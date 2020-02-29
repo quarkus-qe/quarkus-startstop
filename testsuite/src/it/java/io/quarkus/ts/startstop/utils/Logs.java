@@ -35,7 +35,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static io.quarkus.ts.startstop.StartStopTest.BASE_DIR;
-import static io.quarkus.ts.startstop.utils.Commands.isThisWindows;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
@@ -52,9 +51,13 @@ public class Logs {
      e.g.
      //started in [38;5;188m1.228[39ms.
      //stopped in [38;5;188m0.024[39ms[39m[38;5;203m[39m[38;5;227m
+
+     Although when run from Jenkins service account; those symbols are not present :-)
+     This a
+     //TODO to make it smoother.
      */
-    private static final Pattern startedPatternWindows = Pattern.compile(".* started in .*188m([0-9\\.]+).*", Pattern.DOTALL);
-    private static final Pattern stoppedPatternWindows = Pattern.compile(".* stopped in .*188m([0-9\\.]+).*", Pattern.DOTALL);
+    private static final Pattern startedPatternControlSymbols = Pattern.compile(".* started in .*188m([0-9\\.]+).*", Pattern.DOTALL);
+    private static final Pattern stoppedPatternControlSymbols = Pattern.compile(".* stopped in .*188m([0-9\\.]+).*", Pattern.DOTALL);
 
 
     // TODO: How about WARNING? Other unwanted messages?
@@ -142,12 +145,26 @@ public class Logs {
         try (Scanner sc = new Scanner(log)) {
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
-                Matcher m = isThisWindows ? startedPatternWindows.matcher(line) : startedPattern.matcher(line);
+
+                Matcher m = startedPatternControlSymbols.matcher(line);
                 if (startedStopped[0] == -1f && m.matches()) {
                     startedStopped[0] = Float.parseFloat(m.group(1));
                     continue;
                 }
-                m = isThisWindows ? stoppedPatternWindows.matcher(line) : stoppedPattern.matcher(line);
+
+                m = startedPattern.matcher(line);
+                if (startedStopped[0] == -1f && m.matches()) {
+                    startedStopped[0] = Float.parseFloat(m.group(1));
+                    continue;
+                }
+
+                m = stoppedPatternControlSymbols.matcher(line);
+                if (startedStopped[1] == -1f && m.matches()) {
+                    startedStopped[1] = Float.parseFloat(m.group(1));
+                    continue;
+                }
+
+                m = stoppedPattern.matcher(line);
                 if (startedStopped[1] == -1f && m.matches()) {
                     startedStopped[1] = Float.parseFloat(m.group(1));
                 }
