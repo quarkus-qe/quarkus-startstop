@@ -125,17 +125,17 @@ public class Commands {
     public static void pidKiller(long pid, boolean force) {
         try {
             if (isThisWindows) {
-                if (force) {
-                    Runtime.getRuntime().exec(new String[]{"cmd", "/C", "taskkill", "/PID", Long.toString(pid), "/F", "/T"});
-                } else {
-                    Runtime.getRuntime().exec(new String[]{"cmd", "/C",
+                if (!force) {
+                    Process p = Runtime.getRuntime().exec(new String[]{
                             BASE_DIR + File.separator + "testsuite" + File.separator + "src" + File.separator + "it" + File.separator + "resources" + File.separator +
                                     "CtrlC.exe ", Long.toString(pid)});
+                    p.waitFor(1, TimeUnit.MINUTES);
                 }
+                Runtime.getRuntime().exec(new String[]{"cmd", "/C", "taskkill", "/PID", Long.toString(pid), "/F", "/T"});
             } else {
                 Runtime.getRuntime().exec(new String[]{"kill", force ? "-9" : "-15", Long.toString(pid)});
             }
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             LOGGER.severe(e.getMessage());
         }
     }

@@ -170,9 +170,15 @@ public class Logs {
                 }
             }
         }
-        if (startedStopped[0] == -1f || startedStopped[1] == -1f) {
-            throw new IllegalStateException("Parsing start/stop times from log failed. " +
-                    "Might not be the good time to call this method. Find " + log.getName() + " in your target dir.");
+        if (startedStopped[0] == -1f) {
+            LOGGER.severe("Parsing start time from log failed. " +
+                    "Might not be the good time to call this method. The process might be killed before it wrote to log." +
+                    "Find " + log.getName() + " in your target dir.");
+        }
+        if (startedStopped[1] == -1f) {
+            LOGGER.severe("Parsing stop time from log failed. " +
+                    "Might not be the good time to call this method. The process might be killed before it wrote to log." +
+                    "Find " + log.getName() + " in your target dir.");
         }
         return startedStopped;
     }
