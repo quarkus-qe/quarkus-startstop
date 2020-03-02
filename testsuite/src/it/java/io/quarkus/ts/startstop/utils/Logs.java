@@ -52,9 +52,9 @@ public class Logs {
      //started in [38;5;188m1.228[39ms.
      //stopped in [38;5;188m0.024[39ms[39m[38;5;203m[39m[38;5;227m
 
-     Although when run from Jenkins service account; those symbols are not present :-)
-     This a
-     //TODO to make it smoother.
+     Although when run from Jenkins service account; those symbols might not be present
+     depending on whether you checked AllowInteractingWithDesktop.
+     // TODO to make it smoother?
      */
     private static final Pattern startedPatternControlSymbols = Pattern.compile(".* started in .*188m([0-9\\.]+).*", Pattern.DOTALL);
     private static final Pattern stoppedPatternControlSymbols = Pattern.compile(".* stopped in .*188m([0-9\\.]+).*", Pattern.DOTALL);
@@ -172,12 +172,12 @@ public class Logs {
         }
         if (startedStopped[0] == -1f) {
             LOGGER.severe("Parsing start time from log failed. " +
-                    "Might not be the good time to call this method. The process might be killed before it wrote to log." +
+                    "Might not be the right time to call this method. The process might have ben killed before it wrote to log." +
                     "Find " + log.getName() + " in your target dir.");
         }
         if (startedStopped[1] == -1f) {
             LOGGER.severe("Parsing stop time from log failed. " +
-                    "Might not be the good time to call this method. The process might be killed before it wrote to log." +
+                    "Might not be the right time to call this method. The process might have been killed before it wrote to log." +
                     "Find " + log.getName() + " in your target dir.");
         }
         return startedStopped;
