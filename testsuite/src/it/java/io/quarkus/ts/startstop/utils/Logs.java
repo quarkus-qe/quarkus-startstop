@@ -35,7 +35,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static io.quarkus.ts.startstop.StartStopTest.BASE_DIR;
+import static io.quarkus.ts.startstop.utils.Commands.isThisWindows;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Michal Karm Babacek <karm@redhat.com>
@@ -80,6 +82,25 @@ public class Logs {
                         "See testsuite" + File.separator + "target" + File.separator + "archived-logs" + File.separator + testClass + File.separator + testMethod + File.separator + log.getName());
             }
         }
+    }
+
+    public static void checkThreshold(Apps app, MvnCmds cmd, long rssKb, long timeToFirstOKRequest) {
+        String propPrefix = isThisWindows ? "windows" : "linux";
+        if (cmd == MvnCmds.JVM) {
+            propPrefix += ".jvm";
+        } else if (cmd == MvnCmds.NATIVE) {
+            propPrefix += ".native";
+        } else {
+            throw new IllegalArgumentException("Unexpected mode. Check MvnCmds.java.");
+        }
+        long timeToFirstOKRequestThresholdMs = app.thresholdProperties.get(propPrefix + ".time.to.first.ok.request.threshold.ms");
+        long rssThresholdKb = app.thresholdProperties.get(propPrefix + ".RSS.threshold.kB");
+        assertTrue(timeToFirstOKRequest <= timeToFirstOKRequestThresholdMs,
+                "Application " + app + " in " + cmd + " mode took " + timeToFirstOKRequest + " ms to get the first OK request, which is over " +
+                        timeToFirstOKRequestThresholdMs + " ms threshold.");
+        assertTrue(rssKb <= rssThresholdKb,
+                "Application " + app + " in " + cmd + " consumed " + rssKb + " kB, which is over " +
+                        rssThresholdKb + " kB threshold.");
     }
 
     public static void archiveLog(String testClass, String testMethod, File log) throws IOException {

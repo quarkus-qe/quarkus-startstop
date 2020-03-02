@@ -37,7 +37,7 @@ JAX_RS_MINIMAL,NATIVE,111296,10,8,1,28192,74
  * timeToFirstOKRequestMs - how long it took since the process was started till the first request got a valid response
  * startedInMs - "started in" value reported in Quarkus log
  * stoppedInMs - "stopped in" value reported in Quarkus log
- * RSS - memory used; not comparable between Linux and Windows, see below
+ * RSS - memory used in kB; not comparable between Linux and Windows, see below
  * FDs - file descriptors held by the process; Windows is lower due to static linking of JVM libs etc.
 
 ## Logs and Whitelist
@@ -55,6 +55,37 @@ To examine logs yourself see ```./testsuite/target/archived-logs/``` , e.g.
 ./testsuite/target/archived-logs/io.quarkus.ts.startstop.StartStopTest/jaxRsMinimalJVM/jvm-build.log
 ./testsuite/target/archived-logs/io.quarkus.ts.startstop.StartStopTest/fullMicroProfileNative/native-build.log
 ./testsuite/target/archived-logs/io.quarkus.ts.startstop.StartStopTest/fullMicroProfileNative/native-run.log
+```
+## Thresholds
+
+The test suite works with ```threshold.properties``` for each test app. E.g. ```app-jax-rs-minimal/threshold.properties```:
+
+```
+linux.jvm.time.to.first.ok.request.threshold.ms=1500
+linux.jvm.RSS.threshold.kB=170000
+linux.native.time.to.first.ok.request.threshold.ms=35
+linux.native.RSS.threshold.kB=75000
+windows.jvm.time.to.first.ok.request.threshold.ms=2000
+windows.jvm.RSS.threshold.kB=4000
+```
+
+The measured values are simply compared to be less or equal to the set threshold. One can overwrite the threshold properties
+by using env variables or system properties (in this order). All letter are capitalized and dot is replaced with underscore, e.g.
+
+```
+APP_JAX_RS_MINIMAL_LINUX_JVM_TIME_TO_FIRST_OK_REQUEST_THRESHOLD_MS=500 mvn clean verify -Ptestsuite
+```
+
+Results in:
+
+```
+[INFO] Results:
+[INFO] 
+[ERROR] Failures: 
+[ERROR]   StartStopTest.jaxRsMinimalJVM:137->testRuntime:121 Application JAX_RS_MINIMAL 
+          in JVM mode took 957 ms to get the first OK request, which is over 500 ms threshold. 
+          ==> expected: <true> but was: <false>
+[INFO] 
 ```
 
 ## Windows notes

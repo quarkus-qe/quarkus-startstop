@@ -47,6 +47,7 @@ import static io.quarkus.ts.startstop.utils.Commands.runCommand;
 import static io.quarkus.ts.startstop.utils.Commands.waitForTcpClosed;
 import static io.quarkus.ts.startstop.utils.Logs.archiveLog;
 import static io.quarkus.ts.startstop.utils.Logs.checkLog;
+import static io.quarkus.ts.startstop.utils.Logs.checkThreshold;
 import static io.quarkus.ts.startstop.utils.Logs.getLogsDir;
 import static io.quarkus.ts.startstop.utils.Logs.parseStartStopTimestamps;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -116,6 +117,8 @@ public class StartStopTest {
             Path measurementsLog = Paths.get(getLogsDir(testInfo.getTestClass().get().getCanonicalName()).toString(), "measurements.csv");
             Logs.logMeasurements(buildEnds - buildStarts, timeToFirstOKRequest,
                     (long) (startedStopped[0] * 1000), (long) (startedStopped[1] * 1000), rssKb, openedFiles, app, mvnCmds, measurementsLog);
+
+            checkThreshold(app, mvnCmds, rssKb, timeToFirstOKRequest);
 
         } finally {
             // Make sure processes are down even if there was an exception / failure
