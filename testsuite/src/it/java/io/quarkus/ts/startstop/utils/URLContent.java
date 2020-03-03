@@ -41,6 +41,10 @@ public enum URLContent {
             new String[]{"http://localhost:8080/data/secured/test", "Jessie specific value"},
             new String[]{"http://localhost:8080/openapi", "/resilience"},
             new String[]{"http://localhost:8080/data/client/test/parameterValue=xxx", "Processed parameter value 'parameterValue=xxx'"}
+    }),
+    GENERATED_SKELETON(new String[][]{
+            new String[]{"http://localhost:8080", "Congratulations"},
+            new String[]{"http://localhost:8080/bye", "bye"}
     });
 
     public final String[][] urlContent;

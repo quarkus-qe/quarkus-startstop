@@ -19,6 +19,8 @@
  */
 package io.quarkus.ts.startstop.utils;
 
+import static io.quarkus.ts.startstop.utils.Commands.getQuarkusVersion;
+
 /**
  * Maven commands.
  *
@@ -29,12 +31,22 @@ public enum MvnCmds {
             new String[]{"mvn", "clean", "compile", "quarkus:build"},
             new String[]{"java", "-jar", "target/quarkus-runner.jar"}
     }),
-    //  DEV(new String[][]{
-    //          new String[]{"mvn", "clean", "compile", "quarkus:dev"}
-    //  }),
+    DEV(new String[][]{
+            new String[]{"mvn", "clean", "quarkus:dev"}
+    }),
     NATIVE(new String[][]{
             new String[]{"mvn", "clean", "compile", "quarkus:native-image", "-Pnative"},
             new String[]{Commands.isThisWindows ? "target\\quarkus-runner" : "./target/quarkus-runner"}
+    }),
+    GENERATOR(new String[][]{
+            new String[]{
+                    "mvn",
+                    "io.quarkus:quarkus-maven-plugin:" + getQuarkusVersion() + ":create",
+                    "-DprojectGroupId=my-groupId",
+                    "-DprojectArtifactId=" + Apps.GENERATED_SKELETON.dir,
+                    "-DprojectVersion=1.0.0-SNAPSHOT",
+                    "-DclassName=org.my.group.MyResource"
+            }
     });
 
     public final String[][] mvnCmds;
