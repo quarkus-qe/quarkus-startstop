@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (c) 2020 Contributors to the Quarkus StartStop Project
+
+    See the NOTICE file(s) distributed with this work for additional
+    information regarding copyright ownership.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    You may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.quarkus.ts.startstop</groupId>
+    <artifactId>parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Quarkus StartStop TS: Parent</name>
+
+    <properties>
+        <!--<quarkus.version>0.0.1582091968553.temporary-redhat-00005</quarkus.version>-->
+        <quarkus.version>1.3.0.Alpha2</quarkus.version>
+        <vertx.auth.jwt.version>3.8.1</vertx.auth.jwt.version>
+        <microprofile.version>3.2</microprofile.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.version>3.8.1</maven.compiler.version>
+        <maven.surefire.version>2.22.2</maven.surefire.version>
+        <maven.failsafe.version>2.22.2</maven.failsafe.version>
+        <maven.build.helper.version>3.0.0</maven.build.helper.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <junit.jupiter.version>5.6.0</junit.jupiter.version>
+        <resteasy.version>4.3.0.Final</resteasy.version>
+        <commons.lang.version>3.9</commons.lang.version>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>testsuite</id>
+            <modules>
+                <module>testsuite</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>ide</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>testsuite</module>
+                <module>app-jax-rs-minimal</module>
+                <module>app-full-microprofile</module>
+            </modules>
+        </profile>
+    </profiles>
+</project>
