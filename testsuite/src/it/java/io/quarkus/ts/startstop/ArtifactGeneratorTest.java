@@ -27,6 +27,7 @@ import io.quarkus.ts.startstop.utils.MvnCmds;
 import io.quarkus.ts.startstop.utils.URLContent;
 import io.quarkus.ts.startstop.utils.WebpageTester;
 import org.apache.commons.lang3.ArrayUtils;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
@@ -63,6 +64,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author Michal Karm Babacek <karm@redhat.com>
  */
+@Tag("generator")
 public class ArtifactGeneratorTest {
 
     private static final Logger LOGGER = Logger.getLogger(ArtifactGeneratorTest.class.getName());

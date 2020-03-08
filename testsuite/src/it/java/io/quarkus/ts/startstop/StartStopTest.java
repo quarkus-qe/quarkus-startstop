@@ -25,6 +25,7 @@ import io.quarkus.ts.startstop.utils.LogBuilder;
 import io.quarkus.ts.startstop.utils.Logs;
 import io.quarkus.ts.startstop.utils.MvnCmds;
 import io.quarkus.ts.startstop.utils.WebpageTester;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
@@ -57,6 +58,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author Michal Karm Babacek <karm@redhat.com>
  */
+@Tag("startstop")
 public class StartStopTest {
 
     private static final Logger LOGGER = Logger.getLogger(StartStopTest.class.getName());
@@ -151,11 +153,8 @@ public class StartStopTest {
     }
 
     @Test
+    @Tag("native")
     public void jaxRsMinimalNative(TestInfo testInfo) throws IOException, InterruptedException {
-        if (Commands.isThisWindows) {
-            LOGGER.warning(testInfo.getTestMethod().get().getName() + " is skipped on Windows for the time being.");
-            return;
-        }
         testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.NATIVE);
     }
 
@@ -165,11 +164,8 @@ public class StartStopTest {
     }
 
     @Test
+    @Tag("native")
     public void fullMicroProfileNative(TestInfo testInfo) throws IOException, InterruptedException {
-        if (Commands.isThisWindows) {
-            LOGGER.warning(testInfo.getTestMethod().get().getName() + " is skipped on Windows for the time being.");
-            return;
-        }
         testRuntime(testInfo, Apps.FULL_MICROPROFILE, MvnCmds.NATIVE);
     }
 }

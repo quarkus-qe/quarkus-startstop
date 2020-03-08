@@ -156,6 +156,7 @@ public class Logs {
             Files.write(path, (log.header + "\n").getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
         }
         Files.write(path, (log.line + "\n").getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
+        LOGGER.info("\n" + log.header + "\n" + log.line);
     }
 
     public static float[] parseStartStopTimestamps(File log) throws FileNotFoundException {

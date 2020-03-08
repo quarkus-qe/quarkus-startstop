@@ -193,7 +193,7 @@ public class Commands {
             // https://docs.microsoft.com/en-us/windows/win32/cimwin32prov/win32-process
             pa = new ProcessBuilder("wmic", "process", "where", "processid=" + pid, "get", "WorkingSetSize");
         } else {
-            pa = new ProcessBuilder("ps", "--no-headers", "-p", Long.toString(pid), "-o", "rss");
+            pa = new ProcessBuilder("ps", "-p", Long.toString(pid), "-o", "rss=");
         }
         Map<String, String> envA = pa.environment();
         envA.put("PATH", System.getenv("PATH"));

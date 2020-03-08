@@ -1,8 +1,18 @@
 # Usage
 
+The TS expects you run Java 11+ and have ```ps``` program available on your Linux/Mac and ```wmic``` (by default present) on your Windows system.
+
+**Linux/Mac:**
 ```
 mvn clean verify -Ptestsuite
 ```
+
+**Windows:**
+```
+mvn clean verify -Ptestsuite-no-native
+```
+Native compilation is not yet supported on Windows. 
+You may also want to disable native tests with ```-Ptestsuite-no-native``` if you need just a quick check on the JVM mode. 
 
 ## StartStopTest
 
