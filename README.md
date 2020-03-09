@@ -1,8 +1,23 @@
 # Usage
 
+The TS expects you run Java 11+ and have ```ps``` program available on your Linux/Mac and ```wmic``` (by default present) on your Windows system.
+
+**Linux/Mac:**
 ```
 mvn clean verify -Ptestsuite
 ```
+
+**Windows:**
+```
+mvn clean verify -Ptestsuite-no-native
+```
+Native compilation is not yet supported on Windows. 
+You may also want to disable native tests with ```-Ptestsuite-no-native``` if you need just a quick check on the JVM mode. 
+
+## StartStopTest
+
+The goal is to build and start applications with some real source code that actually
+exercises some rudimentary business logic of selected extensions.
 
 Collect results:
 
@@ -12,22 +27,62 @@ cat  testsuite/target/archived-logs/io.quarkus.ts.startstop.StartStopTest/measur
 
 e.g. on Windows:
 ```
-C:\Users\Administrator\source\quarkus-startstop (master -> origin)
 λ type testsuite\target\archived-logs\io.quarkus.ts.startstop.StartStopTest\measurements.csv
-App,Mode,buildTimeMs,timeToFirstOKRequestMs,startedInMs,stoppedInMs,RSS,FDs
-FULL_MICROPROFILE,JVM,13111,2881,2201,117,3660,71
-JAX_RS_MINIMAL,JVM,12589,3415,2235,42,3680,71
+App,Mode,buildTimeMs,timeToFirstOKRequestMs,startedInMs,stoppedInMs,RSSKb,FDs
+FULL_MICROPROFILE,JVM,9391,2162,1480,54,3820,78
+JAX_RS_MINIMAL,JVM,6594,1645,949,34,3824,78
 ```
 
 and on Linux:
 ```
-karm@local:~/workspaceRH/quarkus-startstop (master *%)$ cat testsuite/target/archived-logs/io.quarkus.ts.startstop.StartStopTest/measurements.csv 
-App,Mode,buildTimeMs,timeToFirstOKRequestMs,startedInMs,stoppedInMs,RSS,FDs
-FULL_MICROPROFILE,JVM,12017,1850,1430,32,181820,305
-FULL_MICROPROFILE,NATIVE,154319,32,25,4,51260,129
-JAX_RS_MINIMAL,JVM,7157,1125,794,21,139292,162
-JAX_RS_MINIMAL,NATIVE,111296,10,8,1,28192,74
+$ cat ./testsuite/target/archived-logs/io.quarkus.ts.startstop.StartStopTest/measurements.csv
+App,Mode,buildTimeMs,timeToFirstOKRequestMs,startedInMs,stoppedInMs,RSSKb,FDs
+FULL_MICROPROFILE,JVM,9117,1439,1160,18,179932,307
+FULL_MICROPROFILE,NATIVE,142680,22,17,1,51592,129
+JAX_RS_MINIMAL,JVM,5934,1020,745,22,141996,162
+JAX_RS_MINIMAL,NATIVE,93943,10,7,3,29768,74
 ```
+
+## ArtifactGeneratorTest
+
+The goal of this test is to test Quarkus maven artifact generator, i.e. to to use it to generate an
+empty (Hello World) skeleton and build it in Quarkus dev mode. The objective is to make sure all required
+extensions are correctly found.
+
+Next, the project is run in dev mode, time to the first O.K. request is measured, a ```.java``` file is changed and the time
+it took to get the expected results after hot reload is measured.
+
+The whole run is executed as a warm-up to download the Internet and then again to measure the times.
+The properties for thresholds are stored in [app-generated-skeleton/threshold.properties](./app-generated-skeleton/threshold.properties).
+
+Build and run logs are archived and checked for errors, see:
+
+```
+**/io.quarkus.ts.startstop.ArtifactGeneratorTest/manyExtensions/dev-run.log
+**/io.quarkus.ts.startstop.ArtifactGeneratorTest/manyExtensions/artifact-build.log
+**/io.quarkus.ts.startstop.ArtifactGeneratorTest/manyExtensions/warmup-artifact-build.log
+**/io.quarkus.ts.startstop.ArtifactGeneratorTest/manyExtensions/warmup-dev-run.log
+```
+
+Measurements example, e.g. Windows and OpenJDK 11 J9:
+
+```
+λ type testsuite\target\archived-logs\io.quarkus.ts.startstop.ArtifactGeneratorTest\measurements.csv
+App,Mode,buildTimeMs,timeToFirstOKRequestMs,timeToReloadMs,startedInMs,stoppedInMs,RSSKb,FDs
+GENERATED_SKELETON,GENERATOR,3766,37064,8859,18249,1172,4240,81
+```
+
+e.g. it took 3.766s to generate the skeleton project, it took 37.064s to build and start the Dev mode and it
+took 8.859s to do the live reload and get the expected response to a request.
+
+Linux and OpenJDK 11 HotSpot:
+
+```
+App,Mode,buildTimeMs,timeToFirstOKRequestMs,timeToReloadMs,startedInMs,stoppedInMs,RSSKb,FDs
+GENERATED_SKELETON,GENERATOR,2644,13871,3091,5597,1154,565340,198
+```
+
+See [ArtifactGeneratorTest#manyExtensions](./testsuite/src/it/java/io/quarkus/ts/startstop/ArtifactGeneratorTest.java) for the list of used extensions.
 
 ## Values
 
@@ -35,9 +90,10 @@ JAX_RS_MINIMAL,NATIVE,111296,10,8,1,28192,74
  * Mode - one in DEV, NATIVE, JVM
  * buildTimeMs - how long it tool the build process to terminate
  * timeToFirstOKRequestMs - how long it took since the process was started till the first request got a valid response
+ * timeToReloadMs - how long it took to get a valid response after dev mode reload
  * startedInMs - "started in" value reported in Quarkus log
  * stoppedInMs - "stopped in" value reported in Quarkus log
- * RSS - memory used in kB; not comparable between Linux and Windows, see below
+ * RSSkB - memory used in kB; not comparable between Linux and Windows, see below
  * FDs - file descriptors held by the process; Windows is lower due to static linking of JVM libs etc.
 
 ## Logs and Whitelist

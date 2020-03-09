@@ -21,9 +21,11 @@ package io.quarkus.ts.startstop;
 
 import io.quarkus.ts.startstop.utils.Apps;
 import io.quarkus.ts.startstop.utils.Commands;
+import io.quarkus.ts.startstop.utils.LogBuilder;
 import io.quarkus.ts.startstop.utils.Logs;
 import io.quarkus.ts.startstop.utils.MvnCmds;
 import io.quarkus.ts.startstop.utils.WebpageTester;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
@@ -45,6 +47,7 @@ import static io.quarkus.ts.startstop.utils.Commands.parsePort;
 import static io.quarkus.ts.startstop.utils.Commands.processStopper;
 import static io.quarkus.ts.startstop.utils.Commands.runCommand;
 import static io.quarkus.ts.startstop.utils.Commands.waitForTcpClosed;
+import static io.quarkus.ts.startstop.utils.Logs.SKIP;
 import static io.quarkus.ts.startstop.utils.Logs.archiveLog;
 import static io.quarkus.ts.startstop.utils.Logs.checkLog;
 import static io.quarkus.ts.startstop.utils.Logs.checkThreshold;
@@ -55,6 +58,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author Michal Karm Babacek <karm@redhat.com>
  */
+@Tag("startstop")
 public class StartStopTest {
 
     private static final Logger LOGGER = Logger.getLogger(StartStopTest.class.getName());
@@ -68,6 +72,8 @@ public class StartStopTest {
         File buildLogA = null;
         File runLogA = null;
         File appDir = new File(BASE_DIR + File.separator + app.dir);
+        String cn = testInfo.getTestClass().get().getCanonicalName();
+        String mn = testInfo.getTestMethod().get().getName();
 
         try {
             // Cleanup
@@ -84,7 +90,7 @@ public class StartStopTest {
             long buildEnds = System.currentTimeMillis();
 
             assertTrue(buildLogA.exists());
-            checkLog(testInfo.getTestClass().get().getCanonicalName(), testInfo.getTestMethod().get().getName(), app, mvnCmds, buildLogA);
+            checkLog(cn, mn, app, mvnCmds, buildLogA);
 
             // Run
             LOGGER.info("Running...");
@@ -110,15 +116,24 @@ public class StartStopTest {
             // Release ports
             assertTrue(waitForTcpClosed("localhost", parsePort(app.urlContent.urlContent[0][0]), 60),
                     "Main port is still open");
-            checkLog(testInfo.getTestClass().get().getCanonicalName(), testInfo.getTestMethod().get().getName(), app, mvnCmds, runLogA);
+            checkLog(cn, mn, app, mvnCmds, runLogA);
 
             float[] startedStopped = parseStartStopTimestamps(runLogA);
 
-            Path measurementsLog = Paths.get(getLogsDir(testInfo.getTestClass().get().getCanonicalName()).toString(), "measurements.csv");
-            Logs.logMeasurements(buildEnds - buildStarts, timeToFirstOKRequest,
-                    (long) (startedStopped[0] * 1000), (long) (startedStopped[1] * 1000), rssKb, openedFiles, app, mvnCmds, measurementsLog);
+            Path measurementsLog = Paths.get(getLogsDir(cn).toString(), "measurements.csv");
+            LogBuilder.Log log = new LogBuilder()
+                    .app(app)
+                    .mode(mvnCmds)
+                    .buildTimeMs(buildEnds - buildStarts)
+                    .timeToFirstOKRequestMs(timeToFirstOKRequest)
+                    .startedInMs((long) (startedStopped[0] * 1000))
+                    .stoppedInMs((long) (startedStopped[1] * 1000))
+                    .rssKb(rssKb)
+                    .openedFiles(openedFiles)
+                    .build();
+            Logs.logMeasurements(log, measurementsLog);
 
-            checkThreshold(app, mvnCmds, rssKb, timeToFirstOKRequest);
+            checkThreshold(app, mvnCmds, rssKb, timeToFirstOKRequest, SKIP);
 
         } finally {
             // Make sure processes are down even if there was an exception / failure
@@ -126,8 +141,8 @@ public class StartStopTest {
                 processStopper(pA, true);
             }
             // Archive logs no matter what
-            archiveLog(testInfo.getTestClass().get().getCanonicalName(), testInfo.getTestMethod().get().getName(), buildLogA);
-            archiveLog(testInfo.getTestClass().get().getCanonicalName(), testInfo.getTestMethod().get().getName(), runLogA);
+            archiveLog(cn, mn, buildLogA);
+            archiveLog(cn, mn, runLogA);
             cleanTarget(app);
         }
     }
@@ -138,11 +153,8 @@ public class StartStopTest {
     }
 
     @Test
+    @Tag("native")
     public void jaxRsMinimalNative(TestInfo testInfo) throws IOException, InterruptedException {
-        if (Commands.isThisWindows) {
-            LOGGER.warning(testInfo.getTestMethod().get().getName() + " is skipped on Windows for the time being.");
-            return;
-        }
         testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.NATIVE);
     }
 
@@ -152,11 +164,8 @@ public class StartStopTest {
     }
 
     @Test
+    @Tag("native")
     public void fullMicroProfileNative(TestInfo testInfo) throws IOException, InterruptedException {
-        if (Commands.isThisWindows) {
-            LOGGER.warning(testInfo.getTestMethod().get().getName() + " is skipped on Windows for the time being.");
-            return;
-        }
         testRuntime(testInfo, Apps.FULL_MICROPROFILE, MvnCmds.NATIVE);
     }
 }

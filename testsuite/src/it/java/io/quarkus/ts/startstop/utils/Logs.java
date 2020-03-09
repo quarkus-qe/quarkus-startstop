@@ -61,6 +61,7 @@ public class Logs {
     private static final Pattern startedPatternControlSymbols = Pattern.compile(".* started in .*188m([0-9\\.]+).*", Pattern.DOTALL);
     private static final Pattern stoppedPatternControlSymbols = Pattern.compile(".* stopped in .*188m([0-9\\.]+).*", Pattern.DOTALL);
 
+    public static final long SKIP = -1L;
 
     // TODO: How about WARNING? Other unwanted messages?
     public static void checkLog(String testClass, String testMethod, Apps app, MvnCmds cmd, File log) throws FileNotFoundException {
@@ -78,29 +79,46 @@ public class Logs {
                         }
                     }
                 }
-                assertFalse(error && !whiteListed, cmd.name() + "log should not contain `ERROR' lines that are not whitelisted. " +
-                        "See testsuite" + File.separator + "target" + File.separator + "archived-logs" + File.separator + testClass + File.separator + testMethod + File.separator + log.getName());
+                assertFalse(error && !whiteListed, cmd.name() + " log should not contain `ERROR' lines that are not whitelisted. " +
+                        "See testsuite" + File.separator + "target" + File.separator + "archived-logs" +
+                        File.separator + testClass + File.separator + testMethod + File.separator + log.getName());
             }
         }
     }
 
-    public static void checkThreshold(Apps app, MvnCmds cmd, long rssKb, long timeToFirstOKRequest) {
+    public static void checkThreshold(Apps app, MvnCmds cmd, long rssKb, long timeToFirstOKRequest, long timeToReloadedOKRequest) {
         String propPrefix = isThisWindows ? "windows" : "linux";
         if (cmd == MvnCmds.JVM) {
             propPrefix += ".jvm";
         } else if (cmd == MvnCmds.NATIVE) {
             propPrefix += ".native";
+        } else if (cmd == MvnCmds.DEV) {
+            propPrefix += ".dev";
+        } else if (cmd == MvnCmds.GENERATOR) {
+            propPrefix += ".generated.dev";
         } else {
             throw new IllegalArgumentException("Unexpected mode. Check MvnCmds.java.");
         }
-        long timeToFirstOKRequestThresholdMs = app.thresholdProperties.get(propPrefix + ".time.to.first.ok.request.threshold.ms");
-        long rssThresholdKb = app.thresholdProperties.get(propPrefix + ".RSS.threshold.kB");
-        assertTrue(timeToFirstOKRequest <= timeToFirstOKRequestThresholdMs,
-                "Application " + app + " in " + cmd + " mode took " + timeToFirstOKRequest + " ms to get the first OK request, which is over " +
-                        timeToFirstOKRequestThresholdMs + " ms threshold.");
-        assertTrue(rssKb <= rssThresholdKb,
-                "Application " + app + " in " + cmd + " consumed " + rssKb + " kB, which is over " +
-                        rssThresholdKb + " kB threshold.");
+        if (timeToFirstOKRequest != SKIP) {
+            long timeToFirstOKRequestThresholdMs = app.thresholdProperties.get(propPrefix + ".time.to.first.ok.request.threshold.ms");
+            assertTrue(timeToFirstOKRequest <= timeToFirstOKRequestThresholdMs,
+                    "Application " + app + " in " + cmd + " mode took " + timeToFirstOKRequest
+                            + " ms to get the first OK request, which is over " +
+                            timeToFirstOKRequestThresholdMs + " ms threshold.");
+        }
+        if (rssKb != SKIP) {
+            long rssThresholdKb = app.thresholdProperties.get(propPrefix + ".RSS.threshold.kB");
+            assertTrue(rssKb <= rssThresholdKb,
+                    "Application " + app + " in " + cmd + " consumed " + rssKb + " kB, which is over " +
+                            rssThresholdKb + " kB threshold.");
+        }
+        if (timeToReloadedOKRequest != SKIP) {
+            long timeToReloadedOKRequestThresholdMs = app.thresholdProperties.get(propPrefix + ".time.to.reload.threshold.ms");
+            assertTrue(timeToReloadedOKRequest <= timeToReloadedOKRequestThresholdMs,
+                    "Application " + app + " in " + cmd + " mode took " + timeToReloadedOKRequest
+                            + " ms to get the first OK request after dev mode reload, which is over " +
+                            timeToReloadedOKRequestThresholdMs + " ms threshold.");
+        }
     }
 
     public static void archiveLog(String testClass, String testMethod, File log) throws IOException {
@@ -127,38 +145,18 @@ public class Logs {
     }
 
     public static Path getLogsDir(String testClass) throws IOException {
-        Path destDir = new File(BASE_DIR + File.separator + "testsuite" + File.separator + "target" + File.separator + "archived-logs" + File.separator + testClass).toPath();
+        Path destDir = new File(BASE_DIR + File.separator + "testsuite" + File.separator + "target" +
+                File.separator + "archived-logs" + File.separator + testClass).toPath();
         Files.createDirectories(destDir);
         return destDir;
     }
 
-    public static void logMeasurements(
-            long buildTimeMs, long timeToFirstOKRequestMs, long startedInMs, long stoppedInMs, long rssKb, long openedFiles, Apps app, MvnCmds mode, Path log) throws IOException {
-
-        if (buildTimeMs <= 0) {
-            throw new IllegalArgumentException("buildTimeMs must be a positive long, was: " + buildTimeMs);
+    public static void logMeasurements(LogBuilder.Log log, Path path) throws IOException {
+        if (Files.notExists(path)) {
+            Files.write(path, (log.header + "\n").getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
         }
-        if (timeToFirstOKRequestMs <= 0) {
-            throw new IllegalArgumentException("timeToFirstOKRequestMs must be a positive long, was: " + timeToFirstOKRequestMs);
-        }
-        if (startedInMs <= 0) {
-            throw new IllegalArgumentException("startedInMs must be a positive long, was: " + startedInMs);
-        }
-        if (stoppedInMs <= 0) {
-            throw new IllegalArgumentException("stoppedInMs must be a positive long, was: " + stoppedInMs);
-        }
-        if (rssKb <= 0) {
-            throw new IllegalArgumentException("rssKb must be a positive long, was: " + rssKb);
-        }
-        if (openedFiles <= 0) {
-            throw new IllegalArgumentException("openedFiles must be a positive long, was: " + openedFiles);
-        }
-        if (Files.notExists(log)) {
-            Files.write(log, "App,Mode,buildTimeMs,timeToFirstOKRequestMs,startedInMs,stoppedInMs,RSS,FDs\n".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
-        }
-        Files.write(log,
-                String.format("%s,%s,%d,%d,%d,%d,%d,%d\n", app.toString(), mode.toString(), buildTimeMs, timeToFirstOKRequestMs, startedInMs, stoppedInMs, rssKb, openedFiles)
-                        .getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
+        Files.write(path, (log.line + "\n").getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
+        LOGGER.info("\n" + log.header + "\n" + log.line);
     }
 
     public static float[] parseStartStopTimestamps(File log) throws FileNotFoundException {

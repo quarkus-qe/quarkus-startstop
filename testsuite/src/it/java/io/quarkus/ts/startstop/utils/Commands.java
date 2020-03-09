@@ -25,6 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
@@ -33,8 +34,10 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static io.quarkus.ts.startstop.StartStopTest.BASE_DIR;
@@ -47,6 +50,46 @@ public class Commands {
 
     public static final boolean isThisWindows = System.getProperty("os.name").matches(".*[Ww]indows.*");
     private static final Pattern numPattern = Pattern.compile("[ \t]*[0-9]+[ \t]*");
+    private static final Pattern quarkusVersionPattern = Pattern.compile("[ \t]*<quarkus.version>([^<]*)</quarkus.version>.*");
+    private static final String ARTIFACT_GENERATOR_WORKSPACE = "ARTIFACT_GENERATOR_WORKSPACE";
+
+    public static String getArtifactGeneBaseDir() {
+        String env = System.getenv().get(ARTIFACT_GENERATOR_WORKSPACE);
+        if (StringUtils.isNotBlank(env)) {
+            return env;
+        }
+        String sys = System.getProperty(ARTIFACT_GENERATOR_WORKSPACE);
+        if (StringUtils.isNotBlank(sys)) {
+            return sys;
+        }
+        return System.getProperty("java.io.tmpdir");
+    }
+
+    public static String getQuarkusVersion() {
+        for (String p : new String[]{"QUARKUS_VERSION", "quarkus.version"}) {
+            String env = System.getenv().get(p);
+            if (StringUtils.isNotBlank(env)) {
+                return env;
+            }
+            String sys = System.getProperty(p);
+            if (StringUtils.isNotBlank(sys)) {
+                return sys;
+            }
+        }
+        String failure = "Failed to determine quarkus.version. Check pom.xm, check env and sys vars QUARKUS_VERSION";
+        try (Scanner sc = new Scanner(new File(BASE_DIR + File.separator + "pom.xml"))) {
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+                Matcher m = quarkusVersionPattern.matcher(line);
+                if (m.matches()) {
+                    return m.group(1);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            throw new IllegalArgumentException(failure);
+        }
+        throw new IllegalArgumentException(failure);
+    }
 
     public static String getBaseDir() {
         String env = System.getenv().get("basedir");
@@ -63,14 +106,17 @@ public class Commands {
     public static void cleanTarget(Apps app) {
         String target = BASE_DIR + File.separator + app.dir + File.separator + "target";
         String logs = BASE_DIR + File.separator + app.dir + File.separator + "logs";
-        try {
-            FileUtils.deleteDirectory(new File(target));
-            FileUtils.deleteDirectory(new File(logs));
-        } catch (IOException e) {
-            // Silence is golden
+        cleanDir(target, logs);
+    }
+
+    public static void cleanDir(String... dir) {
+        for (String s : dir) {
+            try {
+                FileUtils.forceDelete(new File(s));
+            } catch (IOException e) {
+                //Silence is golden
+            }
         }
-        (new File(target)).deleteOnExit();
-        (new File(logs)).deleteOnExit();
     }
 
     public static boolean waitForTcpClosed(String host, int port, long loopTimeoutS) throws InterruptedException, UnknownHostException {
@@ -147,7 +193,7 @@ public class Commands {
             // https://docs.microsoft.com/en-us/windows/win32/cimwin32prov/win32-process
             pa = new ProcessBuilder("wmic", "process", "where", "processid=" + pid, "get", "WorkingSetSize");
         } else {
-            pa = new ProcessBuilder("ps", "--no-headers", "-p", Long.toString(pid), "-o", "rss");
+            pa = new ProcessBuilder("ps", "-p", Long.toString(pid), "-o", "rss=");
         }
         Map<String, String> envA = pa.environment();
         envA.put("PATH", System.getenv("PATH"));

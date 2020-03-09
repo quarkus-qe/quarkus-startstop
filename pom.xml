@@ -53,12 +53,27 @@
             <modules>
                 <module>testsuite</module>
             </modules>
+            <properties>
+                <excludeTags>none</excludeTags>
+            </properties>
+        </profile>
+        <profile>
+            <id>testsuite-no-native</id>
+            <modules>
+                <module>testsuite</module>
+            </modules>
+            <properties>
+                <excludeTags>native</excludeTags>
+            </properties>
         </profile>
         <profile>
             <id>ide</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+            <properties>
+                <excludeTags>none</excludeTags>
+            </properties>
             <modules>
                 <module>testsuite</module>
                 <module>app-jax-rs-minimal</module>

@@ -26,15 +26,18 @@ package io.quarkus.ts.startstop.utils;
  */
 public enum Whitelist {
     JAX_RS_MINIMAL(new String[]{
-            ""
     }),
     FULL_MICROPROFILE(new String[]{
-            ""
+    }),
+    GENERATED_SKELETON(new String[]{
+            // It so happens that the dummy skeleton tries to find Mongo. This is expected.
+            // See app-generated-skeleton/README.md for explanation of the scope.
+            "The remote computer refused the network connection"
     });
 
     public final String[] errs;
 
-    Whitelist( String[] errs) {
+    Whitelist(String[] errs) {
         this.errs = errs;
     }
 }
