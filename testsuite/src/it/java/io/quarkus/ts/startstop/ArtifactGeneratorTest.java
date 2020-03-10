@@ -184,7 +184,10 @@ public class ArtifactGeneratorTest {
             }
             // Archive logs no matter what
             archiveLog(cn, mn, buildLogA);
-            archiveLog(cn, mn, runLogA);
+            if (runLogA != null) {
+                // If build failed it is actually expected to have no runtime log.
+                archiveLog(cn, mn, runLogA);
+            }
             cleanDir(appDir.getAbsolutePath(), logsDir);
         }
     }

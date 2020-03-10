@@ -26,13 +26,22 @@ package io.quarkus.ts.startstop.utils;
  */
 public enum Whitelist {
     JAX_RS_MINIMAL(new String[]{
+            // Some artifacts names...
+            "maven-error-diagnostics",
+            "errorprone"
     }),
     FULL_MICROPROFILE(new String[]{
+            // Some artifacts names...
+            "maven-error-diagnostics",
+            "errorprone"
     }),
     GENERATED_SKELETON(new String[]{
             // It so happens that the dummy skeleton tries to find Mongo. This is expected.
             // See app-generated-skeleton/README.md for explanation of the scope.
-            "The remote computer refused the network connection"
+            "The remote computer refused the network connection",
+            // Some artifacts names...
+            "maven-error-diagnostics",
+            "errorprone"
     });
 
     public final String[] errs;
