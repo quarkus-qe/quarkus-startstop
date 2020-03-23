@@ -20,33 +20,27 @@
 package io.quarkus.ts.startstop.utils;
 
 /**
- * Whitelists errors in log files.
+ * Whitelists jar names.
+ *
+ * There are basically known issues. The enum should be empty.
  *
  * @author Michal Karm Babacek <karm@redhat.com>
  */
-public enum Whitelist {
-    JAX_RS_MINIMAL(new String[]{
-            // Some artifacts names...
-            "maven-error-diagnostics",
-            "errorprone"
-    }),
-    FULL_MICROPROFILE(new String[]{
-            // Some artifacts names...
-            "maven-error-diagnostics",
-            "errorprone"
-    }),
-    GENERATED_SKELETON(new String[]{
-            // It so happens that the dummy skeleton tries to find Mongo. This is expected.
-            // See app-generated-skeleton/README.md for explanation of the scope.
-            "The remote computer refused the network connection",
-            // Some artifacts names...
-            "maven-error-diagnostics",
-            "errorprone"
+public enum WhitelistProductBomJars {
+    PRODUCT_BOM(new String[]{
+            "lib/jakarta.",
+            "lib/javax.",
+            "lib/com.google.code.findbugs.jsr305",
+            "lib/com.google.guava.failureaccess",
+            "lib/org.eclipse.yasson",
+            "lib/com.mchange.mchange-commons-java",
+            "lib/org.checkerframework.checker-qual",
+            "lib/io.smallrye.reactive.smallrye-axle-amqp-client"
     });
 
-    public final String[] errs;
+    public final String[] jarNames;
 
-    Whitelist(String[] errs) {
-        this.errs = errs;
+    WhitelistProductBomJars(String[] jarNames) {
+        this.jarNames = jarNames;
     }
 }

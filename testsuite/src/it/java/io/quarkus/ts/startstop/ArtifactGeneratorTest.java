@@ -21,22 +21,24 @@ package io.quarkus.ts.startstop;
 
 import io.quarkus.ts.startstop.utils.Apps;
 import io.quarkus.ts.startstop.utils.Commands;
+import io.quarkus.ts.startstop.utils.FakeOIDCServer;
 import io.quarkus.ts.startstop.utils.LogBuilder;
 import io.quarkus.ts.startstop.utils.Logs;
 import io.quarkus.ts.startstop.utils.MvnCmds;
+import io.quarkus.ts.startstop.utils.TestFlags;
 import io.quarkus.ts.startstop.utils.URLContent;
 import io.quarkus.ts.startstop.utils.WebpageTester;
-import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -44,11 +46,13 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.quarkus.ts.startstop.StartStopTest.BASE_DIR;
 import static io.quarkus.ts.startstop.utils.Commands.cleanDir;
+import static io.quarkus.ts.startstop.utils.Commands.confAppPropsForSkeleton;
 import static io.quarkus.ts.startstop.utils.Commands.getArtifactGeneBaseDir;
+import static io.quarkus.ts.startstop.utils.Commands.getGeneratorCommand;
 import static io.quarkus.ts.startstop.utils.Commands.getOpenedFDs;
 import static io.quarkus.ts.startstop.utils.Commands.getRSSkB;
+import static io.quarkus.ts.startstop.utils.Commands.getRunCommand;
 import static io.quarkus.ts.startstop.utils.Commands.parsePort;
 import static io.quarkus.ts.startstop.utils.Commands.processStopper;
 import static io.quarkus.ts.startstop.utils.Commands.runCommand;
@@ -69,7 +73,71 @@ public class ArtifactGeneratorTest {
 
     private static final Logger LOGGER = Logger.getLogger(ArtifactGeneratorTest.class.getName());
 
-    public void testRuntime(TestInfo testInfo, String[] extensions, boolean warmUp) throws IOException, InterruptedException {
+    public static final String[] allSupportedExtensionsSetA = new String[]{
+            "agroal",
+            "config-yaml",
+            "core",
+            "hibernate-orm",
+            "hibernate-orm-panache",
+            "hibernate-validator",
+            "jackson",
+            "jaxb",
+            "jdbc-mysql",
+            "jdbc-postgresql",
+            "jsonb",
+            "jsonp",
+            "kafka-client",
+            // "logging-json", https://issues.redhat.com/browse/QUARKUS-80
+            "narayana-jta",
+            "oidc",
+            "quartz",
+            "reactive-pg-client",
+            "rest-client",
+            "resteasy",
+            "resteasy-jackson",
+            "resteasy-jaxb",
+            "resteasy-jsonb",
+            "scheduler",
+            //"spring-boot-properties", https://issues.redhat.com/browse/QUARKUS-79
+            "smallrye-reactive-messaging-amqp",
+            "spring-data-jpa",
+            "spring-di",
+            "spring-security",
+            "spring-web",
+            "undertow",
+            "undertow-websockets",
+            "vertx",
+            "vertx-web",
+    };
+
+    public static final String[] allSupportedExtensionsSetB = new String[]{
+            "agroal",
+            "config-yaml",
+            "core",
+            "hibernate-orm",
+            "hibernate-orm-panache",
+            "hibernate-validator",
+            "jackson",
+            "jaxb",
+            "jdbc-mariadb",
+            "jdbc-mssql",
+            "smallrye-context-propagation",
+            "smallrye-fault-tolerance",
+            "smallrye-health",
+            "smallrye-jwt",
+            "smallrye-metrics",
+            "smallrye-openapi",
+            "smallrye-opentracing",
+            "smallrye-reactive-messaging",
+            "smallrye-reactive-messaging-kafka",
+            "smallrye-reactive-streams-operators",
+            "spring-data-jpa",
+            "spring-di",
+            "spring-security",
+            "spring-web",
+    };
+
+    public void testRuntime(TestInfo testInfo, String[] extensions, Set<TestFlags> flags) throws Exception {
         Process pA = null;
         File buildLogA = null;
         File runLogA = null;
@@ -78,15 +146,20 @@ public class ArtifactGeneratorTest {
         File appBaseDir = new File(getArtifactGeneBaseDir());
         File appDir = new File(appBaseDir, Apps.GENERATED_SKELETON.dir);
         String logsDir = appBaseDir.getAbsolutePath() + File.separator + Apps.GENERATED_SKELETON.dir + "-logs";
-        String extensionsStr = String.join(",", extensions);
-        String[] generatorCmd = ArrayUtils.addAll(MvnCmds.GENERATOR.mvnCmds[0], "-Dextensions=" + extensionsStr + "");
+
+        List<String> generatorCmd = getGeneratorCommand(MvnCmds.GENERATOR.mvnCmds[0], extensions);
+
+        List<String> runCmd = getRunCommand(MvnCmds.DEV.mvnCmds[0]);
+
         URLContent skeletonApp = Apps.GENERATED_SKELETON.urlContent;
 
-        if (warmUp) {
+        if (flags.contains(TestFlags.WARM_UP)) {
             LOGGER.info(mn + ": Warming up setup: " + String.join(" ", generatorCmd));
         } else {
             LOGGER.info(mn + ": Testing setup: " + String.join(" ", generatorCmd));
         }
+
+        FakeOIDCServer fakeOIDCServer = new FakeOIDCServer(6661, "localhost");
 
         try {
             // Cleanup
@@ -94,7 +167,7 @@ public class ArtifactGeneratorTest {
             Files.createDirectories(Paths.get(logsDir));
 
             // Build
-            buildLogA = new File(logsDir + File.separator + (warmUp ? "warmup-artifact-build.log" : "artifact-build.log"));
+            buildLogA = new File(logsDir + File.separator + (flags.contains(TestFlags.WARM_UP) ? "warmup-artifact-build.log" : "artifact-build.log"));
             ExecutorService buildService = Executors.newFixedThreadPool(1);
             buildService.submit(new Commands.ProcessRunner(appBaseDir, buildLogA, generatorCmd, 20));
             long buildStarts = System.currentTimeMillis();
@@ -106,23 +179,20 @@ public class ArtifactGeneratorTest {
             checkLog(cn, mn, Apps.GENERATED_SKELETON, MvnCmds.GENERATOR, buildLogA);
 
             // Config, see app-generated-skeleton/README.md
-            String appPropsSrc = BASE_DIR + File.separator + Apps.GENERATED_SKELETON.dir + File.separator + "application.properties";
-            String appPropsDst = appDir + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "application.properties";
-            Files.copy(Paths.get(appPropsSrc),
-                    Paths.get(appPropsDst), StandardCopyOption.REPLACE_EXISTING);
+            confAppPropsForSkeleton(appDir.getAbsolutePath());
 
             // Run
             LOGGER.info("Running...");
-            runLogA = new File(logsDir + File.separator + (warmUp ? "warmup-dev-run.log" : "dev-run.log"));
-            pA = runCommand(MvnCmds.DEV.mvnCmds[0], appDir, runLogA);
+            runLogA = new File(logsDir + File.separator + (flags.contains(TestFlags.WARM_UP) ? "warmup-dev-run.log" : "dev-run.log"));
+            pA = runCommand(runCmd, appDir, runLogA);
 
             // Test web pages
             // The reason for a seemingly large timeout of 20 minutes is that dev mode will be downloading the Internet on the first fresh run.
-            long timeoutS = (warmUp ? 20 * 60 : 60);
+            long timeoutS = (flags.contains(TestFlags.WARM_UP) ? 20 * 60 : 60);
             long timeToFirstOKRequest = WebpageTester.testWeb(skeletonApp.urlContent[0][0], timeoutS,
                     skeletonApp.urlContent[0][1], true);
 
-            if (warmUp) {
+            if (flags.contains(TestFlags.WARM_UP)) {
                 LOGGER.info("Terminating warmup and scanning logs...");
                 pA.getInputStream().available();
                 checkLog(cn, mn, Apps.GENERATED_SKELETON, MvnCmds.GENERATOR, runLogA);
@@ -162,7 +232,7 @@ public class ArtifactGeneratorTest {
 
             float[] startedStopped = parseStartStopTimestamps(runLogA);
 
-            Path measurementsLog = Paths.get(getLogsDir(cn).toString(), "measurements.csv");
+            Path measurementsLog = Paths.get(getLogsDir(cn, mn).toString(), "measurements.csv");
             LogBuilder.Log log = new LogBuilder()
                     .app(Apps.GENERATED_SKELETON)
                     .mode(MvnCmds.GENERATOR)
@@ -178,6 +248,8 @@ public class ArtifactGeneratorTest {
             checkThreshold(Apps.GENERATED_SKELETON, MvnCmds.GENERATOR, SKIP, timeToFirstOKRequest, timeToReloadedOKRequest);
 
         } finally {
+            fakeOIDCServer.stop();
+
             // Make sure processes are down even if there was an exception / failure
             if (pA != null) {
                 processStopper(pA, true);
@@ -193,68 +265,14 @@ public class ArtifactGeneratorTest {
     }
 
     @Test
-    public void manyExtensions(TestInfo testInfo) throws IOException, InterruptedException {
-        String[] extensions = new String[]{
-                "agroal",
-                "core",
-                "hibernate-orm",
-                "hibernate-orm-panache",
-                "hibernate-validator",
-                "jackson",
-                "jaxb",
-                "jdbc-mysql",
-                "jdbc-postgresql",
-                "jsonb",
-                "jsonp",
-                "kafka-client",
-                "narayana-jta",
-                "resteasy",
-                "resteasy-jsonb",
-                "smallrye-health",
-                "smallrye-metrics",
-                "undertow",
-                "kogito",
-                "artemis-jms",
-                "config-yaml",
-                "elytron-security",
-                "jdbc-mariadb",
-                "jdbc-mssql",
-                "keycloak-authorization",
-                "kubernetes",
-                "oidc",
-                "quartz",
-                "rest-client",
-                "resteasy-jackson",
-                "resteasy-jaxb",
-                "scheduler",
-                "smallrye-context-propagation",
-                "smallrye-fault-tolerance",
-                "smallrye-jwt",
-                "smallrye-openapi",
-                "smallrye-reactive-messaging",
-                "smallrye-reactive-messaging-amqp",
-                "smallrye-reactive-streams-operators",
-                "spring-data-jpa",
-                "spring-di",
-                "spring-web",
-                "spring-security",
-                "undertow-websockets",
-                "vertx",
-                "infinispan-client",
-                "kubernetes-client",
-                "mailer",
-                "mongodb-panache",
-                "qute",
-                "resteasy-qute",
-                "vertx-graphql",
-                "vertx-web",
-                "logging-json",
-                "neo4j",
-                "smallrye-opentracing",
-                "cache",
-                "spring-boot-properties"
-        };
-        testRuntime(testInfo, extensions, true);
-        testRuntime(testInfo, extensions, false);
+    public void manyExtensionsSetA(TestInfo testInfo) throws Exception {
+        testRuntime(testInfo, allSupportedExtensionsSetA, EnumSet.of(TestFlags.WARM_UP));
+        testRuntime(testInfo, allSupportedExtensionsSetA, EnumSet.noneOf(TestFlags.class));
+    }
+
+    @Test
+    public void manyExtensionsSetB(TestInfo testInfo) throws Exception {
+        testRuntime(testInfo, allSupportedExtensionsSetB, EnumSet.of(TestFlags.WARM_UP));
+        testRuntime(testInfo, allSupportedExtensionsSetB, EnumSet.noneOf(TestFlags.class));
     }
 }

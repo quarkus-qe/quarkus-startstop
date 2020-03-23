@@ -3,6 +3,23 @@
 The TS expects you run Java 11+ and have ```ps``` program available on your Linux/Mac and ```wmic``` (by default present) on your Windows system.
 Native image build requires GraalVM with Native image toolchain installed. Refer to [Building Native Image Guide](https://quarkus.io/guides/building-native-image) for details. 
 
+
+All, including Quarkus builds nad native images:
+
+```
+mvn clean verify -Ptestsuite 
+ -Dquarkus.version=1.3.0.Final-redhat-00019
+ -Dquarkus.platform.version=1.3.0.Final-redhat-00010
+ -Dtests.maven.repo.local=/home/karm/QUARKUS/quarkus-1.3.0.ER11/maven-repository
+ -Dmaven.repo.local=/home/karm/QUARKUS/quarkus-1.3.0.ER11/maven-repository
+```
+
+Community version, including native images:
+
+```
+mvn clean verify -Ptestsuite-community -Dquarkus.version=1.3.0.Final
+```
+
 **Linux/Mac:**
 ```
 mvn clean verify -Ptestsuite

@@ -28,7 +28,7 @@ import static io.quarkus.ts.startstop.utils.Commands.getQuarkusVersion;
  */
 public enum MvnCmds {
     JVM(new String[][]{
-            new String[]{"mvn", "clean", "compile", "quarkus:build"},
+            new String[]{"mvn", "clean", "compile", "quarkus:build", "-Dquarkus.package.output-name=quarkus"},
             new String[]{"java", "-jar", "target/quarkus-runner.jar"}
     }),
     DEV(new String[][]{

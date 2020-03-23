@@ -41,8 +41,10 @@ import java.util.logging.Logger;
 
 import static io.quarkus.ts.startstop.utils.Commands.cleanTarget;
 import static io.quarkus.ts.startstop.utils.Commands.getBaseDir;
+import static io.quarkus.ts.startstop.utils.Commands.getBuildCommand;
 import static io.quarkus.ts.startstop.utils.Commands.getOpenedFDs;
 import static io.quarkus.ts.startstop.utils.Commands.getRSSkB;
+import static io.quarkus.ts.startstop.utils.Commands.getRunCommand;
 import static io.quarkus.ts.startstop.utils.Commands.parsePort;
 import static io.quarkus.ts.startstop.utils.Commands.processStopper;
 import static io.quarkus.ts.startstop.utils.Commands.runCommand;
@@ -83,7 +85,7 @@ public class StartStopTest {
             // Build
             buildLogA = new File(appDir.getAbsolutePath() + File.separator + "logs" + File.separator + mvnCmds.name().toLowerCase() + "-build.log");
             ExecutorService buildService = Executors.newFixedThreadPool(1);
-            buildService.submit(new Commands.ProcessRunner(appDir, buildLogA, mvnCmds.mvnCmds[0], 20));
+            buildService.submit(new Commands.ProcessRunner(appDir, buildLogA, getBuildCommand(mvnCmds.mvnCmds[0]), 20));
             long buildStarts = System.currentTimeMillis();
             buildService.shutdown();
             buildService.awaitTermination(30, TimeUnit.MINUTES);
@@ -95,7 +97,7 @@ public class StartStopTest {
             // Run
             LOGGER.info("Running...");
             runLogA = new File(appDir.getAbsolutePath() + File.separator + "logs" + File.separator + mvnCmds.name().toLowerCase() + "-run.log");
-            pA = runCommand(mvnCmds.mvnCmds[1], appDir, runLogA);
+            pA = runCommand(getRunCommand(mvnCmds.mvnCmds[1]), appDir, runLogA);
 
             // Test web pages
             long timeToFirstOKRequest = WebpageTester.testWeb(app.urlContent.urlContent[0][0], 10, app.urlContent.urlContent[0][1], true);
@@ -120,7 +122,7 @@ public class StartStopTest {
 
             float[] startedStopped = parseStartStopTimestamps(runLogA);
 
-            Path measurementsLog = Paths.get(getLogsDir(cn).toString(), "measurements.csv");
+            Path measurementsLog = Paths.get(getLogsDir(cn, mn).toString(), "measurements.csv");
             LogBuilder.Log log = new LogBuilder()
                     .app(app)
                     .mode(mvnCmds)
