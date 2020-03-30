@@ -28,14 +28,7 @@ package io.quarkus.ts.startstop.utils;
  */
 public enum WhitelistProductBomJars {
     PRODUCT_BOM(new String[]{
-            "lib/jakarta.",
-            "lib/javax.",
-            "lib/com.google.code.findbugs.jsr305",
-            "lib/com.google.guava.failureaccess",
-            "lib/org.eclipse.yasson",
-            "lib/com.mchange.mchange-commons-java",
             "lib/org.checkerframework.checker-qual",
-            "lib/io.smallrye.reactive.smallrye-axle-amqp-client"
     });
 
     public final String[] jarNames;

@@ -73,7 +73,7 @@ public class ArtifactGeneratorTest {
 
     private static final Logger LOGGER = Logger.getLogger(ArtifactGeneratorTest.class.getName());
 
-    public static final String[] allSupportedExtensionsSetA = new String[]{
+    public static final String[] supportedExtensionsSetA = new String[]{
             "agroal",
             "config-yaml",
             "core",
@@ -110,7 +110,7 @@ public class ArtifactGeneratorTest {
             "vertx-web",
     };
 
-    public static final String[] allSupportedExtensionsSetB = new String[]{
+    public static final String[] supportedExtensionsSetB = new String[]{
             "agroal",
             "config-yaml",
             "core",
@@ -266,13 +266,13 @@ public class ArtifactGeneratorTest {
 
     @Test
     public void manyExtensionsSetA(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, allSupportedExtensionsSetA, EnumSet.of(TestFlags.WARM_UP));
-        testRuntime(testInfo, allSupportedExtensionsSetA, EnumSet.noneOf(TestFlags.class));
+        testRuntime(testInfo, supportedExtensionsSetA, EnumSet.of(TestFlags.WARM_UP));
+        testRuntime(testInfo, supportedExtensionsSetA, EnumSet.noneOf(TestFlags.class));
     }
 
     @Test
     public void manyExtensionsSetB(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, allSupportedExtensionsSetB, EnumSet.of(TestFlags.WARM_UP));
-        testRuntime(testInfo, allSupportedExtensionsSetB, EnumSet.noneOf(TestFlags.class));
+        testRuntime(testInfo, supportedExtensionsSetB, EnumSet.of(TestFlags.WARM_UP));
+        testRuntime(testInfo, supportedExtensionsSetB, EnumSet.noneOf(TestFlags.class));
     }
 }

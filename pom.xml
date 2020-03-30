@@ -31,7 +31,7 @@
     <name>Quarkus StartStop TS: Parent</name>
 
     <properties>
-        <quarkus.version>1.3.0.Final</quarkus.version>
+        <quarkus.version>1.3.1.Final</quarkus.version>
         <vertx.auth.jwt.version>3.8.1</vertx.auth.jwt.version>
         <microprofile.version>3.2</microprofile.version>
         <maven.compiler.source>11</maven.compiler.source>
