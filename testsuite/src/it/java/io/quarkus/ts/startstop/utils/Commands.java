@@ -20,7 +20,6 @@
 package io.quarkus.ts.startstop.utils;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.BufferedReader;
@@ -32,9 +31,17 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -52,6 +59,7 @@ public class Commands {
     private static final Pattern numPattern = Pattern.compile("[ \t]*[0-9]+[ \t]*");
     private static final Pattern quarkusVersionPattern = Pattern.compile("[ \t]*<quarkus.version>([^<]*)</quarkus.version>.*");
     private static final String ARTIFACT_GENERATOR_WORKSPACE = "ARTIFACT_GENERATOR_WORKSPACE";
+    private static final String MAVEN_REPO_LOCAL = "tests.maven.repo.local";
 
     public static String getArtifactGeneBaseDir() {
         String env = System.getenv().get(ARTIFACT_GENERATOR_WORKSPACE);
@@ -63,6 +71,33 @@ public class Commands {
             return sys;
         }
         return System.getProperty("java.io.tmpdir");
+    }
+
+    public static String getLocalMavenRepoDir() {
+        String env = System.getenv().get(MAVEN_REPO_LOCAL);
+        if (StringUtils.isNotBlank(env)) {
+            return env;
+        }
+        String sys = System.getProperty(MAVEN_REPO_LOCAL);
+        if (StringUtils.isNotBlank(sys)) {
+            return sys;
+        }
+        return System.getProperty("user.home") + File.separator + ".m2" + File.separator + "repository";
+    }
+
+    public static String getQuarkusPlatformVersion() {
+        for (String p : new String[]{"QUARKUS_PLATFORM_VERSION", "quarkus.platform.version"}) {
+            String env = System.getenv().get(p);
+            if (StringUtils.isNotBlank(env)) {
+                return env;
+            }
+            String sys = System.getProperty(p);
+            if (StringUtils.isNotBlank(sys)) {
+                return sys;
+            }
+        }
+        LOGGER.warning("Failed to detect quarkus.platform.version/QUARKUS_PLATFORM_VERSION, defaulting to getQuarkusVersion().");
+        return getQuarkusVersion();
     }
 
     public static String getQuarkusVersion() {
@@ -119,6 +154,82 @@ public class Commands {
         }
     }
 
+    public static List<String> getRunCommand(String[] baseCommand) {
+        List<String> runCmd = new ArrayList<>();
+        if (isThisWindows) {
+            runCmd.add("cmd");
+            runCmd.add("/C");
+        }
+        runCmd.addAll(Arrays.asList(baseCommand));
+
+        return Collections.unmodifiableList(runCmd);
+    }
+
+    public static List<String> getBuildCommand(String[] baseCommand) {
+        List<String> buildCmd = new ArrayList<>();
+        if (isThisWindows) {
+            buildCmd.add("cmd");
+            buildCmd.add("/C");
+        }
+        buildCmd.addAll(Arrays.asList(baseCommand));
+        buildCmd.add("-Dmaven.repo.local=" + getLocalMavenRepoDir());
+
+        return Collections.unmodifiableList(buildCmd);
+    }
+
+    public static List<String> getBuildCommand(String[] baseCommand, String repoDir) {
+        List<String> buildCmd = new ArrayList<>();
+        if (isThisWindows) {
+            buildCmd.add("cmd");
+            buildCmd.add("/C");
+        }
+        buildCmd.addAll(Arrays.asList(baseCommand));
+        buildCmd.add("-Dmaven.repo.local=" + repoDir);
+        buildCmd.add("--settings=" + BASE_DIR + File.separator + Apps.GENERATED_SKELETON.dir + File.separator + "settings.xml");
+
+        return Collections.unmodifiableList(buildCmd);
+    }
+
+    public static List<String> getGeneratorCommand(Set<TestFlags> flags, String[] baseCommand, String[] extensions, String repoDir) {
+        List<String> generatorCmd = new ArrayList<>();
+        if (isThisWindows) {
+            generatorCmd.add("cmd");
+            generatorCmd.add("/C");
+        }
+        generatorCmd.addAll(Arrays.asList(baseCommand));
+        if (flags.contains(TestFlags.PRODUCT_BOM)) {
+            generatorCmd.add("-DplatformArtifactId=quarkus-product-bom");
+            generatorCmd.add("-DplatformGroupId=com.redhat.quarkus");
+            generatorCmd.add("-DplatformVersion=" + getQuarkusPlatformVersion());
+        } else if (flags.contains(TestFlags.QUARKUS_BOM)) {
+            generatorCmd.add("-DplatformArtifactId=quarkus-bom");
+        } else if (flags.contains(TestFlags.UNIVERSE_BOM)) {
+            generatorCmd.add("-DplatformArtifactId=quarkus-universe-bom");
+        } else if (flags.contains(TestFlags.UNIVERSE_PRODUCT_BOM)) {
+            generatorCmd.add("-DplatformArtifactId=quarkus-universe-bom");
+            generatorCmd.add("-DplatformGroupId=com.redhat.quarkus");
+            generatorCmd.add("-DplatformVersion=" + getQuarkusPlatformVersion());
+        }
+        generatorCmd.add("-Dextensions=" + String.join(",", extensions));
+        generatorCmd.add("-Dmaven.repo.local=" + repoDir);
+        generatorCmd.add("--settings=" + BASE_DIR + File.separator + Apps.GENERATED_SKELETON.dir + File.separator + "settings.xml");
+
+        return Collections.unmodifiableList(generatorCmd);
+    }
+
+    public static List<String> getGeneratorCommand(String[] baseCommand, String[] extensions) {
+        List<String> generatorCmd = new ArrayList<>();
+        if (isThisWindows) {
+            generatorCmd.add("cmd");
+            generatorCmd.add("/C");
+        }
+        generatorCmd.addAll(Arrays.asList(baseCommand));
+        generatorCmd.add("-Dextensions=" + String.join(",", extensions));
+        generatorCmd.add("-Dmaven.repo.local=" + getLocalMavenRepoDir());
+
+        return Collections.unmodifiableList(generatorCmd);
+    }
+
     public static boolean waitForTcpClosed(String host, int port, long loopTimeoutS) throws InterruptedException, UnknownHostException {
         InetAddress address = InetAddress.getByName(host);
         long now = System.currentTimeMillis();
@@ -143,17 +254,20 @@ public class Commands {
         return false;
     }
 
+    public static void confAppPropsForSkeleton(String appDir) throws IOException {
+        // Config, see app-generated-skeleton/README.md
+        String appPropsSrc = BASE_DIR + File.separator + Apps.GENERATED_SKELETON.dir + File.separator + "application.properties";
+        String appPropsDst = appDir + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "application.properties";
+        Files.copy(Paths.get(appPropsSrc),
+                Paths.get(appPropsDst), StandardCopyOption.REPLACE_EXISTING);
+    }
+
     public static int parsePort(String url) {
         return Integer.parseInt(url.split(":")[2].split("/")[0]);
     }
 
-    public static Process runCommand(String[] command, File directory, File logFile) {
-        ProcessBuilder pa;
-        if (isThisWindows) {
-            pa = new ProcessBuilder(ArrayUtils.addAll(new String[]{"cmd", "/C"}, command));
-        } else {
-            pa = new ProcessBuilder(command);
-        }
+    public static Process runCommand(List<String> command, File directory, File logFile) {
+        ProcessBuilder pa = new ProcessBuilder(command);
         Map<String, String> envA = pa.environment();
         envA.put("PATH", System.getenv("PATH"));
         pa.directory(directory);
@@ -291,10 +405,10 @@ public class Commands {
     public static class ProcessRunner implements Runnable {
         final File directory;
         final File log;
-        final String[] command;
+        final List<String> command;
         final long timeoutMinutes;
 
-        public ProcessRunner(File directory, File log, String[] command, long timeoutMinutes) {
+        public ProcessRunner(File directory, File log, List<String> command, long timeoutMinutes) {
             this.directory = directory;
             this.log = log;
             this.command = command;
@@ -303,12 +417,7 @@ public class Commands {
 
         @Override
         public void run() {
-            ProcessBuilder pb;
-            if (isThisWindows) {
-                pb = new ProcessBuilder(ArrayUtils.addAll(new String[]{"cmd", "/C"}, command));
-            } else {
-                pb = new ProcessBuilder(ArrayUtils.addAll(command));
-            }
+            ProcessBuilder pb = new ProcessBuilder(command);
             Map<String, String> env = pb.environment();
             env.put("PATH", System.getenv("PATH"));
             pb.directory(directory);

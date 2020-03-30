@@ -29,10 +29,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static io.quarkus.ts.startstop.StartStopTest.BASE_DIR;
 import static io.quarkus.ts.startstop.utils.Commands.isThisWindows;
@@ -44,6 +48,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class Logs {
     private static final Logger LOGGER = Logger.getLogger(Logs.class.getName());
+
+    public static final String jarSuffix = "redhat";
+    private static final Pattern jarNamePattern = Pattern.compile("^((?!" + jarSuffix + ").)*jar$");
 
     private static final Pattern startedPattern = Pattern.compile(".* started in ([0-9\\.]+)s.*", Pattern.DOTALL);
     private static final Pattern stoppedPattern = Pattern.compile(".* stopped in ([0-9\\.]+)s.*", Pattern.DOTALL);
@@ -71,7 +78,7 @@ public class Logs {
                 boolean error = line.matches("(?i:.*ERROR.*)");
                 boolean whiteListed = false;
                 if (error) {
-                    for (String w : app.whitelist.errs) {
+                    for (String w : app.whitelistLogLines.errs) {
                         if (line.contains(w)) {
                             whiteListed = true;
                             LOGGER.info(cmd.name() + "log for " + testMethod + " contains whitelisted error: `" + line + "'");
@@ -83,6 +90,34 @@ public class Logs {
                         "See testsuite" + File.separator + "target" + File.separator + "archived-logs" +
                         File.separator + testClass + File.separator + testMethod + File.separator + log.getName());
             }
+        }
+    }
+
+    public static void checkJarSuffixes(Set<TestFlags> flags, File appDir) throws IOException {
+        if (flags.contains(TestFlags.PRODUCT_BOM) || flags.contains(TestFlags.UNIVERSE_PRODUCT_BOM)) {
+            List<Path> possiblyUnwantedArtifacts = Logs.listJarsFailingNameCheck(
+                    appDir.getAbsolutePath() + File.separator + "target" + File.separator + "lib");
+            List<String> reportArtifacts = new ArrayList<>();
+            boolean containsNotWhitelisted = false;
+            for (Path p : possiblyUnwantedArtifacts) {
+                boolean found = false;
+                for (String w : WhitelistProductBomJars.PRODUCT_BOM.jarNames) {
+                    if (p.toString().contains(w)) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) {
+                    reportArtifacts.add("WHITELISTED: " + p);
+                } else {
+                    containsNotWhitelisted = true;
+                    reportArtifacts.add(p.toString());
+                }
+            }
+            assertFalse(containsNotWhitelisted, "There are not-whitelisted artifacts without expected string " + jarSuffix + " suffix, see: \n"
+                    + String.join("\n", reportArtifacts));
+            LOGGER.warning("There are whitelisted artifacts without expected string " + jarSuffix + " suffix, see: \n"
+                    + String.join("\n", reportArtifacts));
         }
     }
 
@@ -157,6 +192,22 @@ public class Logs {
         }
         Files.write(path, (log.line + "\n").getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
         LOGGER.info("\n" + log.header + "\n" + log.line);
+    }
+
+    /**
+     * List Jar file names failing regexp pattern check
+     *
+     * Note the pattern is hardcoded to look for jars not containing word 'redhat',
+     * but it could be easily generalized if needed.
+     *
+     * @param path to the root of directory tree
+     * @return list of offending jar paths
+     */
+    public static List<Path> listJarsFailingNameCheck(String path) throws IOException {
+        return Files.find(Paths.get(path),
+                500, //if this is not enough, something is broken anyway
+                (filePath, fileAttr) -> fileAttr.isRegularFile() && jarNamePattern.matcher(filePath.getFileName().toString()).matches())
+                .collect(Collectors.toList());
     }
 
     public static float[] parseStartStopTimestamps(File log) throws FileNotFoundException {

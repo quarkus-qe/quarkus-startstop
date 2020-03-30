@@ -38,19 +38,19 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Michal Karm Babacek <karm@redhat.com>
  */
 public enum Apps {
-    JAX_RS_MINIMAL("app-jax-rs-minimal", URLContent.JAX_RS_MINIMAL, Whitelist.JAX_RS_MINIMAL),
-    FULL_MICROPROFILE("app-full-microprofile", URLContent.FULL_MICROPROFILE, Whitelist.FULL_MICROPROFILE),
-    GENERATED_SKELETON("app-generated-skeleton", URLContent.GENERATED_SKELETON, Whitelist.GENERATED_SKELETON);
+    JAX_RS_MINIMAL("app-jax-rs-minimal", URLContent.JAX_RS_MINIMAL, WhitelistLogLines.JAX_RS_MINIMAL),
+    FULL_MICROPROFILE("app-full-microprofile", URLContent.FULL_MICROPROFILE, WhitelistLogLines.FULL_MICROPROFILE),
+    GENERATED_SKELETON("app-generated-skeleton", URLContent.GENERATED_SKELETON, WhitelistLogLines.GENERATED_SKELETON);
 
     public final String dir;
     public final URLContent urlContent;
-    public final Whitelist whitelist;
+    public final WhitelistLogLines whitelistLogLines;
     public final Map<String, Long> thresholdProperties = new HashMap<>();
 
-    Apps(String dir, URLContent urlContent, Whitelist whitelist) {
+    Apps(String dir, URLContent urlContent, WhitelistLogLines whitelistLogLines) {
         this.dir = dir;
         this.urlContent = urlContent;
-        this.whitelist = whitelist;
+        this.whitelistLogLines = whitelistLogLines;
         File tpFile = new File(BASE_DIR + File.separator + dir + File.separator + "threshold.properties");
         String appDirNormalized = dir.toUpperCase().replace('-', '_') + "_";
         try (InputStream input = new FileInputStream(tpFile)) {

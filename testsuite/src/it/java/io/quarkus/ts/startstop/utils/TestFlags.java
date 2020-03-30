@@ -20,33 +20,19 @@
 package io.quarkus.ts.startstop.utils;
 
 /**
- * Whitelists errors in log files.
+ * Some flags to drive the tests flow
  *
  * @author Michal Karm Babacek <karm@redhat.com>
  */
-public enum Whitelist {
-    JAX_RS_MINIMAL(new String[]{
-            // Some artifacts names...
-            "maven-error-diagnostics",
-            "errorprone"
-    }),
-    FULL_MICROPROFILE(new String[]{
-            // Some artifacts names...
-            "maven-error-diagnostics",
-            "errorprone"
-    }),
-    GENERATED_SKELETON(new String[]{
-            // It so happens that the dummy skeleton tries to find Mongo. This is expected.
-            // See app-generated-skeleton/README.md for explanation of the scope.
-            "The remote computer refused the network connection",
-            // Some artifacts names...
-            "maven-error-diagnostics",
-            "errorprone"
-    });
+public enum TestFlags {
+    WARM_UP("This run is just a warm up for Dev mode."),
+    QUARKUS_BOM("platformArtifactId will use quarkus-bom"),
+    PRODUCT_BOM("platformArtifactId will use quarkus-product-bom"),
+    UNIVERSE_BOM("platformArtifactId will use quarkus-universe-bom"),
+    UNIVERSE_PRODUCT_BOM("platformArtifactId will use quarkus-universe-bom, and -DplatformGroupId=com.redhat.quarkus");
+    public final String label;
 
-    public final String[] errs;
-
-    Whitelist(String[] errs) {
-        this.errs = errs;
+    TestFlags(String label) {
+        this.label = label;
     }
 }
