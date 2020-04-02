@@ -33,12 +33,26 @@ public enum WhitelistLogLines {
     FULL_MICROPROFILE(new String[]{
             // Some artifacts names...
             "maven-error-diagnostics",
-            "errorprone"
+            "errorprone",
+            // Needs fixing in the demo app?
+            "TestSecureController.java",
     }),
     GENERATED_SKELETON(new String[]{
             // It so happens that the dummy skeleton tries to find Mongo. This is expected.
             // See app-generated-skeleton/README.md for explanation of the scope.
             "The remote computer refused the network connection",
+            // Harmless warning
+            "The Agroal dependency is present but no JDBC datasources have been defined",
+            // Due to our not exactly accurate application.properties, these expected warnings occur...
+            "Unrecognized configuration key \"quarkus.oidc.auth-server-url\" was provided",
+            "Unrecognized configuration key \"quarkus.oidc.client-id\" was provided",
+            "Unrecognized configuration key \"quarkus.smallrye-jwt.enabled\" was provided",
+            "Unrecognized configuration key \"quarkus.jaeger.service-name\" was provided",
+            "Unrecognized configuration key \"quarkus.jaeger.sampler-param\" was provided",
+            "Unrecognized configuration key \"quarkus.jaeger.endpoint\" was provided",
+            "Unrecognized configuration key \"quarkus.jaeger.sampler-type\" was provided",
+            // Hmm, weird, right? Deprecations should be fixed
+            "`io.vertx.reactivex.core.Vertx` is deprecated",
             // Some artifacts names...
             "maven-error-diagnostics",
             "errorprone"

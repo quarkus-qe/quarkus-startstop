@@ -68,6 +68,8 @@ public class Logs {
     private static final Pattern startedPatternControlSymbols = Pattern.compile(".* started in .*188m([0-9\\.]+).*", Pattern.DOTALL);
     private static final Pattern stoppedPatternControlSymbols = Pattern.compile(".* stopped in .*188m([0-9\\.]+).*", Pattern.DOTALL);
 
+    private static final Pattern warnErrorDetectionPattern = Pattern.compile("(?i:.*(ERROR|WARN).*)");
+
     public static final long SKIP = -1L;
 
     // TODO: How about WARNING? Other unwanted messages?
@@ -75,7 +77,7 @@ public class Logs {
         try (Scanner sc = new Scanner(log)) {
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
-                boolean error = line.matches("(?i:.*ERROR.*)");
+                boolean error = warnErrorDetectionPattern.matcher(line).matches();
                 boolean whiteListed = false;
                 if (error) {
                     for (String w : app.whitelistLogLines.errs) {
@@ -86,7 +88,7 @@ public class Logs {
                         }
                     }
                 }
-                assertFalse(error && !whiteListed, cmd.name() + " log should not contain `ERROR' lines that are not whitelisted. " +
+                assertFalse(error && !whiteListed, cmd.name() + " log should not contain error or warning lines that are not whitelisted. " +
                         "See testsuite" + File.separator + "target" + File.separator + "archived-logs" +
                         File.separator + testClass + File.separator + testMethod + File.separator + log.getName());
             }
