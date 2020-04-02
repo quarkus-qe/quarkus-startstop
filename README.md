@@ -20,6 +20,8 @@ Community version, including native images:
 mvn clean verify -Ptestsuite-community -Dquarkus.version=1.3.0.Final
 ```
 
+One can fine-tune excluded test cases or tests with ```excludeTags```, e.g. ```-DexcludeTags=startstop```.
+
 **Linux/Mac:**
 ```
 mvn clean verify -Ptestsuite
