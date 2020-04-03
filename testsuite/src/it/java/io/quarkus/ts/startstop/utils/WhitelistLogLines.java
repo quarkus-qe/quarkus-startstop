@@ -19,48 +19,54 @@
  */
 package io.quarkus.ts.startstop.utils;
 
+import java.util.regex.Pattern;
+
 /**
  * Whitelists errors in log files.
  *
  * @author Michal Karm Babacek <karm@redhat.com>
  */
 public enum WhitelistLogLines {
-    JAX_RS_MINIMAL(new String[]{
+    JAX_RS_MINIMAL(new Pattern[]{
             // Some artifacts names...
-            "maven-error-diagnostics",
-            "errorprone"
+            Pattern.compile(".*maven-error-diagnostics.*"),
+            Pattern.compile(".*errorprone.*")
     }),
-    FULL_MICROPROFILE(new String[]{
+    FULL_MICROPROFILE(new Pattern[]{
             // Some artifacts names...
-            "maven-error-diagnostics",
-            "errorprone",
+            Pattern.compile(".*maven-error-diagnostics.*"),
+            Pattern.compile(".*errorprone.*"),
             // Needs fixing in the demo app?
-            "TestSecureController.java",
+            Pattern.compile(".*TestSecureController.java.*"),
+            // Well, the RestClient demo probably should do some cleanup before shutdown...?
+            Pattern.compile(".*Closing a class org.jboss.resteasy.client.jaxrs.engines.ApacheHttpClient.*")
     }),
-    GENERATED_SKELETON(new String[]{
+    GENERATED_SKELETON(new Pattern[]{
             // It so happens that the dummy skeleton tries to find Mongo. This is expected.
             // See app-generated-skeleton/README.md for explanation of the scope.
-            "The remote computer refused the network connection",
+            Pattern.compile(".*The remote computer refused the network connection.*"),
             // Harmless warning
-            "The Agroal dependency is present but no JDBC datasources have been defined",
+            Pattern.compile(".*The Agroal dependency is present but no JDBC datasources have been defined.*"),
             // Due to our not exactly accurate application.properties, these expected warnings occur...
-            "Unrecognized configuration key \"quarkus.oidc.auth-server-url\" was provided",
-            "Unrecognized configuration key \"quarkus.oidc.client-id\" was provided",
-            "Unrecognized configuration key \"quarkus.smallrye-jwt.enabled\" was provided",
-            "Unrecognized configuration key \"quarkus.jaeger.service-name\" was provided",
-            "Unrecognized configuration key \"quarkus.jaeger.sampler-param\" was provided",
-            "Unrecognized configuration key \"quarkus.jaeger.endpoint\" was provided",
-            "Unrecognized configuration key \"quarkus.jaeger.sampler-type\" was provided",
+            Pattern.compile(".*Unrecognized configuration key[ \\\\\"]*(" +
+                    "quarkus.oidc.auth-server-url|" +
+                    "quarkus.oidc.client-id|" +
+                    "quarkus.smallrye-jwt.enabled|" +
+                    "quarkus.jaeger.service-name|" +
+                    "quarkus.jaeger.sampler-param|" +
+                    "quarkus.jaeger.endpoint|" +
+                    "quarkus.jaeger.sampler-type" +
+                    ")[ \\\\\"]*was provided.*"),
             // Hmm, weird, right? Deprecations should be fixed
-            "`io.vertx.reactivex.core.Vertx` is deprecated",
+            Pattern.compile(".*`io.vertx.reactivex.core.Vertx` is deprecated.*"),
             // Some artifacts names...
-            "maven-error-diagnostics",
-            "errorprone"
+            Pattern.compile(".*maven-error-diagnostics.*"),
+            Pattern.compile(".*errorprone.*")
     });
 
-    public final String[] errs;
+    public final Pattern[] errs;
 
-    WhitelistLogLines(String[] errs) {
+    WhitelistLogLines(Pattern[] errs) {
         this.errs = errs;
     }
 }

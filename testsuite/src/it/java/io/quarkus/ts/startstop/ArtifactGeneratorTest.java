@@ -87,7 +87,7 @@ public class ArtifactGeneratorTest {
             "jsonb",
             "jsonp",
             "kafka-client",
-            // "logging-json", https://issues.redhat.com/browse/QUARKUS-80
+            "logging-json",
             "narayana-jta",
             "oidc",
             "quartz",
@@ -98,7 +98,7 @@ public class ArtifactGeneratorTest {
             "resteasy-jaxb",
             "resteasy-jsonb",
             "scheduler",
-            //"spring-boot-properties", https://issues.redhat.com/browse/QUARKUS-79
+            "spring-boot-properties",
             "smallrye-reactive-messaging-amqp",
             "spring-data-jpa",
             "spring-di",
