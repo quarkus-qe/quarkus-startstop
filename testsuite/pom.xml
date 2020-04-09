@@ -67,7 +67,7 @@
                 <version>${maven.surefire.version}</version>
                 <configuration>
                     <!-- include -->
-                    <groups>generator,startstop,bomtests</groups>
+                    <groups>generator,startstop,bomtests,codequarkus</groups>
                     <!-- exclude -->
                     <excludedGroups>${excludeTags}</excludedGroups>
                 </configuration>

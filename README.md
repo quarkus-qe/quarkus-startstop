@@ -104,6 +104,10 @@ GENERATED_SKELETON,GENERATOR,2644,13871,3091,5597,1154,565340,198
 
 See [ArtifactGeneratorTest#manyExtensions](./testsuite/src/it/java/io/quarkus/ts/startstop/ArtifactGeneratorTest.java) for the list of used extensions.
 
+## Code Quarkus test
+
+Add ```-Dcode.quarkus.url=``` to test against a selected Code Quarkus site.
+
 ## Values
 
  * App - the test app used

@@ -146,19 +146,14 @@ public class ArtifactGeneratorTest {
         File appBaseDir = new File(getArtifactGeneBaseDir());
         File appDir = new File(appBaseDir, Apps.GENERATED_SKELETON.dir);
         String logsDir = appBaseDir.getAbsolutePath() + File.separator + Apps.GENERATED_SKELETON.dir + "-logs";
-
         List<String> generatorCmd = getGeneratorCommand(MvnCmds.GENERATOR.mvnCmds[0], extensions);
-
         List<String> runCmd = getRunCommand(MvnCmds.DEV.mvnCmds[0]);
-
         URLContent skeletonApp = Apps.GENERATED_SKELETON.urlContent;
-
         if (flags.contains(TestFlags.WARM_UP)) {
             LOGGER.info(mn + ": Warming up setup: " + String.join(" ", generatorCmd));
         } else {
             LOGGER.info(mn + ": Testing setup: " + String.join(" ", generatorCmd));
         }
-
         FakeOIDCServer fakeOIDCServer = new FakeOIDCServer(6661, "localhost");
 
         try {
@@ -190,12 +185,11 @@ public class ArtifactGeneratorTest {
             // The reason for a seemingly large timeout of 20 minutes is that dev mode will be downloading the Internet on the first fresh run.
             long timeoutS = (flags.contains(TestFlags.WARM_UP) ? 20 * 60 : 60);
             long timeToFirstOKRequest = WebpageTester.testWeb(skeletonApp.urlContent[0][0], timeoutS,
-                    skeletonApp.urlContent[0][1], true);
+                    skeletonApp.urlContent[0][1], !flags.contains(TestFlags.WARM_UP));
 
             if (flags.contains(TestFlags.WARM_UP)) {
                 LOGGER.info("Terminating warmup and scanning logs...");
                 pA.getInputStream().available();
-                checkLog(cn, mn, Apps.GENERATED_SKELETON, MvnCmds.GENERATOR, runLogA);
                 processStopper(pA, false);
                 LOGGER.info("Gonna wait for ports closed after warmup...");
                 // Release ports
@@ -246,10 +240,8 @@ public class ArtifactGeneratorTest {
                     .build();
             Logs.logMeasurements(log, measurementsLog);
             checkThreshold(Apps.GENERATED_SKELETON, MvnCmds.GENERATOR, SKIP, timeToFirstOKRequest, timeToReloadedOKRequest);
-
         } finally {
             fakeOIDCServer.stop();
-
             // Make sure processes are down even if there was an exception / failure
             if (pA != null) {
                 processStopper(pA, true);

@@ -1,3 +1,5 @@
+# CtrlC.exe
+
 When you start Quarkus on Windows as a process without
 a console window, you cannot stop it gently with TASKKILL, 
 you have to use TASKKILL /F. That terminates the process immediately
@@ -34,3 +36,11 @@ int main(int argc, const char* argv[]) {
 }
 
 ``` 
+
+# JSONtoEnum.java
+
+This is a utility that generates a convenience enum from a Code Quarkus website instance, e.g:
+
+```
+javac JSONtoEnum.java  &&  java JSONtoEnum https://code.quarkus.stage.redhat.com/api/extensions
+```

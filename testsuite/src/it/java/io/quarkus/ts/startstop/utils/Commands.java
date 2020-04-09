@@ -25,17 +25,23 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.URL;
 import java.net.UnknownHostException;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +52,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static io.quarkus.ts.startstop.StartStopTest.BASE_DIR;
 
@@ -58,29 +65,31 @@ public class Commands {
     public static final boolean isThisWindows = System.getProperty("os.name").matches(".*[Ww]indows.*");
     private static final Pattern numPattern = Pattern.compile("[ \t]*[0-9]+[ \t]*");
     private static final Pattern quarkusVersionPattern = Pattern.compile("[ \t]*<quarkus.version>([^<]*)</quarkus.version>.*");
-    private static final String ARTIFACT_GENERATOR_WORKSPACE = "ARTIFACT_GENERATOR_WORKSPACE";
-    private static final String MAVEN_REPO_LOCAL = "tests.maven.repo.local";
 
     public static String getArtifactGeneBaseDir() {
-        String env = System.getenv().get(ARTIFACT_GENERATOR_WORKSPACE);
-        if (StringUtils.isNotBlank(env)) {
-            return env;
-        }
-        String sys = System.getProperty(ARTIFACT_GENERATOR_WORKSPACE);
-        if (StringUtils.isNotBlank(sys)) {
-            return sys;
+        for (String p : new String[]{"ARTIFACT_GENERATOR_WORKSPACE", "artifact.generator.workspace"}) {
+            String env = System.getenv().get(p);
+            if (StringUtils.isNotBlank(env)) {
+                return env;
+            }
+            String sys = System.getProperty(p);
+            if (StringUtils.isNotBlank(sys)) {
+                return sys;
+            }
         }
         return System.getProperty("java.io.tmpdir");
     }
 
     public static String getLocalMavenRepoDir() {
-        String env = System.getenv().get(MAVEN_REPO_LOCAL);
-        if (StringUtils.isNotBlank(env)) {
-            return env;
-        }
-        String sys = System.getProperty(MAVEN_REPO_LOCAL);
-        if (StringUtils.isNotBlank(sys)) {
-            return sys;
+        for (String p : new String[]{"TESTS_MAVEN_REPO_LOCAL", "tests.maven.repo.local"}) {
+            String env = System.getenv().get(p);
+            if (StringUtils.isNotBlank(env)) {
+                return env;
+            }
+            String sys = System.getProperty(p);
+            if (StringUtils.isNotBlank(sys)) {
+                return sys;
+            }
         }
         return System.getProperty("user.home") + File.separator + ".m2" + File.separator + "repository";
     }
@@ -136,6 +145,21 @@ public class Commands {
             throw new IllegalArgumentException("Unable to determine project.basedir.");
         }
         return new File(sys).getParent();
+    }
+
+    public static String getCodeQuarkusURL() {
+        for (String p : new String[]{"CODE_QUARKUS_URL", "code.quarkus.url"}) {
+            String env = System.getenv().get(p);
+            if (StringUtils.isNotBlank(env)) {
+                return env;
+            }
+            String sys = System.getProperty(p);
+            if (StringUtils.isNotBlank(sys)) {
+                return sys;
+            }
+        }
+        LOGGER.warning("Failed to detect code.quarkus.url/CODE_QUARKUS_URL, defaulting to https://code.quarkus.io.");
+        return "https://code.quarkus.io";
     }
 
     public static void cleanTarget(Apps app) {
@@ -228,6 +252,33 @@ public class Commands {
         generatorCmd.add("-Dmaven.repo.local=" + getLocalMavenRepoDir());
 
         return Collections.unmodifiableList(generatorCmd);
+    }
+
+    public static void download(Collection<CodeQuarkusExtensions> extensions, String destinationZipFile) throws IOException {
+        try (ReadableByteChannel readableByteChannel = Channels.newChannel(
+                new URL(getCodeQuarkusURL() + "/api/download?s=" +
+                        extensions.stream().map(x -> x.shortId).collect(Collectors.joining("."))).openStream());
+             FileChannel fileChannel = new FileOutputStream(destinationZipFile).getChannel()) {
+            fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+        }
+    }
+
+    public static File unzip(String zipFilePath, String destinationDir) throws InterruptedException, IOException {
+        ProcessBuilder pb;
+        if (isThisWindows) {
+            pb = new ProcessBuilder("powershell", "-c", "Expand-Archive", "-Path", zipFilePath, "-DestinationPath", destinationDir, "-Force");
+        } else {
+            pb = new ProcessBuilder("unzip", "-o", zipFilePath, "-d", destinationDir);
+        }
+        Map<String, String> env = pb.environment();
+        env.put("PATH", System.getenv("PATH"));
+        pb.directory(new File(destinationDir));
+        pb.redirectErrorStream(true);
+        File unzipLog = new File(zipFilePath + ".log");
+        pb.redirectOutput(ProcessBuilder.Redirect.to(unzipLog));
+        Process p = pb.start();
+        p.waitFor(3, TimeUnit.MINUTES);
+        return unzipLog;
     }
 
     public static boolean waitForTcpClosed(String host, int port, long loopTimeoutS) throws InterruptedException, UnknownHostException {
