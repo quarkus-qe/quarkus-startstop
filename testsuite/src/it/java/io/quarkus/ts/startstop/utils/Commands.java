@@ -65,6 +65,7 @@ public class Commands {
     public static final boolean isThisWindows = System.getProperty("os.name").matches(".*[Ww]indows.*");
     private static final Pattern numPattern = Pattern.compile("[ \t]*[0-9]+[ \t]*");
     private static final Pattern quarkusVersionPattern = Pattern.compile("[ \t]*<quarkus.version>([^<]*)</quarkus.version>.*");
+    private static final Pattern trailingSlash = Pattern.compile("/+$");
 
     public static String getArtifactGeneBaseDir() {
         for (String p : new String[]{"ARTIFACT_GENERATOR_WORKSPACE", "artifact.generator.workspace"}) {
@@ -148,28 +149,39 @@ public class Commands {
     }
 
     public static String getCodeQuarkusURL() {
+        String url = null;
         for (String p : new String[]{"CODE_QUARKUS_URL", "code.quarkus.url"}) {
             String env = System.getenv().get(p);
             if (StringUtils.isNotBlank(env)) {
-                return env;
+                url = env;
+                break;
             }
             String sys = System.getProperty(p);
             if (StringUtils.isNotBlank(sys)) {
-                return sys;
+                url = sys;
+                break;
             }
         }
-        LOGGER.warning("Failed to detect code.quarkus.url/CODE_QUARKUS_URL, defaulting to https://code.quarkus.io.");
-        return "https://code.quarkus.io";
+        if (url == null) {
+            url = "https://code.quarkus.io";
+            LOGGER.warning("Failed to detect code.quarkus.url/CODE_QUARKUS_URL env/sys props, defaulting to " + url);
+            return url;
+        }
+        Matcher m = trailingSlash.matcher(url);
+        if (m.find()) {
+            url = m.replaceAll("");
+        }
+        return url;
     }
 
     public static void cleanTarget(Apps app) {
         String target = BASE_DIR + File.separator + app.dir + File.separator + "target";
         String logs = BASE_DIR + File.separator + app.dir + File.separator + "logs";
-        cleanDir(target, logs);
+        cleanDirOrFile(target, logs);
     }
 
-    public static void cleanDir(String... dir) {
-        for (String s : dir) {
+    public static void cleanDirOrFile(String... path) {
+        for (String s : path) {
             try {
                 FileUtils.forceDelete(new File(s));
             } catch (IOException e) {
@@ -275,6 +287,7 @@ public class Commands {
         pb.directory(new File(destinationDir));
         pb.redirectErrorStream(true);
         File unzipLog = new File(zipFilePath + ".log");
+        unzipLog.delete();
         pb.redirectOutput(ProcessBuilder.Redirect.to(unzipLog));
         Process p = pb.start();
         p.waitFor(3, TimeUnit.MINUTES);

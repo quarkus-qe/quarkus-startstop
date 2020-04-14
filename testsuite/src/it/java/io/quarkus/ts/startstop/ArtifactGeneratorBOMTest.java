@@ -41,9 +41,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-import static io.quarkus.ts.startstop.ArtifactGeneratorTest.supportedExtensionsSetA;
-import static io.quarkus.ts.startstop.ArtifactGeneratorTest.supportedExtensionsSetB;
-import static io.quarkus.ts.startstop.utils.Commands.cleanDir;
+import static io.quarkus.ts.startstop.ArtifactGeneratorTest.supportedExtensionsSubsetSetA;
+import static io.quarkus.ts.startstop.ArtifactGeneratorTest.supportedExtensionsSubsetSetB;
+import static io.quarkus.ts.startstop.utils.Commands.cleanDirOrFile;
 import static io.quarkus.ts.startstop.utils.Commands.confAppPropsForSkeleton;
 import static io.quarkus.ts.startstop.utils.Commands.getArtifactGeneBaseDir;
 import static io.quarkus.ts.startstop.utils.Commands.getBuildCommand;
@@ -91,7 +91,7 @@ public class ArtifactGeneratorBOMTest {
 
         try {
             // Cleanup
-            cleanDir(appDir.getAbsolutePath(), logsDir);
+            cleanDirOrFile(appDir.getAbsolutePath(), logsDir);
             Files.createDirectories(Paths.get(logsDir));
             Files.createDirectories(Paths.get(repoDir));
 
@@ -157,55 +157,55 @@ public class ArtifactGeneratorBOMTest {
             if (runLogA != null) {
                 archiveLog(cn, mn, runLogA);
             }
-            cleanDir(appDir.getAbsolutePath(), logsDir);
+            cleanDirOrFile(appDir.getAbsolutePath(), logsDir);
         }
     }
 
     @Test
     @Tag("community")
     public void quarkusBomExtensionsA(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSetA, EnumSet.of(TestFlags.QUARKUS_BOM));
+        testRuntime(testInfo, supportedExtensionsSubsetSetA, EnumSet.of(TestFlags.QUARKUS_BOM));
     }
 
     @Test
     @Tag("community")
     public void quarkusBomExtensionsB(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSetB, EnumSet.of(TestFlags.QUARKUS_BOM));
+        testRuntime(testInfo, supportedExtensionsSubsetSetB, EnumSet.of(TestFlags.QUARKUS_BOM));
     }
 
     @Test
     @Tag("product")
     public void quarkusProductBomExtensionsA(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSetA, EnumSet.of(TestFlags.PRODUCT_BOM));
+        testRuntime(testInfo, supportedExtensionsSubsetSetA, EnumSet.of(TestFlags.PRODUCT_BOM));
     }
 
     @Test
     @Tag("product")
     public void quarkusProductBomExtensionsB(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSetB, EnumSet.of(TestFlags.PRODUCT_BOM));
+        testRuntime(testInfo, supportedExtensionsSubsetSetB, EnumSet.of(TestFlags.PRODUCT_BOM));
     }
 
     @Test
     @Tag("community")
     public void quarkusUniverseBomExtensionsA(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSetA, EnumSet.of(TestFlags.UNIVERSE_BOM));
+        testRuntime(testInfo, supportedExtensionsSubsetSetA, EnumSet.of(TestFlags.UNIVERSE_BOM));
     }
 
     @Test
     @Tag("community")
     public void quarkusUniverseBomExtensionsB(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSetB, EnumSet.of(TestFlags.UNIVERSE_BOM));
+        testRuntime(testInfo, supportedExtensionsSubsetSetB, EnumSet.of(TestFlags.UNIVERSE_BOM));
     }
 
     @Test
     @Tag("product")
     public void quarkusUniverseProductBomExtensionsA(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSetA, EnumSet.of(TestFlags.UNIVERSE_PRODUCT_BOM));
+        testRuntime(testInfo, supportedExtensionsSubsetSetA, EnumSet.of(TestFlags.UNIVERSE_PRODUCT_BOM));
     }
 
     @Test
     @Tag("product")
     public void quarkusUniverseProductBomExtensionsB(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSetB, EnumSet.of(TestFlags.UNIVERSE_PRODUCT_BOM));
+        testRuntime(testInfo, supportedExtensionsSubsetSetB, EnumSet.of(TestFlags.UNIVERSE_PRODUCT_BOM));
     }
 }

@@ -34,7 +34,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.logging.Logger;
 
-import static io.quarkus.ts.startstop.utils.Commands.cleanDir;
+import static io.quarkus.ts.startstop.utils.Commands.cleanDirOrFile;
 import static io.quarkus.ts.startstop.utils.Commands.download;
 import static io.quarkus.ts.startstop.utils.Commands.getArtifactGeneBaseDir;
 import static io.quarkus.ts.startstop.utils.Commands.getBuildCommand;
@@ -75,18 +75,18 @@ public class CodeQuarkusTest {
         String zipFile = GEN_BASE_DIR + File.separator + "code-with-quarkus.zip";
 
         try {
-            cleanDir(appDir.getAbsolutePath(), logsDir);
+            cleanDirOrFile(appDir.getAbsolutePath(), logsDir);
             Files.createDirectories(Paths.get(logsDir));
             LOGGER.info("Downloading...");
             download(extensions, zipFile);
             LOGGER.info("Unzipping...");
             unzipLog = unzip(zipFile, GEN_BASE_DIR);
-            LOGGER.info("Running...");
             runLogA = new File(logsDir + File.separator + "dev-run.log");
+            LOGGER.info("Running command: " + devCmd + " in directory: " + appDir);
             pA = runCommand(devCmd, appDir, runLogA);
             // It takes time to download the Internet
-            long timeoutS = 30 * 60;
-            LOGGER.info("Waiting for the web content...");
+            long timeoutS = 10 * 60;
+            LOGGER.info("Timeout: " + timeoutS + "s. Waiting for the web content...");
             WebpageTester.testWeb(skeletonApp.urlContent[0][0], timeoutS, skeletonApp.urlContent[0][1], false);
             LOGGER.info("Terminating and scanning logs...");
             pA.getInputStream().available();
@@ -101,32 +101,32 @@ public class CodeQuarkusTest {
             }
             archiveLog(cn, mn, unzipLog);
             archiveLog(cn, mn, runLogA);
-            cleanDir(appDir.getAbsolutePath(), logsDir);
+            cleanDirOrFile(appDir.getAbsolutePath(), logsDir);
         }
     }
 
     @Test
-    public void supportedExtensionsA(TestInfo testInfo) throws Exception {
+    public void supportedExtensionsSubsetA(TestInfo testInfo) throws Exception {
         testRuntime(testInfo, supportedEx.get(0));
     }
 
     @Test
-    public void supportedExtensionsB(TestInfo testInfo) throws Exception {
+    public void supportedExtensionsSubsetB(TestInfo testInfo) throws Exception {
         testRuntime(testInfo, supportedEx.get(1));
     }
 
     @Test
-    public void supportedExtensionsC(TestInfo testInfo) throws Exception {
+    public void supportedExtensionsSubsetC(TestInfo testInfo) throws Exception {
         testRuntime(testInfo, supportedEx.get(2));
     }
 
     @Test
-    public void supportedExtensionsD(TestInfo testInfo) throws Exception {
+    public void supportedExtensionsSubsetD(TestInfo testInfo) throws Exception {
         testRuntime(testInfo, supportedEx.get(3));
     }
 
     @Test
-    public void notSupportedExtensions(TestInfo testInfo) throws Exception {
+    public void notsupportedExtensionsSubset(TestInfo testInfo) throws Exception {
         testRuntime(testInfo, notSupportedEx.get(0).subList(0, Math.min(10, mixedEx.get(0).size())));
     }
 

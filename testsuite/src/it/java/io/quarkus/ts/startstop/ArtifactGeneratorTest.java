@@ -46,7 +46,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.quarkus.ts.startstop.utils.Commands.cleanDir;
+import static io.quarkus.ts.startstop.utils.Commands.cleanDirOrFile;
 import static io.quarkus.ts.startstop.utils.Commands.confAppPropsForSkeleton;
 import static io.quarkus.ts.startstop.utils.Commands.getArtifactGeneBaseDir;
 import static io.quarkus.ts.startstop.utils.Commands.getGeneratorCommand;
@@ -73,7 +73,7 @@ public class ArtifactGeneratorTest {
 
     private static final Logger LOGGER = Logger.getLogger(ArtifactGeneratorTest.class.getName());
 
-    public static final String[] supportedExtensionsSetA = new String[]{
+    public static final String[] supportedExtensionsSubsetSetA = new String[]{
             "agroal",
             "config-yaml",
             "core",
@@ -110,7 +110,7 @@ public class ArtifactGeneratorTest {
             "vertx-web",
     };
 
-    public static final String[] supportedExtensionsSetB = new String[]{
+    public static final String[] supportedExtensionsSubsetSetB = new String[]{
             "agroal",
             "config-yaml",
             "core",
@@ -158,7 +158,7 @@ public class ArtifactGeneratorTest {
 
         try {
             // Cleanup
-            cleanDir(appDir.getAbsolutePath(), logsDir);
+            cleanDirOrFile(appDir.getAbsolutePath(), logsDir);
             Files.createDirectories(Paths.get(logsDir));
 
             // Build
@@ -252,19 +252,19 @@ public class ArtifactGeneratorTest {
                 // If build failed it is actually expected to have no runtime log.
                 archiveLog(cn, mn, runLogA);
             }
-            cleanDir(appDir.getAbsolutePath(), logsDir);
+            cleanDirOrFile(appDir.getAbsolutePath(), logsDir);
         }
     }
 
     @Test
     public void manyExtensionsSetA(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSetA, EnumSet.of(TestFlags.WARM_UP));
-        testRuntime(testInfo, supportedExtensionsSetA, EnumSet.noneOf(TestFlags.class));
+        testRuntime(testInfo, supportedExtensionsSubsetSetA, EnumSet.of(TestFlags.WARM_UP));
+        testRuntime(testInfo, supportedExtensionsSubsetSetA, EnumSet.noneOf(TestFlags.class));
     }
 
     @Test
     public void manyExtensionsSetB(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSetB, EnumSet.of(TestFlags.WARM_UP));
-        testRuntime(testInfo, supportedExtensionsSetB, EnumSet.noneOf(TestFlags.class));
+        testRuntime(testInfo, supportedExtensionsSubsetSetB, EnumSet.of(TestFlags.WARM_UP));
+        testRuntime(testInfo, supportedExtensionsSubsetSetB, EnumSet.noneOf(TestFlags.class));
     }
 }
