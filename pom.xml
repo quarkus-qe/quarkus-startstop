@@ -44,6 +44,9 @@
         <junit.jupiter.version>5.6.0</junit.jupiter.version>
         <resteasy.version>4.3.0.Final</resteasy.version>
         <commons.lang.version>3.9</commons.lang.version>
+
+        <!-- Test to be executed by default (should be all of them) -->
+        <includeTags>generator,startstop,bomtests,codequarkus</includeTags>
     </properties>
 
     <profiles>
