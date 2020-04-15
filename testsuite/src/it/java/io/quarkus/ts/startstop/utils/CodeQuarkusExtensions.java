@@ -38,6 +38,8 @@ public enum CodeQuarkusExtensions {
     QUARKUS_RESTEASY_JAXB("quarkus-resteasy-jaxb", "RESTEasy JAXB", "d7W", true),
     QUARKUS_RESTEASY_MUTINY("quarkus-resteasy-mutiny", "RESTEasy Mutiny", "8Tx", false),
     QUARKUS_RESTEASY_QUTE("quarkus-resteasy-qute", "RESTEasy Qute", "ju", false),
+//  Commented out as it would require touching application.properties with confAppPropsForSkeleton(String appDir)
+//  https://github.com/quarkusio/quarkus/issues/8506
 //  QUARKUS_SMALLRYE_JWT("quarkus-smallrye-jwt", "SmallRye JWT", "D9x", false),
     QUARKUS_SMALLRYE_OPENAPI("quarkus-smallrye-openapi", "SmallRye OpenAPI", "ARC", true),
     QUARKUS_UNDERTOW("quarkus-undertow", "Undertow Servlet", "LMC", true),
@@ -94,10 +96,14 @@ public enum CodeQuarkusExtensions {
     QUARKUS_KUBERNETES_CLIENT("quarkus-kubernetes-client", "Kubernetes Client", "Spa", false),
     QUARKUS_SMALLRYE_METRICS("quarkus-smallrye-metrics", "SmallRye Metrics", "Ll4", true),
     QUARKUS_SMALLRYE_OPENTRACING("quarkus-smallrye-opentracing", "SmallRye OpenTracing", "f7", true),
+//  Commented out as it would require touching application.properties with confAppPropsForSkeleton(String appDir)
+//  https://github.com/quarkusio/quarkus/issues/8506
 //  QUARKUS_OIDC("quarkus-oidc", "OpenID Connect", "fgL", true),
     QUARKUS_ELYTRON_SECURITY_JDBC("quarkus-elytron-security-jdbc", "Elytron Security JDBC", "Pxs", false),
     QUARKUS_ELYTRON_SECURITY_OAUTH2("quarkus-elytron-security-oauth2", "Elytron Security OAuth 2.0", "9Ie", false),
     QUARKUS_ELYTRON_SECURITY_PROPERTIES_FILE("quarkus-elytron-security-properties-file", "Elytron Security Properties File", "Dk8", false),
+//  Commented out as it would require touching application.properties with confAppPropsForSkeleton(String appDir)
+//  https://github.com/quarkusio/quarkus/issues/8506
 //  QUARKUS_KEYCLOAK_AUTHORIZATION("quarkus-keycloak-authorization", "Keycloak Authorization", "2Bx", false),
     QUARKUS_SECURITY_JPA("quarkus-security-jpa", "Security JPA", "W8w", false),
     QUARKUS_VAULT("quarkus-vault", "Vault", "r73", false),
