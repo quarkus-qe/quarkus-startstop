@@ -61,7 +61,9 @@ public enum WhitelistLogLines {
             Pattern.compile(".*`io.vertx.reactivex.core.Vertx` is deprecated.*"),
             // Some artifacts names...
             Pattern.compile(".*maven-error-diagnostics.*"),
-            Pattern.compile(".*errorprone.*")
+            Pattern.compile(".*errorprone.*"),
+            // When GraalVM 19.3.1 is used; unrelated to the test
+            Pattern.compile(".*forcing TieredStopAtLevel to full optimization because JVMCI is enabled.*"),
     });
 
     public final Pattern[] errs;

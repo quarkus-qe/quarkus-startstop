@@ -47,6 +47,9 @@ public enum MvnCmds {
                     "-DprojectVersion=1.0.0-SNAPSHOT",
                     "-DclassName=org.my.group.MyResource"
             }
+    }),
+    MVNW_DEV(new String[][]{
+            new String[]{Commands.isThisWindows ? "mvnw.cmd" : "./mvnw", "quarkus:dev"}
     });
 
     public final String[][] mvnCmds;

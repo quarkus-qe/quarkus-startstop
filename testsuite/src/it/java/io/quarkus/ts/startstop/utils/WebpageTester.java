@@ -54,6 +54,9 @@ public class WebpageTester {
             throw new IllegalArgumentException("stringToLookFor must contain a non-empty string");
         }
         String webPage = "";
+        String failureMessage = "Timeout " + timeoutS + "s was reached. " +
+                (StringUtils.isNotBlank(webPage) ? webPage + " must contain string: " : "Empty webpage does not contain string: ") +
+                "`" + stringToLookFor + "'";
         long now = System.currentTimeMillis();
         final long startTime = now;
         boolean found = false;
@@ -82,7 +85,10 @@ public class WebpageTester {
             }
             now = System.currentTimeMillis();
         }
-        assertTrue(found, webPage + " must contain string: `" + stringToLookFor + "'");
+        if (!found) {
+            LOGGER.info(failureMessage);
+        }
+        assertTrue(found, failureMessage);
         return foundTimestamp - startTime;
     }
 }

@@ -46,7 +46,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.quarkus.ts.startstop.utils.Commands.cleanDir;
+import static io.quarkus.ts.startstop.utils.Commands.cleanDirOrFile;
 import static io.quarkus.ts.startstop.utils.Commands.confAppPropsForSkeleton;
 import static io.quarkus.ts.startstop.utils.Commands.getArtifactGeneBaseDir;
 import static io.quarkus.ts.startstop.utils.Commands.getGeneratorCommand;
@@ -73,7 +73,7 @@ public class ArtifactGeneratorTest {
 
     private static final Logger LOGGER = Logger.getLogger(ArtifactGeneratorTest.class.getName());
 
-    public static final String[] supportedExtensionsSetA = new String[]{
+    public static final String[] supportedExtensionsSubsetSetA = new String[]{
             "agroal",
             "config-yaml",
             "core",
@@ -110,7 +110,7 @@ public class ArtifactGeneratorTest {
             "vertx-web",
     };
 
-    public static final String[] supportedExtensionsSetB = new String[]{
+    public static final String[] supportedExtensionsSubsetSetB = new String[]{
             "agroal",
             "config-yaml",
             "core",
@@ -146,24 +146,19 @@ public class ArtifactGeneratorTest {
         File appBaseDir = new File(getArtifactGeneBaseDir());
         File appDir = new File(appBaseDir, Apps.GENERATED_SKELETON.dir);
         String logsDir = appBaseDir.getAbsolutePath() + File.separator + Apps.GENERATED_SKELETON.dir + "-logs";
-
         List<String> generatorCmd = getGeneratorCommand(MvnCmds.GENERATOR.mvnCmds[0], extensions);
-
         List<String> runCmd = getRunCommand(MvnCmds.DEV.mvnCmds[0]);
-
         URLContent skeletonApp = Apps.GENERATED_SKELETON.urlContent;
-
         if (flags.contains(TestFlags.WARM_UP)) {
             LOGGER.info(mn + ": Warming up setup: " + String.join(" ", generatorCmd));
         } else {
             LOGGER.info(mn + ": Testing setup: " + String.join(" ", generatorCmd));
         }
-
         FakeOIDCServer fakeOIDCServer = new FakeOIDCServer(6661, "localhost");
 
         try {
             // Cleanup
-            cleanDir(appDir.getAbsolutePath(), logsDir);
+            cleanDirOrFile(appDir.getAbsolutePath(), logsDir);
             Files.createDirectories(Paths.get(logsDir));
 
             // Build
@@ -190,12 +185,11 @@ public class ArtifactGeneratorTest {
             // The reason for a seemingly large timeout of 20 minutes is that dev mode will be downloading the Internet on the first fresh run.
             long timeoutS = (flags.contains(TestFlags.WARM_UP) ? 20 * 60 : 60);
             long timeToFirstOKRequest = WebpageTester.testWeb(skeletonApp.urlContent[0][0], timeoutS,
-                    skeletonApp.urlContent[0][1], true);
+                    skeletonApp.urlContent[0][1], !flags.contains(TestFlags.WARM_UP));
 
             if (flags.contains(TestFlags.WARM_UP)) {
                 LOGGER.info("Terminating warmup and scanning logs...");
                 pA.getInputStream().available();
-                checkLog(cn, mn, Apps.GENERATED_SKELETON, MvnCmds.GENERATOR, runLogA);
                 processStopper(pA, false);
                 LOGGER.info("Gonna wait for ports closed after warmup...");
                 // Release ports
@@ -246,10 +240,8 @@ public class ArtifactGeneratorTest {
                     .build();
             Logs.logMeasurements(log, measurementsLog);
             checkThreshold(Apps.GENERATED_SKELETON, MvnCmds.GENERATOR, SKIP, timeToFirstOKRequest, timeToReloadedOKRequest);
-
         } finally {
             fakeOIDCServer.stop();
-
             // Make sure processes are down even if there was an exception / failure
             if (pA != null) {
                 processStopper(pA, true);
@@ -260,19 +252,19 @@ public class ArtifactGeneratorTest {
                 // If build failed it is actually expected to have no runtime log.
                 archiveLog(cn, mn, runLogA);
             }
-            cleanDir(appDir.getAbsolutePath(), logsDir);
+            cleanDirOrFile(appDir.getAbsolutePath(), logsDir);
         }
     }
 
     @Test
     public void manyExtensionsSetA(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSetA, EnumSet.of(TestFlags.WARM_UP));
-        testRuntime(testInfo, supportedExtensionsSetA, EnumSet.noneOf(TestFlags.class));
+        testRuntime(testInfo, supportedExtensionsSubsetSetA, EnumSet.of(TestFlags.WARM_UP));
+        testRuntime(testInfo, supportedExtensionsSubsetSetA, EnumSet.noneOf(TestFlags.class));
     }
 
     @Test
     public void manyExtensionsSetB(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSetB, EnumSet.of(TestFlags.WARM_UP));
-        testRuntime(testInfo, supportedExtensionsSetB, EnumSet.noneOf(TestFlags.class));
+        testRuntime(testInfo, supportedExtensionsSubsetSetB, EnumSet.of(TestFlags.WARM_UP));
+        testRuntime(testInfo, supportedExtensionsSubsetSetB, EnumSet.noneOf(TestFlags.class));
     }
 }

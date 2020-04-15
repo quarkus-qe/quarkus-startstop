@@ -84,7 +84,7 @@ public class Logs {
                     for (Pattern p : app.whitelistLogLines.errs) {
                         if (p.matcher(line).matches()) {
                             whiteListed = true;
-                            LOGGER.info(cmd.name() + "log for " + testMethod + " contains whitelisted error: `" + line + "'");
+                            LOGGER.info(cmd.name() + " log for " + testMethod + " contains whitelisted error: `" + line + "'");
                             break;
                         }
                     }
@@ -124,8 +124,10 @@ public class Logs {
             }
             assertFalse(containsNotWhitelisted, "There are not-whitelisted artifacts without expected string " + jarSuffix + " suffix, see: \n"
                     + String.join("\n", reportArtifacts));
-            LOGGER.warning("There are whitelisted artifacts without expected string " + jarSuffix + " suffix, see: \n"
-                    + String.join("\n", reportArtifacts));
+            if(!reportArtifacts.isEmpty()) {
+                LOGGER.warning("There are whitelisted artifacts without expected string " + jarSuffix + " suffix, see: \n"
+                        + String.join("\n", reportArtifacts));
+            }
         }
     }
 
