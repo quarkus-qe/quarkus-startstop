@@ -124,7 +124,7 @@ public class Logs {
             }
             assertFalse(containsNotWhitelisted, "There are not-whitelisted artifacts without expected string " + jarSuffix + " suffix, see: \n"
                     + String.join("\n", reportArtifacts));
-            if(!reportArtifacts.isEmpty()) {
+            if (!reportArtifacts.isEmpty()) {
                 LOGGER.warning("There are whitelisted artifacts without expected string " + jarSuffix + " suffix, see: \n"
                         + String.join("\n", reportArtifacts));
             }
@@ -181,6 +181,17 @@ public class Logs {
         Files.createDirectories(destDir);
         String filename = log.getName();
         Files.copy(log.toPath(), Paths.get(destDir.toString(), filename));
+    }
+
+    public static void writeReport(String testClass, String testMethod, String text) throws IOException {
+        Path destDir = getLogsDir(testClass, testMethod);
+        Files.createDirectories(destDir);
+        Files.write(Paths.get(destDir.toString(), "report.md"), text.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
+    }
+
+    public static void appendln(StringBuilder s, String text) {
+        s.append(text);
+        s.append("\n");
     }
 
     public static Path getLogsDir(String testClass, String testMethod) throws IOException {

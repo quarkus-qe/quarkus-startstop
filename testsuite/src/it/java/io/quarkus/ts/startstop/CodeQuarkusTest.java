@@ -43,8 +43,10 @@ import static io.quarkus.ts.startstop.utils.Commands.processStopper;
 import static io.quarkus.ts.startstop.utils.Commands.runCommand;
 import static io.quarkus.ts.startstop.utils.Commands.unzip;
 import static io.quarkus.ts.startstop.utils.Commands.waitForTcpClosed;
+import static io.quarkus.ts.startstop.utils.Logs.appendln;
 import static io.quarkus.ts.startstop.utils.Logs.archiveLog;
 import static io.quarkus.ts.startstop.utils.Logs.checkLog;
+import static io.quarkus.ts.startstop.utils.Logs.writeReport;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -65,6 +67,7 @@ public class CodeQuarkusTest {
         Process pA = null;
         File unzipLog = null;
         File runLogA = null;
+        StringBuilder whatIDidReport = new StringBuilder();
         String cn = testInfo.getTestClass().get().getCanonicalName();
         String mn = testInfo.getTestMethod().get().getName();
         LOGGER.info(mn + ": Testing Code Quarkus generator with these " + extensions.size() + " extensions: " + extensions.toString());
@@ -83,6 +86,10 @@ public class CodeQuarkusTest {
             unzipLog = unzip(zipFile, GEN_BASE_DIR);
             runLogA = new File(logsDir + File.separator + "dev-run.log");
             LOGGER.info("Running command: " + devCmd + " in directory: " + appDir);
+            appendln(whatIDidReport, "# " + cn + ", " + mn + "\n");
+            appendln(whatIDidReport, "Extensions: " + extensions.toString());
+            appendln(whatIDidReport, appDir.getAbsolutePath());
+            appendln(whatIDidReport, String.join(" ", devCmd));
             pA = runCommand(devCmd, appDir, runLogA);
             // It takes time to download the Internet
             long timeoutS = 10 * 60;
@@ -101,6 +108,7 @@ public class CodeQuarkusTest {
             }
             archiveLog(cn, mn, unzipLog);
             archiveLog(cn, mn, runLogA);
+            writeReport(cn, mn, whatIDidReport.toString());
             cleanDirOrFile(appDir.getAbsolutePath(), logsDir);
         }
     }

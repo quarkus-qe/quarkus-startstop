@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -50,11 +51,13 @@ import static io.quarkus.ts.startstop.utils.Commands.processStopper;
 import static io.quarkus.ts.startstop.utils.Commands.runCommand;
 import static io.quarkus.ts.startstop.utils.Commands.waitForTcpClosed;
 import static io.quarkus.ts.startstop.utils.Logs.SKIP;
+import static io.quarkus.ts.startstop.utils.Logs.appendln;
 import static io.quarkus.ts.startstop.utils.Logs.archiveLog;
 import static io.quarkus.ts.startstop.utils.Logs.checkLog;
 import static io.quarkus.ts.startstop.utils.Logs.checkThreshold;
 import static io.quarkus.ts.startstop.utils.Logs.getLogsDir;
 import static io.quarkus.ts.startstop.utils.Logs.parseStartStopTimestamps;
+import static io.quarkus.ts.startstop.utils.Logs.writeReport;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -73,10 +76,10 @@ public class StartStopTest {
         Process pA = null;
         File buildLogA = null;
         File runLogA = null;
+        StringBuilder whatIDidReport = new StringBuilder();
         File appDir = new File(BASE_DIR + File.separator + app.dir);
         String cn = testInfo.getTestClass().get().getCanonicalName();
         String mn = testInfo.getTestMethod().get().getName();
-
         try {
             // Cleanup
             cleanTarget(app);
@@ -85,7 +88,11 @@ public class StartStopTest {
             // Build
             buildLogA = new File(appDir.getAbsolutePath() + File.separator + "logs" + File.separator + mvnCmds.name().toLowerCase() + "-build.log");
             ExecutorService buildService = Executors.newFixedThreadPool(1);
-            buildService.submit(new Commands.ProcessRunner(appDir, buildLogA, getBuildCommand(mvnCmds.mvnCmds[0]), 20));
+            List<String> cmd = getBuildCommand(mvnCmds.mvnCmds[0]);
+            buildService.submit(new Commands.ProcessRunner(appDir, buildLogA, cmd, 20));
+            appendln(whatIDidReport, "# " + cn + ", " + mn + "\n");
+            appendln(whatIDidReport, appDir.getAbsolutePath());
+            appendln(whatIDidReport, String.join(" ", cmd));
             long buildStarts = System.currentTimeMillis();
             buildService.shutdown();
             buildService.awaitTermination(30, TimeUnit.MINUTES);
@@ -97,8 +104,10 @@ public class StartStopTest {
             // Run
             LOGGER.info("Running...");
             runLogA = new File(appDir.getAbsolutePath() + File.separator + "logs" + File.separator + mvnCmds.name().toLowerCase() + "-run.log");
-            pA = runCommand(getRunCommand(mvnCmds.mvnCmds[1]), appDir, runLogA);
-
+            cmd = getRunCommand(mvnCmds.mvnCmds[1]);
+            pA = runCommand(cmd, appDir, runLogA);
+            appendln(whatIDidReport, appDir.getAbsolutePath());
+            appendln(whatIDidReport, String.join(" ", cmd));
             // Test web pages
             long timeToFirstOKRequest = WebpageTester.testWeb(app.urlContent.urlContent[0][0], 10, app.urlContent.urlContent[0][1], true);
             LOGGER.info("Testing web page content...");
@@ -145,6 +154,7 @@ public class StartStopTest {
             // Archive logs no matter what
             archiveLog(cn, mn, buildLogA);
             archiveLog(cn, mn, runLogA);
+            writeReport(cn, mn, whatIDidReport.toString());
             cleanTarget(app);
         }
     }
