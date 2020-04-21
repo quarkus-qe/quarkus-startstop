@@ -33,6 +33,7 @@ import org.junit.jupiter.api.TestInfo;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -55,6 +56,7 @@ import static io.quarkus.ts.startstop.utils.Commands.processStopper;
 import static io.quarkus.ts.startstop.utils.Commands.runCommand;
 import static io.quarkus.ts.startstop.utils.Commands.waitForTcpClosed;
 import static io.quarkus.ts.startstop.utils.Logs.appendln;
+import static io.quarkus.ts.startstop.utils.Logs.appendlnSection;
 import static io.quarkus.ts.startstop.utils.Logs.archiveLog;
 import static io.quarkus.ts.startstop.utils.Logs.checkJarSuffixes;
 import static io.quarkus.ts.startstop.utils.Logs.checkLog;
@@ -103,9 +105,10 @@ public class ArtifactGeneratorBOMTest {
             generateLog = new File(logsDir + File.separator + "bom-artifact-generator.log");
             ExecutorService buildService = Executors.newFixedThreadPool(1);
             buildService.submit(new Commands.ProcessRunner(appBaseDir, generateLog, generatorCmd, 20));
-            appendln(whatIDidReport, "# " + cn + ", " + mn + "\n");
+            appendln(whatIDidReport, "# " + cn + ", " + mn);
+            appendln(whatIDidReport, (new Date()).toString());
             appendln(whatIDidReport, appBaseDir.getAbsolutePath());
-            appendln(whatIDidReport, String.join(" ", generatorCmd));
+            appendlnSection(whatIDidReport, String.join(" ", generatorCmd));
             buildService.shutdown();
             buildService.awaitTermination(30, TimeUnit.MINUTES);
 
@@ -121,7 +124,7 @@ public class ArtifactGeneratorBOMTest {
             buildService = Executors.newFixedThreadPool(1);
             buildService.submit(new Commands.ProcessRunner(appDir, buildLogA, buildCmd, 20));
             appendln(whatIDidReport, appDir.getAbsolutePath());
-            appendln(whatIDidReport, String.join(" ", buildCmd));
+            appendlnSection(whatIDidReport, String.join(" ", buildCmd));
             buildService.shutdown();
             buildService.awaitTermination(30, TimeUnit.MINUTES);
 
@@ -134,7 +137,7 @@ public class ArtifactGeneratorBOMTest {
             runLogA = new File(logsDir + File.separator + "bom-artifact-run.log");
             pA = runCommand(runCmd, appDir, runLogA);
             appendln(whatIDidReport, appDir.getAbsolutePath());
-            appendln(whatIDidReport, String.join(" ", runCmd));
+            appendlnSection(whatIDidReport, String.join(" ", runCmd));
 
             // Test web pages
             WebpageTester.testWeb(skeletonApp.urlContent[0][0], 20,

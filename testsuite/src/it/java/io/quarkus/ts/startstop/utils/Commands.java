@@ -266,13 +266,23 @@ public class Commands {
         return Collections.unmodifiableList(generatorCmd);
     }
 
-    public static void download(Collection<CodeQuarkusExtensions> extensions, String destinationZipFile) throws IOException {
+    /**
+     * Download a zip file with an example project
+     *
+     * @param extensions         collection of extension codes, @See {@link io.quarkus.ts.startstop.utils.CodeQuarkusExtensions}
+     * @param destinationZipFile path where the zip file will be written
+     * @return the actual URL used for audit and logging purposes
+     * @throws IOException
+     */
+    public static String download(Collection<CodeQuarkusExtensions> extensions, String destinationZipFile) throws IOException {
+        String downloadURL = getCodeQuarkusURL() + "/api/download?s=" +
+                extensions.stream().map(x -> x.shortId).collect(Collectors.joining("."));
         try (ReadableByteChannel readableByteChannel = Channels.newChannel(
-                new URL(getCodeQuarkusURL() + "/api/download?s=" +
-                        extensions.stream().map(x -> x.shortId).collect(Collectors.joining("."))).openStream());
+                new URL(downloadURL).openStream());
              FileChannel fileChannel = new FileOutputStream(destinationZipFile).getChannel()) {
             fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
         }
+        return downloadURL;
     }
 
     public static File unzip(String zipFilePath, String destinationDir) throws InterruptedException, IOException {

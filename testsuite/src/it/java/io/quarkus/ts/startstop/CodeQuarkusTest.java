@@ -31,6 +31,7 @@ import org.junit.jupiter.api.TestInfo;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -44,6 +45,7 @@ import static io.quarkus.ts.startstop.utils.Commands.runCommand;
 import static io.quarkus.ts.startstop.utils.Commands.unzip;
 import static io.quarkus.ts.startstop.utils.Commands.waitForTcpClosed;
 import static io.quarkus.ts.startstop.utils.Logs.appendln;
+import static io.quarkus.ts.startstop.utils.Logs.appendlnSection;
 import static io.quarkus.ts.startstop.utils.Logs.archiveLog;
 import static io.quarkus.ts.startstop.utils.Logs.checkLog;
 import static io.quarkus.ts.startstop.utils.Logs.writeReport;
@@ -80,16 +82,17 @@ public class CodeQuarkusTest {
         try {
             cleanDirOrFile(appDir.getAbsolutePath(), logsDir);
             Files.createDirectories(Paths.get(logsDir));
+            appendln(whatIDidReport, "# " + cn + ", " + mn);
+            appendln(whatIDidReport, (new Date()).toString());
             LOGGER.info("Downloading...");
-            download(extensions, zipFile);
+            appendln(whatIDidReport, "Download URL: " + download(extensions, zipFile));
             LOGGER.info("Unzipping...");
             unzipLog = unzip(zipFile, GEN_BASE_DIR);
             runLogA = new File(logsDir + File.separator + "dev-run.log");
             LOGGER.info("Running command: " + devCmd + " in directory: " + appDir);
-            appendln(whatIDidReport, "# " + cn + ", " + mn + "\n");
             appendln(whatIDidReport, "Extensions: " + extensions.toString());
             appendln(whatIDidReport, appDir.getAbsolutePath());
-            appendln(whatIDidReport, String.join(" ", devCmd));
+            appendlnSection(whatIDidReport, String.join(" ", devCmd));
             pA = runCommand(devCmd, appDir, runLogA);
             // It takes time to download the Internet
             long timeoutS = 10 * 60;

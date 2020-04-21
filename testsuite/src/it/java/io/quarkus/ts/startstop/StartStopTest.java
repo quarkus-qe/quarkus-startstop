@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -52,6 +53,7 @@ import static io.quarkus.ts.startstop.utils.Commands.runCommand;
 import static io.quarkus.ts.startstop.utils.Commands.waitForTcpClosed;
 import static io.quarkus.ts.startstop.utils.Logs.SKIP;
 import static io.quarkus.ts.startstop.utils.Logs.appendln;
+import static io.quarkus.ts.startstop.utils.Logs.appendlnSection;
 import static io.quarkus.ts.startstop.utils.Logs.archiveLog;
 import static io.quarkus.ts.startstop.utils.Logs.checkLog;
 import static io.quarkus.ts.startstop.utils.Logs.checkThreshold;
@@ -90,9 +92,10 @@ public class StartStopTest {
             ExecutorService buildService = Executors.newFixedThreadPool(1);
             List<String> cmd = getBuildCommand(mvnCmds.mvnCmds[0]);
             buildService.submit(new Commands.ProcessRunner(appDir, buildLogA, cmd, 20));
-            appendln(whatIDidReport, "# " + cn + ", " + mn + "\n");
+            appendln(whatIDidReport, "# " + cn + ", " + mn);
+            appendln(whatIDidReport, (new Date()).toString());
             appendln(whatIDidReport, appDir.getAbsolutePath());
-            appendln(whatIDidReport, String.join(" ", cmd));
+            appendlnSection(whatIDidReport, String.join(" ", cmd));
             long buildStarts = System.currentTimeMillis();
             buildService.shutdown();
             buildService.awaitTermination(30, TimeUnit.MINUTES);
@@ -107,7 +110,7 @@ public class StartStopTest {
             cmd = getRunCommand(mvnCmds.mvnCmds[1]);
             pA = runCommand(cmd, appDir, runLogA);
             appendln(whatIDidReport, appDir.getAbsolutePath());
-            appendln(whatIDidReport, String.join(" ", cmd));
+            appendlnSection(whatIDidReport, String.join(" ", cmd));
             // Test web pages
             long timeToFirstOKRequest = WebpageTester.testWeb(app.urlContent.urlContent[0][0], 10, app.urlContent.urlContent[0][1], true);
             LOGGER.info("Testing web page content...");
@@ -143,9 +146,9 @@ public class StartStopTest {
                     .openedFiles(openedFiles)
                     .build();
             Logs.logMeasurements(log, measurementsLog);
-
+            appendln(whatIDidReport, "Measurements:");
+            appendln(whatIDidReport, log.headerMarkdown + "\n" + log.lineMarkdown);
             checkThreshold(app, mvnCmds, rssKb, timeToFirstOKRequest, SKIP);
-
         } finally {
             // Make sure processes are down even if there was an exception / failure
             if (pA != null) {

@@ -36,6 +36,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -59,6 +60,7 @@ import static io.quarkus.ts.startstop.utils.Commands.runCommand;
 import static io.quarkus.ts.startstop.utils.Commands.waitForTcpClosed;
 import static io.quarkus.ts.startstop.utils.Logs.SKIP;
 import static io.quarkus.ts.startstop.utils.Logs.appendln;
+import static io.quarkus.ts.startstop.utils.Logs.appendlnSection;
 import static io.quarkus.ts.startstop.utils.Logs.archiveLog;
 import static io.quarkus.ts.startstop.utils.Logs.checkLog;
 import static io.quarkus.ts.startstop.utils.Logs.checkThreshold;
@@ -168,9 +170,10 @@ public class ArtifactGeneratorTest {
             buildLogA = new File(logsDir + File.separator + (flags.contains(TestFlags.WARM_UP) ? "warmup-artifact-build.log" : "artifact-build.log"));
             ExecutorService buildService = Executors.newFixedThreadPool(1);
             buildService.submit(new Commands.ProcessRunner(appBaseDir, buildLogA, generatorCmd, 20));
-            appendln(whatIDidReport, "# " + cn + ", " + mn + ", warmup run: " + flags.contains(TestFlags.WARM_UP) + "\n");
+            appendln(whatIDidReport, "# " + cn + ", " + mn + ", warmup run: " + flags.contains(TestFlags.WARM_UP));
+            appendln(whatIDidReport, (new Date()).toString());
             appendln(whatIDidReport, appBaseDir.getAbsolutePath());
-            appendln(whatIDidReport, String.join(" ", generatorCmd));
+            appendlnSection(whatIDidReport, String.join(" ", generatorCmd));
             long buildStarts = System.currentTimeMillis();
             buildService.shutdown();
             buildService.awaitTermination(30, TimeUnit.MINUTES);
@@ -187,7 +190,7 @@ public class ArtifactGeneratorTest {
             runLogA = new File(logsDir + File.separator + (flags.contains(TestFlags.WARM_UP) ? "warmup-dev-run.log" : "dev-run.log"));
             pA = runCommand(runCmd, appDir, runLogA);
             appendln(whatIDidReport, appDir.getAbsolutePath());
-            appendln(whatIDidReport, String.join(" ", runCmd));
+            appendlnSection(whatIDidReport, String.join(" ", runCmd));
             // Test web pages
             // The reason for a seemingly large timeout of 20 minutes is that dev mode will be downloading the Internet on the first fresh run.
             long timeoutS = (flags.contains(TestFlags.WARM_UP) ? 20 * 60 : 60);
@@ -209,7 +212,7 @@ public class ArtifactGeneratorTest {
             LOGGER.info("Testing reload...");
             Path srcFile = Paths.get(appDir + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator +
                     "org" + File.separator + "my" + File.separator + "group" + File.separator + "MyResource.java");
-            appendln(whatIDidReport, "Reloading class: " + srcFile.toAbsolutePath());
+            appendlnSection(whatIDidReport, "Reloading class: " + srcFile.toAbsolutePath());
             try (Stream<String> src = Files.lines(srcFile)) {
                 Files.write(srcFile, src.map(l -> l.replaceAll("hello", "bye")).collect(Collectors.toList()));
             }
@@ -246,6 +249,8 @@ public class ArtifactGeneratorTest {
                     .openedFiles(openedFiles)
                     .build();
             Logs.logMeasurements(log, measurementsLog);
+            appendln(whatIDidReport, "Measurements:");
+            appendln(whatIDidReport, log.headerMarkdown + "\n" + log.lineMarkdown);
             checkThreshold(Apps.GENERATED_SKELETON, MvnCmds.GENERATOR, SKIP, timeToFirstOKRequest, timeToReloadedOKRequest);
         } finally {
             fakeOIDCServer.stop();

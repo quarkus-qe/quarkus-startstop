@@ -27,12 +27,16 @@ import java.util.Objects;
 public class LogBuilder {
 
     public static class Log {
-        public final String header;
-        public final String line;
+        public final String headerCSV;
+        public final String headerMarkdown;
+        public final String lineCSV;
+        public final String lineMarkdown;
 
-        public Log(String header, String line) {
-            this.header = header;
-            this.line = line;
+        public Log(String headerCSV, String headerMarkdown, String lineCSV, String lineMarkdown) {
+            this.headerCSV = headerCSV;
+            this.headerMarkdown = headerMarkdown;
+            this.lineCSV = lineCSV;
+            this.lineMarkdown = lineMarkdown;
         }
     }
 
@@ -126,63 +130,77 @@ public class LogBuilder {
     public Log build() {
         StringBuilder h = new StringBuilder(512);
         StringBuilder l = new StringBuilder(512);
+        int sections = 0;
         if (app != null) {
             h.append(appHeader);
             h.append(',');
             l.append(app);
             l.append(',');
+            sections++;
         }
         if (mode != null) {
             h.append(modeHeader);
             h.append(',');
             l.append(mode);
             l.append(',');
+            sections++;
         }
         if (buildTimeMs != -1L) {
             h.append(buildTimeMsHeader);
             h.append(',');
             l.append(buildTimeMs);
             l.append(',');
+            sections++;
         }
         if (timeToFirstOKRequestMs != -1L) {
             h.append(timeToFirstOKRequestMsHeader);
             h.append(',');
             l.append(timeToFirstOKRequestMs);
             l.append(',');
+            sections++;
         }
         if (timeToReloadedOKRequest != -1L) {
             h.append(timeToReloadedOKRequestHeader);
             h.append(',');
             l.append(timeToReloadedOKRequest);
             l.append(',');
+            sections++;
         }
         if (startedInMs != -1L) {
             h.append(startedInMsHeader);
             h.append(',');
             l.append(startedInMs);
             l.append(',');
+            sections++;
         }
         if (stoppedInMs != -1L) {
             h.append(stoppedInMsHeader);
             h.append(',');
             l.append(stoppedInMs);
             l.append(',');
+            sections++;
         }
         if (rssKb != -1L) {
             h.append(rssKbHeader);
             h.append(',');
             l.append(rssKb);
             l.append(',');
+            sections++;
         }
         if (openedFiles != -1L) {
             h.append(openedFilesHeader);
             h.append(',');
             l.append(openedFiles);
             l.append(',');
+            sections++;
         }
         String header = h.toString();
+        // Strip trailing ',' for CSV
+        String headerCSV = header.substring(0, header.length() - 1);
+        String headerMarkdown = "|" + header.replaceAll(",", "|") + "\n|" + " --- |".repeat(sections);
         String line = l.toString();
-        // Strip trailing ','
-        return new Log(header.substring(0, header.length() - 1), line.substring(0, line.length() - 1));
+        String lineCSV = line.substring(0, line.length() - 1);
+        String lineMarkdown = "|" + line.replaceAll(",", "|");
+        return new Log(headerCSV, headerMarkdown, lineCSV, lineMarkdown);
     }
 }
