@@ -136,6 +136,40 @@ To examine logs yourself see ```./testsuite/target/archived-logs/``` , e.g.
 ./testsuite/target/archived-logs/io.quarkus.ts.startstop.StartStopTest/fullMicroProfileNative/native-build.log
 ./testsuite/target/archived-logs/io.quarkus.ts.startstop.StartStopTest/fullMicroProfileNative/native-run.log
 ```
+
+## What I Did Report
+
+The test suite records Maven commands it used, the directories where those commands were executed etc. in
+a neat markdown file for each test run. e.g.
+
+```
+# io.quarkus.ts.startstop.StartStopTest, jaxRsMinimalJVM
+/home/karm/workspaceRH/quarkus-startstop/app-jax-rs-minimal
+
+mvn clean compile quarkus:build -Dquarkus.package.output-name=quarkus -Dmaven.repo.local=/home/karm/QUARKUS/quarkus-1.3.2.CR1/maven-repository
+
+---
+/home/karm/workspaceRH/quarkus-startstop/app-jax-rs-minimal
+
+java -jar target/quarkus-runner.jar
+
+---
+Measurements:
+
+|App|Mode|buildTimeMs|timeToFirstOKRequestMs|startedInMs|stoppedInMs|RSSKb|FDs|
+| --- | --- | --- | --- | --- | --- | --- | --- |
+|JAX_RS_MINIMAL|JVM|4787|906|643|18|140504|162|
+
+```
+
+The file format is somewhat loose and it differs a bit test to test, it is meant for humans to take a quick look at what the TS did.
+If you need to machine process the data, we suggest: 
+ * capturing the TS stdout log where all commands are logged in a machine friendly format
+ * reading archived measurements.csv files
+
+One can also look into ```./testsuite/target/archived-logs/aggregated-report.md``` for an overall concatenation of all reports from all test runs.
+Subsequent test suite executions without ```mvn clean``` keep appending to this aggregate file on purpose. 
+
 ## Thresholds
 
 The test suite works with ```threshold.properties``` for each test app. E.g. ```app-jax-rs-minimal/threshold.properties```:

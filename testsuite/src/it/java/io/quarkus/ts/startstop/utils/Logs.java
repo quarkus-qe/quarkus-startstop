@@ -24,7 +24,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,6 +40,8 @@ import java.util.stream.Collectors;
 
 import static io.quarkus.ts.startstop.StartStopTest.BASE_DIR;
 import static io.quarkus.ts.startstop.utils.Commands.isThisWindows;
+import static java.nio.charset.StandardCharsets.*;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -124,7 +125,7 @@ public class Logs {
             }
             assertFalse(containsNotWhitelisted, "There are not-whitelisted artifacts without expected string " + jarSuffix + " suffix, see: \n"
                     + String.join("\n", reportArtifacts));
-            if(!reportArtifacts.isEmpty()) {
+            if (!reportArtifacts.isEmpty()) {
                 LOGGER.warning("There are whitelisted artifacts without expected string " + jarSuffix + " suffix, see: \n"
                         + String.join("\n", reportArtifacts));
             }
@@ -180,7 +181,31 @@ public class Logs {
         Path destDir = getLogsDir(testClass, testMethod);
         Files.createDirectories(destDir);
         String filename = log.getName();
-        Files.copy(log.toPath(), Paths.get(destDir.toString(), filename));
+        Files.copy(log.toPath(), Paths.get(destDir.toString(), filename), REPLACE_EXISTING);
+    }
+
+    public static void writeReport(String testClass, String testMethod, String text) throws IOException {
+        Path destDir = getLogsDir(testClass, testMethod);
+        Files.createDirectories(destDir);
+        Files.write(Paths.get(destDir.toString(), "report.md"), text.getBytes(UTF_8), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        Path agregateReport = Paths.get(getLogsDir().toString(), "aggregated-report.md");
+        if (Files.notExists(agregateReport)) {
+            Files.write(agregateReport, ("# Aggregated Report\n\n").getBytes(UTF_8), StandardOpenOption.CREATE);
+        }
+        Files.write(agregateReport, text.getBytes(UTF_8), StandardOpenOption.APPEND);
+    }
+
+    /**
+     * Markdown needs two newlines to make a new paragraph.
+     */
+    public static void appendln(StringBuilder s, String text) {
+        s.append(text);
+        s.append("\n\n");
+    }
+
+    public static void appendlnSection(StringBuilder s, String text) {
+        s.append(text);
+        s.append("\n\n---\n");
     }
 
     public static Path getLogsDir(String testClass, String testMethod) throws IOException {
@@ -190,18 +215,24 @@ public class Logs {
     }
 
     public static Path getLogsDir(String testClass) throws IOException {
+        Path destDir = new File(getLogsDir().toString() + File.separator + testClass).toPath();
+        Files.createDirectories(destDir);
+        return destDir;
+    }
+
+    public static Path getLogsDir() throws IOException {
         Path destDir = new File(BASE_DIR + File.separator + "testsuite" + File.separator + "target" +
-                File.separator + "archived-logs" + File.separator + testClass).toPath();
+                File.separator + "archived-logs").toPath();
         Files.createDirectories(destDir);
         return destDir;
     }
 
     public static void logMeasurements(LogBuilder.Log log, Path path) throws IOException {
         if (Files.notExists(path)) {
-            Files.write(path, (log.header + "\n").getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
+            Files.write(path, (log.headerCSV + "\n").getBytes(UTF_8), StandardOpenOption.CREATE);
         }
-        Files.write(path, (log.line + "\n").getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
-        LOGGER.info("\n" + log.header + "\n" + log.line);
+        Files.write(path, (log.lineCSV + "\n").getBytes(UTF_8), StandardOpenOption.APPEND);
+        LOGGER.info("\n" + log.headerCSV + "\n" + log.lineCSV);
     }
 
     /**
