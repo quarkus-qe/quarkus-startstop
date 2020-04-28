@@ -94,7 +94,7 @@ public class ArtifactGeneratorTest {
             "logging-json",
             "narayana-jta",
             "oidc",
-            "quartz",
+            "quarkus-quartz", // "quartz" is ambiguous with org.apache.camel.quarkus:camel-quarkus-quartz
             "reactive-pg-client",
             "rest-client",
             "resteasy",
