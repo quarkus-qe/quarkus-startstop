@@ -19,6 +19,8 @@
  */
 package io.quarkus.ts.startstop.utils;
 
+import org.jboss.logging.Logger;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -27,7 +29,6 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.logging.Logger;
 
 /**
  * @author Michal Karm Babacek <karm@redhat.com>

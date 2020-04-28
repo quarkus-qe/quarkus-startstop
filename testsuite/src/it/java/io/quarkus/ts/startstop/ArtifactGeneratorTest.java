@@ -28,6 +28,7 @@ import io.quarkus.ts.startstop.utils.MvnCmds;
 import io.quarkus.ts.startstop.utils.TestFlags;
 import io.quarkus.ts.startstop.utils.URLContent;
 import io.quarkus.ts.startstop.utils.WebpageTester;
+import org.jboss.logging.Logger;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
@@ -43,7 +44,6 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

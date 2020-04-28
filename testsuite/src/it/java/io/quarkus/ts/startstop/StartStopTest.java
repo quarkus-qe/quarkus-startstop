@@ -25,6 +25,7 @@ import io.quarkus.ts.startstop.utils.LogBuilder;
 import io.quarkus.ts.startstop.utils.Logs;
 import io.quarkus.ts.startstop.utils.MvnCmds;
 import io.quarkus.ts.startstop.utils.WebpageTester;
+import org.jboss.logging.Logger;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
@@ -39,7 +40,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 import static io.quarkus.ts.startstop.utils.Commands.cleanTarget;
 import static io.quarkus.ts.startstop.utils.Commands.getBaseDir;
