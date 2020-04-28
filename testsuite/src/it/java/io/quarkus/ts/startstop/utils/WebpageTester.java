@@ -20,13 +20,13 @@
 package io.quarkus.ts.startstop.utils;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jboss.logging.Logger;
 
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
-import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -69,7 +69,7 @@ public class WebpageTester {
                 scanner.useDelimiter("\\A");
                 webPage = scanner.hasNext() ? scanner.next() : "";
             } catch (Exception e) {
-                LOGGER.fine("Waiting `" + stringToLookFor + "' to appear on " + url);
+                LOGGER.debug("Waiting `" + stringToLookFor + "' to appear on " + url);
             }
             if (webPage.contains(stringToLookFor)) {
                 found = true;

@@ -20,6 +20,7 @@
 package io.quarkus.ts.startstop.utils;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jboss.logging.Logger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,7 +34,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -126,7 +126,7 @@ public class Logs {
             assertFalse(containsNotWhitelisted, "There are not-whitelisted artifacts without expected string " + jarSuffix + " suffix, see: \n"
                     + String.join("\n", reportArtifacts));
             if (!reportArtifacts.isEmpty()) {
-                LOGGER.warning("There are whitelisted artifacts without expected string " + jarSuffix + " suffix, see: \n"
+                LOGGER.warn("There are whitelisted artifacts without expected string " + jarSuffix + " suffix, see: \n"
                         + String.join("\n", reportArtifacts));
             }
         }
@@ -169,7 +169,7 @@ public class Logs {
 
     public static void archiveLog(String testClass, String testMethod, File log) throws IOException {
         if (log == null || !log.exists()) {
-            LOGGER.severe("log must be a valid, existing file. Skipping operation.");
+            LOGGER.warn("log must be a valid, existing file. Skipping operation.");
             return;
         }
         if (StringUtils.isBlank(testClass)) {
@@ -282,12 +282,12 @@ public class Logs {
             }
         }
         if (startedStopped[0] == -1f) {
-            LOGGER.severe("Parsing start time from log failed. " +
+            LOGGER.error("Parsing start time from log failed. " +
                     "Might not be the right time to call this method. The process might have ben killed before it wrote to log." +
                     "Find " + log.getName() + " in your target dir.");
         }
         if (startedStopped[1] == -1f) {
-            LOGGER.severe("Parsing stop time from log failed. " +
+            LOGGER.error("Parsing stop time from log failed. " +
                     "Might not be the right time to call this method. The process might have been killed before it wrote to log." +
                     "Find " + log.getName() + " in your target dir.");
         }

@@ -21,6 +21,7 @@ package io.quarkus.ts.startstop.utils;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jboss.logging.Logger;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -49,7 +50,6 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -106,7 +106,7 @@ public class Commands {
                 return sys;
             }
         }
-        LOGGER.warning("Failed to detect quarkus.platform.version/QUARKUS_PLATFORM_VERSION, defaulting to getQuarkusVersion().");
+        LOGGER.warn("Failed to detect quarkus.platform.version/QUARKUS_PLATFORM_VERSION, defaulting to getQuarkusVersion().");
         return getQuarkusVersion();
     }
 
@@ -164,7 +164,7 @@ public class Commands {
         }
         if (url == null) {
             url = "https://code.quarkus.io";
-            LOGGER.warning("Failed to detect code.quarkus.url/CODE_QUARKUS_URL env/sys props, defaulting to " + url);
+            LOGGER.warn("Failed to detect code.quarkus.url/CODE_QUARKUS_URL env/sys props, defaulting to " + url);
             return url;
         }
         Matcher m = trailingSlash.matcher(url);
@@ -370,7 +370,7 @@ public class Commands {
                 Runtime.getRuntime().exec(new String[]{"kill", force ? "-9" : "-15", Long.toString(pid)});
             }
         } catch (IOException | InterruptedException e) {
-            LOGGER.severe(e.getMessage());
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
