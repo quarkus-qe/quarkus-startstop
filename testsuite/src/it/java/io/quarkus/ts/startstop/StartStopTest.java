@@ -63,6 +63,9 @@ import static io.quarkus.ts.startstop.utils.Logs.writeReport;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
+ * Tests for build and start of applications with some real source code
+ * Detains in https://github.com/quarkus-qe/quarkus-startstop#startstoptest
+ *
  * @author Michal Karm Babacek <karm@redhat.com>
  */
 @Tag("startstop")

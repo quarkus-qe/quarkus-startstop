@@ -64,6 +64,8 @@ import static io.quarkus.ts.startstop.utils.Logs.writeReport;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
+ * BOM tests for quarkus-maven-plugin generator, command defines BOM via platformArtifactId property
+ *
  * @author Michal Karm Babacek <karm@redhat.com>
  */
 @Tag("bomtests")
