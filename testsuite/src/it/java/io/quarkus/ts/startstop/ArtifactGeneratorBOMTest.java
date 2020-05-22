@@ -74,13 +74,13 @@ public class ArtifactGeneratorBOMTest {
     private static final Logger LOGGER = Logger.getLogger(ArtifactGeneratorBOMTest.class.getName());
 
     public void testRuntime(TestInfo testInfo, String[] extensions, Set<TestFlags> flags) throws Exception {
-        Process pA = null;
-        File generateLog = null;
-        File buildLogA = null;
-        File runLogA = null;
+        Process runCommandProcess = null;
+        File generatorLog = null;
+        File buildLog = null;
+        File runLog = null;
         StringBuilder whatIDidReport = new StringBuilder();
-        String cn = testInfo.getTestClass().get().getCanonicalName();
-        String mn = testInfo.getTestMethod().get().getName();
+        String testClassName = testInfo.getTestClass().get().getCanonicalName();
+        String testMethodName = testInfo.getTestMethod().get().getName();
         File appBaseDir = new File(getArtifactGeneBaseDir());
         File appDir = new File(appBaseDir, Apps.GENERATED_SKELETON.dir);
         String logsDir = appBaseDir.getAbsolutePath() + File.separator + Apps.GENERATED_SKELETON.dir + "-logs";
@@ -103,41 +103,41 @@ public class ArtifactGeneratorBOMTest {
             Files.createDirectories(Paths.get(repoDir));
 
             //Generator
-            LOGGER.info(mn + ": Generator command " + String.join(" ", generatorCmd));
-            generateLog = new File(logsDir + File.separator + "bom-artifact-generator.log");
+            LOGGER.info(testMethodName + ": Generator command " + String.join(" ", generatorCmd));
+            generatorLog = new File(logsDir + File.separator + "bom-artifact-generator.log");
             ExecutorService buildService = Executors.newFixedThreadPool(1);
-            buildService.submit(new Commands.ProcessRunner(appBaseDir, generateLog, generatorCmd, 20));
-            appendln(whatIDidReport, "# " + cn + ", " + mn);
+            buildService.submit(new Commands.ProcessRunner(appBaseDir, generatorLog, generatorCmd, 20));
+            appendln(whatIDidReport, "# " + testClassName + ", " + testMethodName);
             appendln(whatIDidReport, (new Date()).toString());
             appendln(whatIDidReport, appBaseDir.getAbsolutePath());
             appendlnSection(whatIDidReport, String.join(" ", generatorCmd));
             buildService.shutdown();
             buildService.awaitTermination(30, TimeUnit.MINUTES);
 
-            assertTrue(generateLog.exists());
-            checkLog(cn, mn, Apps.GENERATED_SKELETON, MvnCmds.GENERATOR, generateLog);
+            assertTrue(generatorLog.exists());
+            checkLog(testClassName, testMethodName, Apps.GENERATED_SKELETON, MvnCmds.GENERATOR, generatorLog);
 
             // Config, see app-generated-skeleton/README.md
             confAppPropsForSkeleton(appDir.getAbsolutePath());
 
             // Build
-            LOGGER.info(mn + ": Build command " + String.join(" ", buildCmd));
-            buildLogA = new File(logsDir + File.separator + "bom-artifact-build.log");
+            LOGGER.info(testMethodName + ": Build command " + String.join(" ", buildCmd));
+            buildLog = new File(logsDir + File.separator + "bom-artifact-build.log");
             buildService = Executors.newFixedThreadPool(1);
-            buildService.submit(new Commands.ProcessRunner(appDir, buildLogA, buildCmd, 20));
+            buildService.submit(new Commands.ProcessRunner(appDir, buildLog, buildCmd, 20));
             appendln(whatIDidReport, appDir.getAbsolutePath());
             appendlnSection(whatIDidReport, String.join(" ", buildCmd));
             buildService.shutdown();
             buildService.awaitTermination(30, TimeUnit.MINUTES);
 
-            assertTrue(buildLogA.exists());
-            checkLog(cn, mn, Apps.GENERATED_SKELETON, MvnCmds.JVM, buildLogA);
+            assertTrue(buildLog.exists());
+            checkLog(testClassName, testMethodName, Apps.GENERATED_SKELETON, MvnCmds.JVM, buildLog);
 
             // Run
-            LOGGER.info(mn + ": Run command " + String.join(" ", MvnCmds.JVM.mvnCmds[1]));
+            LOGGER.info(testMethodName + ": Run command " + String.join(" ", MvnCmds.JVM.mvnCmds[1]));
             LOGGER.info("Running...");
-            runLogA = new File(logsDir + File.separator + "bom-artifact-run.log");
-            pA = runCommand(runCmd, appDir, runLogA);
+            runLog = new File(logsDir + File.separator + "bom-artifact-run.log");
+            runCommandProcess = runCommand(runCmd, appDir, runLog);
             appendln(whatIDidReport, appDir.getAbsolutePath());
             appendlnSection(whatIDidReport, String.join(" ", runCmd));
 
@@ -147,32 +147,32 @@ public class ArtifactGeneratorBOMTest {
 
             LOGGER.info("Terminating test and scanning logs...");
 //            pA.getInputStream().available();
-            checkLog(cn, mn, Apps.GENERATED_SKELETON, MvnCmds.JVM, runLogA);
-            processStopper(pA, false);
+            checkLog(testClassName, testMethodName, Apps.GENERATED_SKELETON, MvnCmds.JVM, runLog);
+            processStopper(runCommandProcess, false);
             LOGGER.info("Gonna wait for ports closed after run...");
             // Release ports
             assertTrue(waitForTcpClosed("localhost", parsePort(skeletonApp.urlContent[0][0]), 60),
                     "Main port is still open after run");
 
-            checkLog(cn, mn, Apps.GENERATED_SKELETON, MvnCmds.JVM, runLogA);
+            checkLog(testClassName, testMethodName, Apps.GENERATED_SKELETON, MvnCmds.JVM, runLog);
 
             checkJarSuffixes(flags, appDir);
         } finally {
             fakeOIDCServer.stop();
 
             // Make sure processes are down even if there was an exception / failure
-            if (pA != null) {
-                processStopper(pA, true);
+            if (runCommandProcess != null) {
+                processStopper(runCommandProcess, true);
             }
             // Archive logs no matter what
-            archiveLog(cn, mn, generateLog);
-            if (buildLogA != null) {
-                archiveLog(cn, mn, buildLogA);
+            archiveLog(testClassName, testMethodName, generatorLog);
+            if (buildLog != null) {
+                archiveLog(testClassName, testMethodName, buildLog);
             }
-            if (runLogA != null) {
-                archiveLog(cn, mn, runLogA);
+            if (runLog != null) {
+                archiveLog(testClassName, testMethodName, runLog);
             }
-            writeReport(cn, mn, whatIDidReport.toString());
+            writeReport(testClassName, testMethodName, whatIDidReport.toString());
             cleanDirOrFile(appDir.getAbsolutePath(), logsDir);
         }
     }
