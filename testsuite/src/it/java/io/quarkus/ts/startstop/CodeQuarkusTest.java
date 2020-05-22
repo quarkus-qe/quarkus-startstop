@@ -101,7 +101,7 @@ public class CodeQuarkusTest {
             LOGGER.info("Timeout: " + timeoutS + "s. Waiting for the web content...");
             WebpageTester.testWeb(skeletonApp.urlContent[0][0], timeoutS, skeletonApp.urlContent[0][1], false);
             LOGGER.info("Terminating and scanning logs...");
-            pA.getInputStream().available();
+//            pA.getInputStream().available();
             processStopper(pA, false);
             LOGGER.info("Gonna wait for ports closed...");
             assertTrue(waitForTcpClosed("localhost", parsePort(skeletonApp.urlContent[0][0]), 60),
@@ -139,7 +139,7 @@ public class CodeQuarkusTest {
     }
 
     @Test
-    public void notsupportedExtensionsSubset(TestInfo testInfo) throws Exception {
+    public void notSupportedExtensionsSubset(TestInfo testInfo) throws Exception {
         testRuntime(testInfo, notSupportedEx.get(0).subList(0, Math.min(10, mixedEx.get(0).size())));
     }
 

@@ -146,7 +146,7 @@ public class ArtifactGeneratorBOMTest {
                     skeletonApp.urlContent[0][1], false);
 
             LOGGER.info("Terminating test and scanning logs...");
-            pA.getInputStream().available();
+//            pA.getInputStream().available();
             checkLog(cn, mn, Apps.GENERATED_SKELETON, MvnCmds.JVM, runLogA);
             processStopper(pA, false);
             LOGGER.info("Gonna wait for ports closed after run...");

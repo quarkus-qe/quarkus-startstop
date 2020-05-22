@@ -201,7 +201,7 @@ public class ArtifactGeneratorTest {
 
             if (flags.contains(TestFlags.WARM_UP)) {
                 LOGGER.info("Terminating warmup and scanning logs...");
-                pA.getInputStream().available();
+//                pA.getInputStream().available();
                 processStopper(pA, false);
                 LOGGER.info("Gonna wait for ports closed after warmup...");
                 // Release ports
@@ -223,7 +223,7 @@ public class ArtifactGeneratorTest {
                     skeletonApp.urlContent[1][1], true);
 
             LOGGER.info("Terminate and scan logs...");
-            pA.getInputStream().available();
+//            pA.getInputStream().available();
 
             long rssKb = getRSSkB(pA.pid());
             long openedFiles = getOpenedFDs(pA.pid());

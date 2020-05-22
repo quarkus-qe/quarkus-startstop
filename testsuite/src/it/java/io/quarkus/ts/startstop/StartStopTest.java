@@ -122,7 +122,7 @@ public class StartStopTest {
             }
 
             LOGGER.info("Terminate and scan logs...");
-            pA.getInputStream().available();
+//            pA.getInputStream().available();
 
             long rssKb = getRSSkB(pA.pid());
             long openedFiles = getOpenedFDs(pA.pid());
