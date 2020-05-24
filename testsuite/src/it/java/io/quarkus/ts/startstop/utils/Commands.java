@@ -463,6 +463,7 @@ public class Commands {
     */
 
     public static void processStopper(Process p, boolean force) throws InterruptedException, IOException {
+        if (p == null) return;
         p.children().forEach(child -> {
             if (child.supportsNormalTermination()) {
                 child.destroy();

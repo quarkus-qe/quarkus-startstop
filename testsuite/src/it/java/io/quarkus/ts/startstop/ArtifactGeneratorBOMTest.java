@@ -31,36 +31,23 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import static io.quarkus.ts.startstop.ArtifactGeneratorTest.supportedExtensionsSubsetSetA;
 import static io.quarkus.ts.startstop.ArtifactGeneratorTest.supportedExtensionsSubsetSetB;
-import static io.quarkus.ts.startstop.utils.Commands.cleanDirOrFile;
 import static io.quarkus.ts.startstop.utils.Commands.confAppPropsForSkeleton;
-import static io.quarkus.ts.startstop.utils.Commands.getArtifactGeneBaseDir;
 import static io.quarkus.ts.startstop.utils.Commands.getBuildCommand;
 import static io.quarkus.ts.startstop.utils.Commands.getGeneratorCommand;
-import static io.quarkus.ts.startstop.utils.Commands.getLocalMavenRepoDir;
 import static io.quarkus.ts.startstop.utils.Commands.getRunCommand;
 import static io.quarkus.ts.startstop.utils.Commands.parsePort;
 import static io.quarkus.ts.startstop.utils.Commands.processStopper;
 import static io.quarkus.ts.startstop.utils.Commands.runCommand;
 import static io.quarkus.ts.startstop.utils.Commands.waitForTcpClosed;
-import static io.quarkus.ts.startstop.utils.Logs.appendln;
-import static io.quarkus.ts.startstop.utils.Logs.appendlnSection;
-import static io.quarkus.ts.startstop.utils.Logs.archiveLog;
 import static io.quarkus.ts.startstop.utils.Logs.checkJarSuffixes;
 import static io.quarkus.ts.startstop.utils.Logs.checkLog;
-import static io.quarkus.ts.startstop.utils.Logs.writeReport;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -74,106 +61,56 @@ public class ArtifactGeneratorBOMTest {
     private static final Logger LOGGER = Logger.getLogger(ArtifactGeneratorBOMTest.class.getName());
 
     public void testRuntime(TestInfo testInfo, String[] extensions, Set<TestFlags> flags) throws Exception {
-        Process runCommandProcess = null;
-        File generatorLog = null;
-        File buildLog = null;
-        File runLog = null;
-        StringBuilder whatIDidReport = new StringBuilder();
-        String testClassName = testInfo.getTestClass().get().getCanonicalName();
-        String testMethodName = testInfo.getTestMethod().get().getName();
-        File appBaseDir = new File(getArtifactGeneBaseDir());
-        File appDir = new File(appBaseDir, Apps.GENERATED_SKELETON.dir);
-        String logsDir = appBaseDir.getAbsolutePath() + File.separator + Apps.GENERATED_SKELETON.dir + "-logs";
-        String repoDir = getLocalMavenRepoDir();
-
-        List<String> generatorCmd = getGeneratorCommand(flags, MvnCmds.GENERATOR.mvnCmds[0], extensions, repoDir);
-
-        List<String> buildCmd = getBuildCommand(MvnCmds.JVM.mvnCmds[0], repoDir);
-
-        List<String> runCmd = getRunCommand(MvnCmds.JVM.mvnCmds[1]);
-
-        URLContent skeletonApp = Apps.GENERATED_SKELETON.urlContent;
+        ExecutionDetails execution = new ExecutionDetails(testInfo);
+        execution.prepareWorkspace();
 
         FakeOIDCServer fakeOIDCServer = new FakeOIDCServer(6661, "localhost");
+        Process runCommandProcess = null;
 
         try {
-            // Cleanup
-            cleanDirOrFile(appDir.getAbsolutePath(), logsDir);
-            Files.createDirectories(Paths.get(logsDir));
-            Files.createDirectories(Paths.get(repoDir));
+            List<String> generatorCmd = getGeneratorCommand(flags, MvnCmds.GENERATOR.mvnCmds[0], extensions, execution.repoDir);
+            List<String> buildCmd = getBuildCommand(MvnCmds.JVM.mvnCmds[0], execution.repoDir);
+            List<String> runCmd = getRunCommand(MvnCmds.JVM.mvnCmds[1]);
+            URLContent skeletonApp = Apps.GENERATED_SKELETON.urlContent;
 
             //Generator
-            LOGGER.info(testMethodName + ": Generator command " + String.join(" ", generatorCmd));
-            generatorLog = new File(logsDir + File.separator + "bom-artifact-generator.log");
-            ExecutorService buildService = Executors.newFixedThreadPool(1);
-            buildService.submit(new Commands.ProcessRunner(appBaseDir, generatorLog, generatorCmd, 20));
-            appendln(whatIDidReport, "# " + testClassName + ", " + testMethodName);
-            appendln(whatIDidReport, (new Date()).toString());
-            appendln(whatIDidReport, appBaseDir.getAbsolutePath());
-            appendlnSection(whatIDidReport, String.join(" ", generatorCmd));
-            buildService.shutdown();
-            buildService.awaitTermination(30, TimeUnit.MINUTES);
+            execution.reportGeneratorCmd(LOGGER, generatorCmd);
+            execution.runCommand(new Commands.ProcessRunner(execution.appBaseDir,execution.generatorLog, generatorCmd, 20));
+            checkLog(execution.testClassName, execution.testMethodName, Apps.GENERATED_SKELETON, MvnCmds.GENERATOR, execution.generatorLog);
 
-            assertTrue(generatorLog.exists());
-            checkLog(testClassName, testMethodName, Apps.GENERATED_SKELETON, MvnCmds.GENERATOR, generatorLog);
-
-            // Config, see app-generated-skeleton/README.md
-            confAppPropsForSkeleton(appDir.getAbsolutePath());
+            // Configure, see app-generated-skeleton/README.md
+            confAppPropsForSkeleton(execution.appDir.getAbsolutePath());
 
             // Build
-            LOGGER.info(testMethodName + ": Build command " + String.join(" ", buildCmd));
-            buildLog = new File(logsDir + File.separator + "bom-artifact-build.log");
-            buildService = Executors.newFixedThreadPool(1);
-            buildService.submit(new Commands.ProcessRunner(appDir, buildLog, buildCmd, 20));
-            appendln(whatIDidReport, appDir.getAbsolutePath());
-            appendlnSection(whatIDidReport, String.join(" ", buildCmd));
-            buildService.shutdown();
-            buildService.awaitTermination(30, TimeUnit.MINUTES);
-
-            assertTrue(buildLog.exists());
-            checkLog(testClassName, testMethodName, Apps.GENERATED_SKELETON, MvnCmds.JVM, buildLog);
+            execution.reportBuildCmd(LOGGER, buildCmd);
+            execution.runCommand(new Commands.ProcessRunner(execution.appDir, execution.buildLog, buildCmd, 20));
+            checkLog(execution.testClassName, execution.testMethodName, Apps.GENERATED_SKELETON, MvnCmds.JVM, execution.buildLog);
 
             // Run
-            LOGGER.info(testMethodName + ": Run command " + String.join(" ", MvnCmds.JVM.mvnCmds[1]));
-            LOGGER.info("Running...");
-            runLog = new File(logsDir + File.separator + "bom-artifact-run.log");
-            runCommandProcess = runCommand(runCmd, appDir, runLog);
-            appendln(whatIDidReport, appDir.getAbsolutePath());
-            appendlnSection(whatIDidReport, String.join(" ", runCmd));
+            execution.reportRunCmd(LOGGER, runCmd);
+            runCommandProcess = runCommand(runCmd, execution.appDir, execution.runLog);
 
             // Test web pages
             WebpageTester.testWeb(skeletonApp.urlContent[0][0], 20,
                     skeletonApp.urlContent[0][1], false);
 
-            LOGGER.info("Terminating test and scanning logs...");
-//            pA.getInputStream().available();
-            checkLog(testClassName, testMethodName, Apps.GENERATED_SKELETON, MvnCmds.JVM, runLog);
+            // Terminate the process
+            LOGGER.info("Terminating and scanning logs...");
+            runCommandProcess.getInputStream().available();
+            checkLog(execution.testClassName, execution.testMethodName, Apps.GENERATED_SKELETON, MvnCmds.JVM, execution.runLog);
+
             processStopper(runCommandProcess, false);
-            LOGGER.info("Gonna wait for ports closed after run...");
-            // Release ports
             assertTrue(waitForTcpClosed("localhost", parsePort(skeletonApp.urlContent[0][0]), 60),
                     "Main port is still open after run");
+            checkLog(execution.testClassName, execution.testMethodName, Apps.GENERATED_SKELETON, MvnCmds.JVM, execution.runLog);
 
-            checkLog(testClassName, testMethodName, Apps.GENERATED_SKELETON, MvnCmds.JVM, runLog);
+            // Check jars
+            checkJarSuffixes(flags, execution.appDir);
 
-            checkJarSuffixes(flags, appDir);
         } finally {
             fakeOIDCServer.stop();
-
-            // Make sure processes are down even if there was an exception / failure
-            if (runCommandProcess != null) {
-                processStopper(runCommandProcess, true);
-            }
-            // Archive logs no matter what
-            archiveLog(testClassName, testMethodName, generatorLog);
-            if (buildLog != null) {
-                archiveLog(testClassName, testMethodName, buildLog);
-            }
-            if (runLog != null) {
-                archiveLog(testClassName, testMethodName, runLog);
-            }
-            writeReport(testClassName, testMethodName, whatIDidReport.toString());
-            cleanDirOrFile(appDir.getAbsolutePath(), logsDir);
+            processStopper(runCommandProcess, true);
+            execution.archiveLogsAndCleanWorkspace();
         }
     }
 

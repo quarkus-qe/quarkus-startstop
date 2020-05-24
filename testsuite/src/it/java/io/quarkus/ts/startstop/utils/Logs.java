@@ -75,6 +75,7 @@ public class Logs {
     public static final long SKIP = -1L;
 
     public static void checkLog(String testClass, String testMethod, Apps app, MvnCmds cmd, File log) throws FileNotFoundException {
+        assertTrue(log.exists(), "Log " + log.getPath() + " doesn't exist");
         try (Scanner sc = new Scanner(log)) {
             Set<String> offendingLines = new HashSet<>();
             while (sc.hasNextLine()) {
