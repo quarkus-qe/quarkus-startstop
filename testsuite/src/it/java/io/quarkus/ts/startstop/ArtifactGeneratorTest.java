@@ -144,105 +144,70 @@ public class ArtifactGeneratorTest {
     };
 
     public void testRuntime(TestInfo testInfo, String[] extensions, Set<TestFlags> flags) throws Exception {
-        Process pA = null;
-        File buildLogA = null;
-        File runLogA = null;
-        StringBuilder whatIDidReport = new StringBuilder();
-        String cn = testInfo.getTestClass().get().getCanonicalName();
-        String mn = testInfo.getTestMethod().get().getName();
-        File appBaseDir = new File(getArtifactGeneBaseDir());
-        File appDir = new File(appBaseDir, Apps.GENERATED_SKELETON.dir);
-        String logsDir = appBaseDir.getAbsolutePath() + File.separator + Apps.GENERATED_SKELETON.dir + "-logs";
-        List<String> generatorCmd = getGeneratorCommand(MvnCmds.GENERATOR.mvnCmds[0], extensions);
-        List<String> runCmd = getRunCommand(MvnCmds.DEV.mvnCmds[0]);
-        URLContent skeletonApp = Apps.GENERATED_SKELETON.urlContent;
-        if (flags.contains(TestFlags.WARM_UP)) {
-            LOGGER.info(mn + ": Warming up setup: " + String.join(" ", generatorCmd));
-        } else {
-            LOGGER.info(mn + ": Testing setup: " + String.join(" ", generatorCmd));
-        }
+        ExecutionDetails execution = new ExecutionDetails(testInfo, flags.contains(TestFlags.WARM_UP));
+        execution.prepareWorkspace();
+        execution.prepareWorkspace();
+
         FakeOIDCServer fakeOIDCServer = new FakeOIDCServer(6661, "localhost");
+        Process runCommandProcess = null;
 
         try {
-            // Cleanup
-            cleanDirOrFile(appDir.getAbsolutePath(), logsDir);
-            Files.createDirectories(Paths.get(logsDir));
+            List<String> generatorCmd = getGeneratorCommand(MvnCmds.GENERATOR.mvnCmds[0], extensions);
+            List<String> runCmd = getRunCommand(MvnCmds.DEV.mvnCmds[0]);
+            URLContent skeletonApp = Apps.GENERATED_SKELETON.urlContent;
 
-            // Build
-            buildLogA = new File(logsDir + File.separator + (flags.contains(TestFlags.WARM_UP) ? "warmup-artifact-build.log" : "artifact-build.log"));
-            ExecutorService buildService = Executors.newFixedThreadPool(1);
-            buildService.submit(new Commands.ProcessRunner(appBaseDir, buildLogA, generatorCmd, 20));
-            appendln(whatIDidReport, "# " + cn + ", " + mn + ", warmup run: " + flags.contains(TestFlags.WARM_UP));
-            appendln(whatIDidReport, (new Date()).toString());
-            appendln(whatIDidReport, appBaseDir.getAbsolutePath());
-            appendlnSection(whatIDidReport, String.join(" ", generatorCmd));
-            long buildStarts = System.currentTimeMillis();
-            buildService.shutdown();
-            buildService.awaitTermination(30, TimeUnit.MINUTES);
-            long buildEnds = System.currentTimeMillis();
+            //Generator
+            execution.reportGeneratorCmd(LOGGER, generatorCmd);
+            long buildTimeMs = execution.runCommand(new Commands.ProcessRunner(execution.appBaseDir,execution.generatorLog, generatorCmd, 20));
+            checkLog(execution.testClassName, execution.testMethodName, Apps.GENERATED_SKELETON, MvnCmds.GENERATOR, execution.generatorLog);
 
-            assertTrue(buildLogA.exists());
-            checkLog(cn, mn, Apps.GENERATED_SKELETON, MvnCmds.GENERATOR, buildLogA);
-
-            // Config, see app-generated-skeleton/README.md
-            confAppPropsForSkeleton(appDir.getAbsolutePath());
+            // Configure, see app-generated-skeleton/README.md
+            confAppPropsForSkeleton(execution.appDir.getAbsolutePath());
 
             // Run
-            LOGGER.info("Running...");
-            runLogA = new File(logsDir + File.separator + (flags.contains(TestFlags.WARM_UP) ? "warmup-dev-run.log" : "dev-run.log"));
-            pA = runCommand(runCmd, appDir, runLogA);
-            appendln(whatIDidReport, appDir.getAbsolutePath());
-            appendlnSection(whatIDidReport, String.join(" ", runCmd));
+            execution.reportRunCmd(LOGGER, runCmd);
+            runCommandProcess = runCommand(runCmd, execution.appDir, execution.runLog);
+
             // Test web pages
-            // The reason for a seemingly large timeout of 20 minutes is that dev mode will be downloading the Internet on the first fresh run.
-            long timeoutS = (flags.contains(TestFlags.WARM_UP) ? 20 * 60 : 60);
+            long timeoutS = (flags.contains(TestFlags.WARM_UP) ? 20 * 60 : 60); // warm-up needs time to download fresh dependencies
             long timeToFirstOKRequest = WebpageTester.testWeb(skeletonApp.urlContent[0][0], timeoutS,
                     skeletonApp.urlContent[0][1], !flags.contains(TestFlags.WARM_UP));
 
+            // Warm-up finish
             if (flags.contains(TestFlags.WARM_UP)) {
-                LOGGER.info("Terminating warmup and scanning logs...");
-//                pA.getInputStream().available();
-                processStopper(pA, false);
-                LOGGER.info("Gonna wait for ports closed after warmup...");
-                // Release ports
+                LOGGER.info("Terminating and scanning logs...");
+                runCommandProcess.getInputStream().available();
+                processStopper(runCommandProcess, false);
                 assertTrue(waitForTcpClosed("localhost", parsePort(skeletonApp.urlContent[0][0]), 60),
-                        "Main port is still open after warmup");
-                checkLog(cn, mn, Apps.GENERATED_SKELETON, MvnCmds.GENERATOR, runLogA);
+                        "Main port is still open after warm-up");
+                checkLog(execution.testClassName, execution.testMethodName, Apps.GENERATED_SKELETON, MvnCmds.DEV, execution.runLog);
                 return;
             }
 
-            LOGGER.info("Testing reload...");
-            Path srcFile = Paths.get(appDir + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator +
-                    "org" + File.separator + "my" + File.separator + "group" + File.separator + "MyResource.java");
-            appendlnSection(whatIDidReport, "Reloading class: " + srcFile.toAbsolutePath());
-            try (Stream<String> src = Files.lines(srcFile)) {
-                Files.write(srcFile, src.map(l -> l.replaceAll("hello", "bye")).collect(Collectors.toList()));
-            }
-
+            // Reload
+            execution.editFileAndReport(LOGGER);
             long timeToReloadedOKRequest = WebpageTester.testWeb(skeletonApp.urlContent[1][0], 60,
                     skeletonApp.urlContent[1][1], true);
 
-            LOGGER.info("Terminate and scan logs...");
-//            pA.getInputStream().available();
+            // RSS and opened files
+            long rssKb = getRSSkB(runCommandProcess.pid());
+            long openedFiles = getOpenedFDs(runCommandProcess.pid());
 
-            long rssKb = getRSSkB(pA.pid());
-            long openedFiles = getOpenedFDs(pA.pid());
+            // Terminate the process
+            LOGGER.info("Terminating and scanning logs...");
+            runCommandProcess.getInputStream().available();
 
-            processStopper(pA, false);
-
-            LOGGER.info("Gonna wait for ports closed...");
-            // Release ports
+            processStopper(runCommandProcess, false);
             assertTrue(waitForTcpClosed("localhost", parsePort(skeletonApp.urlContent[0][0]), 60),
-                    "Main port is still open");
-            checkLog(cn, mn, Apps.GENERATED_SKELETON, MvnCmds.GENERATOR, runLogA);
+                    "Main port is still open after run");
+            checkLog(execution.testClassName, execution.testMethodName, Apps.GENERATED_SKELETON, MvnCmds.DEV, execution.runLog);
 
-            float[] startedStopped = parseStartStopTimestamps(runLogA);
-
-            Path measurementsLog = Paths.get(getLogsDir(cn, mn).toString(), "measurements.csv");
+            // Measurements and threshold check
+            float[] startedStopped = parseStartStopTimestamps(execution.runLog);
             LogBuilder.Log log = new LogBuilder()
                     .app(Apps.GENERATED_SKELETON)
-                    .mode(MvnCmds.GENERATOR)
-                    .buildTimeMs(buildEnds - buildStarts)
+                    .mode(MvnCmds.DEV)
+                    .buildTimeMs(buildTimeMs)
                     .timeToFirstOKRequestMs(timeToFirstOKRequest)
                     .timeToReloadedOKRequest(timeToReloadedOKRequest)
                     .startedInMs((long) (startedStopped[0] * 1000))
@@ -250,24 +215,12 @@ public class ArtifactGeneratorTest {
                     .rssKb(rssKb)
                     .openedFiles(openedFiles)
                     .build();
-            Logs.logMeasurements(log, measurementsLog);
-            appendln(whatIDidReport, "Measurements:");
-            appendln(whatIDidReport, log.headerMarkdown + "\n" + log.lineMarkdown);
+            execution.measurements(log);
             checkThreshold(Apps.GENERATED_SKELETON, MvnCmds.GENERATOR, SKIP, timeToFirstOKRequest, timeToReloadedOKRequest);
         } finally {
             fakeOIDCServer.stop();
-            // Make sure processes are down even if there was an exception / failure
-            if (pA != null) {
-                processStopper(pA, true);
-            }
-            // Archive logs no matter what
-            archiveLog(cn, mn, buildLogA);
-            if (runLogA != null) {
-                // If build failed it is actually expected to have no runtime log.
-                archiveLog(cn, mn, runLogA);
-            }
-            writeReport(cn, mn, whatIDidReport.toString());
-            cleanDirOrFile(appDir.getAbsolutePath(), logsDir);
+            processStopper(runCommandProcess, true);
+            execution.archiveLogsAndCleanWorkspace();
         }
     }
 
