@@ -462,7 +462,7 @@ public class Commands {
        3.473028811 seconds time elapsed
     */
 
-    public static void processStopper(Process p, boolean force) throws InterruptedException, IOException {
+    public static void processStopper(Process p, boolean force) throws InterruptedException {
         if (p == null) return;
         p.children().forEach(child -> {
             if (child.supportsNormalTermination()) {

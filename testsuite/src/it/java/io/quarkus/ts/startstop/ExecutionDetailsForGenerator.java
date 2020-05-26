@@ -56,19 +56,19 @@ public class ExecutionDetailsForGenerator {
         runLog = new File(logsDir + File.separator + "artifact-run.log");
     }
 
-    String testMethodName;
-    String testClassName;
-    boolean warmUp;
+    final String testMethodName;
+    final String testClassName;
+    final boolean warmUp;
 
-    StringBuilder whatIDidReport = new StringBuilder();
-    File appBaseDir = new File(getArtifactGeneBaseDir());
-    File appDir;
-    String logsDir;
-    String repoDir = getLocalMavenRepoDir();
+    final StringBuilder whatIDidReport = new StringBuilder();
+    final File appBaseDir = new File(getArtifactGeneBaseDir());
+    final File appDir;
+    final String logsDir;
+    final String repoDir = getLocalMavenRepoDir();
 
     File generatorLog;
-    File buildLog;
-    File runLog;
+    final File buildLog;
+    final File runLog;
 
     public void prepareWorkspace() throws IOException {
         cleanDirOrFile(appDir.getAbsolutePath(), logsDir);

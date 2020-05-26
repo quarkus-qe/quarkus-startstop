@@ -40,16 +40,16 @@ public class ExecutionDetailsForStartStop {
         runLog = new File(logsDir + File.separator + mvnCmds.name().toLowerCase() + "-run.log");
     }
 
-    Apps app;
-    MvnCmds mvnCmds;
-    String testMethodName;
-    String testClassName;
+    final Apps app;
+    final MvnCmds mvnCmds;
+    final String testMethodName;
+    final String testClassName;
 
-    StringBuilder whatIDidReport = new StringBuilder();
-    File appDir;
-    String logsDir;
-    File buildLog;
-    File runLog;
+    final StringBuilder whatIDidReport = new StringBuilder();
+    final File appDir;
+    final String logsDir;
+    final File buildLog;
+    final File runLog;
 
     public void prepareWorkspace() throws IOException {
         cleanTarget(app);
