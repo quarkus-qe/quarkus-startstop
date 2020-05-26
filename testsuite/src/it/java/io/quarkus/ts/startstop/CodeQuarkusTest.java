@@ -54,7 +54,7 @@ public class CodeQuarkusTest {
     public static final List<List<CodeQuarkusExtensions>> mixedEx = CodeQuarkusExtensions.partition(1, CodeQuarkusExtensions.Flag.MIXED);
 
     public void testRuntime(TestInfo testInfo, List<CodeQuarkusExtensions> extensions) throws Exception {
-        ExecutionDetails execution = new ExecutionDetails(testInfo, "code-with-quarkus");
+        ExecutionDetailsForGenerator execution = new ExecutionDetailsForGenerator(testInfo, "code-with-quarkus");
         execution.prepareWorkspace();
         Process runCommandProcess = null;
 

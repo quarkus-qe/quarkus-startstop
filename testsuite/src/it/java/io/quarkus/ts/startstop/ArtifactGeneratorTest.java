@@ -126,7 +126,7 @@ public class ArtifactGeneratorTest {
     };
 
     public void testRuntime(TestInfo testInfo, String[] extensions, Set<TestFlags> flags) throws Exception {
-        ExecutionDetails execution = new ExecutionDetails(testInfo, flags.contains(TestFlags.WARM_UP));
+        ExecutionDetailsForGenerator execution = new ExecutionDetailsForGenerator(testInfo, flags.contains(TestFlags.WARM_UP));
         execution.prepareWorkspace();
 
         FakeOIDCServer fakeOIDCServer = new FakeOIDCServer(6661, "localhost");

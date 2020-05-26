@@ -60,7 +60,7 @@ public class ArtifactGeneratorBOMTest {
     private static final Logger LOGGER = Logger.getLogger(ArtifactGeneratorBOMTest.class.getName());
 
     public void testRuntime(TestInfo testInfo, String[] extensions, Set<TestFlags> flags) throws Exception {
-        ExecutionDetails execution = new ExecutionDetails(testInfo);
+        ExecutionDetailsForGenerator execution = new ExecutionDetailsForGenerator(testInfo);
         execution.prepareWorkspace();
 
         FakeOIDCServer fakeOIDCServer = new FakeOIDCServer(6661, "localhost");

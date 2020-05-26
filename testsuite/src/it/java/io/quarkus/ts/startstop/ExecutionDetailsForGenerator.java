@@ -32,18 +32,18 @@ import static io.quarkus.ts.startstop.utils.Logs.getLogsDir;
 import static io.quarkus.ts.startstop.utils.Logs.writeReport;
 
 
-public class ExecutionDetails {
+public class ExecutionDetailsForGenerator {
 
-    public ExecutionDetails(TestInfo testInfo) {
+    public ExecutionDetailsForGenerator(TestInfo testInfo) {
         this(testInfo, Apps.GENERATED_SKELETON.dir, false);
     }
-    public ExecutionDetails(TestInfo testInfo, boolean warmUp) {
+    public ExecutionDetailsForGenerator(TestInfo testInfo, boolean warmUp) {
         this(testInfo, Apps.GENERATED_SKELETON.dir, warmUp);
     }
-    public ExecutionDetails(TestInfo testInfo, String applicationDirectoryName) {
+    public ExecutionDetailsForGenerator(TestInfo testInfo, String applicationDirectoryName) {
         this(testInfo, applicationDirectoryName, false);
     }
-    public ExecutionDetails(TestInfo testInfo, String applicationDirectoryName, boolean warmUp) {
+    public ExecutionDetailsForGenerator(TestInfo testInfo, String applicationDirectoryName, boolean warmUp) {
         this.testClassName = testInfo.getTestClass().get().getCanonicalName();
         this.testMethodName = testInfo.getTestMethod().get().getName();
         this.warmUp = warmUp;
