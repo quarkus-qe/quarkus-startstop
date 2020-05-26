@@ -29,26 +29,14 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Date;
 import java.util.List;
 
-import static io.quarkus.ts.startstop.utils.Commands.cleanDirOrFile;
-import static io.quarkus.ts.startstop.utils.Commands.download;
-import static io.quarkus.ts.startstop.utils.Commands.getArtifactGeneBaseDir;
 import static io.quarkus.ts.startstop.utils.Commands.getBuildCommand;
 import static io.quarkus.ts.startstop.utils.Commands.parsePort;
 import static io.quarkus.ts.startstop.utils.Commands.processStopper;
 import static io.quarkus.ts.startstop.utils.Commands.runCommand;
-import static io.quarkus.ts.startstop.utils.Commands.unzip;
 import static io.quarkus.ts.startstop.utils.Commands.waitForTcpClosed;
-import static io.quarkus.ts.startstop.utils.Logs.appendln;
-import static io.quarkus.ts.startstop.utils.Logs.appendlnSection;
-import static io.quarkus.ts.startstop.utils.Logs.archiveLog;
 import static io.quarkus.ts.startstop.utils.Logs.checkLog;
-import static io.quarkus.ts.startstop.utils.Logs.writeReport;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -61,60 +49,44 @@ public class CodeQuarkusTest {
 
     private static final Logger LOGGER = Logger.getLogger(CodeQuarkusTest.class.getName());
 
-    public static final String GEN_BASE_DIR = getArtifactGeneBaseDir();
-
     public static final List<List<CodeQuarkusExtensions>> supportedEx = CodeQuarkusExtensions.partition(4, CodeQuarkusExtensions.Flag.SUPPORTED);
     public static final List<List<CodeQuarkusExtensions>> notSupportedEx = CodeQuarkusExtensions.partition(1, CodeQuarkusExtensions.Flag.NOT_SUPPORTED);
     public static final List<List<CodeQuarkusExtensions>> mixedEx = CodeQuarkusExtensions.partition(1, CodeQuarkusExtensions.Flag.MIXED);
 
     public void testRuntime(TestInfo testInfo, List<CodeQuarkusExtensions> extensions) throws Exception {
-        Process pA = null;
-        File unzipLog = null;
-        File runLogA = null;
-        StringBuilder whatIDidReport = new StringBuilder();
-        String cn = testInfo.getTestClass().get().getCanonicalName();
-        String mn = testInfo.getTestMethod().get().getName();
-        LOGGER.info(mn + ": Testing Code Quarkus generator with these " + extensions.size() + " extensions: " + extensions.toString());
-        File appDir = new File(GEN_BASE_DIR + File.separator + "code-with-quarkus");
-        String logsDir = GEN_BASE_DIR + File.separator + "code-with-quarkus-logs";
-        List<String> devCmd = getBuildCommand(MvnCmds.MVNW_DEV.mvnCmds[0]);
-        URLContent skeletonApp = Apps.GENERATED_SKELETON.urlContent;
-        String zipFile = GEN_BASE_DIR + File.separator + "code-with-quarkus.zip";
+        ExecutionDetails execution = new ExecutionDetails(testInfo, "code-with-quarkus");
+        execution.prepareWorkspace();
+        Process runCommandProcess = null;
 
         try {
-            cleanDirOrFile(appDir.getAbsolutePath(), logsDir);
-            Files.createDirectories(Paths.get(logsDir));
-            appendln(whatIDidReport, "# " + cn + ", " + mn);
-            appendln(whatIDidReport, (new Date()).toString());
-            LOGGER.info("Downloading...");
-            appendln(whatIDidReport, "Download URL: " + download(extensions, zipFile));
-            LOGGER.info("Unzipping...");
-            unzipLog = unzip(zipFile, GEN_BASE_DIR);
-            runLogA = new File(logsDir + File.separator + "dev-run.log");
-            LOGGER.info("Running command: " + devCmd + " in directory: " + appDir);
-            appendln(whatIDidReport, "Extensions: " + extensions.toString());
-            appendln(whatIDidReport, appDir.getAbsolutePath());
-            appendlnSection(whatIDidReport, String.join(" ", devCmd));
-            pA = runCommand(devCmd, appDir, runLogA);
-            // It takes time to download the Internet
+            List<String> devCmd = getBuildCommand(MvnCmds.MVNW_DEV.mvnCmds[0]);
+            URLContent skeletonApp = Apps.GENERATED_SKELETON.urlContent;
+
+            //Generator
+            execution.reportDownload(LOGGER, extensions);
+            execution.downloadAndUnzip(LOGGER, extensions);
+
+            // Run
+            execution.reportRunCmd(LOGGER, devCmd);
+            runCommandProcess = runCommand(devCmd, execution.appDir, execution.runLog);
+
+            // Test web pages
             long timeoutS = 10 * 60;
             LOGGER.info("Timeout: " + timeoutS + "s. Waiting for the web content...");
             WebpageTester.testWeb(skeletonApp.urlContent[0][0], timeoutS, skeletonApp.urlContent[0][1], false);
+
+            // Terminate the process
             LOGGER.info("Terminating and scanning logs...");
-//            pA.getInputStream().available();
-            processStopper(pA, false);
-            LOGGER.info("Gonna wait for ports closed...");
+            runCommandProcess.getInputStream().available();
+
+            processStopper(runCommandProcess, false);
             assertTrue(waitForTcpClosed("localhost", parsePort(skeletonApp.urlContent[0][0]), 60),
                     "Main port is still open.");
-            checkLog(cn, mn, Apps.GENERATED_SKELETON, MvnCmds.MVNW_DEV, runLogA);
+            checkLog(execution.testClassName, execution.testMethodName, Apps.GENERATED_SKELETON, MvnCmds.MVNW_DEV, execution.runLog);
+
         } finally {
-            if (pA != null) {
-                processStopper(pA, true);
-            }
-            archiveLog(cn, mn, unzipLog);
-            archiveLog(cn, mn, runLogA);
-            writeReport(cn, mn, whatIDidReport.toString());
-            cleanDirOrFile(appDir.getAbsolutePath(), logsDir);
+            processStopper(runCommandProcess, true);
+            execution.archiveLogsAndCleanWorkspace();
         }
     }
 

@@ -1,6 +1,7 @@
 package io.quarkus.ts.startstop;
 
 import io.quarkus.ts.startstop.utils.Apps;
+import io.quarkus.ts.startstop.utils.CodeQuarkusExtensions;
 import io.quarkus.ts.startstop.utils.LogBuilder;
 import io.quarkus.ts.startstop.utils.Logs;
 import org.jboss.logging.Logger;
@@ -20,8 +21,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.quarkus.ts.startstop.utils.Commands.cleanDirOrFile;
+import static io.quarkus.ts.startstop.utils.Commands.download;
 import static io.quarkus.ts.startstop.utils.Commands.getArtifactGeneBaseDir;
 import static io.quarkus.ts.startstop.utils.Commands.getLocalMavenRepoDir;
+import static io.quarkus.ts.startstop.utils.Commands.unzip;
 import static io.quarkus.ts.startstop.utils.Logs.appendln;
 import static io.quarkus.ts.startstop.utils.Logs.appendlnSection;
 import static io.quarkus.ts.startstop.utils.Logs.archiveLog;
@@ -30,29 +33,42 @@ import static io.quarkus.ts.startstop.utils.Logs.writeReport;
 
 
 public class ExecutionDetails {
-    String testMethodName;
-    String testClassName;
-    boolean warmUp = false;
 
     public ExecutionDetails(TestInfo testInfo) {
-        this(testInfo, false);
+        this(testInfo, Apps.GENERATED_SKELETON.dir, false);
     }
     public ExecutionDetails(TestInfo testInfo, boolean warmUp) {
-        testClassName = testInfo.getTestClass().get().getCanonicalName();
-        testMethodName = testInfo.getTestMethod().get().getName();
+        this(testInfo, Apps.GENERATED_SKELETON.dir, warmUp);
+    }
+    public ExecutionDetails(TestInfo testInfo, String applicationDirectoryName) {
+        this(testInfo, applicationDirectoryName, false);
+    }
+    public ExecutionDetails(TestInfo testInfo, String applicationDirectoryName, boolean warmUp) {
+        this.testClassName = testInfo.getTestClass().get().getCanonicalName();
+        this.testMethodName = testInfo.getTestMethod().get().getName();
         this.warmUp = warmUp;
+
+        appDir = new File(appBaseDir, applicationDirectoryName);
+        logsDir = appBaseDir.getAbsolutePath() + File.separator + applicationDirectoryName + "-logs";
+
+        generatorLog = new File(logsDir + File.separator + "artifact-generator.log");
+        buildLog = new File(logsDir + File.separator + "artifact-build.log");
+        runLog = new File(logsDir + File.separator + "artifact-run.log");
     }
 
-    File appBaseDir = new File(getArtifactGeneBaseDir());
-    File appDir = new File(appBaseDir, Apps.GENERATED_SKELETON.dir);
-    String logsDir = appBaseDir.getAbsolutePath() + File.separator + Apps.GENERATED_SKELETON.dir + "-logs";
-    String repoDir = getLocalMavenRepoDir();
-
-    File generatorLog = new File(logsDir + File.separator + "artifact-generator.log");
-    File buildLog = new File(logsDir + File.separator + "artifact-build.log");
-    File runLog = new File(logsDir + File.separator + "artifact-run.log");
+    String testMethodName;
+    String testClassName;
+    boolean warmUp;
 
     StringBuilder whatIDidReport = new StringBuilder();
+    File appBaseDir = new File(getArtifactGeneBaseDir());
+    File appDir;
+    String logsDir;
+    String repoDir = getLocalMavenRepoDir();
+
+    File generatorLog;
+    File buildLog;
+    File runLog;
 
     public void prepareWorkspace() throws IOException {
         cleanDirOrFile(appDir.getAbsolutePath(), logsDir);
@@ -78,7 +94,6 @@ public class ExecutionDetails {
         appendln(whatIDidReport, (new Date()).toString());
         appendln(whatIDidReport, appBaseDir.getAbsolutePath());
         appendlnSection(whatIDidReport, String.join(" ", generatorCmd));
-
     }
     public void reportBuildCmd(Logger LOGGER, List<String> buildCmd) {
         LOGGER.info(testMethodName + ": Build command " + String.join(" ", buildCmd));
@@ -91,6 +106,21 @@ public class ExecutionDetails {
 
         appendln(whatIDidReport, appDir.getAbsolutePath());
         appendlnSection(whatIDidReport, String.join(" ", runCmd));
+    }
+    public void reportDownload(Logger LOGGER, List<CodeQuarkusExtensions> extensions) {
+        LOGGER.info(testMethodName + ": Testing Code Quarkus generator with these " + extensions.size() + " extensions: " + extensions.toString());
+
+        appendln(whatIDidReport, "# " + testClassName + ", " + testMethodName + (warmUp?", warm-up run":""));
+        appendln(whatIDidReport, (new Date()).toString());
+        appendln(whatIDidReport, "Extensions: " + extensions.toString());
+    }
+
+    public void downloadAndUnzip(Logger LOGGER, List<CodeQuarkusExtensions> extensions) throws IOException, InterruptedException {
+        String zipFile = appBaseDir.getAbsolutePath() + File.separator + "code-with-quarkus.zip";
+        LOGGER.info("Downloading...");
+        appendln(whatIDidReport, "Download URL: " + download(extensions, zipFile));
+        LOGGER.info("Unzipping...");
+        generatorLog = unzip(zipFile, appBaseDir.getAbsolutePath());
     }
 
     public long runCommand(Runnable task) throws InterruptedException {

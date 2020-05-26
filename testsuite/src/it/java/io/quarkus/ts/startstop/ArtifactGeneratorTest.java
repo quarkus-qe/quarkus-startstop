@@ -151,6 +151,7 @@ public class ArtifactGeneratorTest {
 
             // Test web pages
             long timeoutS = (flags.contains(TestFlags.WARM_UP) ? 20 * 60 : 60); // warm-up needs time to download fresh dependencies
+            LOGGER.info("Timeout: " + timeoutS + "s. Waiting for the web content...");
             long timeToFirstOKRequest = WebpageTester.testWeb(skeletonApp.urlContent[0][0], timeoutS,
                     skeletonApp.urlContent[0][1], !flags.contains(TestFlags.WARM_UP));
 
