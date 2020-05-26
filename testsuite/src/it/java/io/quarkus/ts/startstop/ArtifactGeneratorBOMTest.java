@@ -47,7 +47,6 @@ import static io.quarkus.ts.startstop.utils.Commands.runCommand;
 import static io.quarkus.ts.startstop.utils.Commands.waitForTcpClosed;
 import static io.quarkus.ts.startstop.utils.Logs.checkJarSuffixes;
 import static io.quarkus.ts.startstop.utils.Logs.checkLog;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**

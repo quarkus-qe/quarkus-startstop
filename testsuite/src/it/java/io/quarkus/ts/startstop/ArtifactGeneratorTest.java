@@ -23,7 +23,6 @@ import io.quarkus.ts.startstop.utils.Apps;
 import io.quarkus.ts.startstop.utils.Commands;
 import io.quarkus.ts.startstop.utils.FakeOIDCServer;
 import io.quarkus.ts.startstop.utils.LogBuilder;
-import io.quarkus.ts.startstop.utils.Logs;
 import io.quarkus.ts.startstop.utils.MvnCmds;
 import io.quarkus.ts.startstop.utils.TestFlags;
 import io.quarkus.ts.startstop.utils.URLContent;
@@ -33,23 +32,11 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static io.quarkus.ts.startstop.utils.Commands.cleanDirOrFile;
 import static io.quarkus.ts.startstop.utils.Commands.confAppPropsForSkeleton;
-import static io.quarkus.ts.startstop.utils.Commands.getArtifactGeneBaseDir;
 import static io.quarkus.ts.startstop.utils.Commands.getGeneratorCommand;
 import static io.quarkus.ts.startstop.utils.Commands.getOpenedFDs;
 import static io.quarkus.ts.startstop.utils.Commands.getRSSkB;
@@ -59,14 +46,9 @@ import static io.quarkus.ts.startstop.utils.Commands.processStopper;
 import static io.quarkus.ts.startstop.utils.Commands.runCommand;
 import static io.quarkus.ts.startstop.utils.Commands.waitForTcpClosed;
 import static io.quarkus.ts.startstop.utils.Logs.SKIP;
-import static io.quarkus.ts.startstop.utils.Logs.appendln;
-import static io.quarkus.ts.startstop.utils.Logs.appendlnSection;
-import static io.quarkus.ts.startstop.utils.Logs.archiveLog;
 import static io.quarkus.ts.startstop.utils.Logs.checkLog;
 import static io.quarkus.ts.startstop.utils.Logs.checkThreshold;
-import static io.quarkus.ts.startstop.utils.Logs.getLogsDir;
 import static io.quarkus.ts.startstop.utils.Logs.parseStartStopTimestamps;
-import static io.quarkus.ts.startstop.utils.Logs.writeReport;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -145,7 +127,6 @@ public class ArtifactGeneratorTest {
 
     public void testRuntime(TestInfo testInfo, String[] extensions, Set<TestFlags> flags) throws Exception {
         ExecutionDetails execution = new ExecutionDetails(testInfo, flags.contains(TestFlags.WARM_UP));
-        execution.prepareWorkspace();
         execution.prepareWorkspace();
 
         FakeOIDCServer fakeOIDCServer = new FakeOIDCServer(6661, "localhost");

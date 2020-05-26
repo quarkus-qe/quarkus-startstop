@@ -82,7 +82,9 @@ public class StartStopTest {
         File buildLogA = null;
         File runLogA = null;
         StringBuilder whatIDidReport = new StringBuilder();
+
         File appDir = new File(BASE_DIR + File.separator + app.dir);
+
         String cn = testInfo.getTestClass().get().getCanonicalName();
         String mn = testInfo.getTestMethod().get().getName();
         try {

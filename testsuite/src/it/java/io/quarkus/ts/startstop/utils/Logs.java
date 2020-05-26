@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 
 import static io.quarkus.ts.startstop.StartStopTest.BASE_DIR;
 import static io.quarkus.ts.startstop.utils.Commands.isThisWindows;
-import static java.nio.charset.StandardCharsets.*;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
