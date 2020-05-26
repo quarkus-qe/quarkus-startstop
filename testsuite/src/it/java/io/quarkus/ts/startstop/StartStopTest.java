@@ -22,7 +22,6 @@ package io.quarkus.ts.startstop;
 import io.quarkus.ts.startstop.utils.Apps;
 import io.quarkus.ts.startstop.utils.Commands;
 import io.quarkus.ts.startstop.utils.LogBuilder;
-import io.quarkus.ts.startstop.utils.Logs;
 import io.quarkus.ts.startstop.utils.MvnCmds;
 import io.quarkus.ts.startstop.utils.WebpageTester;
 import org.jboss.logging.Logger;
@@ -30,18 +29,9 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
-import static io.quarkus.ts.startstop.utils.Commands.cleanTarget;
 import static io.quarkus.ts.startstop.utils.Commands.getBaseDir;
 import static io.quarkus.ts.startstop.utils.Commands.getBuildCommand;
 import static io.quarkus.ts.startstop.utils.Commands.getOpenedFDs;
@@ -52,14 +42,9 @@ import static io.quarkus.ts.startstop.utils.Commands.processStopper;
 import static io.quarkus.ts.startstop.utils.Commands.runCommand;
 import static io.quarkus.ts.startstop.utils.Commands.waitForTcpClosed;
 import static io.quarkus.ts.startstop.utils.Logs.SKIP;
-import static io.quarkus.ts.startstop.utils.Logs.appendln;
-import static io.quarkus.ts.startstop.utils.Logs.appendlnSection;
-import static io.quarkus.ts.startstop.utils.Logs.archiveLog;
 import static io.quarkus.ts.startstop.utils.Logs.checkLog;
 import static io.quarkus.ts.startstop.utils.Logs.checkThreshold;
-import static io.quarkus.ts.startstop.utils.Logs.getLogsDir;
 import static io.quarkus.ts.startstop.utils.Logs.parseStartStopTimestamps;
-import static io.quarkus.ts.startstop.utils.Logs.writeReport;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -76,94 +61,61 @@ public class StartStopTest {
     public static final String BASE_DIR = getBaseDir();
 
     public void testRuntime(TestInfo testInfo, Apps app, MvnCmds mvnCmds) throws IOException, InterruptedException {
-        LOGGER.info("Testing app: " + app.toString() + ", mode: " + mvnCmds.toString());
+        ExecutionDetailsForStartStop execution = new ExecutionDetailsForStartStop(testInfo, app, mvnCmds);
+        execution.prepareWorkspace();
+        Process runCommandProcess = null;
 
-        Process pA = null;
-        File buildLogA = null;
-        File runLogA = null;
-        StringBuilder whatIDidReport = new StringBuilder();
-
-        File appDir = new File(BASE_DIR + File.separator + app.dir);
-
-        String cn = testInfo.getTestClass().get().getCanonicalName();
-        String mn = testInfo.getTestMethod().get().getName();
         try {
-            // Cleanup
-            cleanTarget(app);
-            Files.createDirectories(Paths.get(appDir.getAbsolutePath() + File.separator + "logs"));
+            List<String> buildCmd = getBuildCommand(mvnCmds.mvnCmds[0]);
+            List<String> runCmd = getRunCommand(mvnCmds.mvnCmds[1]);
 
             // Build
-            buildLogA = new File(appDir.getAbsolutePath() + File.separator + "logs" + File.separator + mvnCmds.name().toLowerCase() + "-build.log");
-            ExecutorService buildService = Executors.newFixedThreadPool(1);
-            List<String> cmd = getBuildCommand(mvnCmds.mvnCmds[0]);
-            buildService.submit(new Commands.ProcessRunner(appDir, buildLogA, cmd, 20));
-            appendln(whatIDidReport, "# " + cn + ", " + mn);
-            appendln(whatIDidReport, (new Date()).toString());
-            appendln(whatIDidReport, appDir.getAbsolutePath());
-            appendlnSection(whatIDidReport, String.join(" ", cmd));
-            long buildStarts = System.currentTimeMillis();
-            buildService.shutdown();
-            buildService.awaitTermination(30, TimeUnit.MINUTES);
-            long buildEnds = System.currentTimeMillis();
-
-            assertTrue(buildLogA.exists());
-            checkLog(cn, mn, app, mvnCmds, buildLogA);
+            execution.reportBuildCmd(LOGGER, buildCmd);
+            long buildTimeMs = execution.runCommand(new Commands.ProcessRunner(execution.appDir,execution.buildLog, buildCmd, 20));
+            checkLog(execution.testClassName, execution.testMethodName, app, mvnCmds, execution.buildLog);
 
             // Run
-            LOGGER.info("Running...");
-            runLogA = new File(appDir.getAbsolutePath() + File.separator + "logs" + File.separator + mvnCmds.name().toLowerCase() + "-run.log");
-            cmd = getRunCommand(mvnCmds.mvnCmds[1]);
-            pA = runCommand(cmd, appDir, runLogA);
-            appendln(whatIDidReport, appDir.getAbsolutePath());
-            appendlnSection(whatIDidReport, String.join(" ", cmd));
+            execution.reportRunCmd(LOGGER, runCmd);
+            runCommandProcess = runCommand(runCmd, execution.appDir, execution.runLog);
+
             // Test web pages
-            long timeToFirstOKRequest = WebpageTester.testWeb(app.urlContent.urlContent[0][0], 10, app.urlContent.urlContent[0][1], true);
-            LOGGER.info("Testing web page content...");
+            LOGGER.info("Waiting for the web content...");
+            long timeToFirstOKRequest = WebpageTester.testWeb(app.urlContent.urlContent[0][0], 10,app.urlContent.urlContent[0][1], true);
             for (String[] urlContent : app.urlContent.urlContent) {
                 WebpageTester.testWeb(urlContent[0], 5, urlContent[1], false);
             }
 
-            LOGGER.info("Terminate and scan logs...");
-//            pA.getInputStream().available();
+            // RSS and opened files
+            long rssKb = getRSSkB(runCommandProcess.pid());
+            long openedFiles = getOpenedFDs(runCommandProcess.pid());
 
-            long rssKb = getRSSkB(pA.pid());
-            long openedFiles = getOpenedFDs(pA.pid());
+            // Terminate the process
+            LOGGER.info("Terminating and scanning logs...");
+            runCommandProcess.getInputStream().available();
 
-            processStopper(pA, false);
-
-            LOGGER.info("Gonna wait for ports closed...");
-            // Release ports
+            processStopper(runCommandProcess, false);
             assertTrue(waitForTcpClosed("localhost", parsePort(app.urlContent.urlContent[0][0]), 60),
-                    "Main port is still open");
-            checkLog(cn, mn, app, mvnCmds, runLogA);
+                    "Main port is still open after run");
+            checkLog(execution.testClassName, execution.testMethodName, app, mvnCmds, execution.runLog);
 
-            float[] startedStopped = parseStartStopTimestamps(runLogA);
-
-            Path measurementsLog = Paths.get(getLogsDir(cn, mn).toString(), "measurements.csv");
+            // Measurements and threshold check
+            float[] startedStopped = parseStartStopTimestamps(execution.runLog);
             LogBuilder.Log log = new LogBuilder()
                     .app(app)
                     .mode(mvnCmds)
-                    .buildTimeMs(buildEnds - buildStarts)
+                    .buildTimeMs(buildTimeMs)
                     .timeToFirstOKRequestMs(timeToFirstOKRequest)
                     .startedInMs((long) (startedStopped[0] * 1000))
                     .stoppedInMs((long) (startedStopped[1] * 1000))
                     .rssKb(rssKb)
                     .openedFiles(openedFiles)
                     .build();
-            Logs.logMeasurements(log, measurementsLog);
-            appendln(whatIDidReport, "Measurements:");
-            appendln(whatIDidReport, log.headerMarkdown + "\n" + log.lineMarkdown);
+            execution.measurements(log);
             checkThreshold(app, mvnCmds, rssKb, timeToFirstOKRequest, SKIP);
+
         } finally {
-            // Make sure processes are down even if there was an exception / failure
-            if (pA != null) {
-                processStopper(pA, true);
-            }
-            // Archive logs no matter what
-            archiveLog(cn, mn, buildLogA);
-            archiveLog(cn, mn, runLogA);
-            writeReport(cn, mn, whatIDidReport.toString());
-            cleanTarget(app);
+            processStopper(runCommandProcess, true);
+            execution.archiveLogsAndCleanWorkspace();
         }
     }
 
