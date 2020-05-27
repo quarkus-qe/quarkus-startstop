@@ -47,7 +47,7 @@
         <log4j.version>2.13.2</log4j.version>
 
         <!-- Test to be executed by default (should be all of them) -->
-        <includeTags>generator,startstop,bomtests,codequarkus</includeTags>
+        <includeTags>generator,startstop,bomtests,codequarkus,special-chars</includeTags>
     </properties>
 
     <dependencies>

@@ -114,6 +114,11 @@ GENERATED_SKELETON,GENERATOR,2644,13871,3091,5597,1154,565340,198
 
 See [ArtifactGeneratorTest#manyExtensions](./testsuite/src/it/java/io/quarkus/ts/startstop/ArtifactGeneratorTest.java) for the list of used extensions.
 
+## SpecialCharsTest
+
+The goal of this test is to check the build of Quarkus applications on paths with special characters - japanese characters,
+spaces, diacritics, etc..
+
 ## Code Quarkus test
 
 Add ```-Dcode.quarkus.url=``` to test against a selected Code Quarkus site.
