@@ -70,6 +70,8 @@ import static io.quarkus.ts.startstop.utils.Logs.writeReport;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
+ * Tests for quarkus-maven-plugin generator
+ *
  * @author Michal Karm Babacek <karm@redhat.com>
  */
 @Tag("generator")

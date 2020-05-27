@@ -1,10 +1,26 @@
-# Usage
+# Quarkus start-stop
+Generates, starts, tests, stops small Quarkus applications and measures time and memory
+
+## Prerequisites
 
 The TS expects you run Java 11+ and have ```ps``` program available on your Linux/Mac and ```wmic``` (by default present) on your Windows system.
 Native image build requires GraalVM with Native image toolchain installed. Refer to [Building Native Image Guide](https://quarkus.io/guides/building-native-image) for details. 
 
+## Usage
 
-All, including Quarkus builds nad native images:
+Run with a community version without native images:
+
+```
+mvn clean verify -Ptestsuite-community-no-native -Dquarkus.version=1.4.2.Final
+```
+
+Run with a community version, including native images:
+
+```
+mvn clean verify -Ptestsuite-community -Dquarkus.version=1.4.2.Final
+```
+
+All tests, including Quarkus product builds and native images:
 
 ```
 mvn clean verify -Ptestsuite \
@@ -12,12 +28,6 @@ mvn clean verify -Ptestsuite \
  -Dquarkus.platform.version=1.3.0.Final-redhat-00010 \
  -Dtests.maven.repo.local=/home/karm/QUARKUS/quarkus-1.3.0.ER11/maven-repository \
  -Dmaven.repo.local=/home/karm/QUARKUS/quarkus-1.3.0.ER11/maven-repository
-```
-
-Community version, including native images:
-
-```
-mvn clean verify -Ptestsuite-community -Dquarkus.version=1.3.0.Final
 ```
 
 One can fine-tune excluded test cases or tests with ```excludeTags```, e.g. ```-DexcludeTags=startstop```.

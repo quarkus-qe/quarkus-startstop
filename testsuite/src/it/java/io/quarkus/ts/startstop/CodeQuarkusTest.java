@@ -52,6 +52,8 @@ import static io.quarkus.ts.startstop.utils.Logs.writeReport;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
+ * Tests for code.quarkus.io generator
+ *
  * @author Michal Karm Babacek <karm@redhat.com>
  */
 @Tag("codequarkus")
