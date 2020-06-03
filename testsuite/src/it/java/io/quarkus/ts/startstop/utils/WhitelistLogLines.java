@@ -64,6 +64,7 @@ public enum WhitelistLogLines {
             Pattern.compile(".*errorprone.*"),
             // When GraalVM 19.3.1 is used; unrelated to the test
             Pattern.compile(".*forcing TieredStopAtLevel to full optimization because JVMCI is enabled.*"),
+            Pattern.compile(".*error_prone_annotations.*"),
     });
 
     public final Pattern[] errs;
