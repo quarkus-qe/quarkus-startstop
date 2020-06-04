@@ -178,13 +178,13 @@ public class ArtifactGeneratorBOMTest {
     }
 
     @Test
-    @Tag("community")
+    @Tag("product-and-community")
     public void quarkusBomExtensionsA(TestInfo testInfo) throws Exception {
         testRuntime(testInfo, supportedExtensionsSubsetSetA, EnumSet.of(TestFlags.QUARKUS_BOM));
     }
 
     @Test
-    @Tag("community")
+    @Tag("product-and-community")
     public void quarkusBomExtensionsB(TestInfo testInfo) throws Exception {
         testRuntime(testInfo, supportedExtensionsSubsetSetB, EnumSet.of(TestFlags.QUARKUS_BOM));
     }
