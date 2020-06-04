@@ -188,7 +188,7 @@ public class ArtifactGeneratorTest {
             confAppPropsForSkeleton(appDir.getAbsolutePath());
 
             // Run
-            LOGGER.info("Running...");
+            LOGGER.info("Running... " + runCmd);
             runLogA = new File(logsDir + File.separator + (flags.contains(TestFlags.WARM_UP) ? "warmup-dev-run.log" : "dev-run.log"));
             pA = runCommand(runCmd, appDir, runLogA);
             appendln(whatIDidReport, appDir.getAbsolutePath());

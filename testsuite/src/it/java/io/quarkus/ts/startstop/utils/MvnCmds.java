@@ -19,6 +19,7 @@
  */
 package io.quarkus.ts.startstop.utils;
 
+import static io.quarkus.ts.startstop.utils.Commands.getLocalMavenRepoDir;
 import static io.quarkus.ts.startstop.utils.Commands.getQuarkusVersion;
 
 /**
@@ -32,7 +33,7 @@ public enum MvnCmds {
             new String[]{"java", "-jar", "target/quarkus-runner.jar"}
     }),
     DEV(new String[][]{
-            new String[]{"mvn", "clean", "quarkus:dev"}
+            new String[]{"mvn", "clean", "quarkus:dev", "-Dmaven.repo.local=" + getLocalMavenRepoDir()}
     }),
     NATIVE(new String[][]{
             new String[]{"mvn", "clean", "compile", "quarkus:native-image", "-Pnative"},
