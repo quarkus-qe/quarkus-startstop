@@ -35,6 +35,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -45,6 +47,7 @@ import static io.quarkus.ts.startstop.utils.Commands.cleanTarget;
 import static io.quarkus.ts.startstop.utils.Commands.getBaseDir;
 import static io.quarkus.ts.startstop.utils.Commands.getBuildCommand;
 import static io.quarkus.ts.startstop.utils.Commands.getOpenedFDs;
+import static io.quarkus.ts.startstop.utils.Commands.getQuarkusVersion;
 import static io.quarkus.ts.startstop.utils.Commands.getRSSkB;
 import static io.quarkus.ts.startstop.utils.Commands.getRunCommand;
 import static io.quarkus.ts.startstop.utils.Commands.parsePort;
@@ -93,7 +96,12 @@ public class StartStopTest {
             // Build
             buildLogA = new File(appDir.getAbsolutePath() + File.separator + "logs" + File.separator + mvnCmds.name().toLowerCase() + "-build.log");
             ExecutorService buildService = Executors.newFixedThreadPool(1);
-            List<String> cmd = getBuildCommand(mvnCmds.mvnCmds[0]);
+
+            List<String> baseBuildCmd = new ArrayList<>();
+            baseBuildCmd.addAll(Arrays.asList(mvnCmds.mvnCmds[0]));
+            baseBuildCmd.add("-Dquarkus.version=" + getQuarkusVersion());
+            List<String> cmd = getBuildCommand(baseBuildCmd.toArray(new String[0]));
+
             buildService.submit(new Commands.ProcessRunner(appDir, buildLogA, cmd, 20));
             appendln(whatIDidReport, "# " + cn + ", " + mn);
             appendln(whatIDidReport, (new Date()).toString());
