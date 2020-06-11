@@ -65,6 +65,7 @@ public enum WhitelistLogLines {
             // When GraalVM 19.3.1 is used; unrelated to the test
             Pattern.compile(".*forcing TieredStopAtLevel to full optimization because JVMCI is enabled.*"),
             Pattern.compile(".*error_prone_annotations.*"),
+            Pattern.compile(".*Unable to properly register the hierarchy of the following classes for reflection as they are not in the Jandex index.*"),
     });
 
     public final Pattern[] errs;
