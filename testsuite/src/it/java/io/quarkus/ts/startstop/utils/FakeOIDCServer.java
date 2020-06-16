@@ -28,6 +28,7 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -50,7 +51,7 @@ public class FakeOIDCServer implements Runnable {
             while (running.get()) {
                 Socket s = server.accept();
                 s.setSoTimeout(500);
-                BufferedReader i = new BufferedReader(new InputStreamReader(s.getInputStream()));
+                BufferedReader i = new BufferedReader(new InputStreamReader(s.getInputStream(), StandardCharsets.UTF_8));
                 DataOutputStream o = new DataOutputStream(s.getOutputStream());
                 String l;
                 StringBuilder sb = new StringBuilder(256);

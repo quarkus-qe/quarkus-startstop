@@ -40,23 +40,23 @@ public class LogBuilder {
         }
     }
 
-    private final String buildTimeMsHeader = "buildTimeMs";
+    private static final String buildTimeMsHeader = "buildTimeMs";
     private long buildTimeMs = -1L;
-    private final String timeToFirstOKRequestMsHeader = "timeToFirstOKRequestMs";
+    private static final String timeToFirstOKRequestMsHeader = "timeToFirstOKRequestMs";
     private long timeToFirstOKRequestMs = -1L;
-    private final String timeToReloadedOKRequestHeader = "timeToReloadMs";
+    private static final String timeToReloadedOKRequestHeader = "timeToReloadMs";
     private long timeToReloadedOKRequest = -1L;
-    private final String startedInMsHeader = "startedInMs";
+    private static final String startedInMsHeader = "startedInMs";
     private long startedInMs = -1L;
-    private final String stoppedInMsHeader = "stoppedInMs";
+    private static final String stoppedInMsHeader = "stoppedInMs";
     private long stoppedInMs = -1L;
-    private final String rssKbHeader = "RSSKb";
+    private static final String rssKbHeader = "RSSKb";
     private long rssKb = -1L;
-    private final String openedFilesHeader = "FDs";
+    private static final String openedFilesHeader = "FDs";
     private long openedFiles = -1L;
-    private final String appHeader = "App";
+    private static final String appHeader = "App";
     private Apps app = null;
-    private final String modeHeader = "Mode";
+    private static final String modeHeader = "Mode";
     private MvnCmds mode = null;
 
     public LogBuilder buildTimeMs(long buildTimeMs) {

@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 
 import static io.quarkus.ts.startstop.StartStopTest.BASE_DIR;
 import static io.quarkus.ts.startstop.utils.Commands.isThisWindows;
-import static java.nio.charset.StandardCharsets.*;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -74,8 +74,8 @@ public class Logs {
 
     public static final long SKIP = -1L;
 
-    public static void checkLog(String testClass, String testMethod, Apps app, MvnCmds cmd, File log) throws FileNotFoundException {
-        try (Scanner sc = new Scanner(log)) {
+    public static void checkLog(String testClass, String testMethod, Apps app, MvnCmds cmd, File log) throws IOException {
+        try (Scanner sc = new Scanner(log, UTF_8)) {
             Set<String> offendingLines = new HashSet<>();
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
@@ -251,9 +251,9 @@ public class Logs {
                 .collect(Collectors.toList());
     }
 
-    public static float[] parseStartStopTimestamps(File log) throws FileNotFoundException {
+    public static float[] parseStartStopTimestamps(File log) throws IOException {
         float[] startedStopped = new float[]{-1f, -1f};
-        try (Scanner sc = new Scanner(log)) {
+        try (Scanner sc = new Scanner(log, UTF_8)) {
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
 
