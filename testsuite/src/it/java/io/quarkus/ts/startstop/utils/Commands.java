@@ -37,6 +37,7 @@ import java.net.UnknownHostException;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -122,7 +123,7 @@ public class Commands {
             }
         }
         String failure = "Failed to determine quarkus.version. Check pom.xm, check env and sys vars QUARKUS_VERSION";
-        try (Scanner sc = new Scanner(new File(BASE_DIR + File.separator + "pom.xml"))) {
+        try (Scanner sc = new Scanner(new File(BASE_DIR + File.separator + "pom.xml"), StandardCharsets.UTF_8)) {
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
                 Matcher m = quarkusVersionPattern.matcher(line);
@@ -130,7 +131,7 @@ public class Commands {
                     return m.group(1);
                 }
             }
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             throw new IllegalArgumentException(failure);
         }
         throw new IllegalArgumentException(failure);
@@ -390,7 +391,8 @@ public class Commands {
         envA.put("PATH", System.getenv("PATH"));
         pa.redirectErrorStream(true);
         Process p = pa.start();
-        try (BufferedReader processOutputReader = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+        try (BufferedReader processOutputReader =
+                     new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
             String l;
             while ((l = processOutputReader.readLine()) != null) {
                 if (numPattern.matcher(l).matches()) {
@@ -419,7 +421,8 @@ public class Commands {
         envA.put("PATH", System.getenv("PATH"));
         pa.redirectErrorStream(true);
         Process p = pa.start();
-        try (BufferedReader processOutputReader = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+        try (BufferedReader processOutputReader =
+                     new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
             if (isThisWindows) {
                 String l;
                 // TODO: We just get a magical number with all FDs... Is it O.K.?
