@@ -29,3 +29,9 @@ hs_err_pid*
 *.iws
 target
 
+# VS Code
+.classpath
+.factorypath
+.project
+.settings
+.vscode
