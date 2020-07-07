@@ -125,7 +125,7 @@ public class SpecialCharsTest {
 
             // Test web page
             LOGGER.info("Testing web page content...");
-            int timeout = mvnCmds != MvnCmds.DEV ? 5 : 20;
+            int timeout = mvnCmds != MvnCmds.DEV ? 5 : 60;
             for (String[] urlContent : app.urlContent.urlContent) {
                 WebpageTester.testWeb(urlContent[0], timeout, urlContent[1], false);
             }
@@ -177,7 +177,7 @@ public class SpecialCharsTest {
     }
 
     @Test
-    @DisabledOnOs({OS.WINDOWS})
+    @DisabledOnOs({OS.WINDOWS}) // https://github.com/quarkusio/quarkus/issues/9707
     public void specialDEV(TestInfo testInfo) throws IOException, InterruptedException {
         testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.DEV, ",;~!@#$%^&()");
     }
@@ -210,7 +210,7 @@ public class SpecialCharsTest {
     }
 
     @Test
-    @DisabledOnOs({OS.WINDOWS})
+    @DisabledOnOs({OS.WINDOWS}) // https://github.com/quarkusio/quarkus/issues/9707
     public void japaneseDEV(TestInfo testInfo) throws IOException, InterruptedException {
         testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.DEV, "元気かい");
     }
@@ -227,7 +227,7 @@ public class SpecialCharsTest {
     }
 
     @Test
-    @DisabledOnOs({OS.WINDOWS})
+    @DisabledOnOs({OS.WINDOWS}) // https://github.com/quarkusio/quarkus/issues/9707
     public void otherDEV(TestInfo testInfo) throws IOException, InterruptedException {
         testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.DEV, "Îñţérñåţîöñåļîžåţîờñ");
     }
