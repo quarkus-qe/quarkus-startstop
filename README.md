@@ -123,6 +123,18 @@ spaces, diacritics, etc.
 
 Add ```-Dcode.quarkus.url=``` to test against a selected Code Quarkus site.
 
+## Parameters for NATIVE mode
+Properties starting with `quarkus.native` get appended to the command for the native image build.
+This allows customization of the native image build procedure as described in https://quarkus.io/guides/building-native-image#configuration-reference guide.
+
+Example command:
+```bash
+mvn clean verify -Ptestsuite -Dtest=SpecialCharsTest#diacriticsNative \
+    -Dquarkus.version=1.6.0.Final -Dquarkus.platform.version=1.6.0.Final \
+    -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=docker\
+    -Dquarkus.native.builder-image=quay.io/quarkus/ubi-quarkus-native-image:20.1.0-java11
+```
+
 ## Values
 
  * App - the test app used

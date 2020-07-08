@@ -19,6 +19,9 @@
  */
 package io.quarkus.ts.startstop.utils;
 
+import java.util.stream.Stream;
+
+import static io.quarkus.ts.startstop.utils.Commands.getQuarkusNativeProperties;
 import static io.quarkus.ts.startstop.utils.Commands.getLocalMavenRepoDir;
 import static io.quarkus.ts.startstop.utils.Commands.getQuarkusVersion;
 
@@ -36,7 +39,8 @@ public enum MvnCmds {
             new String[]{"mvn", "clean", "quarkus:dev", "-Dmaven.repo.local=" + getLocalMavenRepoDir()}
     }),
     NATIVE(new String[][]{
-            new String[]{"mvn", "clean", "compile", "package", "-Pnative"},
+            Stream.concat(Stream.of("mvn", "clean", "compile", "package", "-Pnative"),
+                    getQuarkusNativeProperties().stream()).toArray(String[]::new),
             new String[]{Commands.isThisWindows ? "target\\quarkus-runner" : "./target/quarkus-runner"}
     }),
     GENERATOR(new String[][]{
