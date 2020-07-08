@@ -36,7 +36,7 @@ public enum MvnCmds {
             new String[]{"mvn", "clean", "quarkus:dev", "-Dmaven.repo.local=" + getLocalMavenRepoDir()}
     }),
     NATIVE(new String[][]{
-            new String[]{"mvn", "clean", "compile", "quarkus:native-image", "-Pnative"},
+            new String[]{"mvn", "clean", "compile", "package", "-Pnative"},
             new String[]{Commands.isThisWindows ? "target\\quarkus-runner" : "./target/quarkus-runner"}
     }),
     GENERATOR(new String[][]{
