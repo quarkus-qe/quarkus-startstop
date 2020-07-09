@@ -96,6 +96,18 @@ public class Commands {
         return System.getProperty("user.home") + File.separator + ".m2" + File.separator + "repository";
     }
 
+    /**
+     * Get system properties starting with `quarkus.native` prefix, for example quarkus.native.builder-image
+     * @return List of `-Dquarkus.native.xyz=foo` strings
+     */
+    public static List<String> getQuarkusNativeProperties() {
+        List<String> quarkusNativeProperties = System.getProperties().entrySet().stream()
+                .filter(e -> e.getKey().toString().contains("quarkus.native"))
+                .map(e -> "-D" + e.getKey() + "=" + e.getValue())
+                .collect(Collectors.toList());
+        return quarkusNativeProperties;
+    }
+
     public static String getQuarkusPlatformVersion() {
         for (String p : new String[]{"QUARKUS_PLATFORM_VERSION", "quarkus.platform.version"}) {
             String env = System.getenv().get(p);
