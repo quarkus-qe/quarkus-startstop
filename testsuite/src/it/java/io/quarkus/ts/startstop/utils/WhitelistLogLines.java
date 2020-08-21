@@ -61,14 +61,13 @@ public enum WhitelistLogLines {
                     "quarkus.jaeger.endpoint|" +
                     "quarkus.jaeger.sampler-type" +
                     ")[ \\\\\"]*was provided.*"),
-            // Hmm, weird, right? Deprecations should be fixed
-            Pattern.compile(".*`io.vertx.reactivex.core.Vertx` is deprecated.*"),
             // Some artifacts names...
             Pattern.compile(".*maven-error-diagnostics.*"),
             Pattern.compile(".*errorprone.*"),
-            // When GraalVM 19.3.1 is used; unrelated to the test
+            // When GraalVM is used; unrelated to the test
             Pattern.compile(".*forcing TieredStopAtLevel to full optimization because JVMCI is enabled.*"),
             Pattern.compile(".*error_prone_annotations.*"),
+            Pattern.compile(".*SRGQL010000: Schema is null, or it has no operations. Not bootstrapping SmallRye GraphQL*"),
     });
 
     public final Pattern[] errs;
