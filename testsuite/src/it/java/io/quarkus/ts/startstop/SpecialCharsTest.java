@@ -116,7 +116,15 @@ public class SpecialCharsTest {
 
             // Run
             runLogA = new File(logsDir + File.separator + subdir +  "-" + mvnCmds.name().toLowerCase() + "-run.log");
-            cmd = getRunCommand(mvnCmds.mvnCmds[mvnCmds != MvnCmds.DEV ? 1 : 0]);
+
+            if (mvnCmds == MvnCmds.DEV) {
+                List<String> baseBuildCmd = new ArrayList<>();
+                baseBuildCmd.addAll(Arrays.asList(mvnCmds.mvnCmds[0]));
+                baseBuildCmd.add("-Dquarkus.version=" + getQuarkusVersion());
+                cmd = getRunCommand(baseBuildCmd.toArray(new String[0]));
+            } else {
+                cmd = getRunCommand(mvnCmds.mvnCmds[1]);
+            }
             LOGGER.info("Running (" + cmd + ")");
             pA = runCommand(cmd, appDir, runLogA);
 
