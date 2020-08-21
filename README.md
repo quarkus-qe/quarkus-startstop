@@ -123,6 +123,8 @@ spaces, diacritics, etc.
 
 Add ```-Dcode.quarkus.url=``` to test against a selected Code Quarkus site.
 
+See [README.md](./testsuite/src/it/resources/README.md) for details about CodeQuarkusExtensions.java.
+
 ## Parameters for NATIVE mode
 Properties starting with `quarkus.native` get appended to the command for the native image build.
 This allows customization of the native image build procedure as described in https://quarkus.io/guides/building-native-image#configuration-reference guide.
