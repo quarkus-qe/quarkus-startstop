@@ -3,7 +3,7 @@ Generates, starts, tests, stops small Quarkus applications and measures time and
 
 ## Prerequisites
 
-The TS expects you run Java 11+ and have ```ps``` program available on your Linux/Mac and ```wmic``` (by default present) on your Windows system.
+The TS expects you run Apache Maven 3.6.3+, Java 11+ and have ```ps``` program available on your Linux/Mac and ```wmic``` (by default present) on your Windows system.
 Native image build requires GraalVM with Native image toolchain installed. Refer to [Building Native Image Guide](https://quarkus.io/guides/building-native-image) for details. 
 
 ## Usage
