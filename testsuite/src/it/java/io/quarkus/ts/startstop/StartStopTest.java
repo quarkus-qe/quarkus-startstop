@@ -37,6 +37,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -115,51 +116,63 @@ public class StartStopTest {
             assertTrue(buildLogA.exists());
             checkLog(cn, mn, app, mvnCmds, buildLogA);
 
-            // Run
-            LOGGER.info("Running...");
-            runLogA = new File(appDir.getAbsolutePath() + File.separator + "logs" + File.separator + mvnCmds.name().toLowerCase() + "-run.log");
-            cmd = getRunCommand(mvnCmds.mvnCmds[1]);
-            pA = runCommand(cmd, appDir, runLogA);
-            appendln(whatIDidReport, appDir.getAbsolutePath());
-            appendlnSection(whatIDidReport, String.join(" ", cmd));
-            // Test web pages
-            long timeToFirstOKRequest = WebpageTester.testWeb(app.urlContent.urlContent[0][0], 10, app.urlContent.urlContent[0][1], true);
-            LOGGER.info("Testing web page content...");
-            for (String[] urlContent : app.urlContent.urlContent) {
-                WebpageTester.testWeb(urlContent[0], 5, urlContent[1], false);
+            List<Long> rssKbList = new ArrayList<>(10);
+            List<Long> timeToFirstOKRequestList = new ArrayList<>(10);
+            for (int i = 0; i < 10; i++) {
+                // Run
+                LOGGER.info("Running... round " + i);
+                runLogA = new File(appDir.getAbsolutePath() + File.separator + "logs" + File.separator + mvnCmds.name().toLowerCase() + "-run.log");
+                cmd = getRunCommand(mvnCmds.mvnCmds[1]);
+                pA = runCommand(cmd, appDir, runLogA);
+                appendln(whatIDidReport, appDir.getAbsolutePath());
+                appendlnSection(whatIDidReport, String.join(" ", cmd));
+                // Test web pages
+                long timeToFirstOKRequest = WebpageTester.testWeb(app.urlContent.urlContent[0][0], 10, app.urlContent.urlContent[0][1], true);
+                LOGGER.info("Testing web page content...");
+                for (String[] urlContent : app.urlContent.urlContent) {
+                    WebpageTester.testWeb(urlContent[0], 5, urlContent[1], false);
+                }
+
+                LOGGER.info("Terminate and scan logs...");
+                pA.getInputStream().available();
+
+                long rssKb = getRSSkB(pA.pid());
+                long openedFiles = getOpenedFDs(pA.pid());
+
+                processStopper(pA, false);
+
+                LOGGER.info("Gonna wait for ports closed...");
+                // Release ports
+                assertTrue(waitForTcpClosed("localhost", parsePort(app.urlContent.urlContent[0][0]), 60),
+                        "Main port is still open");
+                checkLog(cn, mn, app, mvnCmds, runLogA);
+
+                float[] startedStopped = parseStartStopTimestamps(runLogA);
+
+                Path measurementsLog = Paths.get(getLogsDir(cn, mn).toString(), "measurements.csv");
+                LogBuilder.Log log = new LogBuilder()
+                        .app(app)
+                        .mode(mvnCmds)
+                        .buildTimeMs(buildEnds - buildStarts)
+                        .timeToFirstOKRequestMs(timeToFirstOKRequest)
+                        .startedInMs((long) (startedStopped[0] * 1000))
+                        .stoppedInMs((long) (startedStopped[1] * 1000))
+                        .rssKb(rssKb)
+                        .openedFiles(openedFiles)
+                        .build();
+                Logs.logMeasurements(log, measurementsLog);
+                appendln(whatIDidReport, "Measurements:");
+                appendln(whatIDidReport, log.headerMarkdown + "\n" + log.lineMarkdown);
+
+                rssKbList.add(rssKb);
+                timeToFirstOKRequestList.add(timeToFirstOKRequest);
             }
 
-            LOGGER.info("Terminate and scan logs...");
-            pA.getInputStream().available();
-
-            long rssKb = getRSSkB(pA.pid());
-            long openedFiles = getOpenedFDs(pA.pid());
-
-            processStopper(pA, false);
-
-            LOGGER.info("Gonna wait for ports closed...");
-            // Release ports
-            assertTrue(waitForTcpClosed("localhost", parsePort(app.urlContent.urlContent[0][0]), 60),
-                    "Main port is still open");
-            checkLog(cn, mn, app, mvnCmds, runLogA);
-
-            float[] startedStopped = parseStartStopTimestamps(runLogA);
-
-            Path measurementsLog = Paths.get(getLogsDir(cn, mn).toString(), "measurements.csv");
-            LogBuilder.Log log = new LogBuilder()
-                    .app(app)
-                    .mode(mvnCmds)
-                    .buildTimeMs(buildEnds - buildStarts)
-                    .timeToFirstOKRequestMs(timeToFirstOKRequest)
-                    .startedInMs((long) (startedStopped[0] * 1000))
-                    .stoppedInMs((long) (startedStopped[1] * 1000))
-                    .rssKb(rssKb)
-                    .openedFiles(openedFiles)
-                    .build();
-            Logs.logMeasurements(log, measurementsLog);
-            appendln(whatIDidReport, "Measurements:");
-            appendln(whatIDidReport, log.headerMarkdown + "\n" + log.lineMarkdown);
-            checkThreshold(app, mvnCmds, rssKb, timeToFirstOKRequest, SKIP);
+            long rssKbAvgWithoutMinMax = getAvgWithoutMinMax(rssKbList);
+            long timeToFirstOKRequestAvgWithoutMinMax = getAvgWithoutMinMax(timeToFirstOKRequestList);
+            LOGGER.info("AVG timeToFirstOKRequest without min and max values: " + timeToFirstOKRequestAvgWithoutMinMax);
+            LOGGER.info("AVG rssKb without min and max values: " + rssKbAvgWithoutMinMax);
+            checkThreshold(app, mvnCmds, rssKbAvgWithoutMinMax, timeToFirstOKRequestAvgWithoutMinMax, SKIP);
         } finally {
             // Make sure processes are down even if there was an exception / failure
             if (pA != null) {
@@ -171,6 +184,12 @@ public class StartStopTest {
             writeReport(cn, mn, whatIDidReport.toString());
             cleanTarget(app);
         }
+    }
+
+    private long getAvgWithoutMinMax(List<Long> listOfValues) {
+        listOfValues.remove(Collections.min(listOfValues));
+        listOfValues.remove(Collections.max(listOfValues));
+        return (long) listOfValues.stream().mapToLong(val -> val).average().orElse(Long.MAX_VALUE);
     }
 
     @Test
