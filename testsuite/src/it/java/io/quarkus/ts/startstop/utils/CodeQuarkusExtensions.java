@@ -67,7 +67,7 @@ public enum CodeQuarkusExtensions {
     QUARKUS_AMAZON_SNS("quarkus-amazon-sns", "Amazon SNS", "zXr", false),
     QUARKUS_AMAZON_SQS("quarkus-amazon-sqs", "Amazon SQS", "zYW", false),
     BLAZE_PERSISTENCE_INTEGRATION_QUARKUS("blaze-persistence-integration-quarkus", "Blaze-Persistence", "weW", false),
-    QUARKUS_CACHE("quarkus-cache", "Cache", "W1i", cache),
+    QUARKUS_CACHE("quarkus-cache", "Cache", "W1i", true),
     CASSANDRA_QUARKUS_CLIENT("cassandra-quarkus-client", "DataStax Apache Cassandra client", "mj6", false),
     QUARKUS_ELASTICSEARCH_REST_HIGH_LEVEL_CLIENT("quarkus-elasticsearch-rest-high-level-client", "Elasticsearch REST High Level Client", "OJe", false),
     QUARKUS_ELASTICSEARCH_REST_CLIENT("quarkus-elasticsearch-rest-client", "Elasticsearch REST client", "NhW", false),
