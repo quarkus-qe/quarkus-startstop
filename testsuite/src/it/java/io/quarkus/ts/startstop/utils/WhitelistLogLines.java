@@ -68,6 +68,7 @@ public enum WhitelistLogLines {
             Pattern.compile(".*forcing TieredStopAtLevel to full optimization because JVMCI is enabled.*"),
             Pattern.compile(".*error_prone_annotations.*"),
             Pattern.compile(".*SRGQL010000: Schema is null, or it has no operations. Not bootstrapping SmallRye GraphQL*"),
+            Pattern.compile(".*No WebJars were found in the project.*"),
     });
 
     public final Pattern[] errs;
