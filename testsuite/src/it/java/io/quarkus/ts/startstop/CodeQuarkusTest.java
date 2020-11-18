@@ -41,6 +41,7 @@ import static io.quarkus.ts.startstop.utils.Commands.getArtifactGeneBaseDir;
 import static io.quarkus.ts.startstop.utils.Commands.getBuildCommand;
 import static io.quarkus.ts.startstop.utils.Commands.parsePort;
 import static io.quarkus.ts.startstop.utils.Commands.processStopper;
+import static io.quarkus.ts.startstop.utils.Commands.removeRepositoriesAndPluginRepositories;
 import static io.quarkus.ts.startstop.utils.Commands.runCommand;
 import static io.quarkus.ts.startstop.utils.Commands.unzip;
 import static io.quarkus.ts.startstop.utils.Commands.waitForTcpClosed;
@@ -90,6 +91,8 @@ public class CodeQuarkusTest {
             appendln(whatIDidReport, "Download URL: " + download(extensions, zipFile));
             LOGGER.info("Unzipping...");
             unzipLog = unzip(zipFile, GEN_BASE_DIR);
+            LOGGER.info("Removing repositories and pluginRepositories from pom.xml ...");
+            removeRepositoriesAndPluginRepositories(appDir + File.separator + "pom.xml");
             runLogA = new File(logsDir + File.separator + "dev-run.log");
             LOGGER.info("Running command: " + devCmd + " in directory: " + appDir);
             appendln(whatIDidReport, "Extensions: " + extensions.toString());
