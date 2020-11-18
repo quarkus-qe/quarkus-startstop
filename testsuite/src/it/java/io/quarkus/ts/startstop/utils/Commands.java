@@ -22,10 +22,17 @@ package io.quarkus.ts.startstop.utils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -318,6 +325,23 @@ public class Commands {
         Process p = pb.start();
         p.waitFor(3, TimeUnit.MINUTES);
         return unzipLog;
+    }
+
+    public static void removeRepositoriesAndPluginRepositories(String pomFilePath) throws Exception {
+        File pomFile = new File(pomFilePath);
+        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(pomFile);
+        NodeList repositories = doc.getElementsByTagName("repositories");
+        if (repositories.getLength() == 1) {
+            Node node = repositories.item(0);
+            node.getParentNode().removeChild(node);
+        }
+        NodeList pluginRepositories = doc.getElementsByTagName("pluginRepositories");
+        if (pluginRepositories.getLength() == 1) {
+            Node node = pluginRepositories.item(0);
+            node.getParentNode().removeChild(node);
+        }
+        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        transformer.transform(new DOMSource(doc), new StreamResult(pomFile));
     }
 
     public static boolean waitForTcpClosed(String host, int port, long loopTimeoutS) throws InterruptedException, UnknownHostException {
