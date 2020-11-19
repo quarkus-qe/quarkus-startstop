@@ -70,7 +70,7 @@ public class Logs {
     private static final Pattern startedPatternControlSymbols = Pattern.compile(".* started in .*188m([0-9\\.]+).*", Pattern.DOTALL);
     private static final Pattern stoppedPatternControlSymbols = Pattern.compile(".* stopped in .*188m([0-9\\.]+).*", Pattern.DOTALL);
 
-    private static final Pattern warnErrorDetectionPattern = Pattern.compile("(?i:.*(ERROR|WARN|SLF4J).*)");
+    private static final Pattern warnErrorDetectionPattern = Pattern.compile("(?i:.*(ERROR|WARN|SLF4J:).*)");
 
     public static final long SKIP = -1L;
 
