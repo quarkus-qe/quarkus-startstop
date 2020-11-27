@@ -125,6 +125,11 @@ Add ```-Dcode.quarkus.url=``` to test against a selected Code Quarkus site.
 
 See [README.md](./testsuite/src/it/resources/README.md) for details about CodeQuarkusExtensions.java.
 
+## NativeDebugTest
+The goal of this test is to check the presence of the Quarkus debug symbols file and source cache directory
+after executing with ```-Dquarkus.native.debug.enabled=true``` flag. For more information please refer to:  
+https://quarkus.io/guides/building-native-image#debugging-native-executable
+
 ## Parameters for NATIVE mode
 Properties starting with `quarkus.native` get appended to the command for the native image build.
 This allows customization of the native image build procedure as described in https://quarkus.io/guides/building-native-image#configuration-reference guide.
