@@ -101,8 +101,6 @@
                         </executions>
                         <configuration>
                             <enableHttpUrlHandler>true</enableHttpUrlHandler>
-                            <additionalBuildArgs>-H:Log=registerResource:</additionalBuildArgs>
-                            <additionalBuildArgs>-H:IncludeResources=privateKey.pem</additionalBuildArgs>
                         </configuration>
                     </plugin>
                 </plugins>
