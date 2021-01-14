@@ -50,7 +50,7 @@ public enum MvnCmds {
                     "-DprojectGroupId=my-groupId",
                     "-DprojectArtifactId=" + Apps.GENERATED_SKELETON.dir,
                     "-DprojectVersion=1.0.0-SNAPSHOT",
-                    "-DclassName=org.my.group.MyResource"
+                    "-DpackageName=org.my.group"
             }
     }),
     MVNW_DEV(new String[][]{
