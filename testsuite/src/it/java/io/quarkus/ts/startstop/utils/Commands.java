@@ -70,6 +70,8 @@ import static io.quarkus.ts.startstop.StartStopTest.BASE_DIR;
 public class Commands {
     private static final Logger LOGGER = Logger.getLogger(Commands.class.getName());
 
+    public static final String COMMAND_PARAMETERS_PLACEHOLDER = "COMMAND_PARAMETERS_PLACEHOLDER";
+
     public static final boolean isThisWindows = System.getProperty("os.name").matches(".*[Ww]indows.*");
     private static final Pattern numPattern = Pattern.compile("[ \t]*[0-9]+[ \t]*");
     private static final Pattern quarkusVersionPattern = Pattern.compile("[ \t]*<quarkus.version>([^<]*)</quarkus.version>.*");
@@ -211,12 +213,16 @@ public class Commands {
     }
 
     public static List<String> getRunCommand(String[] baseCommand) {
+        return getRunCommand(baseCommand, new String[0]);
+    }
+
+    public static List<String> getRunCommand(String[] baseCommand, String[] runParams) {
         List<String> runCmd = new ArrayList<>();
         if (isThisWindows) {
             runCmd.add("cmd");
             runCmd.add("/C");
         }
-        runCmd.addAll(Arrays.asList(baseCommand));
+        runCmd.addAll(getBaseCommand(baseCommand, runParams));
 
         return Collections.unmodifiableList(runCmd);
     }
@@ -227,7 +233,7 @@ public class Commands {
             buildCmd.add("cmd");
             buildCmd.add("/C");
         }
-        buildCmd.addAll(Arrays.asList(baseCommand));
+        buildCmd.addAll(getBaseCommand(baseCommand));
         buildCmd.add("-Dmaven.repo.local=" + getLocalMavenRepoDir());
 
         return Collections.unmodifiableList(buildCmd);
@@ -239,7 +245,7 @@ public class Commands {
             buildCmd.add("cmd");
             buildCmd.add("/C");
         }
-        buildCmd.addAll(Arrays.asList(baseCommand));
+        buildCmd.addAll(getBaseCommand(baseCommand));
         buildCmd.add("-Dmaven.repo.local=" + repoDir);
         buildCmd.add("--settings=" + BASE_DIR + File.separator + Apps.GENERATED_SKELETON.dir + File.separator + "settings.xml");
 
@@ -252,7 +258,7 @@ public class Commands {
             generatorCmd.add("cmd");
             generatorCmd.add("/C");
         }
-        generatorCmd.addAll(Arrays.asList(baseCommand));
+        generatorCmd.addAll(getBaseCommand(baseCommand));
         if (flags.contains(TestFlags.PRODUCT_BOM)) {
             generatorCmd.add("-DplatformArtifactId=quarkus-product-bom");
             generatorCmd.add("-DplatformGroupId=com.redhat.quarkus");
@@ -281,12 +287,29 @@ public class Commands {
             generatorCmd.add("cmd");
             generatorCmd.add("/C");
         }
-        generatorCmd.addAll(Arrays.asList(baseCommand));
+        generatorCmd.addAll(getBaseCommand(baseCommand));
         generatorCmd.add("-DplatformVersion=" + getQuarkusVersion());
         generatorCmd.add("-Dextensions=" + String.join(",", extensions));
         generatorCmd.add("-Dmaven.repo.local=" + getLocalMavenRepoDir());
 
         return Collections.unmodifiableList(generatorCmd);
+    }
+
+    private static List<String> getBaseCommand(String[] baseCommand) {
+        return getBaseCommand(baseCommand, new String[0]);
+    }
+
+    private static List<String> getBaseCommand(String[] baseCommand, String[] parameters) {
+        List<String> command = new ArrayList<>();
+        for (String part : baseCommand) {
+            if (COMMAND_PARAMETERS_PLACEHOLDER.equals(part)) {
+                command.addAll(Arrays.asList(parameters));
+            }
+            else {
+                command.add(part);
+            }
+        }
+        return command;
     }
 
     /**

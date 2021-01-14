@@ -143,7 +143,11 @@ public class ArtifactGeneratorTest {
             "spring-web",
     };
 
-    public void testRuntime(TestInfo testInfo, String[] extensions, Set<TestFlags> flags) throws Exception {
+    public static final String[] runParamsSetA = new String[] { "-Dquarkus.log.console.json.pretty-print=false" };
+
+    public static final String[] runParamsSetB = new String[0];
+
+    public void testRuntime(TestInfo testInfo, String[] extensions, String[] runParams, Set<TestFlags> flags) throws Exception {
         Process pA = null;
         File buildLogA = null;
         File runLogA = null;
@@ -154,7 +158,7 @@ public class ArtifactGeneratorTest {
         File appDir = new File(appBaseDir, Apps.GENERATED_SKELETON.dir);
         String logsDir = appBaseDir.getAbsolutePath() + File.separator + Apps.GENERATED_SKELETON.dir + "-logs";
         List<String> generatorCmd = getGeneratorCommand(MvnCmds.GENERATOR.mvnCmds[0], extensions);
-        List<String> runCmd = getRunCommand(MvnCmds.DEV.mvnCmds[0]);
+        List<String> runCmd = getRunCommand(MvnCmds.DEV.mvnCmds[0], runParams);
         URLContent skeletonApp = Apps.GENERATED_SKELETON.urlContent;
         if (flags.contains(TestFlags.WARM_UP)) {
             LOGGER.info(mn + ": Warming up setup: " + String.join(" ", generatorCmd));
@@ -273,13 +277,13 @@ public class ArtifactGeneratorTest {
 
     @Test
     public void manyExtensionsSetA(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSubsetSetA, EnumSet.of(TestFlags.WARM_UP));
-        testRuntime(testInfo, supportedExtensionsSubsetSetA, EnumSet.noneOf(TestFlags.class));
+        testRuntime(testInfo, supportedExtensionsSubsetSetA, runParamsSetA, EnumSet.of(TestFlags.WARM_UP));
+        testRuntime(testInfo, supportedExtensionsSubsetSetA, runParamsSetA, EnumSet.noneOf(TestFlags.class));
     }
 
     @Test
     public void manyExtensionsSetB(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSubsetSetB, EnumSet.of(TestFlags.WARM_UP));
-        testRuntime(testInfo, supportedExtensionsSubsetSetB, EnumSet.noneOf(TestFlags.class));
+        testRuntime(testInfo, supportedExtensionsSubsetSetB, runParamsSetB, EnumSet.of(TestFlags.WARM_UP));
+        testRuntime(testInfo, supportedExtensionsSubsetSetB, runParamsSetB, EnumSet.noneOf(TestFlags.class));
     }
 }

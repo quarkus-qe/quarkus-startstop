@@ -34,16 +34,12 @@ import org.junit.jupiter.api.TestInfo;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static io.quarkus.ts.startstop.ArtifactGeneratorTest.supportedExtensionsSubsetSetA;
-import static io.quarkus.ts.startstop.ArtifactGeneratorTest.supportedExtensionsSubsetSetB;
+import static io.quarkus.ts.startstop.ArtifactGeneratorTest.*;
 import static io.quarkus.ts.startstop.utils.Commands.cleanDirOrFile;
 import static io.quarkus.ts.startstop.utils.Commands.confAppPropsForSkeleton;
 import static io.quarkus.ts.startstop.utils.Commands.getArtifactGeneBaseDir;
@@ -73,7 +69,7 @@ public class ArtifactGeneratorBOMTest {
 
     private static final Logger LOGGER = Logger.getLogger(ArtifactGeneratorBOMTest.class.getName());
 
-    public void testRuntime(TestInfo testInfo, String[] extensions, Set<TestFlags> flags) throws Exception {
+    public void testRuntime(TestInfo testInfo, String[] extensions, String[] runParams, Set<TestFlags> flags) throws Exception {
         Process pA = null;
         File generateLog = null;
         File buildLogA = null;
@@ -90,7 +86,7 @@ public class ArtifactGeneratorBOMTest {
 
         List<String> buildCmd = getBuildCommand(MvnCmds.JVM.mvnCmds[0], repoDir);
 
-        List<String> runCmd = getRunCommand(MvnCmds.JVM.mvnCmds[1]);
+        List<String> runCmd = getRunCommand(MvnCmds.JVM.mvnCmds[1], runParams);
 
         URLContent skeletonApp = Apps.GENERATED_SKELETON.urlContent;
 
@@ -180,48 +176,48 @@ public class ArtifactGeneratorBOMTest {
     @Test
     @Tag("product-and-community")
     public void quarkusBomExtensionsA(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSubsetSetA, EnumSet.of(TestFlags.QUARKUS_BOM));
+        testRuntime(testInfo, supportedExtensionsSubsetSetA, runParamsSetA, EnumSet.of(TestFlags.QUARKUS_BOM));
     }
 
     @Test
     @Tag("product-and-community")
     public void quarkusBomExtensionsB(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSubsetSetB, EnumSet.of(TestFlags.QUARKUS_BOM));
+        testRuntime(testInfo, supportedExtensionsSubsetSetB, runParamsSetB, EnumSet.of(TestFlags.QUARKUS_BOM));
     }
 
     @Test
     @Tag("product")
     public void quarkusProductBomExtensionsA(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSubsetSetA, EnumSet.of(TestFlags.PRODUCT_BOM));
+        testRuntime(testInfo, supportedExtensionsSubsetSetA, runParamsSetA, EnumSet.of(TestFlags.PRODUCT_BOM));
     }
 
     @Test
     @Tag("product")
     public void quarkusProductBomExtensionsB(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSubsetSetB, EnumSet.of(TestFlags.PRODUCT_BOM));
+        testRuntime(testInfo, supportedExtensionsSubsetSetB, runParamsSetB, EnumSet.of(TestFlags.PRODUCT_BOM));
     }
 
     @Test
     @Tag("community")
     public void quarkusUniverseBomExtensionsA(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSubsetSetA, EnumSet.of(TestFlags.UNIVERSE_BOM));
+        testRuntime(testInfo, supportedExtensionsSubsetSetA, runParamsSetA, EnumSet.of(TestFlags.UNIVERSE_BOM));
     }
 
     @Test
     @Tag("community")
     public void quarkusUniverseBomExtensionsB(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSubsetSetB, EnumSet.of(TestFlags.UNIVERSE_BOM));
+        testRuntime(testInfo, supportedExtensionsSubsetSetB, runParamsSetB, EnumSet.of(TestFlags.UNIVERSE_BOM));
     }
 
     @Test
     @Tag("product")
     public void quarkusUniverseProductBomExtensionsA(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSubsetSetA, EnumSet.of(TestFlags.UNIVERSE_PRODUCT_BOM));
+        testRuntime(testInfo, supportedExtensionsSubsetSetA, runParamsSetA, EnumSet.of(TestFlags.UNIVERSE_PRODUCT_BOM));
     }
 
     @Test
     @Tag("product")
     public void quarkusUniverseProductBomExtensionsB(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSubsetSetB, EnumSet.of(TestFlags.UNIVERSE_PRODUCT_BOM));
+        testRuntime(testInfo, supportedExtensionsSubsetSetB, runParamsSetB, EnumSet.of(TestFlags.UNIVERSE_PRODUCT_BOM));
     }
 }
