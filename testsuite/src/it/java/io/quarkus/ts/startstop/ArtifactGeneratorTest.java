@@ -217,10 +217,10 @@ public class ArtifactGeneratorTest {
 
             LOGGER.info("Testing reload...");
             Path srcFile = Paths.get(appDir + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator +
-                    "org" + File.separator + "my" + File.separator + "group" + File.separator + "MyResource.java");
+                    "org" + File.separator + "my" + File.separator + "group" + File.separator + "SpringGreetingController.java");
             appendlnSection(whatIDidReport, "Reloading class: " + srcFile.toAbsolutePath());
             try (Stream<String> src = Files.lines(srcFile)) {
-                Files.write(srcFile, src.map(l -> l.replaceAll("hello", "bye")).collect(Collectors.toList()));
+                Files.write(srcFile, src.map(l -> l.replaceAll("Hello", "bye")).collect(Collectors.toList()));
             }
 
             long timeToReloadedOKRequest = WebpageTester.testWeb(skeletonApp.urlContent[1][0], 60,
