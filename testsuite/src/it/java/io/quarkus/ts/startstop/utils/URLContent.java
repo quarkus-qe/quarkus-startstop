@@ -44,7 +44,7 @@ public enum URLContent {
     }),
     GENERATED_SKELETON(new String[][]{
             new String[]{"http://localhost:8080", "Congratulations"},
-            new String[]{"http://localhost:8080/hello-spring", "bye"}
+            new String[]{"http://localhost:8080/hello-spring", "Bye Spring"}
     });
 
     public final String[][] urlContent;
