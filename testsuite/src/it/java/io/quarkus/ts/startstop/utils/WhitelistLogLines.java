@@ -76,4 +76,39 @@ public enum WhitelistLogLines {
     WhitelistLogLines(Pattern[] errs) {
         this.errs = errs;
     }
+
+    public final Pattern[] platformErrs() {
+        switch (OS.current()) {
+            case MAC:
+                return new Pattern[] {
+                        Pattern.compile(".*objcopy executable not found in PATH. Debug symbols will not be separated from executable.*"),
+                        Pattern.compile(".*That will result in a larger native image with debug symbols embedded in it.*"),
+                };
+        }
+        return new Pattern[] {};
+    }
+
+    enum OS {
+        MAC, LINUX, WINDOWS, UNKNOWN;
+        public static OS current() {
+            if (isMac()) {
+                return MAC;
+            } else if (isWindows()) {
+                return WINDOWS;
+            } else if (isLinux()) {
+                return LINUX;
+            } else {
+                return UNKNOWN;
+            }
+        }
+    }
+    private static boolean isMac() {
+        return System.getProperty("os.name").toLowerCase().contains("mac");
+    }
+    private static boolean isWindows() {
+        return System.getProperty("os.name").toLowerCase().contains("windows");
+    }
+    private static boolean isLinux() {
+        return System.getProperty("os.name").toLowerCase().contains("linux");
+    }
 }

@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
@@ -80,16 +81,12 @@ public class Logs {
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
                 boolean error = warnErrorDetectionPattern.matcher(line).matches();
-                boolean whiteListed = false;
                 if (error) {
-                    for (Pattern p : app.whitelistLogLines.errs) {
-                        if (p.matcher(line).matches()) {
-                            whiteListed = true;
-                            LOGGER.info(cmd.name() + " log for " + testMethod + " contains whitelisted error: `" + line + "'");
-                            break;
-                        }
-                    }
-                    if (!whiteListed) {
+                    if (isWhiteListed(app.whitelistLogLines.errs, line)) {
+                        LOGGER.info(cmd.name() + " log for " + testMethod + " contains whitelisted error: `" + line + "'");
+                    } else  if (isWhiteListed(app.whitelistLogLines.platformErrs(), line)) {
+                        LOGGER.info(cmd.name() + " log for " + testMethod + " contains platform specific whitelisted error: `" + line + "'");
+                    } else {
                         offendingLines.add(line);
                     }
                 }
@@ -100,6 +97,15 @@ public class Logs {
                             File.separator + testClass + File.separator + testMethod + File.separator + log.getName() +
                             " and check these offending lines: \n" + String.join("\n", offendingLines));
         }
+    }
+
+    private static boolean isWhiteListed(Pattern[] patterns, String line) {
+        for (Pattern p : patterns) {
+            if (p.matcher(line).matches()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void checkJarSuffixes(Set<TestFlags> flags, File appDir) throws IOException {
