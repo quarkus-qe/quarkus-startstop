@@ -44,6 +44,7 @@ import java.util.concurrent.TimeUnit;
 
 import static io.quarkus.ts.startstop.ArtifactGeneratorTest.supportedExtensionsSubsetSetA;
 import static io.quarkus.ts.startstop.ArtifactGeneratorTest.supportedExtensionsSubsetSetB;
+import static io.quarkus.ts.startstop.utils.Commands.adjustPrettyPrintForJsonLogging;
 import static io.quarkus.ts.startstop.utils.Commands.cleanDirOrFile;
 import static io.quarkus.ts.startstop.utils.Commands.confAppPropsForSkeleton;
 import static io.quarkus.ts.startstop.utils.Commands.getArtifactGeneBaseDir;
@@ -119,6 +120,7 @@ public class ArtifactGeneratorBOMTest {
 
             // Config, see app-generated-skeleton/README.md
             confAppPropsForSkeleton(appDir.getAbsolutePath());
+            adjustPrettyPrintForJsonLogging(appDir.getAbsolutePath());
 
             // Build
             LOGGER.info(mn + ": Build command " + String.join(" ", buildCmd));

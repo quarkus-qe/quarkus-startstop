@@ -46,6 +46,7 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
@@ -368,12 +369,29 @@ public class Commands {
         return false;
     }
 
+    // TODO we should get rid of it once Quarkus progresses with walid config per extension in generated examples
     public static void confAppPropsForSkeleton(String appDir) throws IOException {
         // Config, see app-generated-skeleton/README.md
         String appPropsSrc = BASE_DIR + File.separator + Apps.GENERATED_SKELETON.dir + File.separator + "application.properties";
         String appPropsDst = appDir + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "application.properties";
         Files.copy(Paths.get(appPropsSrc),
                 Paths.get(appPropsDst), StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    public static void adjustPrettyPrintForJsonLogging(String appDir) throws IOException {
+        Path appProps = Paths.get(appDir + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "application.properties");
+        Path appYaml = Paths.get(appDir + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "application.yml");
+
+        adjustFileContent(appProps, "quarkus.log.console.json.pretty-print=true", "quarkus.log.console.json.pretty-print=false");
+        adjustFileContent(appYaml, "pretty-print: true", "pretty-print: fase");
+    }
+
+    private static void adjustFileContent(Path path, String regex, String replacement) throws IOException {
+        if (Files.exists(path)) {
+            String content = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
+            content = content.replaceAll(regex, replacement);
+            Files.write(path, content.getBytes(StandardCharsets.UTF_8));
+        }
     }
 
     public static int parsePort(String url) {

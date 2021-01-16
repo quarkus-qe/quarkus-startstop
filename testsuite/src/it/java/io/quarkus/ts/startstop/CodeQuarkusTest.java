@@ -35,6 +35,7 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 
+import static io.quarkus.ts.startstop.utils.Commands.adjustPrettyPrintForJsonLogging;
 import static io.quarkus.ts.startstop.utils.Commands.cleanDirOrFile;
 import static io.quarkus.ts.startstop.utils.Commands.download;
 import static io.quarkus.ts.startstop.utils.Commands.getArtifactGeneBaseDir;
@@ -93,6 +94,7 @@ public class CodeQuarkusTest {
             unzipLog = unzip(zipFile, GEN_BASE_DIR);
             LOGGER.info("Removing repositories and pluginRepositories from pom.xml ...");
             removeRepositoriesAndPluginRepositories(appDir + File.separator + "pom.xml");
+            adjustPrettyPrintForJsonLogging(appDir.getAbsolutePath());
             runLogA = new File(logsDir + File.separator + "dev-run.log");
             LOGGER.info("Running command: " + devCmd + " in directory: " + appDir);
             appendln(whatIDidReport, "Extensions: " + extensions.toString());
