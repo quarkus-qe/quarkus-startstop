@@ -64,6 +64,7 @@ public enum WhitelistLogLines {
             // Some artifacts names...
             Pattern.compile(".*maven-error-diagnostics.*"),
             Pattern.compile(".*errorprone.*"),
+            Pattern.compile(".*google-cloud-errorreporting-bom.*"),
             // When GraalVM is used; unrelated to the test
             Pattern.compile(".*forcing TieredStopAtLevel to full optimization because JVMCI is enabled.*"),
             Pattern.compile(".*error_prone_annotations.*"),
