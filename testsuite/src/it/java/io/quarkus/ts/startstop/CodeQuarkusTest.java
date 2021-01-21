@@ -144,12 +144,16 @@ public class CodeQuarkusTest {
     }
 
     @Test
-    public void notsupportedExtensionsSubset(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, notSupportedEx.get(0).subList(0, Math.min(10, mixedEx.get(0).size())));
+    public void notSupportedExtensionsSubsetA(TestInfo testInfo) throws Exception {
+        testRuntime(testInfo, notSupportedEx.get(0).subList(0, Math.min(20, notSupportedEx.get(0).size())));
+    }
+    @Test
+    public void notSupportedExtensionsSubsetB(TestInfo testInfo) throws Exception {
+        testRuntime(testInfo, notSupportedEx.get(0).subList(Math.min(20, notSupportedEx.get(0).size()), Math.min(40, notSupportedEx.get(0).size())));
     }
 
     @Test
     public void mixExtensions(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, mixedEx.get(0).subList(0, Math.min(15, mixedEx.get(0).size())));
+        testRuntime(testInfo, mixedEx.get(0).subList(0, Math.min(20, mixedEx.get(0).size())));
     }
 }
