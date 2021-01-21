@@ -69,6 +69,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*error_prone_annotations.*"),
             Pattern.compile(".*SRGQL010000: Schema is null, or it has no operations. Not bootstrapping SmallRye GraphQL*"),
             Pattern.compile(".*No WebJars were found in the project.*"),
+            // https://github.com/quarkusio/quarkus/issues/14442
+            Pattern.compile(".*Producing values from constructors and fields is no longer supported and will be removed in a future release: io.quarkus.deployment.annotations.BuildProducer io.quarkus.reactivemessaging.http.deployment.ReactiveHttpProcessor.routeProducer*"),
     });
 
     public final Pattern[] errs;
