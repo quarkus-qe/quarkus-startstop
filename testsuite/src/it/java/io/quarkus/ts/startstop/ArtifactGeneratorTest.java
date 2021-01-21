@@ -100,6 +100,7 @@ public class ArtifactGeneratorTest {
             "quarkus-quartz", // "quartz" is ambiguous with org.apache.camel.quarkus:camel-quarkus-quartz
             "reactive-pg-client",
             "rest-client",
+            "rest-client-jaxb",
             "resteasy",
             "resteasy-jackson",
             "resteasy-jaxb",
@@ -115,6 +116,10 @@ public class ArtifactGeneratorTest {
             "undertow-websockets",
             "vertx",
             "vertx-web",
+            "grpc",
+            "infinispan-client",
+            // https://github.com/quarkusio/quarkus/issues/14439
+            // "cache",
     };
 
     public static final String[] supportedExtensionsSubsetSetB = new String[]{
@@ -124,6 +129,8 @@ public class ArtifactGeneratorTest {
             "hibernate-orm",
             "hibernate-orm-panache",
             "hibernate-validator",
+            "rest-client",
+            "rest-client-jackson",
             "jackson",
             "jaxb",
             "jdbc-mariadb",
@@ -142,6 +149,10 @@ public class ArtifactGeneratorTest {
             "spring-di",
             "spring-security",
             "spring-web",
+            "spring-cloud-config-client",
+            "spring-scheduled",
+            // https://github.com/quarkusio/quarkus/issues/14439
+            // "spring-cache",
     };
 
     public void testRuntime(TestInfo testInfo, String[] extensions, Set<TestFlags> flags) throws Exception {
