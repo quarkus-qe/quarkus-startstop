@@ -47,6 +47,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.quarkus.ts.startstop.utils.Commands.adjustPrettyPrintForJsonLogging;
 import static io.quarkus.ts.startstop.utils.Commands.cleanDirOrFile;
 import static io.quarkus.ts.startstop.utils.Commands.confAppPropsForSkeleton;
 import static io.quarkus.ts.startstop.utils.Commands.getArtifactGeneBaseDir;
@@ -99,6 +100,7 @@ public class ArtifactGeneratorTest {
             "quarkus-quartz", // "quartz" is ambiguous with org.apache.camel.quarkus:camel-quarkus-quartz
             "reactive-pg-client",
             "rest-client",
+            "rest-client-jaxb",
             "resteasy",
             "resteasy-jackson",
             "resteasy-jaxb",
@@ -114,6 +116,10 @@ public class ArtifactGeneratorTest {
             "undertow-websockets",
             "vertx",
             "vertx-web",
+            "grpc",
+            "infinispan-client",
+            // https://github.com/quarkusio/quarkus/issues/14439
+            // "cache",
     };
 
     public static final String[] supportedExtensionsSubsetSetB = new String[]{
@@ -123,6 +129,8 @@ public class ArtifactGeneratorTest {
             "hibernate-orm",
             "hibernate-orm-panache",
             "hibernate-validator",
+            "rest-client",
+            "rest-client-jackson",
             "jackson",
             "jaxb",
             "jdbc-mariadb",
@@ -141,6 +149,10 @@ public class ArtifactGeneratorTest {
             "spring-di",
             "spring-security",
             "spring-web",
+            "spring-cloud-config-client",
+            "spring-scheduled",
+            // https://github.com/quarkusio/quarkus/issues/14439
+            // "spring-cache",
     };
 
     public void testRuntime(TestInfo testInfo, String[] extensions, Set<TestFlags> flags) throws Exception {
@@ -186,6 +198,7 @@ public class ArtifactGeneratorTest {
 
             // Config, see app-generated-skeleton/README.md
             confAppPropsForSkeleton(appDir.getAbsolutePath());
+            adjustPrettyPrintForJsonLogging(appDir.getAbsolutePath());
 
             // Run
             LOGGER.info("Running... " + runCmd);
@@ -213,10 +226,10 @@ public class ArtifactGeneratorTest {
 
             LOGGER.info("Testing reload...");
             Path srcFile = Paths.get(appDir + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator +
-                    "org" + File.separator + "my" + File.separator + "group" + File.separator + "MyResource.java");
+                    "org" + File.separator + "my" + File.separator + "group" + File.separator + "SpringGreetingController.java");
             appendlnSection(whatIDidReport, "Reloading class: " + srcFile.toAbsolutePath());
             try (Stream<String> src = Files.lines(srcFile)) {
-                Files.write(srcFile, src.map(l -> l.replaceAll("hello", "bye")).collect(Collectors.toList()));
+                Files.write(srcFile, src.map(l -> l.replaceAll("Hello", "Bye")).collect(Collectors.toList()));
             }
 
             long timeToReloadedOKRequest = WebpageTester.testWeb(skeletonApp.urlContent[1][0], 60,

@@ -35,6 +35,7 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 
+import static io.quarkus.ts.startstop.utils.Commands.adjustPrettyPrintForJsonLogging;
 import static io.quarkus.ts.startstop.utils.Commands.cleanDirOrFile;
 import static io.quarkus.ts.startstop.utils.Commands.download;
 import static io.quarkus.ts.startstop.utils.Commands.getArtifactGeneBaseDir;
@@ -93,6 +94,7 @@ public class CodeQuarkusTest {
             unzipLog = unzip(zipFile, GEN_BASE_DIR);
             LOGGER.info("Removing repositories and pluginRepositories from pom.xml ...");
             removeRepositoriesAndPluginRepositories(appDir + File.separator + "pom.xml");
+            adjustPrettyPrintForJsonLogging(appDir.getAbsolutePath());
             runLogA = new File(logsDir + File.separator + "dev-run.log");
             LOGGER.info("Running command: " + devCmd + " in directory: " + appDir);
             appendln(whatIDidReport, "Extensions: " + extensions.toString());
@@ -142,12 +144,16 @@ public class CodeQuarkusTest {
     }
 
     @Test
-    public void notsupportedExtensionsSubset(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, notSupportedEx.get(0).subList(0, Math.min(10, mixedEx.get(0).size())));
+    public void notSupportedExtensionsSubsetA(TestInfo testInfo) throws Exception {
+        testRuntime(testInfo, notSupportedEx.get(0).subList(0, Math.min(20, notSupportedEx.get(0).size())));
+    }
+    @Test
+    public void notSupportedExtensionsSubsetB(TestInfo testInfo) throws Exception {
+        testRuntime(testInfo, notSupportedEx.get(0).subList(Math.min(20, notSupportedEx.get(0).size()), Math.min(40, notSupportedEx.get(0).size())));
     }
 
     @Test
     public void mixExtensions(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, mixedEx.get(0).subList(0, Math.min(15, mixedEx.get(0).size())));
+        testRuntime(testInfo, mixedEx.get(0).subList(0, Math.min(20, mixedEx.get(0).size())));
     }
 }

@@ -64,16 +64,54 @@ public enum WhitelistLogLines {
             // Some artifacts names...
             Pattern.compile(".*maven-error-diagnostics.*"),
             Pattern.compile(".*errorprone.*"),
+            Pattern.compile(".*google-cloud-errorreporting-bom.*"),
             // When GraalVM is used; unrelated to the test
             Pattern.compile(".*forcing TieredStopAtLevel to full optimization because JVMCI is enabled.*"),
             Pattern.compile(".*error_prone_annotations.*"),
             Pattern.compile(".*SRGQL010000: Schema is null, or it has no operations. Not bootstrapping SmallRye GraphQL*"),
             Pattern.compile(".*No WebJars were found in the project.*"),
+            // https://github.com/quarkusio/quarkus/issues/14442
+            Pattern.compile(".*Producing values from constructors and fields is no longer supported and will be removed in a future release: io.quarkus.deployment.annotations.BuildProducer io.quarkus.reactivemessaging.http.deployment.ReactiveHttpProcessor.routeProducer*"),
     });
 
     public final Pattern[] errs;
 
     WhitelistLogLines(Pattern[] errs) {
         this.errs = errs;
+    }
+
+    public final Pattern[] platformErrs() {
+        switch (OS.current()) {
+            case MAC:
+                return new Pattern[] {
+                        Pattern.compile(".*objcopy executable not found in PATH. Debug symbols will not be separated from executable.*"),
+                        Pattern.compile(".*That will result in a larger native image with debug symbols embedded in it.*"),
+                };
+        }
+        return new Pattern[] {};
+    }
+
+    enum OS {
+        MAC, LINUX, WINDOWS, UNKNOWN;
+        public static OS current() {
+            if (isMac()) {
+                return MAC;
+            } else if (isWindows()) {
+                return WINDOWS;
+            } else if (isLinux()) {
+                return LINUX;
+            } else {
+                return UNKNOWN;
+            }
+        }
+    }
+    private static boolean isMac() {
+        return System.getProperty("os.name").toLowerCase().contains("mac");
+    }
+    private static boolean isWindows() {
+        return System.getProperty("os.name").toLowerCase().contains("windows");
+    }
+    private static boolean isLinux() {
+        return System.getProperty("os.name").toLowerCase().contains("linux");
     }
 }
