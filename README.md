@@ -1,4 +1,4 @@
-# Quarkus start-stop
+# Quarkus Start-Stop
 Generates, starts, tests, stops small Quarkus applications and measures time and memory
 
 ## Prerequisites
