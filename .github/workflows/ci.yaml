@@ -4,8 +4,8 @@ on:
   schedule:
     - cron: '0 23 * * *'
 jobs:
-  build-released-jvm:
-    name: JVM build - released Quarkus
+  linux-build-released-jvm:
+    name: Linux - JVM build - released Quarkus
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -26,15 +26,17 @@ jobs:
         run: |
           mvn -V -B -s .github/mvn-settings.xml clean verify -DexcludeTags=product,native,codequarkus
       - name: Zip Artifacts
+        if: failure()
         run: |
-          zip -r artifacts-jvm${{ matrix.java }}.zip . -i '*-reports/*' '*/archived-logs/*'
+          zip -r linux-build-released-jvm${{ matrix.java }}.zip . -i '*-reports/*' '*/archived-logs/*'
       - name: Archive artifacts
         uses: actions/upload-artifact@v1
+        if: failure()
         with:
           name: ci-artifacts
-          path: artifacts-jvm${{ matrix.java }}.zip
-  build-released-native:
-      name: Native build - released Quarkus
+          path: linux-build-released-jvm${{ matrix.java }}.zip
+  linux-build-released-native:
+      name: Linux - Native build - released Quarkus
       runs-on: ubuntu-latest
       strategy:
         matrix:
@@ -55,13 +57,15 @@ jobs:
           run: |
             mvn -V -B -s .github/mvn-settings.xml clean verify -DexcludeTags=product,codequarkus -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=docker
         - name: Zip Artifacts
+          if: failure()
           run: |
-            zip -r artifacts-jvm${{ matrix.java }}.zip . -i '*-reports/*' '*/archived-logs/*'
+            zip -r linux-build-released-native${{ matrix.java }}.zip . -i '*-reports/*' '*/archived-logs/*'
         - name: Archive artifacts
           uses: actions/upload-artifact@v1
+          if: failure()
           with:
             name: ci-artifacts
-            path: artifacts-jvm${{ matrix.java }}.zip
+            path: linux-build-released-native${{ matrix.java }}.zip
   build-code-start:
     name: Code Quarkus build - released Quarkus
     runs-on: ubuntu-latest
@@ -84,10 +88,45 @@ jobs:
         run: |
           mvn -V -B -s .github/mvn-settings.xml clean verify -Ptestsuite -DincludeTags=codequarkus
       - name: Zip Artifacts
+        if: failure()
         run: |
-          zip -r artifacts-jvm${{ matrix.java }}.zip . -i '*-reports/*' '*/archived-logs/*'
+          zip -r build-code-start${{ matrix.java }}.zip . -i '*-reports/*' '*/archived-logs/*'
       - name: Archive artifacts
         uses: actions/upload-artifact@v1
+        if: failure()
         with:
           name: ci-artifacts
-          path: artifacts-jvm${{ matrix.java }}.zip
+          path: build-code-start${{ matrix.java }}.zip
+  windows-build-released-jvm:
+    name: Windows - JVM build - released Quarkus
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        java: [ 11 ]
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Install JDK {{ matrix.java }}
+        uses: joschi/setup-jdk@e87a7cec853d2dd7066adf837fe12bf0f3d45e52
+        with:
+          java-version: ${{ matrix.java }}
+      - name: Build with Maven
+        run: |
+          mvn -V -B -s .github/mvn-settings.xml clean verify -DexcludeTags='product,native,codequarkus'
+      - name: Zip Artifacts
+        if: failure()
+        shell: bash
+        run: |
+          # Disambiguate windows find from cygwin find
+          /usr/bin/find . -name '*-reports' -o -name 'archived-logs' -type d | tar -czf windows-build-released-jvm${{ matrix.java }}.tar -T -
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: ci-artifacts
+          path: windows-build-released-jvm${{ matrix.java }}.tar
