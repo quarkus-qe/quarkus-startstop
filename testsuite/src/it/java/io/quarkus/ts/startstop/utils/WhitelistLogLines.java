@@ -31,8 +31,6 @@ public enum WhitelistLogLines {
             // Some artifacts names...
             Pattern.compile(".*maven-error-diagnostics.*"),
             Pattern.compile(".*errorprone.*"),
-            // https://github.com/oracle/graal/blob/master/substratevm/src/com.oracle.svm.core/src/com/oracle/svm/core/jdk/VarHandleFeature.java#L199
-            Pattern.compile(".*GR-10238.*")
     }),
     FULL_MICROPROFILE(new Pattern[]{
             // Some artifacts names...
@@ -42,8 +40,6 @@ public enum WhitelistLogLines {
             Pattern.compile(".*TestSecureController.java.*"),
             // Well, the RestClient demo probably should do some cleanup before shutdown...?
             Pattern.compile(".*Closing a class org.jboss.resteasy.client.jaxrs.engines.ApacheHttpClient.*"),
-            // https://github.com/oracle/graal/blob/master/substratevm/src/com.oracle.svm.core/src/com/oracle/svm/core/jdk/VarHandleFeature.java#L199
-            Pattern.compile(".*GR-10238.*")
     }),
     GENERATED_SKELETON(new Pattern[]{
             // It so happens that the dummy skeleton tries to find Mongo. This is expected.
