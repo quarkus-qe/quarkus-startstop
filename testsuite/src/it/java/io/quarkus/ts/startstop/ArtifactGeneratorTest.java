@@ -118,8 +118,7 @@ public class ArtifactGeneratorTest {
             "vertx-web",
             "grpc",
             "infinispan-client",
-            // https://github.com/quarkusio/quarkus/issues/14439
-            // "cache",
+            "cache",
     };
 
     public static final String[] supportedExtensionsSubsetSetB = new String[]{
@@ -151,8 +150,7 @@ public class ArtifactGeneratorTest {
             "spring-web",
             "spring-cloud-config-client",
             "spring-scheduled",
-            // https://github.com/quarkusio/quarkus/issues/14439
-            // "spring-cache",
+            "spring-cache",
     };
 
     public void testRuntime(TestInfo testInfo, String[] extensions, Set<TestFlags> flags) throws Exception {
