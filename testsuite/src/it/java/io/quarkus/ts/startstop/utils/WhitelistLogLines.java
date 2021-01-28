@@ -66,6 +66,14 @@ public enum WhitelistLogLines {
             Pattern.compile(".*error_prone_annotations.*"),
             Pattern.compile(".*SRGQL010000: Schema is null, or it has no operations. Not bootstrapping SmallRye GraphQL*"),
             Pattern.compile(".*No WebJars were found in the project.*"),
+    }),
+    WINDOWS_DEV_MODE_ERRORS(new Pattern[]{ 
+    		Pattern.compile(".*Re-run Maven using the -X switch to enable full debug logging.*"),
+    		Pattern.compile(".*For more information about the errors and possible solutions, please read the following articles.*"),
+    		Pattern.compile(".*Failed to run: Dev mode process did not complete successfully.*"),
+    		Pattern.compile(".*http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException.*"),
+    		Pattern.compile(".*To see the full stack trace of the errors, re-run Maven with the -e switch.*"),
+    		Pattern.compile("\\[ERROR\\] *"),
     });
 
     public final Pattern[] errs;

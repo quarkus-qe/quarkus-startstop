@@ -38,7 +38,7 @@ public enum URLContent {
             new String[]{"http://localhost:8080/health", "\"UP\""},
             new String[]{"http://localhost:8080/data/metric/timed", "Request is used in statistics, check with the Metrics call."},
             new String[]{"http://localhost:8080/metrics", "ontroller_timed_request_seconds_count"},
-            new String[]{"http://localhost:8080/data/secured/test", "Jessie specific value"},
+            new String[]{"http://localhost:8080/data/secured/test", "Jessie specific value"}, 
             new String[]{"http://localhost:8080/openapi", "/resilience"},
             new String[]{"http://localhost:8080/data/client/test/parameterValue=xxx", "Processed parameter value 'parameterValue=xxx'"}
     }),

@@ -23,14 +23,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
@@ -72,6 +70,8 @@ public class Logs {
     private static final Pattern stoppedPatternControlSymbols = Pattern.compile(".* stopped in .*188m([0-9\\.]+).*", Pattern.DOTALL);
 
     private static final Pattern warnErrorDetectionPattern = Pattern.compile("(?i:.*(ERROR|WARN|SLF4J:).*)");
+    
+    private static final Pattern DEV_MODE_ERROR = Pattern.compile(".*Failed to run: Dev mode process did not complete successfully.*");
 
     public static final long SKIP = -1L;
 
@@ -84,13 +84,22 @@ public class Logs {
                 if (error) {
                     if (isWhiteListed(app.whitelistLogLines.errs, line)) {
                         LOGGER.info(cmd.name() + " log for " + testMethod + " contains whitelisted error: `" + line + "'");
-                    } else  if (isWhiteListed(app.whitelistLogLines.platformErrs(), line)) {
+                    } else if (isWhiteListed(app.whitelistLogLines.platformErrs(), line)) {
                         LOGGER.info(cmd.name() + " log for " + testMethod + " contains platform specific whitelisted error: `" + line + "'");
                     } else {
                         offendingLines.add(line);
                     }
                 }
             }
+            
+            // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
+            // Reported by https://github.com/quarkusio/quarkus/issues/14647.
+            if (Commands.isThisWindows && isDevModeError(offendingLines)) {
+            	for (Pattern windowsDevModeErrorToIgnore : WhitelistLogLines.WINDOWS_DEV_MODE_ERRORS.errs) {
+            		offendingLines.removeIf(line -> windowsDevModeErrorToIgnore.matcher(line).matches());
+            	}
+            } 
+            
             assertTrue(offendingLines.isEmpty(),
                     cmd.name() + " log should not contain error or warning lines that are not whitelisted. " +
                             "See testsuite" + File.separator + "target" + File.separator + "archived-logs" +
@@ -98,6 +107,10 @@ public class Logs {
                             " and check these offending lines: \n" + String.join("\n", offendingLines));
         }
     }
+    
+    private static boolean isDevModeError(Set<String> offendingLines) {
+		return offendingLines.stream().anyMatch(line -> DEV_MODE_ERROR.matcher(line).matches());
+	}
 
     private static boolean isWhiteListed(Pattern[] patterns, String line) {
         for (Pattern p : patterns) {

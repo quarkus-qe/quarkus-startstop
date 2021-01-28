@@ -202,6 +202,7 @@ public class SpecialCharsTest {
     }
 
     @Test
+    @DisabledOnOs({OS.WINDOWS}) // https://github.com/quarkusio/quarkus/issues/9707
     public void diacriticsDEV(TestInfo testInfo) throws IOException, InterruptedException {
         testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.DEV, "ěščřžýáíéůú");
     }
