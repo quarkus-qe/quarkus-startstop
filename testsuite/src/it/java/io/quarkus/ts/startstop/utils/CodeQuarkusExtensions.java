@@ -81,8 +81,7 @@ public enum CodeQuarkusExtensions {
     QUARKUS_AMAZON_SQS("quarkus-amazon-sqs", "Amazon SQS", "zYW", false),
     // https://github.com/quarkusio/quarkus/issues/14445
     // BLAZE_PERSISTENCE_INTEGRATION_QUARKUS("blaze-persistence-integration-quarkus", "Blaze-Persistence", "weW", false),
-    // https://github.com/quarkusio/quarkus/issues/14439 (1.11.1.Final is fixing it)
-    // QUARKUS_CACHE("quarkus-cache", "Cache", "W1i", true),
+    QUARKUS_CACHE("quarkus-cache", "Cache", "W1i", true),
     // https://github.com/datastax/cassandra-quarkus/issues/144
     // CASSANDRA_QUARKUS_CLIENT("cassandra-quarkus-client", "DataStax Apache Cassandra client", "mj6", false),
     QUARKUS_ELASTICSEARCH_REST_HIGH_LEVEL_CLIENT("quarkus-elasticsearch-rest-high-level-client", "Elasticsearch REST High Level Client", "OJe", false),
@@ -393,8 +392,7 @@ public enum CodeQuarkusExtensions {
     QUARKUS_QUTE("quarkus-qute", "Qute Templating", "xTN", false),
     QUARKUS_SCHEDULER("quarkus-scheduler", "Scheduler - tasks", "CBv", true),
     QUARKUS_SPRING_BOOT_PROPERTIES("quarkus-spring-boot-properties", "Quarkus Extension for Spring Boot properties", "XkM", true),
-    // https://github.com/quarkusio/quarkus/issues/14439
-    // QUARKUS_SPRING_CACHE("quarkus-spring-cache", "Quarkus Extension for Spring Cache API", "DG", true),
+    QUARKUS_SPRING_CACHE("quarkus-spring-cache", "Quarkus Extension for Spring Cache API", "DG", true),
     QUARKUS_SPRING_CLOUD_CONFIG_CLIENT("quarkus-spring-cloud-config-client", "Quarkus Extension for Spring Cloud Config Client", "egg", true),
     QUARKUS_SPRING_DI("quarkus-spring-di", "Quarkus Extension for Spring DI API", "VOH", true),
     QUARKUS_SPRING_DATA_JPA("quarkus-spring-data-jpa", "Quarkus Extension for Spring Data JPA API", "2ec", true),
