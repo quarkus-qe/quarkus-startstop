@@ -119,6 +119,8 @@ public class ArtifactGeneratorTest {
             "grpc",
             "infinispan-client",
             "cache",
+            "micrometer",
+            "quarkus-openshift-client",
     };
 
     public static final String[] supportedExtensionsSubsetSetB = new String[]{
@@ -130,10 +132,12 @@ public class ArtifactGeneratorTest {
             "hibernate-validator",
             "rest-client",
             "rest-client-jackson",
+            "rest-client-mutiny",
             "jackson",
             "jaxb",
             "jdbc-mariadb",
             "jdbc-mssql",
+            "resteasy-multipart",
             "smallrye-context-propagation",
             "smallrye-fault-tolerance",
             "smallrye-health",
@@ -145,12 +149,14 @@ public class ArtifactGeneratorTest {
             "smallrye-reactive-messaging-kafka",
             "smallrye-reactive-streams-operators",
             "spring-data-jpa",
+            "spring-data-rest",
             "spring-di",
             "spring-security",
             "spring-web",
             "spring-cloud-config-client",
             "spring-scheduled",
             "spring-cache",
+
     };
 
     public void testRuntime(TestInfo testInfo, String[] extensions, Set<TestFlags> flags) throws Exception {
