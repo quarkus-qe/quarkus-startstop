@@ -66,6 +66,7 @@ public enum WhitelistLogLines {
             Pattern.compile(".*error_prone_annotations.*"),
             Pattern.compile(".*SRGQL010000: Schema is null, or it has no operations. Not bootstrapping SmallRye GraphQL*"),
             Pattern.compile(".*No WebJars were found in the project.*"),
+            Pattern.compile(".*This application uses the MP Metrics API. The micrometer extension currently provides a compatibility layer that supports the MP Metrics API, but metric names and recorded values will be different. Note that the MP Metrics compatibility layer will move to a different extension in the future.*"),
     });
 
     public final Pattern[] errs;

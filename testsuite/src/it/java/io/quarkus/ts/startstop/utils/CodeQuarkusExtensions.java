@@ -34,15 +34,16 @@ public enum CodeQuarkusExtensions {
     QUARKUS_RESTEASY_JSONB("quarkus-resteasy-jsonb", "RESTEasy JSON-B", "49J", true),
     QUARKUS_VERTX_GRAPHQL("quarkus-vertx-graphql", "Eclipse Vert.x GraphQL", "F9R", false),
     QUARKUS_HIBERNATE_VALIDATOR("quarkus-hibernate-validator", "Hibernate Validator", "YjV", true),
-    QUARKUS_REST_CLIENT_MUTINY("quarkus-rest-client-mutiny", "Mutiny support for REST Client", "Ph0", false),
+    QUARKUS_REST_CLIENT_MUTINY("quarkus-rest-client-mutiny", "Mutiny support for REST Client", "Ph0", true),
     QUARKUS_REST_CLIENT("quarkus-rest-client", "REST Client", "ekA", true),
     QUARKUS_REST_CLIENT_JAXB("quarkus-rest-client-jaxb", "REST Client JAXB", "8iY", true),
     QUARKUS_REST_CLIENT_JSONB("quarkus-rest-client-jsonb", "REST Client JSON-B", "Q3z", true),
     QUARKUS_REST_CLIENT_JACKSON("quarkus-rest-client-jackson", "REST Client Jackson", "pJg", true),
+    // TODO clarify vvvv
     QUARKUS_HIBERNATE_ORM_REST_DATA_PANACHE("quarkus-hibernate-orm-rest-data-panache", "REST resources for Hibernate ORM with Panache", "CPa", false),
     QUARKUS_MONGODB_REST_DATA_PANACHE("quarkus-mongodb-rest-data-panache", "REST resources for MongoDB with Panache", "2nT", false),
     QUARKUS_RESTEASY_JAXB("quarkus-resteasy-jaxb", "RESTEasy JAXB", "d7W", true),
-    QUARKUS_RESTEASY_MULTIPART("quarkus-resteasy-multipart", "RESTEasy Multipart", "kV0", false),
+    QUARKUS_RESTEASY_MULTIPART("quarkus-resteasy-multipart", "RESTEasy Multipart", "kV0", true),
     QUARKUS_RESTEASY_MUTINY("quarkus-resteasy-mutiny", "RESTEasy Mutiny", "8Tx", false),
     QUARKUS_RESTEASY_QUTE("quarkus-resteasy-qute", "RESTEasy Qute", "ju", false),
     // TODO Introduce buckets with reactive jax-rs extensions once they move from experimental / unsupported level
@@ -110,10 +111,16 @@ public enum CodeQuarkusExtensions {
     QUARKUS_SMALLRYE_REACTIVE_MESSAGING_AMQP("quarkus-smallrye-reactive-messaging-amqp", "SmallRye Reactive Messaging - AMQP Connector", "ur3", true),
     QUARKUS_SMALLRYE_REACTIVE_MESSAGING_KAFKA("quarkus-smallrye-reactive-messaging-kafka", "SmallRye Reactive Messaging - Kafka Connector", "9qf", true),
     QUARKUS_SMALLRYE_REACTIVE_MESSAGING_MQTT("quarkus-smallrye-reactive-messaging-mqtt", "SmallRye Reactive Messaging - MQTT Connector", "ZsB", false),
-    QUARKUS_QPID_JMS("quarkus-qpid-jms", "AMQP 1.0 JMS client - Apache Qpid JMS", "Zdm", false),
+    // SRCFG00014: Property quarkus.qpid-jms.url is required but the value was not found or is empty
+    // https://github.com/quarkusio/quarkus/issues/8506
+    // QUARKUS_QPID_JMS("quarkus-qpid-jms", "AMQP 1.0 JMS client - Apache Qpid JMS", "Zdm", false),
     QUARKUS_KAFKA_CLIENT("quarkus-kafka-client", "Apache Kafka Client", "FKK", true),
-    QUARKUS_KAFKA_STREAMS("quarkus-kafka-streams", "Apache Kafka Streams", "ShK", false),
-    QUARKUS_ARTEMIS_JMS("quarkus-artemis-jms", "Artemis JMS", "DWo", false),
+    // SRCFG00014: Property quarkus.kafka-streams.topics is required but the value was not found or is empty
+    // https://github.com/quarkusio/quarkus/issues/8506
+    // QUARKUS_KAFKA_STREAMS("quarkus-kafka-streams", "Apache Kafka Streams", "ShK", false),
+    // SRCFG00014: Property quarkus.artemis.url is required but the value was not found or is empty
+    // https://github.com/quarkusio/quarkus/issues/8506
+    // QUARKUS_ARTEMIS_JMS("quarkus-artemis-jms", "Artemis JMS", "DWo", false),
     QUARKUS_GOOGLE_CLOUD_PUBSUB("quarkus-google-cloud-pubsub", "Google Cloud Pubsub", "Rbo", false),
     QUARKUS_CONFIG_YAML("quarkus-config-yaml", "YAML Configuration", "UAO", true),
     QUARKUS_LOGGING_JSON("quarkus-logging-json", "Logging JSON", "7RG", true),
@@ -146,9 +153,9 @@ public enum CodeQuarkusExtensions {
     QUARKUS_KUBERNETES_CONFIG("quarkus-kubernetes-config", "Kubernetes Config", "VUX", false),
     QUARKUS_KUBERNETES_SERVICE_BINDING("quarkus-kubernetes-service-binding", "Kubernetes Service Binding", "8iE", false),
     QUARKUS_MINIKUBE("quarkus-minikube", "Minikube", "VUy", false),
-    QUARKUS_OPENSHIFT_CLIENT("quarkus-openshift-client", "OpenShift Client", "CxU", false),
-    QUARKUS_MICROMETER("quarkus-micrometer", "Micrometer metrics", "Svz", false),
-    QUARKUS_SMALLRYE_METRICS("quarkus-smallrye-metrics", "SmallRye Metrics", "Ll4", true),
+    QUARKUS_OPENSHIFT_CLIENT("quarkus-openshift-client", "OpenShift Client", "CxU", true),
+    QUARKUS_MICROMETER("quarkus-micrometer", "Micrometer metrics", "Svz", true),
+    QUARKUS_SMALLRYE_METRICS("quarkus-smallrye-metrics", "SmallRye Metrics", "Ll4", false),
     QUARKUS_SMALLRYE_OPENTRACING("quarkus-smallrye-opentracing", "SmallRye OpenTracing", "f7", true),
 //  Commented out as it would require touching application.properties with confAppPropsForSkeleton(String appDir)
 //  https://github.com/quarkusio/quarkus/issues/8506
@@ -396,7 +403,7 @@ public enum CodeQuarkusExtensions {
     QUARKUS_SPRING_CLOUD_CONFIG_CLIENT("quarkus-spring-cloud-config-client", "Quarkus Extension for Spring Cloud Config Client", "egg", true),
     QUARKUS_SPRING_DI("quarkus-spring-di", "Quarkus Extension for Spring DI API", "VOH", true),
     QUARKUS_SPRING_DATA_JPA("quarkus-spring-data-jpa", "Quarkus Extension for Spring Data JPA API", "2ec", true),
-    QUARKUS_SPRING_DATA_REST("quarkus-spring-data-rest", "Quarkus Extension for Spring Data REST", "kdX", false),
+    QUARKUS_SPRING_DATA_REST("quarkus-spring-data-rest", "Quarkus Extension for Spring Data REST", "kdX", true),
     QUARKUS_SPRING_SCHEDULED("quarkus-spring-scheduled", "Quarkus Extension for Spring Scheduled ", "RUR", true),
     QUARKUS_SPRING_SECURITY("quarkus-spring-security", "Quarkus Extension for Spring Security API", "mek", true),
     QUARKUS_SPRING_WEB("quarkus-spring-web", "Quarkus Extension for Spring Web API", "0D7", true),
