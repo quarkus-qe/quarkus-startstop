@@ -21,25 +21,37 @@ package io.quarkus.ts.startstop;
 
 import io.quarkus.ts.startstop.utils.Apps;
 import io.quarkus.ts.startstop.utils.CodeQuarkusExtensions;
+import io.quarkus.ts.startstop.utils.Commands;
 import io.quarkus.ts.startstop.utils.MvnCmds;
 import io.quarkus.ts.startstop.utils.URLContent;
 import io.quarkus.ts.startstop.utils.WebpageTester;
+
+import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 import static io.quarkus.ts.startstop.utils.Commands.adjustPrettyPrintForJsonLogging;
 import static io.quarkus.ts.startstop.utils.Commands.cleanDirOrFile;
 import static io.quarkus.ts.startstop.utils.Commands.download;
 import static io.quarkus.ts.startstop.utils.Commands.getArtifactGeneBaseDir;
 import static io.quarkus.ts.startstop.utils.Commands.getBuildCommand;
+import static io.quarkus.ts.startstop.utils.Commands.getRunCommand;
 import static io.quarkus.ts.startstop.utils.Commands.parsePort;
 import static io.quarkus.ts.startstop.utils.Commands.processStopper;
 import static io.quarkus.ts.startstop.utils.Commands.removeRepositoriesAndPluginRepositories;
@@ -68,18 +80,27 @@ public class CodeQuarkusTest {
     public static final List<List<CodeQuarkusExtensions>> supportedEx = CodeQuarkusExtensions.partition(4, CodeQuarkusExtensions.Flag.SUPPORTED);
     public static final List<List<CodeQuarkusExtensions>> notSupportedEx = CodeQuarkusExtensions.partition(1, CodeQuarkusExtensions.Flag.NOT_SUPPORTED);
     public static final List<List<CodeQuarkusExtensions>> mixedEx = CodeQuarkusExtensions.partition(1, CodeQuarkusExtensions.Flag.MIXED);
+    
+    public static final Stream<CodeQuarkusExtensions> supportedExWithCodeStarter() {
+        return Arrays.asList(CodeQuarkusExtensions.QUARKUS_CONFIG_YAML,
+                CodeQuarkusExtensions.QUARKUS_LOGGING_JSON,
+                CodeQuarkusExtensions.QUARKUS_RESTEASY,
+                CodeQuarkusExtensions.QUARKUS_RESTEASY_JACKSON,
+                CodeQuarkusExtensions.QUARKUS_SPRING_WEB,
+                CodeQuarkusExtensions.QUARKUS_QUTE).stream();
+    }
 
-    public void testRuntime(TestInfo testInfo, List<CodeQuarkusExtensions> extensions) throws Exception {
+    public void testRuntime(TestInfo testInfo, List<CodeQuarkusExtensions> extensions, MvnCmds mvnCmds) throws Exception {
         Process pA = null;
         File unzipLog = null;
+        File buildLogA = null;
         File runLogA = null;
         StringBuilder whatIDidReport = new StringBuilder();
         String cn = testInfo.getTestClass().get().getCanonicalName();
         String mn = testInfo.getTestMethod().get().getName();
-        LOGGER.info(mn + ": Testing Code Quarkus generator with these " + extensions.size() + " extensions: " + extensions.toString());
+        LOGGER.info(mn + ": Testing Code Quarkus generator with these " + extensions.size() + " extensions: " + extensions.toString() + ", mode: " + mvnCmds.toString());
         File appDir = new File(GEN_BASE_DIR + File.separator + "code-with-quarkus");
         String logsDir = GEN_BASE_DIR + File.separator + "code-with-quarkus-logs";
-        List<String> devCmd = getBuildCommand(MvnCmds.MVNW_DEV.mvnCmds[0]);
         URLContent skeletonApp = Apps.GENERATED_SKELETON.urlContent;
         String zipFile = GEN_BASE_DIR + File.separator + "code-with-quarkus.zip";
 
@@ -95,12 +116,46 @@ public class CodeQuarkusTest {
             LOGGER.info("Removing repositories and pluginRepositories from pom.xml ...");
             removeRepositoriesAndPluginRepositories(appDir + File.separator + "pom.xml");
             adjustPrettyPrintForJsonLogging(appDir.getAbsolutePath());
+            
+            List<String> cmd;
+            // Build
+            if (mvnCmds != MvnCmds.MVNW_DEV) {
+                buildLogA = new File(logsDir + File.separator + "build.log");
+                ExecutorService buildService = Executors.newFixedThreadPool(1);
+                List<String> baseBuildCmd = new ArrayList<>();
+                baseBuildCmd.addAll(Arrays.asList(mvnCmds.mvnCmds[0]));
+                cmd = getBuildCommand(baseBuildCmd.toArray(new String[0]));
+
+                appendln(whatIDidReport, "# " + cn + ", " + mn);
+                appendln(whatIDidReport, (new Date()).toString());
+                appendln(whatIDidReport, appDir.getAbsolutePath());
+                appendln(whatIDidReport, "Extensions: " + extensions.toString());
+                appendlnSection(whatIDidReport, String.join(" ", cmd));
+
+                LOGGER.info("Building (" + cmd + ")");
+                buildService.submit(new Commands.ProcessRunner(appDir, buildLogA, cmd, 20));
+
+                buildService.shutdown();
+                buildService.awaitTermination(30, TimeUnit.MINUTES);
+
+                assertTrue(buildLogA.exists());
+            }
+            
+            // Run
             runLogA = new File(logsDir + File.separator + "dev-run.log");
-            LOGGER.info("Running command: " + devCmd + " in directory: " + appDir);
+            if (mvnCmds == MvnCmds.MVNW_DEV) {
+                cmd = getBuildCommand(mvnCmds.mvnCmds[0]);
+            } else {
+                cmd = getRunCommand(mvnCmds.mvnCmds[1]);
+            }
+            
+            LOGGER.info("Running (" + cmd + ") in directory: " + appDir);
             appendln(whatIDidReport, "Extensions: " + extensions.toString());
             appendln(whatIDidReport, appDir.getAbsolutePath());
-            appendlnSection(whatIDidReport, String.join(" ", devCmd));
-            pA = runCommand(devCmd, appDir, runLogA);
+            appendlnSection(whatIDidReport, String.join(" ", cmd));
+            
+            pA = runCommand(cmd, appDir, runLogA);
+            
             // It takes time to download the Internet
             long timeoutS = 10 * 60;
             LOGGER.info("Timeout: " + timeoutS + "s. Waiting for the web content...");
@@ -111,49 +166,69 @@ public class CodeQuarkusTest {
             LOGGER.info("Gonna wait for ports closed...");
             assertTrue(waitForTcpClosed("localhost", parsePort(skeletonApp.urlContent[0][0]), 60),
                     "Main port is still open.");
-            checkLog(cn, mn, Apps.GENERATED_SKELETON, MvnCmds.MVNW_DEV, runLogA);
+            checkLog(cn, mn, Apps.GENERATED_SKELETON, mvnCmds, runLogA);
         } finally {
             if (pA != null) {
                 processStopper(pA, true);
             }
-            archiveLog(cn, mn, unzipLog);
-            archiveLog(cn, mn, runLogA);
-            writeReport(cn, mn, whatIDidReport.toString());
+            
+            String tag = StringUtils.EMPTY;
+            if (extensions.size() == 1) {
+            	tag = "-" + extensions.get(0).id;
+            }
+            
+            archiveLog(cn, mn + tag, unzipLog);
+            archiveLog(cn, mn + tag, buildLogA);
+            archiveLog(cn, mn + tag, runLogA);
+            writeReport(cn, mn + tag, whatIDidReport.toString());
             cleanDirOrFile(appDir.getAbsolutePath(), logsDir);
         }
     }
 
     @Test
     public void supportedExtensionsSubsetA(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedEx.get(0));
+        testRuntime(testInfo, supportedEx.get(0), MvnCmds.MVNW_DEV);
     }
 
     @Test
     public void supportedExtensionsSubsetB(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedEx.get(1));
+        testRuntime(testInfo, supportedEx.get(1), MvnCmds.MVNW_DEV);
     }
 
     @Test
     public void supportedExtensionsSubsetC(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedEx.get(2));
+        testRuntime(testInfo, supportedEx.get(2), MvnCmds.MVNW_DEV);
     }
 
     @Test
     public void supportedExtensionsSubsetD(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedEx.get(3));
+        testRuntime(testInfo, supportedEx.get(3), MvnCmds.MVNW_DEV);
     }
 
     @Test
     public void notSupportedExtensionsSubsetA(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, notSupportedEx.get(0).subList(0, Math.min(20, notSupportedEx.get(0).size())));
+        testRuntime(testInfo, notSupportedEx.get(0).subList(0, Math.min(20, notSupportedEx.get(0).size())), MvnCmds.MVNW_DEV);
     }
+    
     @Test
     public void notSupportedExtensionsSubsetB(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, notSupportedEx.get(0).subList(Math.min(20, notSupportedEx.get(0).size()), Math.min(40, notSupportedEx.get(0).size())));
+        testRuntime(testInfo, notSupportedEx.get(0).subList(Math.min(20, notSupportedEx.get(0).size()), Math.min(40, notSupportedEx.get(0).size())), MvnCmds.MVNW_DEV);
     }
 
     @Test
     public void mixExtensions(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, mixedEx.get(0).subList(0, Math.min(20, mixedEx.get(0).size())));
+        testRuntime(testInfo, mixedEx.get(0).subList(0, Math.min(20, mixedEx.get(0).size())), MvnCmds.MVNW_DEV);
+    }
+    
+    @ParameterizedTest
+    @MethodSource("supportedExWithCodeStarter")
+    public void supportedExtensionWithCodeStarterWorksInJVM(CodeQuarkusExtensions extension, TestInfo testInfo) throws Exception {
+    	testRuntime(testInfo, Arrays.asList(extension), MvnCmds.MVNW_JVM);
+    }
+    
+    @ParameterizedTest
+    @MethodSource("supportedExWithCodeStarter")
+    public void supportedExtensionWithCodeStarterWorksInNative(CodeQuarkusExtensions extension, TestInfo testInfo) throws Exception {
+    	testRuntime(testInfo, Arrays.asList(extension), MvnCmds.MVNW_NATIVE);
     }
 }

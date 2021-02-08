@@ -26,13 +26,15 @@ jobs:
         run: |
           mvn -V -B -s .github/mvn-settings.xml clean verify -DexcludeTags=product,native,codequarkus
       - name: Zip Artifacts
+        if: failure()
         run: |
           zip -r artifacts-jvm${{ matrix.java }}.zip . -i '*-reports/*' '*/archived-logs/*'
       - name: Archive artifacts
         uses: actions/upload-artifact@v1
+        if: failure()
         with:
           name: ci-artifacts
-          path: artifacts-jvm${{ matrix.java }}.zip
+          path: artifacts-released-jvm${{ matrix.java }}.zip
   build-released-native:
       name: Native build - released Quarkus
       runs-on: ubuntu-latest
@@ -55,13 +57,15 @@ jobs:
           run: |
             mvn -V -B -s .github/mvn-settings.xml clean verify -DexcludeTags=product,codequarkus -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=docker
         - name: Zip Artifacts
+          if: failure()
           run: |
             zip -r artifacts-jvm${{ matrix.java }}.zip . -i '*-reports/*' '*/archived-logs/*'
         - name: Archive artifacts
           uses: actions/upload-artifact@v1
+          if: failure()
           with:
             name: ci-artifacts
-            path: artifacts-jvm${{ matrix.java }}.zip
+            path: artifacts-released-native${{ matrix.java }}.zip
   build-code-start:
     name: Code Quarkus build - released Quarkus
     runs-on: ubuntu-latest
@@ -84,10 +88,12 @@ jobs:
         run: |
           mvn -V -B -s .github/mvn-settings.xml clean verify -Ptestsuite -DincludeTags=codequarkus
       - name: Zip Artifacts
+        if: failure()
         run: |
           zip -r artifacts-jvm${{ matrix.java }}.zip . -i '*-reports/*' '*/archived-logs/*'
       - name: Archive artifacts
         uses: actions/upload-artifact@v1
+        if: failure()
         with:
           name: ci-artifacts
-          path: artifacts-jvm${{ matrix.java }}.zip
+          path: artifacts-code-start${{ matrix.java }}.zip
