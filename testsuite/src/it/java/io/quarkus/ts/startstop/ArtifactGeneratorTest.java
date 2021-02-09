@@ -207,9 +207,9 @@ public class ArtifactGeneratorTest {
             // Run
             LOGGER.info("Running... " + runCmd);
             runLogA = new File(logsDir + File.separator + (flags.contains(TestFlags.WARM_UP) ? "warmup-dev-run.log" : "dev-run.log"));
-            pA = runCommand(runCmd, appDir, runLogA);
             appendln(whatIDidReport, appDir.getAbsolutePath());
             appendlnSection(whatIDidReport, String.join(" ", runCmd));
+            pA = runCommand(runCmd, appDir, runLogA);
             // Test web pages
             // The reason for a seemingly large timeout of 20 minutes is that dev mode will be downloading the Internet on the first fresh run.
             long timeoutS = (flags.contains(TestFlags.WARM_UP) ? 20 * 60 : 60);

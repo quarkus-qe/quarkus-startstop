@@ -126,10 +126,9 @@ public class SpecialCharsTest {
                 cmd = getRunCommand(mvnCmds.mvnCmds[1]);
             }
             LOGGER.info("Running (" + cmd + ")");
-            pA = runCommand(cmd, appDir, runLogA);
-
             appendln(whatIDidReport, appDir.getAbsolutePath());
             appendlnSection(whatIDidReport, String.join(" ", cmd));
+            pA = runCommand(cmd, appDir, runLogA);
 
             // Test web page
             LOGGER.info("Testing web page content...");
