@@ -123,9 +123,10 @@ public class StartStopTest {
                 LOGGER.info("Running... round " + i);
                 runLogA = new File(appDir.getAbsolutePath() + File.separator + "logs" + File.separator + mvnCmds.name().toLowerCase() + "-run.log");
                 cmd = getRunCommand(mvnCmds.mvnCmds[1]);
-                pA = runCommand(cmd, appDir, runLogA);
                 appendln(whatIDidReport, appDir.getAbsolutePath());
                 appendlnSection(whatIDidReport, String.join(" ", cmd));
+                pA = runCommand(cmd, appDir, runLogA);
+
                 // Test web pages
                 long timeToFirstOKRequest = WebpageTester.testWeb(app.urlContent.urlContent[0][0], 10, app.urlContent.urlContent[0][1], true);
                 LOGGER.info("Testing web page content...");

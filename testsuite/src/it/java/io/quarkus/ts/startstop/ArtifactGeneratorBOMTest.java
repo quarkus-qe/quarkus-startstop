@@ -139,9 +139,9 @@ public class ArtifactGeneratorBOMTest {
             LOGGER.info(mn + ": Run command " + String.join(" ", MvnCmds.JVM.mvnCmds[1]));
             LOGGER.info("Running...");
             runLogA = new File(logsDir + File.separator + "bom-artifact-run.log");
-            pA = runCommand(runCmd, appDir, runLogA);
             appendln(whatIDidReport, appDir.getAbsolutePath());
             appendlnSection(whatIDidReport, String.join(" ", runCmd));
+            pA = runCommand(runCmd, appDir, runLogA);
 
             // Test web pages
             WebpageTester.testWeb(skeletonApp.urlContent[0][0], 20,
