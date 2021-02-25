@@ -33,7 +33,7 @@ public class JSONtoEnum {
     public static Pattern pattern = Pattern.compile("(?i).*\"id\":\"[^:]*:([^\"]*)\".*\"name\":\"([^\"]*)\".*\"shortId\":\"([^\"]*)\".*\"tags\":\\[([^]]*)].*");
 
     public static void main(String[] args) throws Exception {
-        if (args.length < 1 || !args[0].startsWith("https://")) {
+        if (args.length < 1 || !args[0].startsWith("http")) {
             System.out.println("Expects URL e.g. https://code.quarkus.stage.redhat.com/api/extensions");
             System.exit(1);
         }
