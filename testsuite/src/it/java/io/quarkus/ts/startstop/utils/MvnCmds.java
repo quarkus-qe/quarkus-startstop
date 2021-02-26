@@ -33,7 +33,7 @@ import static io.quarkus.ts.startstop.utils.Commands.getQuarkusVersion;
 public enum MvnCmds {
     JVM(new String[][]{
             new String[]{"mvn", "clean", "compile", "quarkus:build", "-Dquarkus.package.output-name=quarkus"},
-            new String[]{"java", "-jar", "target/quarkus-runner.jar"}
+            new String[]{"java", "-jar", "target/quarkus-app/quarkus-run.jar"}
     }),
     DEV(new String[][]{
             new String[]{"mvn", "clean", "quarkus:dev", "-Dmaven.repo.local=" + getLocalMavenRepoDir()}
@@ -58,7 +58,7 @@ public enum MvnCmds {
     }),
     MVNW_JVM(new String[][]{
         new String[]{Commands.MVNW, "clean", "compile", "quarkus:build", "-Dquarkus.package.output-name=quarkus"},
-        new String[]{"java", "-jar", "target/quarkus-runner.jar"}
+        new String[]{"java", "-jar", "target/quarkus-app/quarkus-run.jar"}
     }),
     MVNW_NATIVE(new String[][]{
         Stream.concat(Stream.of(Commands.MVNW, "clean", "compile", "package", "-Pnative", "-Dquarkus.package.output-name=quarkus"),
