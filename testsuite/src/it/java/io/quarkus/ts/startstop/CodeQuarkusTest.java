@@ -28,6 +28,7 @@ import io.quarkus.ts.startstop.utils.WebpageTester;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
@@ -211,6 +212,7 @@ public class CodeQuarkusTest {
     }
     
     @Test
+    @Disabled("https://github.com/quarkusio/quarkus/issues/15352")
     public void notSupportedExtensionsSubsetB(TestInfo testInfo) throws Exception {
         testRuntime(testInfo, notSupportedEx.get(0).subList(Math.min(20, notSupportedEx.get(0).size()), Math.min(40, notSupportedEx.get(0).size())), MvnCmds.MVNW_DEV);
     }
