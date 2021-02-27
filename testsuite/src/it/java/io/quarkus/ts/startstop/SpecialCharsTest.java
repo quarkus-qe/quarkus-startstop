@@ -19,6 +19,7 @@ import io.quarkus.ts.startstop.utils.MvnCmds;
 import io.quarkus.ts.startstop.utils.WebpageTester;
 import org.apache.commons.io.FileUtils;
 import org.jboss.logging.Logger;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
@@ -179,6 +180,7 @@ public class SpecialCharsTest {
     }
 
     @Test
+    @Disabled("https://github.com/quarkusio/quarkus/issues/15358")
     public void specialJVM(TestInfo testInfo) throws IOException, InterruptedException {
         testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.JVM, ",;~!@#$%^&()");
     }
