@@ -1,5 +1,6 @@
 package io.quarkus.ts.startstop;
 
+import io.quarkus.ts.startstop.utils.Commands;
 import io.quarkus.ts.startstop.utils.WebpageTester;
 import org.jboss.logging.Logger;
 import org.junit.jupiter.api.Tag;
@@ -18,7 +19,7 @@ public class CodeQuarkusSiteTest {
 
     private static final Logger LOGGER = Logger.getLogger(CodeQuarkusSiteTest.class.getName());
 
-    public static final String webPageUrl = "https://preview-code-quarkus-redhat-int-build.apps.app-sre-stage-0.k3s7.p1.openshiftapps.com/";
+    public static final String webPageUrl = Commands.getCodeQuarkusURL("https://code.quarkus.redhat.com/");
     public static final String elementIcon = "<link rel=\"shortcut icon\" type=\"image/png\" href=\"https://www.redhat.com/misc/favicon.ico\">";
     public static final String elementTitle = "<title>Quarkus - Start coding with code.quarkus.redhat.com</title>";
 
