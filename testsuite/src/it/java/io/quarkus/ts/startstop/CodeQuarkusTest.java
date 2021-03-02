@@ -61,6 +61,7 @@ import static io.quarkus.ts.startstop.utils.Commands.waitForTcpClosed;
 import static io.quarkus.ts.startstop.utils.Logs.appendln;
 import static io.quarkus.ts.startstop.utils.Logs.appendlnSection;
 import static io.quarkus.ts.startstop.utils.Logs.archiveLog;
+import static io.quarkus.ts.startstop.utils.Logs.checkListeningHost;
 import static io.quarkus.ts.startstop.utils.Logs.checkLog;
 import static io.quarkus.ts.startstop.utils.Logs.writeReport;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -167,6 +168,7 @@ public class CodeQuarkusTest {
             assertTrue(waitForTcpClosed("localhost", parsePort(skeletonApp.urlContent[0][0]), 60),
                     "Main port is still open.");
             checkLog(cn, mn, Apps.GENERATED_SKELETON, mvnCmds, runLogA);
+            checkListeningHost(cn, mn, mvnCmds, runLogA);
         } finally {
             if (pA != null) {
                 processStopper(pA, true);

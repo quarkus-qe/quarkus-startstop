@@ -59,6 +59,7 @@ import static io.quarkus.ts.startstop.utils.Logs.SKIP;
 import static io.quarkus.ts.startstop.utils.Logs.appendln;
 import static io.quarkus.ts.startstop.utils.Logs.appendlnSection;
 import static io.quarkus.ts.startstop.utils.Logs.archiveLog;
+import static io.quarkus.ts.startstop.utils.Logs.checkListeningHost;
 import static io.quarkus.ts.startstop.utils.Logs.checkLog;
 import static io.quarkus.ts.startstop.utils.Logs.checkThreshold;
 import static io.quarkus.ts.startstop.utils.Logs.getLogsDir;
@@ -147,6 +148,7 @@ public class StartStopTest {
                 assertTrue(waitForTcpClosed("localhost", parsePort(app.urlContent.urlContent[0][0]), 60),
                         "Main port is still open");
                 checkLog(cn, mn, app, mvnCmds, runLogA);
+                checkListeningHost(cn, mn, mvnCmds, runLogA);
 
                 float[] startedStopped = parseStartStopTimestamps(runLogA);
 
