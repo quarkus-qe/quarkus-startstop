@@ -171,6 +171,10 @@ public class Commands {
     }
 
     public static String getCodeQuarkusURL() {
+        return getCodeQuarkusURL("https://code.quarkus.io");
+    }
+
+    public static String getCodeQuarkusURL(String fallbackURL) {
         String url = null;
         for (String p : new String[]{"CODE_QUARKUS_URL", "code.quarkus.url"}) {
             String env = System.getenv().get(p);
@@ -185,7 +189,7 @@ public class Commands {
             }
         }
         if (url == null) {
-            url = "https://code.quarkus.io";
+            url = fallbackURL;
             LOGGER.warn("Failed to detect code.quarkus.url/CODE_QUARKUS_URL env/sys props, defaulting to " + url);
             return url;
         }
