@@ -72,6 +72,9 @@ public class Logs {
     private static final Pattern stoppedPatternControlSymbols = Pattern.compile(".* stopped in .*188m([0-9\\.]+).*", Pattern.DOTALL);
 
     private static final Pattern warnErrorDetectionPattern = Pattern.compile("(?i:.*(ERROR|WARN|SLF4J:).*)");
+    private static final Pattern listeningOnDetectionPattern = Pattern.compile("(?i:.*Listening on:.*)");
+    private static final Pattern devExpectedHostPattern = Pattern.compile("(?i:.*localhost:.*)");
+    private static final Pattern defaultExpectedHostPattern = Pattern.compile("(?i:.*0.0.0.0:.*)");
 
     public static final long SKIP = -1L;
 
@@ -97,6 +100,29 @@ public class Logs {
                             File.separator + testClass + File.separator + testMethod + File.separator + log.getName() +
                             " and check these offending lines: \n" + String.join("\n", offendingLines));
         }
+    }
+    
+    public static void checkListeningHost(String testClass, String testMethod, MvnCmds cmd, File log) throws IOException {
+    	boolean isOffending = true;
+    	try (Scanner sc = new Scanner(log, UTF_8)) {
+    		while (sc.hasNextLine()) {
+    			String line = sc.nextLine();
+    			if (listeningOnDetectionPattern.matcher(line).matches()) { 
+    				Pattern expectedHostPattern = defaultExpectedHostPattern;
+    				if (cmd == MvnCmds.DEV || cmd == MvnCmds.MVNW_DEV) {
+    					expectedHostPattern = devExpectedHostPattern;
+    				}
+    				
+    				isOffending = !expectedHostPattern.matcher(line).matches();
+    			}
+    		}
+    	}
+    	
+    	assertFalse(isOffending,
+                cmd.name() + " log should contain expected listening host. " +
+                        "See testsuite" + File.separator + "target" + File.separator + "archived-logs" +
+                        File.separator + testClass + File.separator + testMethod + File.separator + log.getName() +
+                        " and check the listening host.");
     }
 
     private static boolean isWhiteListed(Pattern[] patterns, String line) {
