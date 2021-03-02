@@ -34,7 +34,7 @@ public enum CodeQuarkusExtensions {
     QUARKUS_RESTEASY_JSONB("quarkus-resteasy-jsonb", "RESTEasy JSON-B", "49J", true),
     QUARKUS_VERTX_GRAPHQL("quarkus-vertx-graphql", "Eclipse Vert.x GraphQL", "F9R", false),
     QUARKUS_HIBERNATE_VALIDATOR("quarkus-hibernate-validator", "Hibernate Validator", "YjV", true),
-    QUARKUS_REST_CLIENT_MUTINY("quarkus-rest-client-mutiny", "Mutiny support for REST Client", "Ph0", true),
+    QUARKUS_REST_CLIENT_MUTINY("quarkus-rest-client-mutiny", "Mutiny support for REST Client", "Ph0", false),
     QUARKUS_REST_CLIENT("quarkus-rest-client", "REST Client", "ekA", true),
     QUARKUS_REST_CLIENT_JAXB("quarkus-rest-client-jaxb", "REST Client JAXB", "8iY", true),
     QUARKUS_REST_CLIENT_JSONB("quarkus-rest-client-jsonb", "REST Client JSON-B", "Q3z", true),
@@ -57,7 +57,7 @@ public enum CodeQuarkusExtensions {
     QUARKUS_SMALLRYE_GRAPHQL("quarkus-smallrye-graphql", "SmallRye GraphQL", "jjB", false),
 //  Commented out as it would require touching application.properties with confAppPropsForSkeleton(String appDir)
 //  https://github.com/quarkusio/quarkus/issues/8506
-//  QUARKUS_SMALLRYE_JWT("quarkus-smallrye-jwt", "SmallRye JWT", "D9x", false),
+//  QUARKUS_SMALLRYE_JWT("quarkus-smallrye-jwt", "SmallRye JWT", "D9x", true),
     QUARKUS_SMALLRYE_OPENAPI("quarkus-smallrye-openapi", "SmallRye OpenAPI", "ARC", true),
     QUARKUS_UNDERTOW("quarkus-undertow", "Undertow Servlet", "LMC", true),
     QUARKUS_UNDERTOW_WEBSOCKETS("quarkus-undertow-websockets", "Undertow WebSockets", "barD", true),
@@ -127,7 +127,7 @@ public enum CodeQuarkusExtensions {
     QUARKUS_LOGGING_GELF("quarkus-logging-gelf", "Logging GELF", "wCO", false),
     QUARKUS_LOGGING_SENTRY("quarkus-logging-sentry", "Logging Sentry", "eoJ", false),
     QUARKUS_VERTX("quarkus-vertx", "Eclipse Vert.x", "WqB", true),
-    QUARKUS_MUTINY("quarkus-mutiny", "Mutiny", "zqM", false),
+    QUARKUS_MUTINY("quarkus-mutiny", "Mutiny", "zqM", true),
     QUARKUS_REDIS_CLIENT("quarkus-redis-client", "Redis Client", "jlX", false),
     QUARKUS_SMALLRYE_CONTEXT_PROPAGATION("quarkus-smallrye-context-propagation", "SmallRye Context Propagation", "7pM", true),
     QUARKUS_KUBERNETES("quarkus-kubernetes", "Kubernetes", "dZK", false),
@@ -141,7 +141,7 @@ public enum CodeQuarkusExtensions {
     QUARKUS_AZURE_FUNCTIONS_HTTP("quarkus-azure-functions-http", "Azure Functions HTTP", "3YS", false),
     QUARKUS_CONTAINER_IMAGE_DOCKER("quarkus-container-image-docker", "Container Image Docker", "V9i", false),
     QUARKUS_CONTAINER_IMAGE_JIB("quarkus-container-image-jib", "Container Image Jib", "qZz", false),
-    QUARKUS_CONTAINER_IMAGE_OPENSHIFT("quarkus-container-image-openshift", "Container Image OpenShift", "fPM", false),
+    QUARKUS_CONTAINER_IMAGE_OPENSHIFT("quarkus-container-image-openshift", "Container Image OpenShift", "fPM", true),
     QUARKUS_CONTAINER_IMAGE_S2I("quarkus-container-image-s2i", "Container Image S2I", "pbs", false),
     QUARKUS_FUNQY_AMAZON_LAMBDA("quarkus-funqy-amazon-lambda", "Funqy AWS Lambda Binding", "Pqi", false),
     QUARKUS_FUNQY_GOOGLE_CLOUD_FUNCTIONS("quarkus-funqy-google-cloud-functions", "Funqy Google Cloud Functions", "K2H", false),
@@ -153,9 +153,9 @@ public enum CodeQuarkusExtensions {
     QUARKUS_KUBERNETES_CONFIG("quarkus-kubernetes-config", "Kubernetes Config", "VUX", false),
     QUARKUS_KUBERNETES_SERVICE_BINDING("quarkus-kubernetes-service-binding", "Kubernetes Service Binding", "8iE", false),
     QUARKUS_MINIKUBE("quarkus-minikube", "Minikube", "VUy", false),
-    QUARKUS_OPENSHIFT_CLIENT("quarkus-openshift-client", "OpenShift Client", "CxU", true),
+    QUARKUS_OPENSHIFT_CLIENT("quarkus-openshift-client", "OpenShift Client", "CxU", false),
     QUARKUS_MICROMETER("quarkus-micrometer", "Micrometer metrics", "Svz", true),
-    QUARKUS_SMALLRYE_METRICS("quarkus-smallrye-metrics", "SmallRye Metrics", "Ll4", false),
+    QUARKUS_SMALLRYE_METRICS("quarkus-smallrye-metrics", "SmallRye Metrics", "Ll4", false), //intentionally because of micrometer
     QUARKUS_SMALLRYE_OPENTRACING("quarkus-smallrye-opentracing", "SmallRye OpenTracing", "f7", true),
 //  Commented out as it would require touching application.properties with confAppPropsForSkeleton(String appDir)
 //  https://github.com/quarkusio/quarkus/issues/8506
@@ -172,7 +172,7 @@ public enum CodeQuarkusExtensions {
     QUARKUS_OIDC_CLIENT_FILTER("quarkus-oidc-client-filter", "OpenID Connect Client Filter", "T0U", false),
     QUARKUS_OIDC_TOKEN_PROPAGATION("quarkus-oidc-token-propagation", "OpenID Connect Token Propagation", "Bg9", false),
     QUARKUS_SECURITY_JPA("quarkus-security-jpa", "Security JPA", "W8w", false),
-    QUARKUS_SMALLRYE_JWT_BUILD("quarkus-smallrye-jwt-build", "SmallRye JWT Build", "Phi", false),
+    QUARKUS_SMALLRYE_JWT_BUILD("quarkus-smallrye-jwt-build", "SmallRye JWT Build", "Phi", true),
     QUARKUS_VAULT("quarkus-vault", "Vault", "r73", false),
     CAMEL_QUARKUS_CORE("camel-quarkus-core", "Camel Core", "8bB", false),
     CAMEL_QUARKUS_AMQP("camel-quarkus-amqp", "Camel AMQP", "maV", false),

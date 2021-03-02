@@ -228,6 +228,7 @@ public class CodeQuarkusTest {
     	testRuntime(testInfo, Arrays.asList(extension), MvnCmds.MVNW_JVM);
     }
     
+    @Tag("native")
     @ParameterizedTest
     @MethodSource("supportedExWithCodeStarter")
     public void supportedExtensionWithCodeStarterWorksInNative(CodeQuarkusExtensions extension, TestInfo testInfo) throws Exception {
