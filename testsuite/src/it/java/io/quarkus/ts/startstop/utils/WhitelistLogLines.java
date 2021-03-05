@@ -51,6 +51,10 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Unrecognized configuration key[ \\\\\"]*(" +
                     "quarkus.oidc.auth-server-url|" +
                     "quarkus.oidc.client-id|" +
+                    "quarkus.oidc-client.auth-server-url|" +
+                    "quarkus.oidc-client.client-id|" +
+                    "quarkus.oidc-client.token-path|" +
+                    "quarkus.oidc-client.discovery-enabled|" +
                     "quarkus.smallrye-jwt.enabled|" +
                     "quarkus.jaeger.service-name|" +
                     "quarkus.jaeger.sampler-param|" +
@@ -67,6 +71,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*SRGQL010000: Schema is null, or it has no operations. Not bootstrapping SmallRye GraphQL*"),
             Pattern.compile(".*No WebJars were found in the project.*"),
             Pattern.compile(".*This application uses the MP Metrics API. The micrometer extension currently provides a compatibility layer that supports the MP Metrics API, but metric names and recorded values will be different. Note that the MP Metrics compatibility layer will move to a different extension in the future.*"),
+            // kubernetes-client tries to configure client from service account
+            Pattern.compile(".*Error reading service account token from.*"),
     });
 
     public final Pattern[] errs;
