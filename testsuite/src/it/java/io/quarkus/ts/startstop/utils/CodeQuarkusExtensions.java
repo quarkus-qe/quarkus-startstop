@@ -55,9 +55,7 @@ public enum CodeQuarkusExtensions {
     QUARKUS_REACTIVE_MESSAGING_HTTP("quarkus-reactive-messaging-http", "Reactive HTTP and WebSocket Connector", "5Gh", false),
     QUARKUS_VERTX_WEB("quarkus-vertx-web", "Reactive Routes", "JsG", true),
     QUARKUS_SMALLRYE_GRAPHQL("quarkus-smallrye-graphql", "SmallRye GraphQL", "jjB", false),
-//  Commented out as it would require touching application.properties with confAppPropsForSkeleton(String appDir)
-//  https://github.com/quarkusio/quarkus/issues/8506
-//  QUARKUS_SMALLRYE_JWT("quarkus-smallrye-jwt", "SmallRye JWT", "D9x", true),
+    QUARKUS_SMALLRYE_JWT("quarkus-smallrye-jwt", "SmallRye JWT", "D9x", true),
     QUARKUS_SMALLRYE_OPENAPI("quarkus-smallrye-openapi", "SmallRye OpenAPI", "ARC", true),
     QUARKUS_UNDERTOW("quarkus-undertow", "Undertow Servlet", "LMC", true),
     QUARKUS_UNDERTOW_WEBSOCKETS("quarkus-undertow-websockets", "Undertow WebSockets", "barD", true),
