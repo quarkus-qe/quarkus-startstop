@@ -240,7 +240,7 @@ Results in:
 To help to troubleshoot the issues, some performance insights from the application are needed.
 One of the best way to gather performance insights is to generate CPU and allocation FlameGraphs using Async Profiler.
 
-Very good starting point is https://github.com/quarkusio/quarkus/blob/master/TROUBLESHOOTING.md document.
+Very good starting point is https://github.com/quarkusio/quarkus/blob/main/TROUBLESHOOTING.md document.
 Please follow the instructions from `Installing Async Profiler` section of the guide.
 
 On TS side perform modification similar to this change:
@@ -263,7 +263,7 @@ index 0c02537..6278605 100755
 ```
 Similar change is needed for `alloc` instead of `cpu` insights.
 
-In case of StartStopTest, you should consider reducing the number of iterations performed for start command in [StartStopTest.java#L121](https://github.com/quarkus-qe/quarkus-startstop/blob/master/testsuite/src/it/java/io/quarkus/ts/startstop/StartStopTest.java#L121)
+In case of StartStopTest, you should consider reducing the number of iterations performed for start command in [StartStopTest.java#L121](https://github.com/quarkus-qe/quarkus-startstop/blob/main/testsuite/src/it/java/io/quarkus/ts/startstop/StartStopTest.java#L121)
 
 ## Windows notes
 
