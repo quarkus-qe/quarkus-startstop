@@ -58,7 +58,7 @@ public enum CodeQuarkusExtensions {
     QUARKUS_SMALLRYE_JWT("quarkus-smallrye-jwt", "SmallRye JWT", "D9x", true),
     QUARKUS_SMALLRYE_OPENAPI("quarkus-smallrye-openapi", "SmallRye OpenAPI", "ARC", true),
     QUARKUS_UNDERTOW("quarkus-undertow", "Undertow Servlet", "LMC", true),
-    QUARKUS_UNDERTOW_WEBSOCKETS("quarkus-undertow-websockets", "Undertow WebSockets", "barD", true),
+    QUARKUS_WEBSOCKETS("websockets", "WebSockets", "JPE", true),
     QUARKUS_WEBJARS_LOCATOR("quarkus-webjars-locator", "WebJar Locator", "XSP", false),
     QUARKUS_GRPC("quarkus-grpc", "gRPC", "iDg", true),
     QUARKUS_HIBERNATE_ORM("quarkus-hibernate-orm", "Hibernate ORM", "vH0", true),
