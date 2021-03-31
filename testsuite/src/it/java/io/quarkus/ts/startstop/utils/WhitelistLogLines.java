@@ -73,6 +73,10 @@ public enum WhitelistLogLines {
             Pattern.compile(".*This application uses the MP Metrics API. The micrometer extension currently provides a compatibility layer that supports the MP Metrics API, but metric names and recorded values will be different. Note that the MP Metrics compatibility layer will move to a different extension in the future.*"),
             // kubernetes-client tries to configure client from service account
             Pattern.compile(".*Error reading service account token from.*"),
+            // hibernate-orm issues this warning when default datasource is ambiguous
+            // (no explicit configuration, none or multiple JDBC driver extensions)
+            // Result of DevServices support https://github.com/quarkusio/quarkus/pull/14960
+            Pattern.compile(".*Unable to determine a database type for default datasource.*"),
     });
 
     public final Pattern[] errs;
