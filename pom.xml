@@ -44,6 +44,7 @@
         <commons.lang.version>3.9</commons.lang.version>
         <jboss-logging.version>3.4.1.Final</jboss-logging.version>
         <log4j.version>2.13.2</log4j.version>
+        <htmlunit.version>2.46.0</htmlunit.version>
 
         <!-- Test to be executed by default (should be all of them) -->
         <includeTags>generator,startstop,bomtests,codequarkus,special-chars</includeTags>
@@ -64,6 +65,11 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.htmlunit</groupId>
+            <artifactId>htmlunit</artifactId>
+            <version>${htmlunit.version}</version>
         </dependency>
     </dependencies>
 
