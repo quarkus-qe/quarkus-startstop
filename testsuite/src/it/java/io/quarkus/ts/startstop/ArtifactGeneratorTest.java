@@ -107,13 +107,12 @@ public class ArtifactGeneratorTest {
             "resteasy-jsonb",
             "scheduler",
             "spring-boot-properties",
-            "smallrye-reactive-messaging-amqp",
+            "smallrye-reactive-streams-operators",
             "spring-data-jpa",
             "spring-di",
             "spring-security",
             "spring-web",
             "undertow",
-            "undertow-websockets",
             "vertx",
             "vertx-web",
             "grpc",
@@ -150,8 +149,8 @@ public class ArtifactGeneratorTest {
             "smallrye-openapi",
             "smallrye-opentracing",
             "smallrye-reactive-messaging",
+            "smallrye-reactive-messaging-amqp",
             "smallrye-reactive-messaging-kafka",
-            "smallrye-reactive-streams-operators",
             "spring-data-jpa",
             "spring-data-rest",
             "spring-di",
@@ -160,7 +159,7 @@ public class ArtifactGeneratorTest {
             "spring-cloud-config-client",
             "spring-scheduled",
             "spring-cache",
-
+            "websockets",
     };
 
     public void testRuntime(TestInfo testInfo, String[] extensions, Set<TestFlags> flags) throws Exception {
