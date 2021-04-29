@@ -92,6 +92,13 @@ public class LogBuilder {
     }
 
     public LogBuilder stoppedInMs(long stoppedInMs) {
+        // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
+        // Reported by https://github.com/quarkusio/quarkus/issues/14647.
+        if (stoppedInMs <= 0 && Commands.isThisWindows) {
+            // do nothing in Windows
+            return this;
+        }
+
         if (stoppedInMs <= 0) {
             throw new IllegalArgumentException("stoppedInMs must be a positive long, was: " + stoppedInMs);
         }

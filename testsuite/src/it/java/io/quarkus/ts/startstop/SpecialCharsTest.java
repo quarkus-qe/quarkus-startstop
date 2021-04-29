@@ -68,10 +68,7 @@ public class SpecialCharsTest {
             // Clean target directory
             cleanTarget(app);
 
-            // Delete dir with special chars
-            if (appDestDir.exists()) {
-                FileUtils.deleteDirectory(appDestDir);
-            }
+            removeDirWithSpecialCharacters(appDestDir);
 
             // Make dir with special chars
             if (!appDestDir.mkdir()) {
@@ -155,28 +152,24 @@ public class SpecialCharsTest {
             }
             writeReport(cn, mn, whatIDidReport.toString());
 
-            // Remove dir with special chars
-            if (appDestDir.exists()) {
-                FileUtils.deleteDirectory(appDestDir);
-            }
+            removeDirWithSpecialCharacters(appDestDir);
         }
     }
 
-
     @Test
     public void spacesJVM(TestInfo testInfo) throws IOException, InterruptedException {
-        testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.JVM, "s p a c e s");
+        testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.JVM, "s p a c e s j v m");
     }
 
     @Test
     public void spacesDEV(TestInfo testInfo) throws IOException, InterruptedException {
-        testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.DEV, "s p a c e s");
+        testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.DEV, "s p a c e s d e v");
     }
 
     @Test
     @Tag("native")
     public void spacesNative(TestInfo testInfo) throws IOException, InterruptedException {
-        testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.NATIVE, "s p a c e s");
+        testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.NATIVE, "s p a c e s n a t i v e");
     }
 
     @Test
@@ -193,6 +186,7 @@ public class SpecialCharsTest {
 
     @Test
     @Tag("native")
+    @DisabledOnOs({OS.WINDOWS}) // https://github.com/quarkusio/quarkus/issues/9707
     public void specialNative(TestInfo testInfo) throws IOException, InterruptedException {
         testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.NATIVE, ",;~!@#$%^&()");
     }
@@ -203,12 +197,14 @@ public class SpecialCharsTest {
     }
 
     @Test
+    @DisabledOnOs({OS.WINDOWS}) // https://github.com/quarkusio/quarkus/issues/9707
     public void diacriticsDEV(TestInfo testInfo) throws IOException, InterruptedException {
         testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.DEV, "ěščřžýáíéůú");
     }
 
     @Test
     @Tag("native")
+    @DisabledOnOs({OS.WINDOWS}) // https://github.com/quarkusio/quarkus/issues/9707
     public void diacriticsNative(TestInfo testInfo) throws IOException, InterruptedException {
         testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.NATIVE, "ěščřžýáíéůú");
     }
@@ -226,6 +222,7 @@ public class SpecialCharsTest {
 
     @Test
     @Tag("native")
+    @DisabledOnOs({OS.WINDOWS}) // https://github.com/quarkusio/quarkus/issues/9707
     public void japaneseNative(TestInfo testInfo) throws IOException, InterruptedException {
         testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.NATIVE, "元気かい");
     }
@@ -243,8 +240,20 @@ public class SpecialCharsTest {
 
     @Test
     @Tag("native")
+    @DisabledOnOs({OS.WINDOWS}) // https://github.com/quarkusio/quarkus/issues/9707
     public void otherNative(TestInfo testInfo) throws IOException, InterruptedException {
         testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.NATIVE, "Îñţérñåţîöñåļîžåţîờñ");
+    }
+
+    private void removeDirWithSpecialCharacters(File appDestDir) {
+        // Remove dir with special chars
+        try {
+            if (appDestDir.exists()) {
+                FileUtils.deleteDirectory(appDestDir);
+            }
+        } catch (IOException ignored) {
+            // ignored when the folder could not be deleted.
+        }
     }
 
 }
