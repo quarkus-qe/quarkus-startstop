@@ -77,7 +77,24 @@ public enum WhitelistLogLines {
             // (no explicit configuration, none or multiple JDBC driver extensions)
             // Result of DevServices support https://github.com/quarkusio/quarkus/pull/14960
             Pattern.compile(".*Unable to determine a database type for default datasource.*"),
+    }),
+    // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
+    // Reported by https://github.com/quarkusio/quarkus/issues/14647.
+    WINDOWS_DEV_MODE_ERRORS(new Pattern[]{
+            Pattern.compile(".*Re-run Maven using the -X switch to enable full debug logging.*"),
+            Pattern.compile(".*For more information about the errors and possible solutions, please read the following articles.*"),
+            Pattern.compile(".*Failed to run: Dev mode process did not complete successfully.*"),
+            Pattern.compile(".*http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException.*"),
+            Pattern.compile(".*To see the full stack trace of the errors, re-run Maven with the -e switch.*"),
+            Pattern.compile("\\[ERROR\\] *"),
     });
+    
+    // Depending to the OS and also on the Quarkus extensions, the Native build might print some warnings about duplicate entries
+    private static final Pattern COMMON_WARNING_DUPLICATE_ENTRY_NATIVE = Pattern.compile(".*Duplicate entry about.html entry.*");
+    private static final Pattern COMMON_WARNING_DUPLICATE_ENTRIES_NATIVE = Pattern.compile(".*Dependencies with duplicate files detected.*");
+    // When
+    private static final Pattern WARNING_MISSING_OBJCOPY_NATIVE = Pattern.compile(".*objcopy executable not found in PATH. Debug symbols will not be separated from executable.*");
+    private static final Pattern WARNING_MISSING_OBJCOPY_RESULT_NATIVE = Pattern.compile(".*That will result in a larger native image with debug symbols embedded in it.*");
 
     public final Pattern[] errs;
 
@@ -89,8 +106,27 @@ public enum WhitelistLogLines {
         switch (OS.current()) {
             case MAC:
                 return new Pattern[] {
-                        Pattern.compile(".*objcopy executable not found in PATH. Debug symbols will not be separated from executable.*"),
-                        Pattern.compile(".*That will result in a larger native image with debug symbols embedded in it.*"),
+                        COMMON_WARNING_DUPLICATE_ENTRY_NATIVE,
+                        COMMON_WARNING_DUPLICATE_ENTRIES_NATIVE,
+                        WARNING_MISSING_OBJCOPY_NATIVE,
+                        WARNING_MISSING_OBJCOPY_RESULT_NATIVE,
+                };
+            case WINDOWS:
+                return new Pattern[] {
+                        COMMON_WARNING_DUPLICATE_ENTRY_NATIVE,
+                        COMMON_WARNING_DUPLICATE_ENTRIES_NATIVE,
+                        WARNING_MISSING_OBJCOPY_NATIVE,
+                        WARNING_MISSING_OBJCOPY_RESULT_NATIVE,
+                        Pattern.compile(".*Uber JAR strategy is used for native image source JAR generation on Windows.*"),
+                        // Randomly fails when vertx-cache temporary directory exists. Reported by https://github.com/quarkusio/quarkus/issues/16895
+                        Pattern.compile(".*Unable to make the Vert.x cache directory.*"),
+                        // Randomly prints some SLF4J traces. Reported by https://github.com/quarkusio/quarkus/issues/16896
+                        Pattern.compile(".*SLF4J:.*"),
+                };
+            case LINUX:
+            	return new Pattern[] {
+                        COMMON_WARNING_DUPLICATE_ENTRY_NATIVE,
+                        COMMON_WARNING_DUPLICATE_ENTRIES_NATIVE,
                 };
         }
         return new Pattern[] {};
