@@ -19,17 +19,13 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>io.quarkus.ts.startstop</groupId>
     <artifactId>parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Quarkus StartStop TS: Parent</name>
-
     <properties>
         <quarkus.version>1.13.3.Final</quarkus.version>
         <maven.compiler.source>11</maven.compiler.source>
@@ -45,11 +41,12 @@
         <jboss-logging.version>3.4.1.Final</jboss-logging.version>
         <log4j.version>2.13.2</log4j.version>
         <htmlunit.version>2.46.0</htmlunit.version>
-
+        <formatter-maven-plugin.version>2.15.0</formatter-maven-plugin.version>
+        <impsort-maven-plugin.version>1.6.0</impsort-maven-plugin.version>
+        <xml-format-maven-plugin>3.1.2</xml-format-maven-plugin>
         <!-- Test to be executed by default (should be all of them) -->
         <includeTags>generator,startstop,bomtests,codequarkus,special-chars</includeTags>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.jboss.logging</groupId>
@@ -72,7 +69,6 @@
             <version>${htmlunit.version}</version>
         </dependency>
     </dependencies>
-
     <profiles>
         <profile>
             <id>testsuite</id>
@@ -124,5 +120,96 @@
                 <module>app-full-microprofile</module>
             </modules>
         </profile>
+        <profile>
+            <id>format</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <src.format.goal>format</src.format.goal>
+                <src.sort.goal>sort</src.sort.goal>
+                <xml.format.goal>xml-format</xml.format.goal>
+            </properties>
+        </profile>
+        <profile>
+            <id>validate-format</id>
+            <activation>
+                <property>
+                    <name>validate-format</name>
+                </property>
+            </activation>
+            <properties>
+                <src.format.goal>validate</src.format.goal>
+                <src.sort.goal>check</src.sort.goal>
+                <xml.format.goal>xml-check</xml.format.goal>
+            </properties>
+        </profile>
     </profiles>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>net.revelc.code.formatter</groupId>
+                <artifactId>formatter-maven-plugin</artifactId>
+                <version>${formatter-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>${src.format.goal}</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <artifactId>quarkus-ide-config</artifactId>
+                        <groupId>io.quarkus</groupId>
+                        <version>${quarkus.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <configFile>eclipse-format.xml</configFile>
+                    <lineEnding>LF</lineEnding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>net.revelc.code</groupId>
+                <artifactId>impsort-maven-plugin</artifactId>
+                <version>${impsort-maven-plugin.version}</version>
+                <configuration>
+                    <!-- store outside of target to speed up formatting when mvn clean is used -->
+                    <cachedir>.cache</cachedir>
+                    <groups>java.,javax.,org.,com.</groups>
+                    <staticGroups>*</staticGroups>
+                    <removeUnused>true</removeUnused>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>${src.sort.goal}</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>au.com.acegi</groupId>
+                <artifactId>xml-format-maven-plugin</artifactId>
+                <version>${xml-format-maven-plugin}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>${xml.format.goal}</goal>
+                        </goals>
+                        <configuration>
+                            <indentSize>4</indentSize>
+                            <excludes>
+                                <!-- Exclude files from target folder -->
+                                <exclude>**/target/**/*.xml</exclude>
+                                <!-- Exclude Quarkus main repository -->
+                                <exclude>**/quarkus/**/*.xml</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
