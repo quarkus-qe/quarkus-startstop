@@ -46,6 +46,10 @@
         <xml-format-maven-plugin>3.1.2</xml-format-maven-plugin>
         <!-- Test to be executed by default (should be all of them) -->
         <includeTags>generator,startstop,bomtests,codequarkus,special-chars</includeTags>
+        <!-- Default values for format -->
+        <src.format.goal>format</src.format.goal>
+        <src.sort.goal>sort</src.sort.goal>
+        <xml.format.goal>xml-format</xml.format.goal>
     </properties>
     <dependencies>
         <dependency>
@@ -119,17 +123,6 @@
                 <module>app-jax-rs-minimal</module>
                 <module>app-full-microprofile</module>
             </modules>
-        </profile>
-        <profile>
-            <id>format</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <src.format.goal>format</src.format.goal>
-                <src.sort.goal>sort</src.sort.goal>
-                <xml.format.goal>xml-format</xml.format.goal>
-            </properties>
         </profile>
         <profile>
             <id>validate-format</id>
