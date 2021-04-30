@@ -1,12 +1,12 @@
 package com.example.quarkus.secure;
 
-import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
 
 /**
  * Represent the MP Auth token
@@ -21,18 +21,18 @@ public class MPJWTToken {
     private Long iat; // issued at
     private String sub; // subject
     private String upn; // value for name in Principal
-    private String preferredUsername;  // value for name in Principal
+    private String preferredUsername; // value for name in Principal
     private List<String> groups = new ArrayList<>();
-        /*
-    "iss": "https://server.example.com",
-            "aud": "s6BhdRkqt3",
-            "jti": "a-123",
-            "exp": 1311281970,
-            "iat": 1311280970,
-            "sub": "24400320",
-            "upn": "jdoe@server.example.com",
-            "groups": ["red-group", "green-group", "admin-group", "admin"],
-    */
+    /*
+     * "iss": "https://server.example.com",
+     * "aud": "s6BhdRkqt3",
+     * "jti": "a-123",
+     * "exp": 1311281970,
+     * "iat": 1311280970,
+     * "sub": "24400320",
+     * "upn": "jdoe@server.example.com",
+     * "groups": ["red-group", "green-group", "admin-group", "admin"],
+     */
 
     private List<String> roles;
     private Map<String, String> additionalClaims;
