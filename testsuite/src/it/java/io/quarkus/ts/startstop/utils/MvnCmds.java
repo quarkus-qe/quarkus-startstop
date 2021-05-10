@@ -54,14 +54,14 @@ public enum MvnCmds {
             }
     }),
     MVNW_DEV(new String[][]{
-            new String[]{Commands.MVNW, "quarkus:dev"}
+            new String[]{Commands.mvnw(), "quarkus:dev"}
     }),
     MVNW_JVM(new String[][]{
-        new String[]{Commands.MVNW, "clean", "compile", "quarkus:build", "-Dquarkus.package.output-name=quarkus"},
+        new String[]{Commands.mvnw(), "clean", "compile", "quarkus:build", "-Dquarkus.package.output-name=quarkus"},
         new String[]{"java", "-jar", "target/quarkus-runner.jar"}
     }),
     MVNW_NATIVE(new String[][]{
-        Stream.concat(Stream.of(Commands.MVNW, "clean", "compile", "package", "-Pnative", "-Dquarkus.package.output-name=quarkus"),
+        Stream.concat(Stream.of(Commands.mvnw(), "clean", "compile", "package", "-Pnative", "-Dquarkus.package.output-name=quarkus"),
                 getQuarkusNativeProperties().stream()).toArray(String[]::new),
         new String[]{Commands.isThisWindows ? "target\\quarkus-runner" : "./target/quarkus-runner"}
     });
