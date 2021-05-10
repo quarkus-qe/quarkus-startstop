@@ -19,18 +19,8 @@
  */
 package io.quarkus.ts.startstop.utils;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.jboss.logging.Logger;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import static io.quarkus.ts.startstop.StartStopTest.BASE_DIR;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -49,6 +39,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -63,7 +56,24 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static io.quarkus.ts.startstop.StartStopTest.BASE_DIR;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.jboss.logging.Logger;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * @author Michal Karm Babacek <karm@redhat.com>
@@ -307,11 +317,12 @@ public class Commands {
      * @throws IOException
      */
     public static String download(Collection<CodeQuarkusExtensions> extensions, String destinationZipFile) throws IOException {
+        disableSslVerification();
         String downloadURL = getCodeQuarkusURL() + "/api/download?s=" +
                 extensions.stream().map(x -> x.shortId).collect(Collectors.joining("."));
         try (ReadableByteChannel readableByteChannel = Channels.newChannel(
                 new URL(downloadURL).openStream());
-             FileChannel fileChannel = new FileOutputStream(destinationZipFile).getChannel()) {
+                FileChannel fileChannel = new FileOutputStream(destinationZipFile).getChannel()) {
             fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
         }
         return downloadURL;
@@ -428,7 +439,7 @@ public class Commands {
                 if (!force) {
                     Process p = Runtime.getRuntime().exec(new String[]{
                             BASE_DIR + File.separator + "testsuite" + File.separator + "src" + File.separator + "it" + File.separator + "resources" + File.separator +
-                                    "CtrlC.exe ", Long.toString(pid)});
+                            "CtrlC.exe ", Long.toString(pid)});
                     p.waitFor(1, TimeUnit.MINUTES);
                 }
                 Runtime.getRuntime().exec(new String[]{"cmd", "/C", "taskkill", "/PID", Long.toString(pid), "/F", "/T"});
@@ -454,7 +465,7 @@ public class Commands {
         pa.redirectErrorStream(true);
         Process p = pa.start();
         try (BufferedReader processOutputReader =
-                     new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
+                new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
             String l;
             while ((l = processOutputReader.readLine()) != null) {
                 if (numPattern.matcher(l).matches()) {
@@ -484,7 +495,7 @@ public class Commands {
         pa.redirectErrorStream(true);
         Process p = pa.start();
         try (BufferedReader processOutputReader =
-                     new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
+                new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
             if (isThisWindows) {
                 String l;
                 // TODO: We just get a magical number with all FDs... Is it O.K.?
@@ -528,7 +539,7 @@ public class Commands {
         29,310,015      branch-misses:u           #    3.19% of all branches
 
        3.473028811 seconds time elapsed
-    */
+     */
 
     public static void processStopper(Process p, boolean force) throws InterruptedException, IOException {
         p.children().forEach(child -> {
@@ -542,6 +553,46 @@ public class Commands {
             p.waitFor(3, TimeUnit.MINUTES);
         }
         pidKiller(p.pid(), force);
+    }
+
+    private static void disableSslVerification() {
+        try
+        {
+            // Create a trust manager that does not validate certificate chains
+            TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
+                @Override
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+                @Override
+                public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                }
+                @Override
+                public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                }
+            }
+            };
+
+            // Install the all-trusting trust manager
+            SSLContext sc = SSLContext.getInstance("SSL");
+            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+            // Create all-trusting host name verifier
+            HostnameVerifier allHostsValid = new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            };
+
+            // Install the all-trusting host verifier
+            HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
     }
 
     public static class ProcessRunner implements Runnable {
