@@ -73,6 +73,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*This application uses the MP Metrics API. The micrometer extension currently provides a compatibility layer that supports the MP Metrics API, but metric names and recorded values will be different. Note that the MP Metrics compatibility layer will move to a different extension in the future.*"),
             // kubernetes-client tries to configure client from service account
             Pattern.compile(".*Error reading service account token from.*"),
+            // Maven 3.8.1 throw a warn msg related to a mirror default configuration
+            Pattern.compile(".*org.apache.maven.settings.io.SettingsParseException: Unrecognised tag: 'blocked'.*"),
     });
 
     public final Pattern[] errs;
