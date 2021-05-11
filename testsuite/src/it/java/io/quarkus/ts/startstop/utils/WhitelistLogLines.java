@@ -124,6 +124,10 @@ public enum WhitelistLogLines {
                         Pattern.compile(".*Unable to make the Vert.x cache directory.*"),
                         // Randomly prints some SLF4J traces. Reported by https://github.com/quarkusio/quarkus/issues/16896
                         Pattern.compile(".*SLF4J:.*"),
+                        // When network failures, Windows uses translateErrorToIOException method to throw IO exceptions
+                        // The problem is that the method name contains "Error" and hence it became an offending line.
+                        // For example: this is happening with using Mongo extension (without a Mongo instance).
+                        Pattern.compile(".*translateErrorToIOException.*"),
                 };
             case LINUX:
             	return new Pattern[] {
