@@ -71,11 +71,14 @@ import static io.quarkus.ts.startstop.StartStopTest.BASE_DIR;
 public class Commands {
     private static final Logger LOGGER = Logger.getLogger(Commands.class.getName());
 
-    public static final String MVNW = Commands.isThisWindows ? "mvnw.cmd" : "./mvnw";
     public static final boolean isThisWindows = System.getProperty("os.name").matches(".*[Ww]indows.*");
     private static final Pattern numPattern = Pattern.compile("[ \t]*[0-9]+[ \t]*");
     private static final Pattern quarkusVersionPattern = Pattern.compile("[ \t]*<quarkus.version>([^<]*)</quarkus.version>.*");
     private static final Pattern trailingSlash = Pattern.compile("/+$");
+
+    public static String mvnw() {
+        return Commands.isThisWindows ? "mvnw.cmd" : "./mvnw";
+    }
 
     public static String getArtifactGeneBaseDir() {
         for (String p : new String[]{"ARTIFACT_GENERATOR_WORKSPACE", "artifact.generator.workspace"}) {
