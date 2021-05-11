@@ -130,7 +130,7 @@ public class SpecialCharsTest {
 
             // Test web page
             LOGGER.info("Testing web page content...");
-            int timeout = mvnCmds != MvnCmds.DEV ? 5 : 60;
+            int timeout = mvnCmds != MvnCmds.DEV ? 30 : 120;
             for (String[] urlContent : app.urlContent.urlContent) {
                 WebpageTester.testWeb(urlContent[0], timeout, urlContent[1], false);
             }
