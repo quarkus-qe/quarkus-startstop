@@ -44,6 +44,7 @@
         <formatter-maven-plugin.version>2.15.0</formatter-maven-plugin.version>
         <impsort-maven-plugin.version>1.6.0</impsort-maven-plugin.version>
         <xml-format-maven-plugin>3.1.2</xml-format-maven-plugin>
+        <awaitility.version>4.1.0</awaitility.version>
         <!-- Test to be executed by default (should be all of them) -->
         <includeTags>generator,startstop,bomtests,codequarkus,special-chars</includeTags>
         <!-- Default values for format -->
@@ -122,6 +123,7 @@
                 <module>testsuite</module>
                 <module>app-jax-rs-minimal</module>
                 <module>app-full-microprofile</module>
+                <module>app-live-reload</module>
             </modules>
         </profile>
         <profile>

@@ -40,7 +40,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 public enum Apps {
     JAX_RS_MINIMAL("app-jax-rs-minimal", URLContent.JAX_RS_MINIMAL, WhitelistLogLines.JAX_RS_MINIMAL),
     FULL_MICROPROFILE("app-full-microprofile", URLContent.FULL_MICROPROFILE, WhitelistLogLines.FULL_MICROPROFILE),
-    GENERATED_SKELETON("app-generated-skeleton", URLContent.GENERATED_SKELETON, WhitelistLogLines.GENERATED_SKELETON);
+    GENERATED_SKELETON("app-generated-skeleton", URLContent.GENERATED_SKELETON, WhitelistLogLines.GENERATED_SKELETON),
+    LIVE_RELOAD("app-live-reload", null, null);
 
     public final String dir;
     public final URLContent urlContent;
