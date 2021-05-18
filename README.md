@@ -79,8 +79,10 @@ The goal of this test is to test Quarkus maven artifact generator, i.e. to to us
 empty (Hello World) skeleton and build it in Quarkus dev mode. The objective is to make sure all required
 extensions are correctly found.
 
-Next, the project is run in dev mode, time to the first O.K. request is measured, a ```.java``` file is changed and the time
-it took to get the expected results after hot reload is measured.
+Next, the project is run in dev mode, time to the first O.K. request is measured. Then, an existing ```.java``` file
+is changed and a new one is added, which causes hot reload. After that, a request to the modified file is issued,
+and the time it took to get the expected results is measured. Also, separate request to the added file is issued
+to verify that the new resource has been loaded. Response time is not measured in this case.
 
 The whole run is executed as a warm-up to download the Internet and then again to measure the times.
 The properties for thresholds are stored in [app-generated-skeleton/threshold.properties](./app-generated-skeleton/threshold.properties).
