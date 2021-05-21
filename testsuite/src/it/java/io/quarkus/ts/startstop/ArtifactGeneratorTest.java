@@ -19,37 +19,10 @@
  */
 package io.quarkus.ts.startstop;
 
-import io.quarkus.ts.startstop.utils.Apps;
-import io.quarkus.ts.startstop.utils.Commands;
-import io.quarkus.ts.startstop.utils.FakeOIDCServer;
-import io.quarkus.ts.startstop.utils.LogBuilder;
-import io.quarkus.ts.startstop.utils.Logs;
-import io.quarkus.ts.startstop.utils.MvnCmds;
-import io.quarkus.ts.startstop.utils.TestFlags;
-import io.quarkus.ts.startstop.utils.URLContent;
-import io.quarkus.ts.startstop.utils.WebpageTester;
-import org.jboss.logging.Logger;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
-
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import static io.quarkus.ts.startstop.utils.Commands.adjustPrettyPrintForJsonLogging;
 import static io.quarkus.ts.startstop.utils.Commands.cleanDirOrFile;
 import static io.quarkus.ts.startstop.utils.Commands.confAppPropsForSkeleton;
+import static io.quarkus.ts.startstop.utils.Commands.copyFileForSkeleton;
 import static io.quarkus.ts.startstop.utils.Commands.getArtifactGeneBaseDir;
 import static io.quarkus.ts.startstop.utils.Commands.getGeneratorCommand;
 import static io.quarkus.ts.startstop.utils.Commands.getOpenedFDs;
@@ -69,6 +42,35 @@ import static io.quarkus.ts.startstop.utils.Logs.getLogsDir;
 import static io.quarkus.ts.startstop.utils.Logs.parseStartStopTimestamps;
 import static io.quarkus.ts.startstop.utils.Logs.writeReport;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Date;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.jboss.logging.Logger;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+
+import io.quarkus.ts.startstop.utils.Apps;
+import io.quarkus.ts.startstop.utils.Commands;
+import io.quarkus.ts.startstop.utils.FakeOIDCServer;
+import io.quarkus.ts.startstop.utils.LogBuilder;
+import io.quarkus.ts.startstop.utils.Logs;
+import io.quarkus.ts.startstop.utils.MvnCmds;
+import io.quarkus.ts.startstop.utils.TestFlags;
+import io.quarkus.ts.startstop.utils.URLContent;
+import io.quarkus.ts.startstop.utils.WebpageTester;
 
 /**
  * Tests for quarkus-maven-plugin generator
@@ -233,6 +235,7 @@ public class ArtifactGeneratorTest {
             }
 
             LOGGER.info("Testing reload...");
+            // modify existing class
             Path srcFile = Paths.get(appDir + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator +
                     "org" + File.separator + "my" + File.separator + "group" + File.separator + "SpringGreetingController.java");
             appendlnSection(whatIDidReport, "Reloading class: " + srcFile.toAbsolutePath());
@@ -240,8 +243,19 @@ public class ArtifactGeneratorTest {
                 Files.write(srcFile, src.map(l -> l.replaceAll("Hello", "Bye")).collect(Collectors.toList()));
             }
 
+            // add new class
+            Path addedFile = Paths
+                    .get(appDir + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator +
+                            "org" + File.separator + "my" + File.separator + "group" + File.separator + "AddedController.java");
+            appendlnSection(whatIDidReport, "Adding class: " + addedFile.toAbsolutePath());
+            copyFileForSkeleton("AddedController.java", addedFile);
+
+            // test modified class and measure time
             long timeToReloadedOKRequest = WebpageTester.testWeb(skeletonApp.urlContent[1][0], 60,
                     skeletonApp.urlContent[1][1], true);
+
+            // test added class
+            WebpageTester.testWeb(skeletonApp.urlContent[2][0], 60, skeletonApp.urlContent[2][1], false);
 
             LOGGER.info("Terminate and scan logs...");
             pA.getInputStream().available();

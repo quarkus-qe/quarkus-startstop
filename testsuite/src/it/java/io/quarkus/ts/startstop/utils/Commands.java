@@ -391,10 +391,15 @@ public class Commands {
     // TODO we should get rid of it once Quarkus progresses with walid config per extension in generated examples
     public static void confAppPropsForSkeleton(String appDir) throws IOException {
         // Config, see app-generated-skeleton/README.md
-        String appPropsSrc = BASE_DIR + File.separator + Apps.GENERATED_SKELETON.dir + File.separator + "application.properties";
-        String appPropsDst = appDir + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "application.properties";
-        Files.copy(Paths.get(appPropsSrc),
-                Paths.get(appPropsDst), StandardCopyOption.REPLACE_EXISTING);
+        final String appRelativePath =
+                "src" + File.separator + "main" + File.separator + "resources" + File.separator + "application.properties";
+        copyFileForSkeleton("application.properties", Paths.get(appDir + File.separator + appRelativePath));
+    }
+
+    public static void copyFileForSkeleton(String skeletonFileRelativePath, Path destPath)
+            throws IOException {
+        final String srcPath = BASE_DIR + File.separator + Apps.GENERATED_SKELETON.dir + File.separator + skeletonFileRelativePath;
+        Files.copy(Paths.get(srcPath), destPath, StandardCopyOption.REPLACE_EXISTING);
     }
 
     public static void adjustPrettyPrintForJsonLogging(String appDir) throws IOException {
