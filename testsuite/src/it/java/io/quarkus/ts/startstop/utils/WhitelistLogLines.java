@@ -77,8 +77,10 @@ public enum WhitelistLogLines {
             // (no explicit configuration, none or multiple JDBC driver extensions)
             // Result of DevServices support https://github.com/quarkusio/quarkus/pull/14960
             Pattern.compile(".*Unable to determine a database type for default datasource.*"),
-            // Maven 3.8.1 throw a warn msg related to a mirror default configuration
-            Pattern.compile(".*org.apache.maven.settings.io.SettingsParseException: Unrecognised tag: 'blocked'.*"),
+            // Maven 3.8.1 throw a warn msg related to a mirror default configuration (next 3 patterns)
+            Pattern.compile(".*Unrecognised tag: 'blocked'.*"),
+            Pattern.compile(".*Some problems were encountered while building the effective settings.*"),
+            Pattern.compile("\\[WARNING\\] "),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
