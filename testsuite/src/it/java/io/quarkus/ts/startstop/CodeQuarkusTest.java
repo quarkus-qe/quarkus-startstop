@@ -158,7 +158,7 @@ public class CodeQuarkusTest {
             pA = runCommand(cmd, appDir, runLogA);
             
             // It takes time to download the Internet
-            long timeoutS = 10 * 60;
+            long timeoutS = 10 * 90;
             LOGGER.info("Timeout: " + timeoutS + "s. Waiting for the web content...");
             WebpageTester.testWeb(skeletonApp.urlContent[0][0], timeoutS, skeletonApp.urlContent[0][1], false);
             LOGGER.info("Terminating and scanning logs...");
