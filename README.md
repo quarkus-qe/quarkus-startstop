@@ -238,6 +238,13 @@ Results in:
 [INFO] 
 ```
 
+## Debugging
+To debug particular test in IDEA, open Maven tab, select module and lifecycle phase e.x. (module: testsuite, phase: verify),
+right click to create a new configuration. Parameters Tab -> Command line, specify full Maven command you are using 
+to run the test and add `-DforkCount=0`  
+Example: `verify -Ptestsuite -Dtest=CodeQuarkusTest#supportedExtensionsSubsetC -DforkCount=0 -f pom.xml`  
+Set the breakpoint where needed and click on green bug symbol on top bar of IDEA (make sure a new configuration is selected).
+
 ## Troubleshooting
 To help to troubleshoot the issues, some performance insights from the application are needed.
 One of the best way to gather performance insights is to generate CPU and allocation FlameGraphs using Async Profiler.

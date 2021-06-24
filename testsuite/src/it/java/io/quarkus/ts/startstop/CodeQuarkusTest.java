@@ -84,12 +84,13 @@ public class CodeQuarkusTest {
     public static final List<List<CodeQuarkusExtensions>> mixedEx = CodeQuarkusExtensions.partition(1, CodeQuarkusExtensions.Flag.MIXED);
     
     public static final Stream<CodeQuarkusExtensions> supportedExWithCodeStarter() {
-        return Arrays.asList(CodeQuarkusExtensions.QUARKUS_CONFIG_YAML,
-                CodeQuarkusExtensions.QUARKUS_LOGGING_JSON,
+        return Arrays.asList(
+                //CodeQuarkusExtensions.QUARKUS_CONFIG_YAML,
+                CodeQuarkusExtensions.QUARKUS_QUTE, // This is TECH-PREVIEW
+                CodeQuarkusExtensions.QUARKUS_WEBSOCKETS,
                 CodeQuarkusExtensions.QUARKUS_RESTEASY,
                 CodeQuarkusExtensions.QUARKUS_RESTEASY_JACKSON,
-                CodeQuarkusExtensions.QUARKUS_SPRING_WEB,
-                CodeQuarkusExtensions.QUARKUS_QUTE).stream();
+                CodeQuarkusExtensions.QUARKUS_SPRING_WEB).stream();
     }
 
     public void testRuntime(TestInfo testInfo, List<CodeQuarkusExtensions> extensions, MvnCmds mvnCmds) throws Exception {
@@ -159,7 +160,7 @@ public class CodeQuarkusTest {
             pA = runCommand(cmd, appDir, runLogA);
             
             // It takes time to download the Internet
-            long timeoutS = 10 * 60;
+            long timeoutS = 1 * 60;
             LOGGER.info("Timeout: " + timeoutS + "s. Waiting for the web content...");
             WebpageTester.testWeb(skeletonApp.urlContent[0][0], timeoutS, skeletonApp.urlContent[0][1], false);
             LOGGER.info("Terminating and scanning logs...");
@@ -200,7 +201,9 @@ public class CodeQuarkusTest {
 
     @Test
     public void supportedExtensionsSubsetC(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedEx.get(2), MvnCmds.MVNW_DEV);
+        List<CodeQuarkusExtensions> supportedExtensionsSubsetC = supportedEx.get(2);
+        supportedExtensionsSubsetC.add(CodeQuarkusExtensions.QUARKUS_RESTEASY);
+        testRuntime(testInfo, supportedExtensionsSubsetC, MvnCmds.MVNW_DEV);
     }
 
     @Test
