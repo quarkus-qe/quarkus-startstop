@@ -45,8 +45,8 @@ public class JSONtoEnum {
             if (m.matches() && m.groupCount() == 4) {
                 String id = m.group(1);
                 if (!usedIds.contains(id)) {
-                    String name = m.group(2);
-                    String shortId = m.group(3);
+                    String shortId = m.group(2);
+                    String name = m.group(3);
                     boolean supported = m.group(4).contains("supported");
                     String label = id.replace("-", "_").toUpperCase();
                     s.append("    ");
