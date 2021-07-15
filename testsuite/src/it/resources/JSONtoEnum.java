@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
  * @author Michal Karm Babacek <karm@redhat.com>
  */
 public class JSONtoEnum {
-    public static Pattern pattern = Pattern.compile("(?i).*\"id\":\"[^:]*:([^\"]*)\".*\"name\":\"([^\"]*)\".*\"shortId\":\"([^\"]*)\".*\"tags\":\\[([^]]*)].*");
+    public static Pattern pattern = Pattern.compile("(?i).*\"id\":\"[^:]*:([^\"]*)\".*\"shortId\":\"([^\"]*)\".*\"name\":\"([^\"]*)\".*\"tags\":\\[([^]]*)].*");
 
     public static void main(String[] args) throws Exception {
         if (args.length < 1 || !args[0].startsWith("http")) {
