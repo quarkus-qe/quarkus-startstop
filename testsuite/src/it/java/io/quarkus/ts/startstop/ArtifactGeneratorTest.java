@@ -161,7 +161,8 @@ public class ArtifactGeneratorTest {
             "spring-cloud-config-client",
             "spring-scheduled",
             "spring-cache",
-            "websockets",
+            // TODO https://github.com/quarkusio/quarkus/issues/18843
+            // "websockets",
     };
 
     public void testRuntime(TestInfo testInfo, String[] extensions, Set<TestFlags> flags) throws Exception {
@@ -236,11 +237,15 @@ public class ArtifactGeneratorTest {
             LOGGER.info("Testing reload...");
             // modify existing class
             Path srcFile = Paths.get(appDir + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator +
-                    "org" + File.separator + "my" + File.separator + "group" + File.separator + "SpringGreetingController.java");
+                    "org" + File.separator + "my" + File.separator + "group" + File.separator + "GreetingController.java");
             appendlnSection(whatIDidReport, "Reloading class: " + srcFile.toAbsolutePath());
             try (Stream<String> src = Files.lines(srcFile)) {
                 Files.write(srcFile, src.map(l -> l.replaceAll("Hello", "Bye")).collect(Collectors.toList()));
             }
+
+            // test modified class and measure time
+            long timeToReloadedOKRequest = WebpageTester.testWeb(skeletonApp.urlContent[1][0], 60,
+                    skeletonApp.urlContent[1][1], true);
 
             // add new class
             Path addedFile = Paths
@@ -248,10 +253,6 @@ public class ArtifactGeneratorTest {
                             "org" + File.separator + "my" + File.separator + "group" + File.separator + "AddedController.java");
             appendlnSection(whatIDidReport, "Adding class: " + addedFile.toAbsolutePath());
             copyFileForSkeleton("AddedController.java", addedFile);
-
-            // test modified class and measure time
-            long timeToReloadedOKRequest = WebpageTester.testWeb(skeletonApp.urlContent[1][0], 60,
-                    skeletonApp.urlContent[1][1], true);
 
             // test added class
             WebpageTester.testWeb(skeletonApp.urlContent[2][0], 60, skeletonApp.urlContent[2][1], false);

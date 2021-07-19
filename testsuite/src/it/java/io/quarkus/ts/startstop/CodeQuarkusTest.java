@@ -49,6 +49,7 @@ import java.util.stream.Stream;
 
 import static io.quarkus.ts.startstop.utils.Commands.adjustPrettyPrintForJsonLogging;
 import static io.quarkus.ts.startstop.utils.Commands.cleanDirOrFile;
+import static io.quarkus.ts.startstop.utils.Commands.disableDevServices;
 import static io.quarkus.ts.startstop.utils.Commands.download;
 import static io.quarkus.ts.startstop.utils.Commands.getArtifactGeneBaseDir;
 import static io.quarkus.ts.startstop.utils.Commands.getBuildCommand;
@@ -84,11 +85,12 @@ public class CodeQuarkusTest {
     public static final List<List<CodeQuarkusExtensions>> mixedEx = CodeQuarkusExtensions.partition(1, CodeQuarkusExtensions.Flag.MIXED);
     
     public static final Stream<CodeQuarkusExtensions> supportedExWithCodeStarter() {
-        return Arrays.asList(CodeQuarkusExtensions.QUARKUS_CONFIG_YAML,
+        return Arrays.asList(
                 CodeQuarkusExtensions.QUARKUS_LOGGING_JSON,
                 CodeQuarkusExtensions.QUARKUS_RESTEASY,
                 CodeQuarkusExtensions.QUARKUS_RESTEASY_JACKSON,
                 CodeQuarkusExtensions.QUARKUS_SPRING_WEB,
+                CodeQuarkusExtensions.QUARKUS_WEBSOCKETS,
                 CodeQuarkusExtensions.QUARKUS_QUTE).stream();
     }
 
@@ -118,7 +120,7 @@ public class CodeQuarkusTest {
             LOGGER.info("Removing repositories and pluginRepositories from pom.xml ...");
             removeRepositoriesAndPluginRepositories(appDir + File.separator + "pom.xml");
             adjustPrettyPrintForJsonLogging(appDir.getAbsolutePath());
-            
+            disableDevServices(appDir.getAbsolutePath());
             List<String> cmd;
             // Build
             if (mvnCmds != MvnCmds.MVNW_DEV) {
@@ -200,7 +202,11 @@ public class CodeQuarkusTest {
 
     @Test
     public void supportedExtensionsSubsetC(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedEx.get(2), MvnCmds.MVNW_DEV);
+        List<CodeQuarkusExtensions> supportedExtensionsSubsetC = supportedEx.get(2);
+        // resteasy or spring-web extension is needed to provide index.html file
+        // content from index.html file is checked to ensure the application is up and running
+        supportedExtensionsSubsetC.add(CodeQuarkusExtensions.QUARKUS_RESTEASY);
+        testRuntime(testInfo, supportedExtensionsSubsetC, MvnCmds.MVNW_DEV);
     }
 
     @Test
@@ -214,7 +220,6 @@ public class CodeQuarkusTest {
     }
     
     @Test
-    @Disabled("https://github.com/quarkusio/quarkus/issues/15352")
     public void notSupportedExtensionsSubsetB(TestInfo testInfo) throws Exception {
         testRuntime(testInfo, notSupportedEx.get(0).subList(Math.min(20, notSupportedEx.get(0).size()), Math.min(40, notSupportedEx.get(0).size())), MvnCmds.MVNW_DEV);
     }

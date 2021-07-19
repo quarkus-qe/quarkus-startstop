@@ -40,6 +40,7 @@ public enum WhitelistLogLines {
             Pattern.compile(".*TestSecureController.java.*"),
             // Well, the RestClient demo probably should do some cleanup before shutdown...?
             Pattern.compile(".*Closing a class org.jboss.resteasy.client.jaxrs.engines.ApacheHttpClient.*"),
+            Pattern.compile(".*Class does not exist in ClassLoader QuarkusClassLoader.*"), // TODO remove when resolved https://github.com/quarkusio/quarkus/issues/18746
     }),
     GENERATED_SKELETON(new Pattern[]{
             // It so happens that the dummy skeleton tries to find Mongo. This is expected.
@@ -56,6 +57,11 @@ public enum WhitelistLogLines {
                     "quarkus.oidc-client.token-path|" +
                     "quarkus.oidc-client.discovery-enabled|" +
                     "quarkus.smallrye-jwt.enabled|" +
+                    "quarkus.datasource.devservices|" +
+                    "quarkus.kafka.devservices.enabled|" +
+                    "quarkus.mongodb.devservices.enabled|" +
+                    "quarkus.redis.devservices.enabled|" +
+                    "quarkus.jaeger.enabled|" +
                     "quarkus.jaeger.service-name|" +
                     "quarkus.jaeger.sampler-param|" +
                     "quarkus.jaeger.endpoint|" +
@@ -79,6 +85,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Unable to determine a database type for default datasource.*"),
             // Maven 3.8.1 throw a warn msg related to a mirror default configuration
             Pattern.compile(".*org.apache.maven.settings.io.SettingsParseException: Unrecognised tag: 'blocked'.*"),
+            Pattern.compile(".*io.qua.arc.impl.*"), // TODO remove when resolved https://github.com/quarkusio/quarkus/issues/18105
+            Pattern.compile(".*Class does not exist in ClassLoader QuarkusClassLoader.*"), // TODO remove when resolved https://github.com/quarkusio/quarkus/issues/18746
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.

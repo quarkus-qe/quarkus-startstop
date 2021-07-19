@@ -219,12 +219,17 @@ public class Commands {
         cleanDirOrFile(target, logs);
     }
 
-    public static void cleanDirOrFile(String... path) {
-        for (String s : path) {
-            try {
-                FileUtils.forceDelete(new File(s));
-            } catch (IOException e) {
-                //Silence is golden
+    public static void cleanDirOrFile(String... paths) {
+        for (String path : paths) {
+            File file = new File(path);
+            if (file.exists()) {
+                try {
+                    FileUtils.forceDelete(file);
+                } catch (IOException e) {
+                    LOGGER.warn("Failed to delete path " + path, e);
+                }
+            } else {
+                LOGGER.warn("Path " + path + " doesn't exist");
             }
         }
     }
@@ -407,7 +412,7 @@ public class Commands {
         Path appYaml = Paths.get(appDir + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "application.yml");
 
         adjustFileContent(appProps, "quarkus.log.console.json.pretty-print=true", "quarkus.log.console.json.pretty-print=false");
-        adjustFileContent(appYaml, "pretty-print: true", "pretty-print: fase");
+        adjustFileContent(appYaml, "pretty-print: true", "pretty-print: false");
     }
 
     private static void adjustFileContent(Path path, String regex, String replacement) throws IOException {
@@ -415,6 +420,25 @@ public class Commands {
             String content = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
             content = content.replaceAll(regex, replacement);
             Files.write(path, content.getBytes(StandardCharsets.UTF_8));
+        }
+    }
+
+    public static void disableDevServices(String appDir) throws IOException {
+        Path appProps = Paths.get(appDir + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "application.properties");
+
+        String disabledDevServices =
+                "quarkus.datasource.devservices=false\n" +
+                "quarkus.kafka.devservices.enabled=false\n" +
+                "quarkus.mongodb.devservices.enabled=false\n" +
+                "quarkus.redis.devservices.enabled=false\n"
+                ;
+
+        if (Files.exists(appProps)) {
+            String content = new String(Files.readAllBytes(appProps), StandardCharsets.UTF_8);
+            content = content + "\n" + disabledDevServices;
+            Files.write(appProps, content.getBytes(StandardCharsets.UTF_8));
+        } else {
+            Files.write(appProps, disabledDevServices.getBytes(StandardCharsets.UTF_8));
         }
     }
 
