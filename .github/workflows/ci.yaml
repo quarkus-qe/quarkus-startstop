@@ -158,8 +158,7 @@ jobs:
     strategy:
       matrix:
         java: [ 11 ]
-        # Version 21.1 is not working due to https://github.com/quarkusio/quarkus/issues/14904
-        graalvm-version: [ "21.0.0.2.java11" ]
+        graalvm-version: [ "21.1.0.java11" ]
     steps:
       - uses: actions/checkout@v1
       - uses: actions/cache@v1
