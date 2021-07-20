@@ -17,10 +17,10 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.auth.JWTOptions;
 import io.vertx.ext.auth.PubSecKeyOptions;
 import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.auth.jwt.JWTAuthOptions;
-import io.vertx.ext.jwt.JWTOptions;
 
 @Path("/secured")
 @ApplicationScoped
@@ -49,7 +49,7 @@ public class TestSecureController {
         JWTAuth provider = JWTAuth.create(null, new JWTAuthOptions()
                 .addPubSecKey(new PubSecKeyOptions()
                         .setAlgorithm("RS256")
-                        .setSecretKey(key)));
+                        .setBuffer(key))); // Set up private key
 
         MPJWTToken token = new MPJWTToken();
         token.setAud("targetService");
@@ -72,10 +72,8 @@ public class TestSecureController {
                         TestSecureController.class.getResourceAsStream("/privateKey.pem"), StandardCharsets.US_ASCII))) {
             String line;
             while ((line = is.readLine()) != null) {
-                if (!line.startsWith("-")) {
-                    sb.append(line);
-                    sb.append('\n');
-                }
+                sb.append(line);
+                sb.append('\n');
             }
         } catch (IOException e) {
             e.printStackTrace();
