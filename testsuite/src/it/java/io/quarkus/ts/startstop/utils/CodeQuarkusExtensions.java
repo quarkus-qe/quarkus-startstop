@@ -78,8 +78,7 @@ public enum CodeQuarkusExtensions {
     QUARKUS_AMAZON_SES("quarkus-amazon-ses", "Amazon SES", "zSW", false),
     QUARKUS_AMAZON_SNS("quarkus-amazon-sns", "Amazon SNS", "zXr", false),
     QUARKUS_AMAZON_SQS("quarkus-amazon-sqs", "Amazon SQS", "zYW", false),
-    // https://github.com/quarkusio/quarkus/issues/14445
-    // BLAZE_PERSISTENCE_INTEGRATION_QUARKUS("blaze-persistence-integration-quarkus", "Blaze-Persistence", "weW", false),
+    BLAZE_PERSISTENCE_INTEGRATION_QUARKUS("blaze-persistence-integration-quarkus", "Blaze-Persistence", "weW", false),
     QUARKUS_CACHE("quarkus-cache", "Cache", "W1i", true),
     // https://github.com/datastax/cassandra-quarkus/issues/144
     // CASSANDRA_QUARKUS_CLIENT("cassandra-quarkus-client", "DataStax Apache Cassandra client", "mj6", false),

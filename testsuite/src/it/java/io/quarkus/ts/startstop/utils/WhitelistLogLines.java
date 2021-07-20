@@ -128,8 +128,6 @@ public enum WhitelistLogLines {
                         WARNING_MISSING_OBJCOPY_NATIVE,
                         WARNING_MISSING_OBJCOPY_RESULT_NATIVE,
                         Pattern.compile(".*Uber JAR strategy is used for native image source JAR generation on Windows.*"),
-                        // Randomly fails when vertx-cache temporary directory exists. Reported by https://github.com/quarkusio/quarkus/issues/16895
-                        Pattern.compile(".*Unable to make the Vert.x cache directory.*"),
                         // Randomly prints some SLF4J traces. Reported by https://github.com/quarkusio/quarkus/issues/16896
                         Pattern.compile(".*SLF4J:.*"),
                         // When network failures, Windows uses translateErrorToIOException method to throw IO exceptions
