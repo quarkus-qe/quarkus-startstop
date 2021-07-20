@@ -198,6 +198,8 @@
                                 <exclude>**/target/**/*.xml</exclude>
                                 <!-- Exclude Quarkus main repository -->
                                 <exclude>**/quarkus/**/*.xml</exclude>
+                                <!-- Exclude .idea -->
+                                <exclude>.idea/**</exclude>
                             </excludes>
                         </configuration>
                     </execution>
