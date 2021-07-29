@@ -59,6 +59,7 @@ public enum WhitelistLogLines {
                     "quarkus.smallrye-jwt.enabled|" +
                     "quarkus.datasource.devservices|" +
                     "quarkus.kafka.devservices.enabled|" +
+                    "quarkus.amqp.devservices.enabled|" +
                     "quarkus.mongodb.devservices.enabled|" +
                     "quarkus.redis.devservices.enabled|" +
                     "quarkus.jaeger.enabled|" +

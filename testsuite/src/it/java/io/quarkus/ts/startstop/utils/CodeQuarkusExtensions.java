@@ -92,7 +92,8 @@ public enum CodeQuarkusExtensions {
     QUARKUS_HIBERNATE_REACTIVE("quarkus-hibernate-reactive", "Hibernate Reactive", "r1s", false),
     QUARKUS_HIBERNATE_REACTIVE_PANACHE("quarkus-hibernate-reactive-panache", "Hibernate Reactive with Panache", "20r", false),
     QUARKUS_HIBERNATE_SEARCH_ORM_ELASTICSEARCH("quarkus-hibernate-search-orm-elasticsearch", "Hibernate Search + Elasticsearch", "oHk", false),
-    QUARKUS_INFINISPAN_CLIENT("quarkus-infinispan-client", "Infinispan Client", "sOv", true),
+    // TODO https://github.com/quarkusio/quarkus/issues/19081
+    // QUARKUS_INFINISPAN_CLIENT("quarkus-infinispan-client", "Infinispan Client", "sOv", true),
     QUARKUS_LIQUIBASE("quarkus-liquibase", "Liquibase", "Xkd", false),
     QUARKUS_MONGODB_CLIENT("quarkus-mongodb-client", "MongoDB client", "ThS", false),
     QUARKUS_MONGODB_PANACHE("quarkus-mongodb-panache", "MongoDB with Panache", "y3v", false),
