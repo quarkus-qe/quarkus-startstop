@@ -429,6 +429,7 @@ public class Commands {
         String disabledDevServices =
                 "quarkus.datasource.devservices=false\n" +
                 "quarkus.kafka.devservices.enabled=false\n" +
+                "quarkus.amqp.devservices.enabled=false\n" +
                 "quarkus.mongodb.devservices.enabled=false\n" +
                 "quarkus.redis.devservices.enabled=false\n"
                 ;
