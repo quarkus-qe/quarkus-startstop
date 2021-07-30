@@ -88,6 +88,7 @@ public enum WhitelistLogLines {
             Pattern.compile(".*org.apache.maven.settings.io.SettingsParseException: Unrecognised tag: 'blocked'.*"),
             Pattern.compile(".*io.qua.arc.impl.*"), // TODO remove when resolved https://github.com/quarkusio/quarkus/issues/18105
             Pattern.compile(".*Class does not exist in ClassLoader QuarkusClassLoader.*"), // TODO remove when resolved https://github.com/quarkusio/quarkus/issues/18746
+            Pattern.compile(".*Detected a split package usage which is considered a bad practice and should be avoided.*"), // TODO remove when resolved https://github.com/quarkusio/quarkus/issues/19092
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.

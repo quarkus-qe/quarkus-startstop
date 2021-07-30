@@ -64,7 +64,6 @@ import org.junit.jupiter.api.TestInfo;
 
 import io.quarkus.ts.startstop.utils.Apps;
 import io.quarkus.ts.startstop.utils.Commands;
-import io.quarkus.ts.startstop.utils.FakeOIDCServer;
 import io.quarkus.ts.startstop.utils.LogBuilder;
 import io.quarkus.ts.startstop.utils.Logs;
 import io.quarkus.ts.startstop.utils.MvnCmds;
@@ -118,7 +117,8 @@ public class ArtifactGeneratorTest {
             "vertx",
             "vertx-web",
             "grpc",
-            "infinispan-client",
+//             TODO https://github.com/quarkusio/quarkus/issues/19081
+//            "infinispan-client",
             "cache",
             "micrometer",
             "quarkus-openshift-client",
@@ -183,7 +183,6 @@ public class ArtifactGeneratorTest {
         } else {
             LOGGER.info(mn + ": Testing setup: " + String.join(" ", generatorCmd));
         }
-        FakeOIDCServer fakeOIDCServer = new FakeOIDCServer(6661, "localhost");
 
         try {
             // Cleanup
@@ -290,7 +289,6 @@ public class ArtifactGeneratorTest {
             appendln(whatIDidReport, log.headerMarkdown + "\n" + log.lineMarkdown);
             checkThreshold(Apps.GENERATED_SKELETON, MvnCmds.GENERATOR, SKIP, timeToFirstOKRequest, timeToReloadedOKRequest);
         } finally {
-            fakeOIDCServer.stop();
             // Make sure processes are down even if there was an exception / failure
             if (pA != null) {
                 processStopper(pA, true);

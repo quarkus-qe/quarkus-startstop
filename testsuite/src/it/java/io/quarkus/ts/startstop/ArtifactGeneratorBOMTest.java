@@ -21,7 +21,6 @@ package io.quarkus.ts.startstop;
 
 import io.quarkus.ts.startstop.utils.Apps;
 import io.quarkus.ts.startstop.utils.Commands;
-import io.quarkus.ts.startstop.utils.FakeOIDCServer;
 import io.quarkus.ts.startstop.utils.MvnCmds;
 import io.quarkus.ts.startstop.utils.TestFlags;
 import io.quarkus.ts.startstop.utils.URLContent;
@@ -95,8 +94,6 @@ public class ArtifactGeneratorBOMTest {
 
         URLContent skeletonApp = Apps.GENERATED_SKELETON.urlContent;
 
-        FakeOIDCServer fakeOIDCServer = new FakeOIDCServer(6661, "localhost");
-
         try {
             // Cleanup
             cleanDirOrFile(appDir.getAbsolutePath(), logsDir);
@@ -160,8 +157,6 @@ public class ArtifactGeneratorBOMTest {
 
             checkJarSuffixes(flags, appDir);
         } finally {
-            fakeOIDCServer.stop();
-
             // Make sure processes are down even if there was an exception / failure
             if (pA != null) {
                 processStopper(pA, true);
@@ -203,27 +198,4 @@ public class ArtifactGeneratorBOMTest {
         testRuntime(testInfo, supportedExtensionsSubsetSetB, EnumSet.of(TestFlags.PRODUCT_BOM));
     }
 
-    @Test
-    @Tag("community")
-    public void quarkusUniverseBomExtensionsA(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSubsetSetA, EnumSet.of(TestFlags.UNIVERSE_BOM));
-    }
-
-    @Test
-    @Tag("community")
-    public void quarkusUniverseBomExtensionsB(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSubsetSetB, EnumSet.of(TestFlags.UNIVERSE_BOM));
-    }
-
-    @Test
-    @Tag("product")
-    public void quarkusUniverseProductBomExtensionsA(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSubsetSetA, EnumSet.of(TestFlags.UNIVERSE_PRODUCT_BOM));
-    }
-
-    @Test
-    @Tag("product")
-    public void quarkusUniverseProductBomExtensionsB(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedExtensionsSubsetSetB, EnumSet.of(TestFlags.UNIVERSE_PRODUCT_BOM));
-    }
 }

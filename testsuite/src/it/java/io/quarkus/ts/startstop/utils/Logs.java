@@ -148,7 +148,7 @@ public class Logs {
     }
 
     public static void checkJarSuffixes(Set<TestFlags> flags, File appDir) throws IOException {
-        if (flags.contains(TestFlags.PRODUCT_BOM) || flags.contains(TestFlags.UNIVERSE_PRODUCT_BOM)) {
+        if (flags.contains(TestFlags.PRODUCT_BOM)) {
             List<Path> possiblyUnwantedArtifacts = Logs.listJarsFailingNameCheck(
                     appDir.getAbsolutePath() + File.separator + "target" + File.separator + "lib");
             List<String> reportArtifacts = new ArrayList<>();

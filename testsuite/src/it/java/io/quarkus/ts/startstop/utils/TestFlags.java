@@ -27,9 +27,7 @@ package io.quarkus.ts.startstop.utils;
 public enum TestFlags {
     WARM_UP("This run is just a warm up for Dev mode."),
     QUARKUS_BOM("platformArtifactId will use quarkus-bom"),
-    PRODUCT_BOM("platformArtifactId will use quarkus-product-bom"),
-    UNIVERSE_BOM("platformArtifactId will use quarkus-universe-bom"),
-    UNIVERSE_PRODUCT_BOM("platformArtifactId will use quarkus-universe-bom, and -DplatformGroupId=com.redhat.quarkus");
+    PRODUCT_BOM("platformArtifactId will use quarkus-product-bom");
     public final String label;
 
     TestFlags(String label) {
