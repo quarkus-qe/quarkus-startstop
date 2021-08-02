@@ -47,9 +47,6 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * @author Michal Karm Babacek <karm@redhat.com>
- */
 public class Logs {
     private static final Logger LOGGER = Logger.getLogger(Logs.class.getName());
 

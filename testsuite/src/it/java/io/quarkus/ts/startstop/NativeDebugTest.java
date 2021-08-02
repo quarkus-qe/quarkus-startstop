@@ -30,8 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Tests Quarkus native mode with "-Dquarkus.native.debug.enabled=true"
  * Verify that debug symbols are created as well as the source cache
- *
- * @author Kyrylo Shpak <kshpak@redhat.com>
  */
 @Tag("native")
 public class NativeDebugTest {

@@ -30,8 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Tests for checking presence of element on webpage
- *
- * @author Shpak Kyrylo <kshpak@redhat.com>
  */
 @Tag("codequarkus")
 public class CodeQuarkusSiteTest {

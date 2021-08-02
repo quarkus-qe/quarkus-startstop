@@ -42,8 +42,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests for running Quarkus applications on path with special characters
- *
- * @author Ondrej Machala <omachala@redhat.com>
  */
 @Tag("special-chars")
 public class SpecialCharsTest {

@@ -73,8 +73,6 @@ import io.quarkus.ts.startstop.utils.WebpageTester;
 
 /**
  * Tests for quarkus-maven-plugin generator
- *
- * @author Michal Karm Babacek <karm@redhat.com>
  */
 @Tag("generator")
 public class ArtifactGeneratorTest {

@@ -26,9 +26,6 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * @author Michal Karm Babacek <karm@redhat.com>
- */
 public class JSONtoEnum {
     public static Pattern pattern = Pattern.compile("(?i).*\"id\":\"[^:]*:([^\"]*)\".*\"shortId\":\"([^\"]*)\".*\"name\":\"([^\"]*)\".*\"tags\":\\[([^]]*)].*");
 

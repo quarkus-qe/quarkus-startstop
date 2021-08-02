@@ -21,9 +21,6 @@ package io.quarkus.ts.startstop.utils;
 
 import java.util.Objects;
 
-/**
- * @author Michal Karm Babacek <karm@redhat.com>
- */
 public class LogBuilder {
 
     public static class Log {

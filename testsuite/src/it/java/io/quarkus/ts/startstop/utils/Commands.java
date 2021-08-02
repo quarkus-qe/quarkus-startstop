@@ -75,9 +75,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-/**
- * @author Michal Karm Babacek <karm@redhat.com>
- */
 public class Commands {
     private static final Logger LOGGER = Logger.getLogger(Commands.class.getName());
 

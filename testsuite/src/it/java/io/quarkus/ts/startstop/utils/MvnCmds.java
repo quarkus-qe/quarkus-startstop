@@ -26,9 +26,7 @@ import static io.quarkus.ts.startstop.utils.Commands.getLocalMavenRepoDir;
 import static io.quarkus.ts.startstop.utils.Commands.getQuarkusVersion;
 
 /**
- * Maven commands.
- *
- * @author Michal Karm Babacek <karm@redhat.com>
+ * Maven commands
  */
 public enum MvnCmds {
     JVM(new String[][]{

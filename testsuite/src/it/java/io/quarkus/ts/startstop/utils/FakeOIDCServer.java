@@ -31,9 +31,6 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/**
- * @author Michal Karm Babacek <karm@redhat.com>
- */
 public class FakeOIDCServer implements Runnable {
     private static final Logger LOGGER = Logger.getLogger(FakeOIDCServer.class.getName());
     private final ServerSocket server;

@@ -32,11 +32,6 @@ import java.util.Properties;
 import static io.quarkus.ts.startstop.StartStopTest.BASE_DIR;
 import static org.junit.jupiter.api.Assertions.fail;
 
-/**
- * Maven commands.
- *
- * @author Michal Karm Babacek <karm@redhat.com>
- */
 public enum Apps {
     JAX_RS_MINIMAL("app-jax-rs-minimal", URLContent.JAX_RS_MINIMAL, WhitelistLogLines.JAX_RS_MINIMAL),
     FULL_MICROPROFILE("app-full-microprofile", URLContent.FULL_MICROPROFILE, WhitelistLogLines.FULL_MICROPROFILE),

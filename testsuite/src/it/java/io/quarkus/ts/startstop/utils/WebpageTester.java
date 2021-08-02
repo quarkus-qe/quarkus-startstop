@@ -30,9 +30,6 @@ import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * @author Michal Karm Babacek <karm@redhat.com>
- */
 public class WebpageTester {
     private static final Logger LOGGER = Logger.getLogger(WebpageTester.class.getName());
 

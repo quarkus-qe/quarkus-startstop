@@ -21,8 +21,6 @@ package io.quarkus.ts.startstop.utils;
 
 /**
  * Some flags to drive the tests flow
- *
- * @author Michal Karm Babacek <karm@redhat.com>
  */
 public enum TestFlags {
     WARM_UP("This run is just a warm up for Dev mode."),

@@ -21,8 +21,6 @@ package io.quarkus.ts.startstop.utils;
 
 /**
  * Available endpoitns and expected content.
- *
- * @author Michal Karm Babacek <karm@redhat.com>
  */
 public enum URLContent {
     JAX_RS_MINIMAL(new String[][]{

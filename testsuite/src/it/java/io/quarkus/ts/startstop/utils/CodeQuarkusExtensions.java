@@ -24,9 +24,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * @author Michal Karm Babacek <karm@redhat.com>
- */
 public enum CodeQuarkusExtensions {
 
     QUARKUS_RESTEASY("quarkus-resteasy", "RESTEasy JAX-RS", "98e", true),

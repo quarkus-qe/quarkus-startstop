@@ -70,8 +70,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests for code.quarkus.io generator
- *
- * @author Michal Karm Babacek <karm@redhat.com>
  */
 @Tag("codequarkus")
 public class CodeQuarkusTest {

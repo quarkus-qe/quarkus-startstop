@@ -23,8 +23,6 @@ package io.quarkus.ts.startstop.utils;
  * Whitelists jar names.
  *
  * There are basically known issues. The enum should be empty.
- *
- * @author Michal Karm Babacek <karm@redhat.com>
  */
 public enum WhitelistProductBomJars {
     PRODUCT_BOM(new String[]{
