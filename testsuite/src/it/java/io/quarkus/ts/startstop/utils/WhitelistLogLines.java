@@ -66,8 +66,7 @@ public enum WhitelistLogLines {
             // Maven 3.8.1 throw a warn msg related to a mirror default configuration
             Pattern.compile(".*org.apache.maven.settings.io.SettingsParseException: Unrecognised tag: 'blocked'.*"),
             Pattern.compile(".*io.qua.arc.impl.*"), // TODO remove when resolved https://github.com/quarkusio/quarkus/issues/18105
-            Pattern.compile(".*Class does not exist in ClassLoader QuarkusClassLoader.*"), // TODO remove when resolved https://github.com/quarkusio/quarkus/issues/18746
-            Pattern.compile(".*Detected a split package usage which is considered a bad practice and should be avoided.*"), // TODO remove when resolved https://github.com/quarkusio/quarkus/issues/19092
+            Pattern.compile(".*Using @ConfigProperty for Quarkus configuration items is deprecated.*"), // TODO remove when resolved https://github.com/quarkusio/quarkus/issues/19242
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
@@ -84,8 +83,8 @@ public enum WhitelistLogLines {
     private static final Pattern COMMON_WARNING_DUPLICATE_ENTRY_NATIVE = Pattern.compile(".*Duplicate entry about.html entry.*");
     private static final Pattern COMMON_WARNING_DUPLICATE_ENTRIES_NATIVE = Pattern.compile(".*Dependencies with duplicate files detected.*");
     // When
-    private static final Pattern WARNING_MISSING_OBJCOPY_NATIVE = Pattern.compile(".*objcopy executable not found in PATH. Debug symbols will not be separated from executable.*");
-    private static final Pattern WARNING_MISSING_OBJCOPY_RESULT_NATIVE = Pattern.compile(".*That will result in a larger native image with debug symbols embedded in it.*");
+    private static final Pattern WARNING_MISSING_OBJCOPY_NATIVE = Pattern.compile(".*objcopy executable not found in PATH.*");
+    private static final Pattern WARNING_MISSING_OBJCOPY_RESULT_NATIVE = Pattern.compile(".*That also means that resulting native executable is larger as it embeds the debug symbols..*");
 
     public final Pattern[] errs;
 
