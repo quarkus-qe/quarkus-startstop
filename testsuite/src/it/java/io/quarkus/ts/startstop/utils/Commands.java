@@ -403,7 +403,8 @@ public class Commands {
                 "quarkus.kafka.devservices.enabled=false\n" +
                 "quarkus.amqp.devservices.enabled=false\n" +
                 "quarkus.mongodb.devservices.enabled=false\n" +
-                "quarkus.redis.devservices.enabled=false\n"
+                "quarkus.redis.devservices.enabled=false\n" +
+                "quarkus.keycloak.devservices.enabled=false\n"
                 ;
 
         if (Files.exists(appProps)) {
