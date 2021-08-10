@@ -41,6 +41,7 @@ public enum WhitelistLogLines {
                     "quarkus.amqp.devservices.enabled|" +
                     "quarkus.mongodb.devservices.enabled|" +
                     "quarkus.redis.devservices.enabled|" +
+                    "quarkus.keycloak.devservices.enabled|" +
                     "quarkus.jaeger.enabled|" +
                     "quarkus.jaeger.service-name|" +
                     "quarkus.jaeger.sampler-param|" +
