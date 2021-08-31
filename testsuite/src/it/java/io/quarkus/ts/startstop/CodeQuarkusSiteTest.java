@@ -98,7 +98,7 @@ public class CodeQuarkusSiteTest {
             LOGGER.warn("System property 'maven.repo.local' is not specified. Skip test execution.");
             return;
         }
-        Path quarkusProductBomPath = Paths.get(System.getProperty("maven.repo.local")).resolve("com/redhat/quarkus/quarkus-product-bom");
+        Path quarkusProductBomPath = Paths.get(System.getProperty("maven.repo.local")).resolve("com/redhat/quarkus/platform/quarkus-bom");
         try (Stream<Path> paths = Files.walk(quarkusProductBomPath)) {
             List<Path> folders = paths.filter(Files::isDirectory).collect(Collectors.toList());
             quarkusPlatformVersion = folders.get(1).getFileName().toString();
