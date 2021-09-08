@@ -25,7 +25,7 @@ public enum MvnCmds {
     GENERATOR(new String[][]{
             new String[]{
                     "mvn",
-                    "io.quarkus:quarkus-maven-plugin:" + getQuarkusVersion() + ":create",
+                    "io.quarkus.platform:quarkus-maven-plugin:" + getQuarkusVersion() + ":create",
                     "-DprojectGroupId=my-groupId",
                     "-DprojectArtifactId=" + Apps.GENERATED_SKELETON.dir,
                     "-DprojectVersion=1.0.0-SNAPSHOT",
