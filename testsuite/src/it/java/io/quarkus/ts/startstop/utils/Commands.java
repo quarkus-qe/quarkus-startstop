@@ -398,14 +398,7 @@ public class Commands {
     public static void disableDevServices(String appDir) throws IOException {
         Path appProps = Paths.get(appDir + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "application.properties");
 
-        String disabledDevServices =
-                "quarkus.datasource.devservices=false\n" +
-                "quarkus.kafka.devservices.enabled=false\n" +
-                "quarkus.amqp.devservices.enabled=false\n" +
-                "quarkus.mongodb.devservices.enabled=false\n" +
-                "quarkus.redis.devservices.enabled=false\n" +
-                "quarkus.keycloak.devservices.enabled=false\n"
-                ;
+        String disabledDevServices = "quarkus.devservices.enabled=false\n";
 
         if (Files.exists(appProps)) {
             String content = new String(Files.readAllBytes(appProps), StandardCharsets.UTF_8);

@@ -36,12 +36,7 @@ public enum WhitelistLogLines {
                     "quarkus.oidc-client.token-path|" +
                     "quarkus.oidc-client.discovery-enabled|" +
                     "quarkus.smallrye-jwt.enabled|" +
-                    "quarkus.datasource.devservices|" +
-                    "quarkus.kafka.devservices.enabled|" +
-                    "quarkus.amqp.devservices.enabled|" +
-                    "quarkus.mongodb.devservices.enabled|" +
-                    "quarkus.redis.devservices.enabled|" +
-                    "quarkus.keycloak.devservices.enabled|" +
+                    "quarkus.devservices.enabled|" +
                     "quarkus.jaeger.enabled|" +
                     "quarkus.jaeger.service-name|" +
                     "quarkus.jaeger.sampler-param|" +
