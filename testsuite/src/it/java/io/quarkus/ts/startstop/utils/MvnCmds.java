@@ -2,6 +2,7 @@ package io.quarkus.ts.startstop.utils;
 
 import java.util.stream.Stream;
 
+import static io.quarkus.ts.startstop.utils.Commands.getQuarkusGroupId;
 import static io.quarkus.ts.startstop.utils.Commands.getQuarkusNativeProperties;
 import static io.quarkus.ts.startstop.utils.Commands.getLocalMavenRepoDir;
 import static io.quarkus.ts.startstop.utils.Commands.getQuarkusVersion;
@@ -25,7 +26,7 @@ public enum MvnCmds {
     GENERATOR(new String[][]{
             new String[]{
                     "mvn",
-                    "io.quarkus.platform:quarkus-maven-plugin:" + getQuarkusVersion() + ":create",
+                    getQuarkusGroupId() + ":quarkus-maven-plugin:" + getQuarkusVersion() + ":create",
                     "-DprojectGroupId=my-groupId",
                     "-DprojectArtifactId=" + Apps.GENERATED_SKELETON.dir,
                     "-DprojectVersion=1.0.0-SNAPSHOT",
