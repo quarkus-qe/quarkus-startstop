@@ -63,6 +63,9 @@ public class Commands {
     private static final Pattern numPattern = Pattern.compile("[ \t]*[0-9]+[ \t]*");
     private static final Pattern quarkusVersionPattern = Pattern.compile("[ \t]*<quarkus.version>([^<]*)</quarkus.version>.*");
     private static final Pattern trailingSlash = Pattern.compile("/+$");
+    private static final String QUARKUS_PLATFORM_GROUP_ID = "com.redhat.quarkus.platform";
+    private static final String QUARKUS_UPSTREAM_GROUP_ID = "io.quarkus.platform";
+    private static final String REDHAT_VERSION_TAG = "-redhat-";
 
     public static String mvnw() {
         return Commands.isThisWindows ? "mvnw.cmd" : "./mvnw";
@@ -147,6 +150,14 @@ public class Commands {
             throw new IllegalArgumentException(failure);
         }
         throw new IllegalArgumentException(failure);
+    }
+
+    public static String getQuarkusGroupId() {
+        if (getQuarkusVersion().contains(REDHAT_VERSION_TAG)) {
+            return QUARKUS_PLATFORM_GROUP_ID;
+        }
+
+        return QUARKUS_UPSTREAM_GROUP_ID;
     }
 
     public static String getBaseDir() {
