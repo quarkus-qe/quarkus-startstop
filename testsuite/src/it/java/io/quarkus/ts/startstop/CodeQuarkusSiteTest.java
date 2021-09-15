@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests for checking presence of element on webpage
@@ -41,7 +41,7 @@ public class CodeQuarkusSiteTest {
     public static final String elementIconByXpath = "//link[@rel=\"shortcut icon\"][@href=\"https://www.redhat.com/misc/favicon.ico\"]";
     public static final String elementRedHatLogoByXpath= "//img[@class=\"logo\"][@alt=\"Red Hat Logo\"]";
     public static final String elementSupportedFlagByXpath = "//a[@class=\"extension-tag supported\"]";
-    public static final String elementQuarkusPlatformVersionByXpath = "normalize-space(//div[@class=\"quarkus-version\"]/span/text()[last()])";
+    public static final String elementQuarkusPlatformVersionByXpath = "normalize-space(//div[@class=\"current-quarkus-stream\"]/@title)";
 
     private WebClient webClient;
 
@@ -111,7 +111,7 @@ public class CodeQuarkusSiteTest {
         String quarkusPlatformVersionFromWeb = page.getFirstByXPath(elementQuarkusPlatformVersionByXpath);
 
         assertNotNull(quarkusPlatformVersionFromWeb, "Element: " + elementQuarkusPlatformVersionByXpath + " is missing!");
-        assertEquals(quarkusPlatformVersion, quarkusPlatformVersionFromWeb,
+        assertTrue(quarkusPlatformVersionFromWeb.contains(quarkusPlatformVersion),
                 "Quarkus versions doesn't match. Found on the web: " + quarkusPlatformVersionFromWeb + ". Expected: " + quarkusPlatformVersion);
     }
 
