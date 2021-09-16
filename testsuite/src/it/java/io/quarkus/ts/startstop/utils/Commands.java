@@ -267,8 +267,8 @@ public class Commands {
         }
         generatorCmd.addAll(Arrays.asList(baseCommand));
         if (flags.contains(TestFlags.PRODUCT_BOM)) {
-            generatorCmd.add("-DplatformArtifactId=quarkus-product-bom");
-            generatorCmd.add("-DplatformGroupId=com.redhat.quarkus");
+            generatorCmd.add("-DplatformArtifactId=quarkus-bom");
+            generatorCmd.add("-DplatformGroupId=com.redhat.quarkus.platform");
             generatorCmd.add("-DplatformVersion=" + getQuarkusPlatformVersion());
         } else if (flags.contains(TestFlags.QUARKUS_BOM)) {
             generatorCmd.add("-DplatformArtifactId=quarkus-bom");

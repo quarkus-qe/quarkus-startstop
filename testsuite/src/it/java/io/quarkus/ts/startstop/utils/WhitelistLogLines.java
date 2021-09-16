@@ -62,7 +62,8 @@ public enum WhitelistLogLines {
             // Maven 3.8.1 throw a warn msg related to a mirror default configuration
             Pattern.compile(".*org.apache.maven.settings.io.SettingsParseException: Unrecognised tag: 'blocked'.*"),
             Pattern.compile(".*io.qua.arc.impl.*"), // TODO remove when resolved https://github.com/quarkusio/quarkus/issues/18105
-            Pattern.compile(".*Using @ConfigProperty for Quarkus configuration items is deprecated.*"), // TODO remove when resolved https://github.com/quarkusio/quarkus/issues/19242
+            // We have disabled the Quarkus Registry Client (-DquarkusRegistryClient=false)
+            Pattern.compile(".*The extension catalog will be narrowed to.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
