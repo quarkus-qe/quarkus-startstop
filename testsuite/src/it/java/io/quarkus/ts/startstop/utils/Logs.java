@@ -128,7 +128,7 @@ public class Logs {
     public static void checkJarSuffixes(Set<TestFlags> flags, File appDir) throws IOException {
         if (flags.contains(TestFlags.PRODUCT_BOM)) {
             List<Path> possiblyUnwantedArtifacts = Logs.listJarsFailingNameCheck(
-                    appDir.getAbsolutePath() + File.separator + "target" + File.separator + "lib");
+                    appDir.getAbsolutePath() + File.separator + "target" + File.separator + "quarkus-app" + File.separator + "lib");
             List<String> reportArtifacts = new ArrayList<>();
             boolean containsNotWhitelisted = false;
             for (Path p : possiblyUnwantedArtifacts) {

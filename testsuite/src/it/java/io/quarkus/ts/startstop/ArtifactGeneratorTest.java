@@ -96,8 +96,8 @@ public class ArtifactGeneratorTest {
             "vertx",
             "vertx-web",
             "grpc",
-//             TODO https://github.com/quarkusio/quarkus/issues/19081
-//            "infinispan-client",
+            //             TODO https://github.com/quarkusio/quarkus/issues/19081
+            //            "infinispan-client",
             "cache",
             "micrometer",
             "quarkus-openshift-client",
