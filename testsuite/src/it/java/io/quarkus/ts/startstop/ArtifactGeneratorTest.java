@@ -96,15 +96,16 @@ public class ArtifactGeneratorTest {
             "vertx",
             "vertx-web",
             "grpc",
-            //             TODO https://github.com/quarkusio/quarkus/issues/19081
-            //            "infinispan-client",
+            "infinispan-client",
             "cache",
             "micrometer",
+            "micrometer-registry-prometheus",
             "quarkus-openshift-client",
     };
 
     public static final String[] supportedExtensionsSubsetSetB = new String[]{
             "agroal",
+            "quarkus-avro",
             "config-yaml",
             "container-image-openshift",
             "core",
@@ -120,6 +121,7 @@ public class ArtifactGeneratorTest {
             "mutiny",
             "oidc-client",
             "oidc-client-filter",
+            "reactive-mysql-client",
             "resteasy-multipart",
             "smallrye-context-propagation",
             "smallrye-fault-tolerance",
@@ -140,8 +142,9 @@ public class ArtifactGeneratorTest {
             "spring-cloud-config-client",
             "spring-scheduled",
             "spring-cache",
-            // TODO https://github.com/quarkusio/quarkus/issues/18843
+            // TODO https://github.com/quarkusio/quarkus/issues/18843 / https://issues.redhat.com/browse/QUARKUS-1291
             // "websockets",
+            // "websockets-client",
     };
 
     public void testRuntime(TestInfo testInfo, String[] extensions, Set<TestFlags> flags) throws Exception {
