@@ -147,6 +147,96 @@ public class ArtifactGeneratorTest {
             // "websockets-client",
     };
 
+    public static final String[] supportedReactiveExtensionsSubsetSetA = new String[]{
+            "quarkus-jaxrs-client-reactive",
+            "quarkus-resteasy-reactive",
+            "quarkus-resteasy-reactive-jackson",
+            "quarkus-rest-client-reactive",
+            "quarkus-rest-client-reactive-jackson",
+            "core",
+            "hibernate-orm",
+            "hibernate-orm-panache",
+            "hibernate-validator",
+            "jackson",
+            "jaxb",
+            "jdbc-mysql",
+            "jdbc-postgresql",
+            "jsonb",
+            "jsonp",
+            "kafka-client",
+            "logging-json",
+            "narayana-jta",
+            "oidc",
+            "quarkus-quartz",
+            "reactive-pg-client",
+            "scheduler",
+            "spring-boot-properties",
+            "smallrye-reactive-streams-operators",
+            "spring-data-jpa",
+            "spring-di",
+            "spring-security",
+            // problematic with reactive - https://issues.redhat.com/browse/QUARKUS-1300
+//            "spring-web",
+            // https://github.com/quarkusio/quarkus/issues/20302
+//            "undertow",
+            "vertx",
+            "vertx-web",
+            "grpc",
+            "infinispan-client",
+            "cache",
+            "micrometer",
+            "micrometer-registry-prometheus",
+            "quarkus-openshift-client",
+    };
+
+    public static final String[] supportedReactiveExtensionsSubsetSetB = new String[]{
+            "quarkus-jaxrs-client-reactive",
+            "quarkus-resteasy-reactive",
+            "quarkus-resteasy-reactive-jsonb",
+            "quarkus-rest-client-reactive",
+            "agroal",
+            "quarkus-avro",
+            "config-yaml",
+            "container-image-openshift",
+            "core",
+            "hibernate-orm",
+            "hibernate-orm-panache",
+            "hibernate-validator",
+            "jackson",
+            "jaxb",
+            "jdbc-mariadb",
+            "jdbc-mssql",
+            "mutiny",
+            "oidc-client",
+            // problematic with reactive - https://issues.redhat.com/browse/QUARKUS-1300
+//            "oidc-client-filter",
+            "reactive-mysql-client",
+            "smallrye-context-propagation",
+            "smallrye-fault-tolerance",
+            "smallrye-health",
+            "smallrye-jwt",
+            "smallrye-jwt-build",
+            "smallrye-metrics",
+            "smallrye-openapi",
+            "smallrye-opentracing",
+            "smallrye-reactive-messaging",
+            "smallrye-reactive-messaging-amqp",
+            "smallrye-reactive-messaging-kafka",
+            "spring-data-jpa",
+            // problematic with reactive - https://issues.redhat.com/browse/QUARKUS-1300
+//            "spring-data-rest",
+            "spring-di",
+            "spring-security",
+            // problematic with reactive - https://issues.redhat.com/browse/QUARKUS-1300
+//            "spring-web",
+            "spring-cloud-config-client",
+            "spring-scheduled",
+            "spring-cache",
+            // TODO https://github.com/quarkusio/quarkus/issues/18843 / https://issues.redhat.com/browse/QUARKUS-1291
+//             "websockets",
+//             "websockets-client",
+    };
+
     public void testRuntime(TestInfo testInfo, String[] extensions, Set<TestFlags> flags) throws Exception {
         Process pA = null;
         File buildLogA = null;
@@ -218,15 +308,17 @@ public class ArtifactGeneratorTest {
             LOGGER.info("Testing reload...");
             // modify existing class
             Path srcFile = Paths.get(appDir + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator +
-                    "org" + File.separator + "my" + File.separator + "group" + File.separator + "GreetingController.java");
+                    "org" + File.separator + "my" + File.separator + "group" + File.separator +
+                    (flags.contains(TestFlags.RESTEASY_REACTIVE)?"ReactiveGreetingResource.java":"GreetingController.java"));
             appendlnSection(whatIDidReport, "Reloading class: " + srcFile.toAbsolutePath());
             try (Stream<String> src = Files.lines(srcFile)) {
                 Files.write(srcFile, src.map(l -> l.replaceAll("Hello", "Bye")).collect(Collectors.toList()));
             }
 
             // test modified class and measure time
-            long timeToReloadedOKRequest = WebpageTester.testWeb(skeletonApp.urlContent[1][0], 60,
-                    skeletonApp.urlContent[1][1], true);
+            long timeToReloadedOKRequest = WebpageTester.testWeb(
+                    flags.contains(TestFlags.RESTEASY_REACTIVE)?skeletonApp.urlContent[3][0]:skeletonApp.urlContent[1][0], 60,
+                    flags.contains(TestFlags.RESTEASY_REACTIVE)?skeletonApp.urlContent[3][1]:skeletonApp.urlContent[1][1], true);
 
             // add new class
             Path addedFile = Paths
@@ -296,5 +388,17 @@ public class ArtifactGeneratorTest {
     public void manyExtensionsSetB(TestInfo testInfo) throws Exception {
         testRuntime(testInfo, supportedExtensionsSubsetSetB, EnumSet.of(TestFlags.WARM_UP));
         testRuntime(testInfo, supportedExtensionsSubsetSetB, EnumSet.noneOf(TestFlags.class));
+    }
+
+    @Test
+    public void manyReactiveExtensionsSetA(TestInfo testInfo) throws Exception {
+        testRuntime(testInfo, supportedReactiveExtensionsSubsetSetA, EnumSet.of(TestFlags.WARM_UP, TestFlags.RESTEASY_REACTIVE));
+        testRuntime(testInfo, supportedReactiveExtensionsSubsetSetA, EnumSet.of(TestFlags.RESTEASY_REACTIVE));
+    }
+
+    @Test
+    public void manyReactiveExtensionsSetB(TestInfo testInfo) throws Exception {
+        testRuntime(testInfo, supportedReactiveExtensionsSubsetSetB, EnumSet.of(TestFlags.WARM_UP, TestFlags.RESTEASY_REACTIVE));
+        testRuntime(testInfo, supportedReactiveExtensionsSubsetSetB, EnumSet.of(TestFlags.RESTEASY_REACTIVE));
     }
 }
