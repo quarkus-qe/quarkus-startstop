@@ -24,6 +24,8 @@ import java.util.concurrent.TimeUnit;
 
 import static io.quarkus.ts.startstop.ArtifactGeneratorTest.supportedExtensionsSubsetSetA;
 import static io.quarkus.ts.startstop.ArtifactGeneratorTest.supportedExtensionsSubsetSetB;
+import static io.quarkus.ts.startstop.ArtifactGeneratorTest.supportedReactiveExtensionsSubsetSetA;
+import static io.quarkus.ts.startstop.ArtifactGeneratorTest.supportedReactiveExtensionsSubsetSetB;
 import static io.quarkus.ts.startstop.utils.Commands.adjustPrettyPrintForJsonLogging;
 import static io.quarkus.ts.startstop.utils.Commands.cleanDirOrFile;
 import static io.quarkus.ts.startstop.utils.Commands.confAppPropsForSkeleton;
@@ -175,6 +177,30 @@ public class ArtifactGeneratorBOMTest {
     @Tag("product")
     public void quarkusProductBomExtensionsB(TestInfo testInfo) throws Exception {
         testRuntime(testInfo, supportedExtensionsSubsetSetB, EnumSet.of(TestFlags.PRODUCT_BOM));
+    }
+
+    @Test
+    @Tag("product-and-community")
+    public void quarkusBomReactiveExtensionsA(TestInfo testInfo) throws Exception {
+        testRuntime(testInfo, supportedReactiveExtensionsSubsetSetA, EnumSet.of(TestFlags.QUARKUS_BOM));
+    }
+
+    @Test
+    @Tag("product-and-community")
+    public void quarkusBomReactiveExtensionsB(TestInfo testInfo) throws Exception {
+        testRuntime(testInfo, supportedReactiveExtensionsSubsetSetB, EnumSet.of(TestFlags.QUARKUS_BOM));
+    }
+
+    @Test
+    @Tag("product")
+    public void quarkusProductBomReactiveExtensionsA(TestInfo testInfo) throws Exception {
+        testRuntime(testInfo, supportedReactiveExtensionsSubsetSetA, EnumSet.of(TestFlags.PRODUCT_BOM));
+    }
+
+    @Test
+    @Tag("product")
+    public void quarkusProductBomReactiveExtensionsB(TestInfo testInfo) throws Exception {
+        testRuntime(testInfo, supportedReactiveExtensionsSubsetSetB, EnumSet.of(TestFlags.PRODUCT_BOM));
     }
 
 }
