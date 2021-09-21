@@ -41,7 +41,7 @@ public class CodeQuarkusSiteTest {
     public static final String elementIconByXpath = "//link[@rel=\"shortcut icon\"][@href=\"https://www.redhat.com/misc/favicon.ico\"]";
     public static final String elementRedHatLogoByXpath= "//img[@class=\"logo\"][@alt=\"Red Hat Logo\"]";
     public static final String elementSupportedFlagByXpath = "//a[@class=\"extension-tag supported\"]";
-    public static final String elementQuarkusPlatformVersionByXpath = "normalize-space(//div[@class=\"current-quarkus-stream\"]/@title)";
+    public static final String elementQuarkusPlatformVersionByXpath = "normalize-space(//div[@class=\"quarkus-stream\"]/@title)";
 
     private WebClient webClient;
 
@@ -124,7 +124,7 @@ public class CodeQuarkusSiteTest {
         try {
             page = webClient.getPage(url);
         } catch (Exception e) {
-            throw new RuntimeException("Cannot load the page" + webPageUrl);
+            throw new RuntimeException("Cannot load the page: " + webPageUrl);
         }
         JavaScriptJobManager manager = page.getEnclosingWindow().getJobManager();
         while (manager.getJobCount() > 0 && System.currentTimeMillis() < endTime) {
