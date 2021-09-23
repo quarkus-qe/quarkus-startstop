@@ -72,8 +72,7 @@ public enum CodeQuarkusExtensions {
 //    QUARKUS_ELASTICSEARCH_REST_HIGH_LEVEL_CLIENT("quarkus-elasticsearch-rest-high-level-client", "Elasticsearch REST High Level Client", "OJe", false),
     QUARKUS_ELASTICSEARCH_REST_CLIENT("quarkus-elasticsearch-rest-client", "Elasticsearch REST client", "NhW", false),
     QUARKUS_FLYWAY("quarkus-flyway", "Flyway", "wTM", false),
-    // https://issues.redhat.com/browse/QUARKUS-1292
-//    QUARKUS_HAZELCAST_CLIENT("quarkus-hazelcast-client", "Hazelcast Client", "yii", false),
+    QUARKUS_HAZELCAST_CLIENT("quarkus-hazelcast-client", "Hazelcast Client", "yii", false),
     QUARKUS_HIBERNATE_ENVERS("quarkus-hibernate-envers", "Hibernate Envers", "8j9", false),
     QUARKUS_HIBERNATE_ORM_PANACHE_KOTLIN("quarkus-hibernate-orm-panache-kotlin", "Hibernate ORM with Panache and Kotlin", "O3q", false),
     QUARKUS_HIBERNATE_REACTIVE("quarkus-hibernate-reactive", "Hibernate Reactive", "r1s", false),
@@ -117,8 +116,7 @@ public enum CodeQuarkusExtensions {
     QUARKUS_LOGGING_SENTRY("quarkus-logging-sentry", "Logging Sentry", "eoJ", false),
     QUARKUS_VERTX("quarkus-vertx", "Eclipse Vert.x", "WqB", true),
     QUARKUS_MUTINY("quarkus-mutiny", "Mutiny", "zqM", true),
-    // https://issues.redhat.com/browse/QUARKUS-1292
-//    QUARKUS_REDIS_CLIENT("quarkus-redis-client", "Redis Client", "jlX", false),
+    QUARKUS_REDIS_CLIENT("quarkus-redis-client", "Redis Client", "jlX", false),
     QUARKUS_SMALLRYE_CONTEXT_PROPAGATION("quarkus-smallrye-context-propagation", "SmallRye Context Propagation", "7pM", true),
     QUARKUS_KUBERNETES("quarkus-kubernetes", "Kubernetes", "dZK", false),
     QUARKUS_OPENSHIFT("quarkus-openshift", "OpenShift", "Bqi", false),
@@ -419,8 +417,7 @@ public enum CodeQuarkusExtensions {
     CAMEL_QUARKUS_ZENDESK("camel-quarkus-zendesk", "Camel Zendesk", "wKG", false),
     CAMEL_QUARKUS_ZIP_DEFLATER("camel-quarkus-zip-deflater", "Camel Zip Deflate Compression", "Zw2", false),
     CAMEL_QUARKUS_ZIPFILE("camel-quarkus-zipfile", "Camel Zip File", "baW6", false),
-    // https://issues.redhat.com/browse/QUARKUS-1292
-//    DEBEZIUM_QUARKUS_OUTBOX("debezium-quarkus-outbox", "Debezium Quarkus Outbox", "Zv2", false),
+    DEBEZIUM_QUARKUS_OUTBOX("debezium-quarkus-outbox", "Debezium Quarkus Outbox", "Zv2", false),
     KOGITO_QUARKUS("kogito-quarkus", "Kogito", "fYM", false),
     KOGITO_QUARKUS_DECISIONS("kogito-quarkus-decisions", "Kogito - Decisions (DMN)", "Uow", false),
     KOGITO_QUARKUS_PREDICTIONS("kogito-quarkus-predictions", "Kogito - Predictions (PMML)", "kFn", false),
