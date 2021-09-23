@@ -116,6 +116,9 @@ public enum WhitelistLogLines {
                         // The problem is that the method name contains "Error" and hence it became an offending line.
                         // For example: this is happening with using Mongo extension (without a Mongo instance).
                         Pattern.compile(".*translateErrorToIOException.*"),
+                        // In Windows, randomly prints traces like:
+                        // TRACE [io.qua.builder] (build-49) Starting step "io.quarkus.jaxb.deployment.JaxbProcessor..."
+                        Pattern.compile(".*Starting step.*"),
                 };
             case LINUX:
             	return new Pattern[] {
