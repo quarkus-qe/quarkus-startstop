@@ -71,7 +71,7 @@ public enum WhitelistLogLines {
             // https://github.com/netty/netty/issues/11020
             Pattern.compile(".*Can not find \\{\\} in the classpath, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS.*"),
             // comes with https://github.com/quarkusio/quarkus/pull/19969
-            Pattern.compile(".*OIDC metadata discovery failed:.*Connection refused: localhost/127.0.0.1:6661.*"),
+            Pattern.compile(".*OIDC metadata discovery failed:.*Connection refused.*localhost/127.0.0.1:6661.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
