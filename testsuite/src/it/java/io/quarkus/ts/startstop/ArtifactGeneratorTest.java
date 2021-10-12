@@ -94,7 +94,7 @@ public class ArtifactGeneratorTest {
             "spring-web",
             "undertow",
             "vertx",
-            "vertx-web",
+            "quarkus-reactive-routes",
             "grpc",
             "infinispan-client",
             "cache",
@@ -180,7 +180,7 @@ public class ArtifactGeneratorTest {
             // https://github.com/quarkusio/quarkus/issues/20302
 //            "undertow",
             "vertx",
-            "vertx-web",
+            "quarkus-reactive-routes",
             "grpc",
             "infinispan-client",
             "cache",
