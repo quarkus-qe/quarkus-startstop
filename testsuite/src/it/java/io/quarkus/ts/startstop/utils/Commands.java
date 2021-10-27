@@ -273,6 +273,9 @@ public class Commands {
         } else if (flags.contains(TestFlags.QUARKUS_BOM)) {
             generatorCmd.add("-DplatformArtifactId=quarkus-bom");
             generatorCmd.add("-DplatformVersion=" + getQuarkusVersion());
+            if (getQuarkusVersion().equals("999-SNAPSHOT")) {
+                generatorCmd.add("-DplatformGroupId=io.quarkus");
+            }
         }
         generatorCmd.add("-Dextensions=" + String.join(",", extensions));
         generatorCmd.add("-Dmaven.repo.local=" + repoDir);
@@ -288,6 +291,9 @@ public class Commands {
             generatorCmd.add("/C");
         }
         generatorCmd.addAll(Arrays.asList(baseCommand));
+        if (getQuarkusVersion().equals("999-SNAPSHOT")) {
+            generatorCmd.add("-DplatformGroupId=io.quarkus");
+        }
         generatorCmd.add("-DplatformArtifactId=quarkus-bom"); // https://github.com/quarkusio/quarkus/issues/19083
         generatorCmd.add("-DplatformVersion=" + getQuarkusVersion());
         generatorCmd.add("-Dextensions=" + String.join(",", extensions));
