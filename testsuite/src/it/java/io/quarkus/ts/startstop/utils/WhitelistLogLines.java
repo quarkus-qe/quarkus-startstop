@@ -74,6 +74,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*OIDC metadata discovery failed:.*Connection refused.*localhost/127.0.0.1:6661.*"),
             // https://github.com/quarkusio/quarkus/issues/20752
             Pattern.compile(".*system modules path not set in conjunction with -source 11.*"),
+            // https://github.com/quarkusio/quarkus/issues/21030
+            Pattern.compile(".*Build time property cannot be changed at runtime.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
