@@ -176,7 +176,11 @@ public class CodeQuarkusTest {
 
     @Test
     public void supportedExtensionsSubsetB(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedEx.get(1), MvnCmds.MVNW_DEV);
+        List<CodeQuarkusExtensions> supportedExtensionsSubsetB = supportedEx.get(1);
+        // quarkus-reactive-routes extension to open port 8080 and provide index.html file
+        // https://github.com/quarkusio/quarkus/issues/21132
+        supportedExtensionsSubsetB.add(CodeQuarkusExtensions.QUARKUS_REACTIVE_ROUTES);
+        testRuntime(testInfo, supportedExtensionsSubsetB, MvnCmds.MVNW_DEV);
     }
 
     @Test
