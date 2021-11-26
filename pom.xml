@@ -21,7 +21,7 @@
         <commons.lang.version>3.9</commons.lang.version>
         <jboss-logging.version>3.4.1.Final</jboss-logging.version>
         <log4j.version>2.13.2</log4j.version>
-        <htmlunit.version>2.46.0</htmlunit.version>
+        <playwright.version>1.17.0</playwright.version>
         <formatter-maven-plugin.version>2.15.0</formatter-maven-plugin.version>
         <impsort-maven-plugin.version>1.6.0</impsort-maven-plugin.version>
         <xml-format-maven-plugin>3.1.2</xml-format-maven-plugin>
@@ -49,9 +49,9 @@
             <version>${log4j.version}</version>
         </dependency>
         <dependency>
-            <groupId>net.sourceforge.htmlunit</groupId>
-            <artifactId>htmlunit</artifactId>
-            <version>${htmlunit.version}</version>
+            <groupId>com.microsoft.playwright</groupId>
+            <artifactId>playwright</artifactId>
+            <version>${playwright.version}</version>
         </dependency>
     </dependencies>
     <profiles>
