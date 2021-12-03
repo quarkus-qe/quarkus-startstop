@@ -76,6 +76,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*system modules path not set in conjunction with -source 11.*"),
             // https://github.com/quarkusio/quarkus/issues/21030
             Pattern.compile(".*Build time property cannot be changed at runtime.*"),
+            // https://github.com/quarkusio/quarkus/issues/21912
+            Pattern.compile(".*Detected a split package usage which is considered a bad practice and should be avoided.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
