@@ -91,7 +91,8 @@ public enum CodeQuarkusExtensions {
     QUARKUS_MONGODB_PANACHE("quarkus-mongodb-panache", "MongoDB with Panache", "y3v", false),
     QUARKUS_MONGODB_PANACHE_KOTLIN("quarkus-mongodb-panache-kotlin", "MongoDB with Panache for Kotlin", "gT", false),
     QUARKUS_NARAYANA_JTA("quarkus-narayana-jta", "Narayana JTA - Transaction manager", "PBP", true),
-    QUARKUS_NARAYANA_LRA("quarkus-narayana-lra", "Narayana LRA - LRA Participant Support", "O8P", false),
+    // Caused by: java.lang.IllegalStateException: 'quarkus-narayana-lra' can only work if 'quarkus-resteasy-jackson' or 'quarkus-resteasy-reactive-jackson' is present
+    // QUARKUS_NARAYANA_LRA("quarkus-narayana-lra", "Narayana LRA - LRA Participant Support", "O8P", false),
     QUARKUS_NARAYANA_STM("quarkus-narayana-stm", "Narayana STM - Software Transactional Memory", "Nl9", false),
     QUARKUS_NEO4J("quarkus-neo4j", "Neo4j client", "pDS", false),
     // https://issues.redhat.com/browse/QUARKUS-1294
