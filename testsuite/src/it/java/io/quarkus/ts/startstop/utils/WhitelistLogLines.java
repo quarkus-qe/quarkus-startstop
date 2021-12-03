@@ -78,6 +78,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Build time property cannot be changed at runtime.*"),
             // https://github.com/quarkusio/quarkus/issues/21912
             Pattern.compile(".*Detected a split package usage which is considered a bad practice and should be avoided.*"),
+            // Attempted to read Testcontainers configuration file at file:/home/runner/.testcontainers.properties but the file was not found.
+            Pattern.compile(".*Attempted to read Testcontainers configuration file at.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
