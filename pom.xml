@@ -20,7 +20,7 @@
         <resteasy.version>4.3.0.Final</resteasy.version>
         <commons.lang.version>3.9</commons.lang.version>
         <jboss-logging.version>3.4.1.Final</jboss-logging.version>
-        <log4j.version>2.13.2</log4j.version>
+        <log4j.version>2.17.0</log4j.version>
         <playwright.version>1.17.0</playwright.version>
         <formatter-maven-plugin.version>2.15.0</formatter-maven-plugin.version>
         <impsort-maven-plugin.version>1.6.0</impsort-maven-plugin.version>
