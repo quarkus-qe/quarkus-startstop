@@ -38,7 +38,8 @@ public enum CodeQuarkusExtensions {
     QUARKUS_REACTIVE_MESSAGING_HTTP("quarkus-reactive-messaging-http", "Reactive HTTP and WebSocket Connector", "5Gh", false),
     // replaces quarkus-vertx-web - https://github.com/quarkusio/quarkus/wiki/Migration-Guide-2.3#reactive-routes
     QUARKUS_REACTIVE_ROUTES("quarkus-reactive-routes", "Reactive Routes", "0pm", true),
-    QUARKUS_SMALLRYE_GRAPHQL("quarkus-smallrye-graphql", "SmallRye GraphQL", "jjB", false),
+    // https://github.com/quarkusio/quarkus/issues/22158
+//    QUARKUS_SMALLRYE_GRAPHQL("quarkus-smallrye-graphql", "SmallRye GraphQL", "jjB", false),
     QUARKUS_SMALLRYE_GRAPHQL_CLIENT("quarkus-smallrye-graphql-client", "SmallRye GraphQL Client", "5Jv", false),
     QUARKUS_SMALLRYE_JWT("quarkus-smallrye-jwt", "SmallRye JWT", "D9x", true),
     QUARKUS_SMALLRYE_OPENAPI("quarkus-smallrye-openapi", "SmallRye OpenAPI", "ARC", true),
