@@ -97,7 +97,9 @@ public class CodeQuarkusTest {
             LOGGER.info("Unzipping...");
             unzipLog = unzip(zipFile, GEN_BASE_DIR);
             LOGGER.info("Removing repositories and pluginRepositories from pom.xml ...");
-            removeRepositoriesAndPluginRepositories(appDir + File.separator + "pom.xml");
+            if (StringUtils.isBlank(System.getProperty("gh.actions"))) {
+                removeRepositoriesAndPluginRepositories(appDir + File.separator + "pom.xml");
+            }
             adjustPrettyPrintForJsonLogging(appDir.getAbsolutePath());
             disableDevServices(appDir.getAbsolutePath());
             List<String> cmd;
