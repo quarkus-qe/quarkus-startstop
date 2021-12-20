@@ -173,7 +173,7 @@ public class Commands {
     }
 
     public static String getCodeQuarkusURL() {
-        return getCodeQuarkusURL("https://code.quarkus.io");
+        return getCodeQuarkusURL("https://code.quarkus.redhat.com");
     }
 
     public static String getCodeQuarkusURL(String fallbackURL) {
