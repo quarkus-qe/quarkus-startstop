@@ -38,7 +38,7 @@ public class CodeQuarkusSiteTest {
 
     private static final Logger LOGGER = Logger.getLogger(CodeQuarkusSiteTest.class.getName());
 
-    public static final String pageLoadedSelector = ".quarkus-project-edition-form";
+    public static final String pageLoadedSelector = ".extension-category";
     public static final String webPageUrl = Commands.getCodeQuarkusURL("https://code.quarkus.redhat.com/");
     public static final String elementTitleByText = "Quarkus - Start coding with code.quarkus.redhat.com";
     public static final String elementIconByXpath = "//link[@rel=\"shortcut icon\"][@href=\"https://www.redhat.com/misc/favicon.ico\"]";
