@@ -35,7 +35,6 @@ public enum CodeQuarkusExtensions {
 //    QUARKUS_RESTEASY_REACTIVE_JACKSON("quarkus-resteasy-reactive-jackson", "RESTEasy Reactive Jackson", "tEq", true),
 //    QUARKUS_RESTEASY_REACTIVE_LINKS("quarkus-resteasy-reactive-links", "RESTEasy Reactive Links", "6hi", false),
 //    QUARKUS_RESTEASY_REACTIVE_QUTE("quarkus-resteasy-reactive-qute", "RESTEasy Reactive Qute", "X8W", false),
-    QUARKUS_REACTIVE_MESSAGING_HTTP("quarkus-reactive-messaging-http", "Reactive HTTP and WebSocket Connector", "5Gh", false),
     // replaces quarkus-vertx-web - https://github.com/quarkusio/quarkus/wiki/Migration-Guide-2.3#reactive-routes
     QUARKUS_REACTIVE_ROUTES("quarkus-reactive-routes", "Reactive Routes", "0pm", true),
     // https://github.com/quarkusio/quarkus/issues/22158
@@ -63,14 +62,6 @@ public enum CodeQuarkusExtensions {
     QUARKUS_REACTIVE_MYSQL_CLIENT("quarkus-reactive-mysql-client", "Reactive MySQL client", "fmW", true),
     QUARKUS_REACTIVE_PG_CLIENT("quarkus-reactive-pg-client", "Reactive PostgreSQL client", "ih0", true),
     QUARKUS_AGROAL("quarkus-agroal", "Agroal - Database connection pool", "qiu", true),
-    QUARKUS_AMAZON_DYNAMODB("quarkus-amazon-dynamodb", "Amazon DynamoDB", "fUt", false),
-    QUARKUS_AMAZON_IAM("quarkus-amazon-iam", "Amazon IAM", "xlQ", false),
-    QUARKUS_AMAZON_KMS("quarkus-amazon-kms", "Amazon KMS", "xWW", false),
-    QUARKUS_AMAZON_S3("quarkus-amazon-s3", "Amazon S3", "q1T", false),
-    QUARKUS_AMAZON_SES("quarkus-amazon-ses", "Amazon SES", "zSW", false),
-    QUARKUS_AMAZON_SNS("quarkus-amazon-sns", "Amazon SNS", "zXr", false),
-    QUARKUS_AMAZON_SQS("quarkus-amazon-sqs", "Amazon SQS", "zYW", false),
-    QUARKUS_AMAZON_SSM("quarkus-amazon-ssm", "Amazon SSM", "zZQ", false),
     // The Blaze-Persistence dependency is present but no persistence units have been defined.
     // BLAZE_PERSISTENCE_INTEGRATION_QUARKUS("blaze-persistence-integration-quarkus", "Blaze-Persistence", "weW", false),
     QUARKUS_CACHE("quarkus-cache", "Cache", "W1i", true),
@@ -84,7 +75,6 @@ public enum CodeQuarkusExtensions {
     QUARKUS_HIBERNATE_REACTIVE("quarkus-hibernate-reactive", "Hibernate Reactive", "r1s", false),
     QUARKUS_HIBERNATE_REACTIVE_PANACHE("quarkus-hibernate-reactive-panache", "Hibernate Reactive with Panache", "20r", false),
     QUARKUS_HIBERNATE_SEARCH_ORM_ELASTICSEARCH("quarkus-hibernate-search-orm-elasticsearch", "Hibernate Search + Elasticsearch", "oHk", false),
-    QUARKUS_HIBERNATE_SEARCH_ORM_ELASTICSEARCH_AWS("quarkus-hibernate-search-orm-elasticsearch-aws", "Hibernate Search + Elasticsearch - AWS authentication and request signing", "xmM", false),
     QUARKUS_INFINISPAN_CLIENT("quarkus-infinispan-client", "Infinispan Client", "sOv", true),
     QUARKUS_LIQUIBASE("quarkus-liquibase", "Liquibase", "Xkd", false),
     QUARKUS_LIQUIBASE_MONGODB("quarkus-liquibase-mongodb", "Liquibase MongoDB", "QWC", false),
@@ -95,7 +85,6 @@ public enum CodeQuarkusExtensions {
     // Caused by: java.lang.IllegalStateException: 'quarkus-narayana-lra' can only work if 'quarkus-resteasy-jackson' or 'quarkus-resteasy-reactive-jackson' is present
     // QUARKUS_NARAYANA_LRA("quarkus-narayana-lra", "Narayana LRA - LRA Participant Support", "O8P", false),
     QUARKUS_NARAYANA_STM("quarkus-narayana-stm", "Narayana STM - Software Transactional Memory", "Nl9", false),
-    QUARKUS_NEO4J("quarkus-neo4j", "Neo4j client", "pDS", false),
     // https://issues.redhat.com/browse/QUARKUS-1294
 //    QUARKUS_REDIS_CLIENT("quarkus-redis-client", "Redis Client", "jlX", false),
     QUARKUS_SMALLRYE_REACTIVE_MESSAGING("quarkus-smallrye-reactive-messaging", "SmallRye Reactive Messaging", "Nts", true),
@@ -115,9 +104,7 @@ public enum CodeQuarkusExtensions {
     // QUARKUS_ARTEMIS_JMS("quarkus-artemis-jms", "Artemis JMS", "DWo", false),
     QUARKUS_CONFIG_YAML("quarkus-config-yaml", "YAML Configuration", "UAO", true),
     QUARKUS_LOGGING_JSON("quarkus-logging-json", "Logging JSON", "7RG", true),
-    QUARKUS_CONSUL_CONFIG("quarkus-consul-config", "Consul Config", "cTX", false),
     QUARKUS_LOGGING_GELF("quarkus-logging-gelf", "Logging GELF", "wCO", false),
-    QUARKUS_LOGGING_SENTRY("quarkus-logging-sentry", "Logging Sentry", "eoJ", false),
     QUARKUS_VERTX("quarkus-vertx", "Eclipse Vert.x", "WqB", true),
     QUARKUS_MUTINY("quarkus-mutiny", "Mutiny", "zqM", true),
     QUARKUS_REDIS_CLIENT("quarkus-redis-client", "Redis Client", "jlX", false),
@@ -126,7 +113,6 @@ public enum CodeQuarkusExtensions {
     QUARKUS_OPENSHIFT("quarkus-openshift", "OpenShift", "Bqi", false),
     QUARKUS_SMALLRYE_HEALTH("quarkus-smallrye-health", "SmallRye Health", "tqK", true),
     QUARKUS_SMALLRYE_FAULT_TOLERANCE("quarkus-smallrye-fault-tolerance", "SmallRye Fault Tolerance", "vgg", true),
-    QUARKUS_AMAZON_ALEXA("quarkus-amazon-alexa", "Amazon Alexa", "5zI", false),
     QUARKUS_AMAZON_LAMBDA("quarkus-amazon-lambda", "AWS Lambda", "ia1", false),
     QUARKUS_AMAZON_LAMBDA_REST("quarkus-amazon-lambda-rest", "AWS Lambda Gateway REST API", "WSn", false),
     QUARKUS_AMAZON_LAMBDA_HTTP("quarkus-amazon-lambda-http", "AWS Lambda HTTP", "L0j", false),
