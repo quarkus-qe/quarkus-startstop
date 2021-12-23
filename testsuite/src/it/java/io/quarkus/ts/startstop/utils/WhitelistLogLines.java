@@ -80,6 +80,10 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Detected a split package usage which is considered a bad practice and should be avoided.*"),
             // Attempted to read Testcontainers configuration file at file:/home/runner/.testcontainers.properties but the file was not found.
             Pattern.compile(".*Attempted to read Testcontainers configuration file at.*"),
+            // 2021-12-23 12:57:02,610 WARN  [org.apa.kaf.cli.NetworkClient] (smallrye-kafka-consumer-thread-0) [Consumer clientId=kafka-consumer-uppercase-in, groupId=code-with-quarkus] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Broker may not be available.
+            Pattern.compile(".*org.apa.kaf.cli.NetworkClient.*"),
+            // https://github.com/quarkusio/quarkus/issues/22495
+            Pattern.compile(".*The configuration 'wildfly.sasl.relax-compliance' was supplied but isn't a known config.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.

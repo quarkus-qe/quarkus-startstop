@@ -426,6 +426,20 @@ public class Commands {
         }
     }
 
+    public static void dropEntityAnnotations(String appDir) throws IOException {
+        Path srcMainJava = Paths.get(appDir + File.separator + "src" + File.separator + "main" + File.separator + "java");
+
+        Files.walk(srcMainJava)
+                .filter(Files::isRegularFile)
+                .forEach(file -> {
+                    try {
+                        adjustFileContent(file, "@Entity", "");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
     public static int parsePort(String url) {
         return Integer.parseInt(url.split(":")[2].split("/")[0]);
     }
