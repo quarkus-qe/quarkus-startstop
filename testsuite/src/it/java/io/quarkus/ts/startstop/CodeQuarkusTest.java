@@ -9,7 +9,6 @@ import io.quarkus.ts.startstop.utils.WebpageTester;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
@@ -32,6 +31,7 @@ import static io.quarkus.ts.startstop.utils.Commands.adjustPrettyPrintForJsonLog
 import static io.quarkus.ts.startstop.utils.Commands.cleanDirOrFile;
 import static io.quarkus.ts.startstop.utils.Commands.disableDevServices;
 import static io.quarkus.ts.startstop.utils.Commands.download;
+import static io.quarkus.ts.startstop.utils.Commands.dropEntityAnnotations;
 import static io.quarkus.ts.startstop.utils.Commands.getArtifactGeneBaseDir;
 import static io.quarkus.ts.startstop.utils.Commands.getBuildCommand;
 import static io.quarkus.ts.startstop.utils.Commands.getRunCommand;
@@ -100,6 +100,7 @@ public class CodeQuarkusTest {
             removeRepositoriesAndPluginRepositories(appDir + File.separator + "pom.xml");
             adjustPrettyPrintForJsonLogging(appDir.getAbsolutePath());
             disableDevServices(appDir.getAbsolutePath());
+            dropEntityAnnotations(appDir.getAbsolutePath());
             List<String> cmd;
             // Build
             if (mvnCmds != MvnCmds.MVNW_DEV) {
@@ -199,12 +200,12 @@ public class CodeQuarkusTest {
 
     @Test
     public void notSupportedExtensionsSubsetA(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, notSupportedEx.get(0).subList(0, Math.min(20, notSupportedEx.get(0).size())), MvnCmds.MVNW_DEV);
+        testRuntime(testInfo, notSupportedEx.get(0).subList(0, Math.min(10, notSupportedEx.get(0).size())), MvnCmds.MVNW_DEV);
     }
     
     @Test
     public void notSupportedExtensionsSubsetB(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, notSupportedEx.get(0).subList(Math.min(20, notSupportedEx.get(0).size()), Math.min(40, notSupportedEx.get(0).size())), MvnCmds.MVNW_DEV);
+        testRuntime(testInfo, notSupportedEx.get(0).subList(Math.min(10, notSupportedEx.get(0).size()), Math.min(20, notSupportedEx.get(0).size())), MvnCmds.MVNW_DEV);
     }
 
     @Test
