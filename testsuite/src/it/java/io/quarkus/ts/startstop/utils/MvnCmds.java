@@ -12,7 +12,7 @@ import static io.quarkus.ts.startstop.utils.Commands.getQuarkusVersion;
  */
 public enum MvnCmds {
     JVM(new String[][]{
-            new String[]{"mvn", "clean", "compile", "quarkus:build", "-Dquarkus.package.output-name=quarkus"},
+            new String[]{"mvn", "clean", "dependency:tree", "compile", "quarkus:build", "-Dquarkus.package.output-name=quarkus"},
             new String[]{"java", "-jar", "target/quarkus-app/quarkus-run.jar"}
     }),
     DEV(new String[][]{
@@ -38,11 +38,11 @@ public enum MvnCmds {
             new String[]{Commands.mvnw(), "quarkus:dev"}
     }),
     MVNW_JVM(new String[][]{
-        new String[]{Commands.mvnw(), "clean", "compile", "quarkus:build", "-Dquarkus.package.output-name=quarkus"},
+        new String[]{Commands.mvnw(), "clean", "dependency:tree", "compile", "quarkus:build", "-Dquarkus.package.output-name=quarkus"},
         new String[]{"java", "-jar", "target/quarkus-app/quarkus-run.jar"}
     }),
     MVNW_NATIVE(new String[][]{
-        Stream.concat(Stream.of(Commands.mvnw(), "clean", "compile", "package", "-Pnative", "-Dquarkus.package.output-name=quarkus"),
+        Stream.concat(Stream.of(Commands.mvnw(), "clean", "dependency:tree", "compile", "package", "-Pnative", "-Dquarkus.package.output-name=quarkus"),
                 getQuarkusNativeProperties().stream()).toArray(String[]::new),
         new String[]{Commands.isThisWindows ? "target\\quarkus-runner" : "./target/quarkus-runner"}
     });
