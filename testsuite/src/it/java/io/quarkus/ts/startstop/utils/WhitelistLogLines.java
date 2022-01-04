@@ -99,6 +99,9 @@ public enum WhitelistLogLines {
     // Depending to the OS and also on the Quarkus extensions, the Native build might print some warnings about duplicate entries
     private static final Pattern COMMON_WARNING_DUPLICATE_ENTRY_NATIVE = Pattern.compile(".*Duplicate entry about.html entry.*");
     private static final Pattern COMMON_WARNING_DUPLICATE_ENTRIES_NATIVE = Pattern.compile(".*Dependencies with duplicate files detected.*");
+    private static final Pattern COMMON_SLF4J_API_DEPENDENCY_TREE = Pattern.compile(".*org.slf4j:slf4j-api:jar.*");
+    private static final Pattern COMMON_SLF4J_JBOSS_LOGMANAGER_DEPENDENCY_TREE = Pattern.compile(".*org.jboss.slf4j:slf4j-jboss-logmanager:jar.*");
+    private static final Pattern COMMON_XML_APIS_DEPENDENCY_TREE = Pattern.compile(".*The artifact xml-apis:xml-apis:jar:2.0.2 has been relocated to xml-apis:xml-apis:.*");
     // When
     private static final Pattern WARNING_MISSING_OBJCOPY_NATIVE = Pattern.compile(".*objcopy executable not found in PATH.*");
     private static final Pattern WARNING_MISSING_OBJCOPY_RESULT_NATIVE = Pattern.compile(".*That also means that resulting native executable is larger as it embeds the debug symbols..*");
@@ -115,6 +118,9 @@ public enum WhitelistLogLines {
                 return new Pattern[] {
                         COMMON_WARNING_DUPLICATE_ENTRY_NATIVE,
                         COMMON_WARNING_DUPLICATE_ENTRIES_NATIVE,
+                        COMMON_SLF4J_API_DEPENDENCY_TREE,
+                        COMMON_SLF4J_JBOSS_LOGMANAGER_DEPENDENCY_TREE,
+                        COMMON_XML_APIS_DEPENDENCY_TREE,
                         WARNING_MISSING_OBJCOPY_NATIVE,
                         WARNING_MISSING_OBJCOPY_RESULT_NATIVE,
                 };
@@ -122,6 +128,9 @@ public enum WhitelistLogLines {
                 return new Pattern[] {
                         COMMON_WARNING_DUPLICATE_ENTRY_NATIVE,
                         COMMON_WARNING_DUPLICATE_ENTRIES_NATIVE,
+                        COMMON_SLF4J_API_DEPENDENCY_TREE,
+                        COMMON_SLF4J_JBOSS_LOGMANAGER_DEPENDENCY_TREE,
+                        COMMON_XML_APIS_DEPENDENCY_TREE,
                         WARNING_MISSING_OBJCOPY_NATIVE,
                         WARNING_MISSING_OBJCOPY_RESULT_NATIVE,
                         Pattern.compile(".*Uber JAR strategy is used for native image source JAR generation on Windows.*"),
@@ -139,6 +148,9 @@ public enum WhitelistLogLines {
             	return new Pattern[] {
                         COMMON_WARNING_DUPLICATE_ENTRY_NATIVE,
                         COMMON_WARNING_DUPLICATE_ENTRIES_NATIVE,
+                        COMMON_SLF4J_API_DEPENDENCY_TREE,
+                        COMMON_SLF4J_JBOSS_LOGMANAGER_DEPENDENCY_TREE,
+                        COMMON_XML_APIS_DEPENDENCY_TREE,
                 };
         }
         return new Pattern[] {};
