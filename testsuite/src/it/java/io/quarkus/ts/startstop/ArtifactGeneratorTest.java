@@ -74,7 +74,6 @@ public class ArtifactGeneratorTest {
             "jsonb",
             "jsonp",
             "kafka-client",
-            "logging-json",
             "narayana-jta",
             "oidc",
             "quarkus-quartz", // "quartz" is ambiguous with org.apache.camel.quarkus:camel-quarkus-quartz
