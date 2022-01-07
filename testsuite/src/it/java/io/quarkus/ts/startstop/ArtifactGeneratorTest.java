@@ -163,7 +163,6 @@ public class ArtifactGeneratorTest {
             "jsonb",
             "jsonp",
             "kafka-client",
-            "logging-json",
             "narayana-jta",
             "oidc",
             "quarkus-quartz",
