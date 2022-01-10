@@ -141,9 +141,8 @@ public class ArtifactGeneratorTest {
             "spring-cloud-config-client",
             "spring-scheduled",
             "spring-cache",
-            // TODO https://github.com/quarkusio/quarkus/issues/18843 / https://issues.redhat.com/browse/QUARKUS-1291
-            // "websockets",
-            // "websockets-client",
+            "websockets",
+            "websockets-client",
     };
 
     public static final String[] supportedReactiveExtensionsSubsetSetA = new String[]{
