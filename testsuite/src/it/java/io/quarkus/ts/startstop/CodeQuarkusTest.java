@@ -65,6 +65,7 @@ public class CodeQuarkusTest {
     
     public static final Stream<CodeQuarkusExtensions> supportedExWithCodeStarter() {
         return Arrays.asList(
+                CodeQuarkusExtensions.QUARKUS_SMALLRYE_HEALTH,
                 CodeQuarkusExtensions.QUARKUS_LOGGING_JSON,
                 CodeQuarkusExtensions.QUARKUS_RESTEASY,
                 CodeQuarkusExtensions.QUARKUS_RESTEASY_JACKSON,
@@ -213,13 +214,23 @@ public class CodeQuarkusTest {
     @ParameterizedTest
     @MethodSource("supportedExWithCodeStarter")
     public void supportedExtensionWithCodeStarterWorksInJVM(CodeQuarkusExtensions extension, TestInfo testInfo) throws Exception {
-    	testRuntime(testInfo, Arrays.asList(extension), MvnCmds.MVNW_JVM);
+        List<CodeQuarkusExtensions> extensions = new ArrayList<>();
+        extensions.add(extension);
+        if (extension.equals(CodeQuarkusExtensions.QUARKUS_SMALLRYE_HEALTH)) {
+            extensions.add(CodeQuarkusExtensions.QUARKUS_RESTEASY);
+        }
+        testRuntime(testInfo, extensions, MvnCmds.MVNW_JVM);
     }
     
     @Tag("native")
     @ParameterizedTest
     @MethodSource("supportedExWithCodeStarter")
     public void supportedExtensionWithCodeStarterWorksInNative(CodeQuarkusExtensions extension, TestInfo testInfo) throws Exception {
-    	testRuntime(testInfo, Arrays.asList(extension), MvnCmds.MVNW_NATIVE);
+        List<CodeQuarkusExtensions> extensions = new ArrayList<>();
+        extensions.add(extension);
+        if (extension.equals(CodeQuarkusExtensions.QUARKUS_SMALLRYE_HEALTH)) {
+            extensions.add(CodeQuarkusExtensions.QUARKUS_RESTEASY);
+        }
+        testRuntime(testInfo, extensions, MvnCmds.MVNW_NATIVE);
     }
 }
