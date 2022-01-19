@@ -29,6 +29,7 @@ import static io.quarkus.ts.startstop.ArtifactGeneratorTest.supportedReactiveExt
 import static io.quarkus.ts.startstop.utils.Commands.adjustPrettyPrintForJsonLogging;
 import static io.quarkus.ts.startstop.utils.Commands.cleanDirOrFile;
 import static io.quarkus.ts.startstop.utils.Commands.confAppPropsForSkeleton;
+import static io.quarkus.ts.startstop.utils.Commands.dropEntityAnnotations;
 import static io.quarkus.ts.startstop.utils.Commands.getArtifactGeneBaseDir;
 import static io.quarkus.ts.startstop.utils.Commands.getBuildCommand;
 import static io.quarkus.ts.startstop.utils.Commands.getGeneratorCommand;
@@ -99,6 +100,7 @@ public class ArtifactGeneratorBOMTest {
             // Config, see app-generated-skeleton/README.md
             confAppPropsForSkeleton(appDir.getAbsolutePath());
             adjustPrettyPrintForJsonLogging(appDir.getAbsolutePath());
+            dropEntityAnnotations(appDir.getAbsolutePath());
 
             // Build
             LOGGER.info(mn + ": Build command " + String.join(" ", buildCmd));
