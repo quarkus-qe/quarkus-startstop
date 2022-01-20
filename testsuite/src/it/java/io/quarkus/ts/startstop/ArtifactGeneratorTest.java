@@ -4,6 +4,7 @@ import static io.quarkus.ts.startstop.utils.Commands.adjustPrettyPrintForJsonLog
 import static io.quarkus.ts.startstop.utils.Commands.cleanDirOrFile;
 import static io.quarkus.ts.startstop.utils.Commands.confAppPropsForSkeleton;
 import static io.quarkus.ts.startstop.utils.Commands.copyFileForSkeleton;
+import static io.quarkus.ts.startstop.utils.Commands.dropEntityAnnotations;
 import static io.quarkus.ts.startstop.utils.Commands.getArtifactGeneBaseDir;
 import static io.quarkus.ts.startstop.utils.Commands.getGeneratorCommand;
 import static io.quarkus.ts.startstop.utils.Commands.getOpenedFDs;
@@ -277,6 +278,7 @@ public class ArtifactGeneratorTest {
             // Config, see app-generated-skeleton/README.md
             confAppPropsForSkeleton(appDir.getAbsolutePath());
             adjustPrettyPrintForJsonLogging(appDir.getAbsolutePath());
+            dropEntityAnnotations(appDir.getAbsolutePath());
 
             // Run
             LOGGER.info("Running... " + runCmd);

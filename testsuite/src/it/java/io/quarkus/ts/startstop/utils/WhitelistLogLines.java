@@ -84,6 +84,15 @@ public enum WhitelistLogLines {
             Pattern.compile(".*org.apa.kaf.cli.NetworkClient.*"),
             // https://github.com/quarkusio/quarkus/issues/22495
             Pattern.compile(".*The configuration 'wildfly.sasl.relax-compliance' was supplied but isn't a known config.*"),
+            // https://github.com/quarkusio/quarkus/issues/23011
+            Pattern.compile(".*At least one unused gRPC client interceptor found: io.micrometer.core.instrument.binder.grpc.MetricCollectingClientInterceptor. If.*"),
+            Pattern.compile(".*At least one unused gRPC interceptor found: io.micrometer.core.instrument.binder.grpc.MetricCollectingServerInterceptor. If.*"),
+            // https://github.com/quarkusio/quarkus/issues/23012
+            Pattern.compile(".*SRMSG18216: No `group.id` set in the configuration, generate a random id:.*"),
+            // Kafka codestart without dev service enabled is not super stable in reload scenario
+            Pattern.compile(".*Message .* was not sent to Kafka topic 'word' - nacking message:.*"),
+            Pattern.compile(".*Unable to write to Kafka from channel source-out.*"),
+            Pattern.compile(".*io.smallrye.mutiny.subscription.MultiSubscriber.onError\\(MultiSubscriber.java.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
