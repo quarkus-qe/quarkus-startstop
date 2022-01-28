@@ -93,17 +93,17 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Message .* was not sent to Kafka topic 'word' - nacking message:.*"),
             Pattern.compile(".*Unable to write to Kafka from channel source-out.*"),
             Pattern.compile(".*io.smallrye.mutiny.subscription.MultiSubscriber.onError\\(MultiSubscriber.java.*"),
-    }),
-    // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
-    // Reported by https://github.com/quarkusio/quarkus/issues/14647.
-    WINDOWS_DEV_MODE_ERRORS(new Pattern[]{
-            Pattern.compile(".*Re-run Maven using the -X switch to enable full debug logging.*"),
-            Pattern.compile(".*For more information about the errors and possible solutions, please read the following articles.*"),
-            Pattern.compile(".*Failed to run: Dev mode process did not complete successfully.*"),
-            Pattern.compile(".*http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException.*"),
-            Pattern.compile(".*To see the full stack trace of the errors, re-run Maven with the -e switch.*"),
-            Pattern.compile("\\[ERROR\\] *"),
     });
+//    // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
+//    // Reported by https://github.com/quarkusio/quarkus/issues/14647.
+//    WINDOWS_DEV_MODE_ERRORS(new Pattern[]{
+//            Pattern.compile(".*Re-run Maven using the -X switch to enable full debug logging.*"),
+//            Pattern.compile(".*For more information about the errors and possible solutions, please read the following articles.*"),
+//            Pattern.compile(".*Failed to run: Dev mode process did not complete successfully.*"),
+//            Pattern.compile(".*http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException.*"),
+//            Pattern.compile(".*To see the full stack trace of the errors, re-run Maven with the -e switch.*"),
+//            Pattern.compile("\\[ERROR\\] *"),
+//    }
     
     // Depending to the OS and also on the Quarkus extensions, the Native build might print some warnings about duplicate entries
     private static final Pattern COMMON_WARNING_DUPLICATE_ENTRY_NATIVE = Pattern.compile(".*Duplicate entry about.html entry.*");
