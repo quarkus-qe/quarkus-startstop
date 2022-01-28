@@ -294,7 +294,6 @@ public class Commands {
         if (getQuarkusVersion().equals("999-SNAPSHOT")) {
             generatorCmd.add("-DplatformGroupId=io.quarkus");
         }
-        generatorCmd.add("-DplatformArtifactId=quarkus-bom"); // https://github.com/quarkusio/quarkus/issues/19083
         generatorCmd.add("-DplatformVersion=" + getQuarkusVersion());
         generatorCmd.add("-Dextensions=" + String.join(",", extensions));
         generatorCmd.add("-Dmaven.repo.local=" + getLocalMavenRepoDir());
