@@ -37,8 +37,7 @@ public enum CodeQuarkusExtensions {
 //    QUARKUS_RESTEASY_REACTIVE_QUTE("quarkus-resteasy-reactive-qute", "RESTEasy Reactive Qute", "X8W", false),
     // replaces quarkus-vertx-web - https://github.com/quarkusio/quarkus/wiki/Migration-Guide-2.3#reactive-routes
     QUARKUS_REACTIVE_ROUTES("quarkus-reactive-routes", "Reactive Routes", "0pm", true),
-    // https://github.com/quarkusio/quarkus/issues/22158
-//    QUARKUS_SMALLRYE_GRAPHQL("quarkus-smallrye-graphql", "SmallRye GraphQL", "jjB", false),
+    QUARKUS_SMALLRYE_GRAPHQL("quarkus-smallrye-graphql", "SmallRye GraphQL", "jjB", false),
     QUARKUS_SMALLRYE_GRAPHQL_CLIENT("quarkus-smallrye-graphql-client", "SmallRye GraphQL Client", "5Jv", false),
     QUARKUS_SMALLRYE_JWT("quarkus-smallrye-jwt", "SmallRye JWT", "D9x", true),
     QUARKUS_SMALLRYE_OPENAPI("quarkus-smallrye-openapi", "SmallRye OpenAPI", "ARC", true),
@@ -90,11 +89,8 @@ public enum CodeQuarkusExtensions {
     QUARKUS_SMALLRYE_REACTIVE_MESSAGING("quarkus-smallrye-reactive-messaging", "SmallRye Reactive Messaging", "Nts", true),
     QUARKUS_SMALLRYE_REACTIVE_MESSAGING_AMQP("quarkus-smallrye-reactive-messaging-amqp", "SmallRye Reactive Messaging - AMQP Connector", "ur3", true),
     QUARKUS_SMALLRYE_REACTIVE_MESSAGING_KAFKA("quarkus-smallrye-reactive-messaging-kafka", "SmallRye Reactive Messaging - Kafka Connector", "9qf", true),
-    // https://issues.redhat.com/browse/QUARKUS-1293
-//    QUARKUS_SMALLRYE_REACTIVE_MESSAGING_MQTT("quarkus-smallrye-reactive-messaging-mqtt", "SmallRye Reactive Messaging - MQTT Connector", "ZsB", false),
-    // SRCFG00014: Property quarkus.qpid-jms.url is required but the value was not found or is empty
-    // https://github.com/quarkusio/quarkus/issues/8506
-    // QUARKUS_QPID_JMS("quarkus-qpid-jms", "AMQP 1.0 JMS client - Apache Qpid JMS", "Zdm", false),
+    QUARKUS_SMALLRYE_REACTIVE_MESSAGING_MQTT("quarkus-smallrye-reactive-messaging-mqtt", "SmallRye Reactive Messaging - MQTT Connector", "ZsB", false),
+    QUARKUS_QPID_JMS("quarkus-qpid-jms", "AMQP 1.0 JMS client - Apache Qpid JMS", "Zdm", false),
     QUARKUS_KAFKA_CLIENT("quarkus-kafka-client", "Apache Kafka Client", "FKK", true),
     // SRCFG00014: Property quarkus.kafka-streams.topics is required but the value was not found or is empty
     // https://github.com/quarkusio/quarkus/issues/8506
