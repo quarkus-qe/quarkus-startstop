@@ -173,10 +173,9 @@ public class ArtifactGeneratorTest {
             "spring-data-jpa",
             "spring-di",
             "spring-security",
-            // problematic with reactive - https://issues.redhat.com/browse/QUARKUS-1300
+            // codestart is problematic with reactive - https://issues.redhat.com/browse/QUARKUS-1300 / https://github.com/quarkusio/quarkus/issues/23265
 //            "spring-web",
-            // https://github.com/quarkusio/quarkus/issues/20302
-//            "undertow",
+            "undertow",
             "vertx",
             "quarkus-reactive-routes",
             "grpc",
@@ -221,18 +220,16 @@ public class ArtifactGeneratorTest {
             "smallrye-reactive-messaging-amqp",
             "smallrye-reactive-messaging-kafka",
             "spring-data-jpa",
-            // problematic with reactive - https://issues.redhat.com/browse/QUARKUS-1300
-//            "spring-data-rest",
+            "spring-data-rest",
             "spring-di",
             "spring-security",
-            // problematic with reactive - https://issues.redhat.com/browse/QUARKUS-1300
+            // codestart is problematic with reactive - https://issues.redhat.com/browse/QUARKUS-1300 / https://github.com/quarkusio/quarkus/issues/23265
 //            "spring-web",
             "spring-cloud-config-client",
             "spring-scheduled",
             "spring-cache",
-            // TODO https://github.com/quarkusio/quarkus/issues/18843 / https://issues.redhat.com/browse/QUARKUS-1291
-//             "websockets",
-//             "websockets-client",
+             "websockets",
+             "websockets-client",
     };
 
     public void testRuntime(TestInfo testInfo, String[] extensions, Set<TestFlags> flags) throws Exception {
