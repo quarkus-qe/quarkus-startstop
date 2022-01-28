@@ -171,7 +171,6 @@ public class SpecialCharsTest {
     }
 
     @Test
-    @Disabled("https://github.com/quarkusio/quarkus/issues/15358")
     public void specialJVM(TestInfo testInfo) throws IOException, InterruptedException {
         testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.JVM, ",;~!@#$%^&()");
     }
