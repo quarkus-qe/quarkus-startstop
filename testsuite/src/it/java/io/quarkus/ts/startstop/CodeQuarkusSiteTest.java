@@ -104,6 +104,8 @@ public class CodeQuarkusSiteTest {
             return;
         }
         Path quarkusProductBomPath = Paths.get(System.getProperty("maven.repo.local")).resolve("com/redhat/quarkus/platform/quarkus-bom");
+        // https://issues.redhat.com/browse/QUARKUS-1743 ... using core BOM instead of platform one for now
+        quarkusProductBomPath = Paths.get(System.getProperty("maven.repo.local")).resolve("io/quarkus/quarkus-bom");
         try (Stream<Path> paths = Files.walk(quarkusProductBomPath)) {
             List<Path> folders = paths.filter(Files::isDirectory).collect(Collectors.toList());
             quarkusPlatformVersion = folders.get(1).getFileName().toString();
