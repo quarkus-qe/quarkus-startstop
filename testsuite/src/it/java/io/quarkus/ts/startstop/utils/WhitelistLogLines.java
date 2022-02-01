@@ -69,6 +69,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*io.qua.arc.impl.*"), // TODO remove when resolved https://github.com/quarkusio/quarkus/issues/18105
             // We have disabled the Quarkus Registry Client (-DquarkusRegistryClient=false)
             Pattern.compile(".*The extension catalog will be narrowed to.*"),
+            // Quarkus Platform - Camel is not being shipped together with Quarkus; hence a warning about missing members catalog
+            Pattern.compile(".*Failed to resolve member catalog com.redhat.quarkus.platform:quarkus-camel-bom-quarkus-platform-descriptor.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
