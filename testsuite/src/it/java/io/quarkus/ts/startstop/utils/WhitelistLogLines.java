@@ -19,7 +19,6 @@ public enum WhitelistLogLines {
             Pattern.compile(".*TestSecureController.java.*"),
             // Well, the RestClient demo probably should do some cleanup before shutdown...?
             Pattern.compile(".*Closing a class org.jboss.resteasy.client.jaxrs.engines.ApacheHttpClient.*"),
-            Pattern.compile(".*Class does not exist in ClassLoader QuarkusClassLoader.*"), // TODO remove when resolved https://github.com/quarkusio/quarkus/issues/18746
     }),
     GENERATED_SKELETON(new Pattern[]{
             // It so happens that the dummy skeleton tries to find Mongo. This is expected.
@@ -61,7 +60,6 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Unable to determine a database type for default datasource.*"),
             // Maven 3.8.1 throw a warn msg related to a mirror default configuration
             Pattern.compile(".*org.apache.maven.settings.io.SettingsParseException: Unrecognised tag: 'blocked'.*"),
-            Pattern.compile(".*io.qua.arc.impl.*"), // TODO remove when resolved https://github.com/quarkusio/quarkus/issues/18105
             // We have disabled the Quarkus Registry Client (-DquarkusRegistryClient=false)
             Pattern.compile(".*The extension catalog will be narrowed to.*"),
             // comes with https://github.com/quarkusio/quarkus/pull/20182
@@ -72,27 +70,20 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Can not find \\{\\} in the classpath, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS.*"),
             // comes with https://github.com/quarkusio/quarkus/pull/19969
             Pattern.compile(".*OIDC metadata discovery failed:.*Connection refused.*localhost/127.0.0.1:6661.*"),
-            // https://github.com/quarkusio/quarkus/issues/20752
-            Pattern.compile(".*system modules path not set in conjunction with -source 11.*"),
-            // https://github.com/quarkusio/quarkus/issues/21030
-            Pattern.compile(".*Build time property cannot be changed at runtime.*"),
-            // https://github.com/quarkusio/quarkus/issues/21912
-            Pattern.compile(".*Detected a split package usage which is considered a bad practice and should be avoided.*"),
             // Attempted to read Testcontainers configuration file at file:/home/runner/.testcontainers.properties but the file was not found.
             Pattern.compile(".*Attempted to read Testcontainers configuration file at.*"),
             // 2021-12-23 12:57:02,610 WARN  [org.apa.kaf.cli.NetworkClient] (smallrye-kafka-consumer-thread-0) [Consumer clientId=kafka-consumer-uppercase-in, groupId=code-with-quarkus] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Broker may not be available.
             Pattern.compile(".*org.apa.kaf.cli.NetworkClient.*"),
-            // https://github.com/quarkusio/quarkus/issues/22495
-            Pattern.compile(".*The configuration 'wildfly.sasl.relax-compliance' was supplied but isn't a known config.*"),
-            // https://github.com/quarkusio/quarkus/issues/23011
-            Pattern.compile(".*At least one unused gRPC client interceptor found: io.micrometer.core.instrument.binder.grpc.MetricCollectingClientInterceptor. If.*"),
-            Pattern.compile(".*At least one unused gRPC interceptor found: io.micrometer.core.instrument.binder.grpc.MetricCollectingServerInterceptor. If.*"),
-            // https://github.com/quarkusio/quarkus/issues/23012
+            Pattern.compile(".*org.apache.kafka.clients.NetworkClient.*"),
             Pattern.compile(".*SRMSG18216: No `group.id` set in the configuration, generate a random id:.*"),
             // Kafka codestart without dev service enabled is not super stable in reload scenario
-            Pattern.compile(".*Message .* was not sent to Kafka topic 'word' - nacking message:.*"),
-            Pattern.compile(".*Unable to write to Kafka from channel source-out.*"),
+            Pattern.compile(".*Message .* was not sent to Kafka topic 'words' - nacking message:.*"),
+            Pattern.compile(".*Unable to write to Kafka from channel words-out.*"),
             Pattern.compile(".*io.smallrye.mutiny.subscription.MultiSubscriber.onError\\(MultiSubscriber.java.*"),
+            // https://github.com/quarkusio/quarkus/issues/23382
+            Pattern.compile(".*Unable to properly register the hierarchy of the following classes for reflection as they are not in the Jandex index.*"),
+            // https://github.com/quarkusio/quarkus/issues/23387
+            Pattern.compile(".*The configuration.*auto.offset.reset.* was supplied but isn't a known config.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.

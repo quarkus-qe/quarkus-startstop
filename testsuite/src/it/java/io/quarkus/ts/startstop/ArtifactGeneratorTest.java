@@ -132,7 +132,8 @@ public class ArtifactGeneratorTest {
             "smallrye-openapi",
             "smallrye-opentracing",
             "smallrye-reactive-messaging",
-            "smallrye-reactive-messaging-amqp",
+            // https://github.com/quarkusio/quarkus/issues/23383
+//            "smallrye-reactive-messaging-amqp",
             "smallrye-reactive-messaging-kafka",
             "spring-data-jpa",
             "spring-data-rest",
@@ -217,7 +218,8 @@ public class ArtifactGeneratorTest {
             "smallrye-openapi",
             "smallrye-opentracing",
             "smallrye-reactive-messaging",
-            "smallrye-reactive-messaging-amqp",
+            // https://github.com/quarkusio/quarkus/issues/23383
+//            "smallrye-reactive-messaging-amqp",
             "smallrye-reactive-messaging-kafka",
             "spring-data-jpa",
             "spring-data-rest",

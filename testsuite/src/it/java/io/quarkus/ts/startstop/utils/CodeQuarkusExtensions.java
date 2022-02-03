@@ -87,7 +87,8 @@ public enum CodeQuarkusExtensions {
     // https://issues.redhat.com/browse/QUARKUS-1294
 //    QUARKUS_REDIS_CLIENT("quarkus-redis-client", "Redis Client", "jlX", false),
     QUARKUS_SMALLRYE_REACTIVE_MESSAGING("quarkus-smallrye-reactive-messaging", "SmallRye Reactive Messaging", "Nts", true),
-    QUARKUS_SMALLRYE_REACTIVE_MESSAGING_AMQP("quarkus-smallrye-reactive-messaging-amqp", "SmallRye Reactive Messaging - AMQP Connector", "ur3", true),
+    // https://github.com/quarkusio/quarkus/issues/23383
+//    QUARKUS_SMALLRYE_REACTIVE_MESSAGING_AMQP("quarkus-smallrye-reactive-messaging-amqp", "SmallRye Reactive Messaging - AMQP Connector", "ur3", true),
     QUARKUS_SMALLRYE_REACTIVE_MESSAGING_KAFKA("quarkus-smallrye-reactive-messaging-kafka", "SmallRye Reactive Messaging - Kafka Connector", "9qf", true),
     QUARKUS_SMALLRYE_REACTIVE_MESSAGING_MQTT("quarkus-smallrye-reactive-messaging-mqtt", "SmallRye Reactive Messaging - MQTT Connector", "ZsB", false),
     QUARKUS_QPID_JMS("quarkus-qpid-jms", "AMQP 1.0 JMS client - Apache Qpid JMS", "Zdm", false),
