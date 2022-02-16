@@ -231,6 +231,6 @@ public class CodeQuarkusTest {
         if (extension.equals(CodeQuarkusExtensions.QUARKUS_SMALLRYE_HEALTH)) {
             extensions.add(CodeQuarkusExtensions.QUARKUS_RESTEASY);
         }
-        testRuntime(testInfo, extensions, MvnCmds.MVNW_NATIVE);
+        testRuntime(testInfo, extensions, MvnCmds.MVNW_NATIVE_FIPS_DISABLED);
     }
 }

@@ -1,11 +1,11 @@
 package io.quarkus.ts.startstop.utils;
 
-import java.util.stream.Stream;
-
+import static io.quarkus.ts.startstop.utils.Commands.getLocalMavenRepoDir;
 import static io.quarkus.ts.startstop.utils.Commands.getQuarkusGroupId;
 import static io.quarkus.ts.startstop.utils.Commands.getQuarkusNativeProperties;
-import static io.quarkus.ts.startstop.utils.Commands.getLocalMavenRepoDir;
 import static io.quarkus.ts.startstop.utils.Commands.getQuarkusVersion;
+
+import java.util.stream.Stream;
 
 /**
  * Maven commands
@@ -41,9 +41,10 @@ public enum MvnCmds {
         new String[]{Commands.mvnw(), "clean", "compile", "quarkus:build", "-Dquarkus.package.output-name=quarkus"},
         new String[]{"java", "-jar", "target/quarkus-app/quarkus-run.jar"}
     }),
-    MVNW_NATIVE(new String[][]{
-        Stream.concat(Stream.of(Commands.mvnw(), "clean", "compile", "package", "-Pnative", "-Dquarkus.package.output-name=quarkus"),
-                getQuarkusNativeProperties().stream()).toArray(String[]::new),
+    MVNW_NATIVE_FIPS_DISABLED(new String[][]{
+            Stream.concat(Stream.of(Commands.mvnw(), "clean", "compile", "package", "-Pnative",
+                    "-Dquarkus.package.output-name=quarkus", "-Dquarkus.native.additional-build-args=-Dcom.redhat.fips=false"),
+                    getQuarkusNativeProperties().stream()).toArray(String[]::new),
         new String[]{Commands.isThisWindows ? "target\\quarkus-runner" : "./target/quarkus-runner"}
     });
 
