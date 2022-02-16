@@ -9,6 +9,7 @@
     <properties>
         <quarkus.version>2.2.4.Final</quarkus.version>
         <quarkus-ide-config.version>2.2.2.Final</quarkus-ide-config.version>
+        <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.version>3.8.1</maven.compiler.version>
