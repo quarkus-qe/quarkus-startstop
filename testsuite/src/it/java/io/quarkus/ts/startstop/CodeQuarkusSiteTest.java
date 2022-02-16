@@ -106,9 +106,12 @@ public class CodeQuarkusSiteTest {
         Path quarkusProductBomPath = Paths.get(System.getProperty("maven.repo.local")).resolve("com/redhat/quarkus/platform/quarkus-bom");
         // https://issues.redhat.com/browse/QUARKUS-1743 ... using core BOM instead of platform one for now
         quarkusProductBomPath = Paths.get(System.getProperty("maven.repo.local")).resolve("io/quarkus/quarkus-bom");
-        try (Stream<Path> paths = Files.walk(quarkusProductBomPath)) {
-            List<Path> folders = paths.filter(Files::isDirectory).collect(Collectors.toList());
-            quarkusPlatformVersion = folders.get(1).getFileName().toString();
+        try (Stream<Path> paths = Files.list(quarkusProductBomPath)) {
+            List<String> folders = paths.filter(Files::isDirectory)
+                    .map(path -> path.getFileName().toString())
+                    .sorted()
+                    .collect(Collectors.toList());
+            quarkusPlatformVersion = folders.get(folders.size() - 1); // get the last directory from the sorted list
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
