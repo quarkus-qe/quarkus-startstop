@@ -29,6 +29,7 @@ import org.junit.jupiter.api.condition.OS;
 import static io.quarkus.ts.startstop.utils.Commands.cleanTarget;
 import static io.quarkus.ts.startstop.utils.Commands.getBaseDir;
 import static io.quarkus.ts.startstop.utils.Commands.getBuildCommand;
+import static io.quarkus.ts.startstop.utils.Commands.getQuarkusGroupId;
 import static io.quarkus.ts.startstop.utils.Commands.getQuarkusVersion;
 import static io.quarkus.ts.startstop.utils.Commands.getRunCommand;
 import static io.quarkus.ts.startstop.utils.Commands.processStopper;
@@ -93,6 +94,7 @@ public class SpecialCharsTest {
                 List<String> baseBuildCmd = new ArrayList<>();
                 baseBuildCmd.addAll(Arrays.asList(mvnCmds.mvnCmds[0]));
                 baseBuildCmd.add("-Dquarkus.version=" + getQuarkusVersion());
+                baseBuildCmd.add("-Dquarkus.platform.group-id=" + getQuarkusGroupId());
                 cmd = getBuildCommand(baseBuildCmd.toArray(new String[0]));
 
                 appendln(whatIDidReport, "# " + cn + ", " + mn);
@@ -117,6 +119,7 @@ public class SpecialCharsTest {
                 List<String> baseBuildCmd = new ArrayList<>();
                 baseBuildCmd.addAll(Arrays.asList(mvnCmds.mvnCmds[0]));
                 baseBuildCmd.add("-Dquarkus.version=" + getQuarkusVersion());
+                baseBuildCmd.add("-Dquarkus.platform.group-id=" + getQuarkusGroupId());
                 cmd = getRunCommand(baseBuildCmd.toArray(new String[0]));
             } else {
                 cmd = getRunCommand(mvnCmds.mvnCmds[1]);

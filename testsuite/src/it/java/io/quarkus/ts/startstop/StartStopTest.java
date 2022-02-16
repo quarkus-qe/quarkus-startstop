@@ -29,6 +29,7 @@ import static io.quarkus.ts.startstop.utils.Commands.cleanTarget;
 import static io.quarkus.ts.startstop.utils.Commands.getBaseDir;
 import static io.quarkus.ts.startstop.utils.Commands.getBuildCommand;
 import static io.quarkus.ts.startstop.utils.Commands.getOpenedFDs;
+import static io.quarkus.ts.startstop.utils.Commands.getQuarkusGroupId;
 import static io.quarkus.ts.startstop.utils.Commands.getQuarkusVersion;
 import static io.quarkus.ts.startstop.utils.Commands.getRSSkB;
 import static io.quarkus.ts.startstop.utils.Commands.getRunCommand;
@@ -81,6 +82,7 @@ public class StartStopTest {
             List<String> baseBuildCmd = new ArrayList<>();
             baseBuildCmd.addAll(Arrays.asList(mvnCmds.mvnCmds[0]));
             baseBuildCmd.add("-Dquarkus.version=" + getQuarkusVersion());
+            baseBuildCmd.add("-Dquarkus.platform.group-id=" + getQuarkusGroupId());
             List<String> cmd = getBuildCommand(baseBuildCmd.toArray(new String[0]));
 
             buildService.submit(new Commands.ProcessRunner(appDir, buildLogA, cmd, 20));
