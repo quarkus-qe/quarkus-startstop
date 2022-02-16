@@ -19,6 +19,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import static io.quarkus.ts.startstop.utils.Commands.getQuarkusGroupId;
 import static io.quarkus.ts.startstop.utils.Commands.getQuarkusVersion;
 import static io.quarkus.ts.startstop.utils.Commands.getBuildCommand;
 import static io.quarkus.ts.startstop.utils.Commands.cleanTarget;
@@ -59,6 +60,7 @@ public class NativeDebugTest {
             List<String> baseBuildCmd = new ArrayList<>();
             baseBuildCmd.addAll(Arrays.asList(mvnCmds.mvnCmds[0]));
             baseBuildCmd.add("-Dquarkus.version=" + getQuarkusVersion());
+            baseBuildCmd.add("-Dquarkus.platform.group-id=" + getQuarkusGroupId());
             baseBuildCmd.add("-Dquarkus.native.debug.enabled=true");
             List<String> cmd = getBuildCommand(baseBuildCmd.toArray(new String[0]));
 
