@@ -43,7 +43,7 @@ public class CodeQuarkusSiteTest {
     public static final String elementTitleByText = "Quarkus - Start coding with code.quarkus.redhat.com";
     public static final String elementIconByXpath = "//link[@rel=\"shortcut icon\"][@href=\"https://www.redhat.com/misc/favicon.ico\"]";
     public static final String elementRedHatLogoByXpath= "//img[@class=\"logo\"][@alt=\"Red Hat Logo\"]";
-    public static final String elementSupportedFlagByXpath = "//div[@class=\"extension-tag supported dropdown-toggle\"]";
+    public static final String elementSupportedFlagByXpath = "//div[@class=\"extension-tag redhat-support:supported dropdown-toggle\"]";
     public static final String elementQuarkusPlatformVersionByXpath = "//div[@class=\"quarkus-stream final\"]";
 
     private BrowserContext browserContext; // Operates in incognito mode
