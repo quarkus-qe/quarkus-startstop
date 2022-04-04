@@ -42,6 +42,7 @@ public class CodeQuarkusSiteTest {
     public static final String webPageUrl = Commands.getCodeQuarkusURL("https://code.quarkus.redhat.com/");
     public static final String elementTitleByText = "Quarkus - Start coding with code.quarkus.redhat.com";
     public static final String elementIconByXpath = "//link[@rel=\"shortcut icon\"][@href=\"https://www.redhat.com/misc/favicon.ico\"]";
+    public static final String elementJavaVersionSelectByXpath = "//select[@id=\"javaversion\"]";
     public static final String elementRedHatLogoByXpath= "//img[@class=\"logo\"][@alt=\"Red Hat Logo\"]";
     public static final String elementSupportedFlagByXpath = "//div[@class=\"extension-tag redhat-support:supported dropdown-toggle\"]";
     public static final String elementQuarkusPlatformVersionByXpath = "//div[@class=\"quarkus-stream final\"]";
@@ -94,6 +95,18 @@ public class CodeQuarkusSiteTest {
         LOGGER.info("Trying to find element: " + elementSupportedFlagByXpath);
         Locator supportedExtensions = page.locator(elementSupportedFlagByXpath);
         assertTrue(supportedExtensions.count() > 1, "Element: " + elementSupportedFlagByXpath + " is missing!");
+    }
+
+    @Test
+    public void validatePresenceOfJavaVersionSelect(TestInfo testInfo) {
+        Page page = loadPage(webPageUrl, 60);
+        LOGGER.info("Trying to find element: " + elementJavaVersionSelectByXpath);
+        Locator javaVersionSelect = page.locator(elementJavaVersionSelectByXpath);
+        assertTrue(javaVersionSelect.count() == 1, "Element: " + elementJavaVersionSelectByXpath + " is missing!");
+
+        String javaVersionText = javaVersionSelect.textContent();
+        assertTrue(javaVersionText.contains("11"), "Java 11 is missing in java version select! javaVersionText: " + javaVersionText);
+        assertTrue(javaVersionText.contains("17"), "Java 17 is missing in java version select! javaVersionText: " + javaVersionText);
     }
 
     @Test
