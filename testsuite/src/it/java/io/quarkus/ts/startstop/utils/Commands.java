@@ -310,9 +310,29 @@ public class Commands {
      * @throws IOException
      */
     public static String download(Collection<CodeQuarkusExtensions> extensions, String destinationZipFile) throws IOException {
-        disableSslVerification();
         String downloadURL = getCodeQuarkusURL() + "/api/download?s=" +
                 extensions.stream().map(x -> x.shortId).collect(Collectors.joining("."));
+        return download(downloadURL, destinationZipFile);
+    }
+
+    /**
+     * Download a zip file with an example project
+     *
+     * @param extensions         collection of extension codes, @See {@link io.quarkus.ts.startstop.utils.CodeQuarkusExtensions}
+     * @param destinationZipFile path where the zip file will be written
+     * @param javaVersion        Java version used in generated project (11 or 17)
+     * @return the actual URL used for audit and logging purposes
+     * @throws IOException
+     */
+    public static String download(Collection<CodeQuarkusExtensions> extensions, String destinationZipFile, int javaVersion) throws IOException {
+        String downloadURL = getCodeQuarkusURL() + "/api/download?s=" +
+                extensions.stream().map(x -> x.shortId).collect(Collectors.joining(".")) +
+                "&j=" + javaVersion;
+        return download(downloadURL, destinationZipFile);
+    }
+
+    private static String download(String downloadURL, String destinationZipFile) throws IOException {
+        disableSslVerification();
         try (ReadableByteChannel readableByteChannel = Channels.newChannel(
                 new URL(downloadURL).openStream());
                 FileChannel fileChannel = new FileOutputStream(destinationZipFile).getChannel()) {
