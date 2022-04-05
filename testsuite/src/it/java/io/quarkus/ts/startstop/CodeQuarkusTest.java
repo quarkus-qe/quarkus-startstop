@@ -213,7 +213,32 @@ public class CodeQuarkusTest {
     public void mixExtensions(TestInfo testInfo) throws Exception {
         testRuntime(testInfo, mixedEx.get(0).subList(0, Math.min(20, mixedEx.get(0).size())), MvnCmds.MVNW_DEV);
     }
-    
+
+    @Test
+    public void java17BasedProject(TestInfo testInfo) throws Exception {
+        StringBuilder whatIDidReport = new StringBuilder();
+        String cn = testInfo.getTestClass().get().getCanonicalName();
+        String mn = testInfo.getTestMethod().get().getName();
+        File appDir = new File(GEN_BASE_DIR + File.separator + "code-with-quarkus");
+        String zipFile = GEN_BASE_DIR + File.separator + "code-with-quarkus.zip";
+
+        try {
+            appendln(whatIDidReport, "# " + cn + ", " + mn);
+            appendln(whatIDidReport, (new Date()).toString());
+            LOGGER.info("Downloading...");
+            appendln(whatIDidReport, "Download URL: " + download(List.of(CodeQuarkusExtensions.QUARKUS_RESTEASY), zipFile, 17));
+            LOGGER.info("Unzipping...");
+            unzip(zipFile, GEN_BASE_DIR);
+
+            String pom = Files.readString(Paths.get(GEN_BASE_DIR + File.separator + "code-with-quarkus" + File.separator + "pom.xml"));
+            assertTrue(pom.contains("<maven.compiler.release>17"), "Downloaded app doesn't have pom.xml file Java 17 based");
+
+        } finally {
+            writeReport(cn, mn, whatIDidReport.toString());
+            cleanDirOrFile(appDir.getAbsolutePath());
+        }
+    }
+
     @ParameterizedTest
     @MethodSource("supportedExWithCodeStarter")
     public void supportedExtensionWithCodeStarterWorksInJVM(CodeQuarkusExtensions extension, TestInfo testInfo) throws Exception {
