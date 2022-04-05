@@ -44,6 +44,8 @@ public class CodeQuarkusSiteTest {
     public static final String elementIconByXpath = "//link[@rel=\"shortcut icon\"][@href=\"https://www.redhat.com/misc/favicon.ico\"]";
     public static final String elementJavaVersionSelectByXpath = "//select[@id=\"javaversion\"]";
     public static final String elementRedHatLogoByXpath= "//img[@class=\"logo\"][@alt=\"Red Hat Logo\"]";
+    public static final String elementStreamPickerByXpath= "//div[@class=\"stream-picker dropdown\"]";
+    public static final String elementStreamItemsByXpath= "//div[@class=\"dropdown-item\"]";
     public static final String elementSupportedFlagByXpath = "//div[@class=\"extension-tag redhat-support:supported dropdown-toggle\"]";
     public static final String elementQuarkusPlatformVersionByXpath = "//div[@class=\"quarkus-stream final\"]";
 
@@ -107,6 +109,22 @@ public class CodeQuarkusSiteTest {
         String javaVersionText = javaVersionSelect.textContent();
         assertTrue(javaVersionText.contains("11"), "Java 11 is missing in java version select! javaVersionText: " + javaVersionText);
         assertTrue(javaVersionText.contains("17"), "Java 17 is missing in java version select! javaVersionText: " + javaVersionText);
+    }
+
+    @Test
+    public void validatePresenceOfStreamVersionSelect(TestInfo testInfo) {
+        Page page = loadPage(webPageUrl, 60);
+        LOGGER.info("Trying to find element: " + elementStreamPickerByXpath);
+        Locator streamPicker = page.locator(elementStreamPickerByXpath);
+        assertTrue(streamPicker.isVisible(), "Element: " + streamPicker + " is missing!");
+
+        LOGGER.info("Trying to find elements: " + elementStreamItemsByXpath);
+        streamPicker.click();
+        Locator streamItems = page.locator(elementStreamItemsByXpath);
+        assertTrue(streamItems.count() > 0, "No stream is defined");
+//        assertTrue(streamItems.count() > 1, "Just one stream is defined, streamItems count: " + streamItems.count() + "\n" +
+//                "Please make sure the 2 months period for 2 supported streams applies before filing issue for the product. \n" +
+//                "Product Update and Support Policy: https://access.redhat.com/support/policy/updates/jboss_notes#p_quarkus");
     }
 
     @Test
