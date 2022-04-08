@@ -164,6 +164,8 @@ public enum CodeQuarkusExtensions {
     QUARKUS_OIDC_CLIENT_FILTER("quarkus-oidc-client-filter", "OpenID Connect Client Filter", "T0U", true),
     // TODO Introduce buckets with reactive jax-rs extensions
 //    QUARKUS_OIDC_CLIENT_REACTIVE_FILTER("quarkus-oidc-client-reactive-filter", "OpenID Connect Client Filter Reactive", "YqA", false),
+    // TODO Introduce buckets with reactive jax-rs extensions
+//    QUARKUS_OIDC_TOKEN_PROPAGATION_REACTIVE("quarkus-oidc-token-propagation-reactive", "OpenID Connect Token Propagation Reactive", "ignored", false),
     QUARKUS_OIDC_TOKEN_PROPAGATION("quarkus-oidc-token-propagation", "OpenID Connect Token Propagation", "Bg9", false),
     QUARKUS_SECURITY_JPA("quarkus-security-jpa", "Security JPA", "W8w", false),
     QUARKUS_SMALLRYE_JWT_BUILD("quarkus-smallrye-jwt-build", "SmallRye JWT Build", "Phi", true),
