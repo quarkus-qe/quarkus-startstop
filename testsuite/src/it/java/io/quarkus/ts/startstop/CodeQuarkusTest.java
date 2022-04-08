@@ -63,15 +63,14 @@ public class CodeQuarkusTest {
     public static final List<List<CodeQuarkusExtensions>> notSupportedEx = CodeQuarkusExtensions.partition(1, CodeQuarkusExtensions.Flag.NOT_SUPPORTED);
     public static final List<List<CodeQuarkusExtensions>> mixedEx = CodeQuarkusExtensions.partition(1, CodeQuarkusExtensions.Flag.MIXED);
     
-    public static final Stream<CodeQuarkusExtensions> supportedExWithCodeStarter() {
+    public static final Stream<List<CodeQuarkusExtensions>> supportedExWithCodeStarter() {
         return Arrays.asList(
-                CodeQuarkusExtensions.QUARKUS_SMALLRYE_HEALTH,
-                CodeQuarkusExtensions.QUARKUS_LOGGING_JSON,
-                CodeQuarkusExtensions.QUARKUS_RESTEASY,
-                CodeQuarkusExtensions.QUARKUS_RESTEASY_JACKSON,
-                CodeQuarkusExtensions.QUARKUS_SPRING_WEB,
-                CodeQuarkusExtensions.QUARKUS_WEBSOCKETS,
-                CodeQuarkusExtensions.QUARKUS_QUTE).stream();
+                Arrays.asList(CodeQuarkusExtensions.QUARKUS_SMALLRYE_HEALTH, CodeQuarkusExtensions.QUARKUS_RESTEASY),
+                Arrays.asList(CodeQuarkusExtensions.QUARKUS_LOGGING_JSON, CodeQuarkusExtensions.QUARKUS_RESTEASY),
+                Arrays.asList(CodeQuarkusExtensions.QUARKUS_RESTEASY),
+                Arrays.asList(CodeQuarkusExtensions.QUARKUS_SPRING_WEB),
+                Arrays.asList(CodeQuarkusExtensions.QUARKUS_WEBSOCKETS)
+        ).stream();
     }
 
     public void testRuntime(TestInfo testInfo, List<CodeQuarkusExtensions> extensions, MvnCmds mvnCmds) throws Exception {
@@ -206,7 +205,11 @@ public class CodeQuarkusTest {
     
     @Test
     public void notSupportedExtensionsSubsetB(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, notSupportedEx.get(0).subList(Math.min(10, notSupportedEx.get(0).size()), Math.min(20, notSupportedEx.get(0).size())), MvnCmds.MVNW_DEV);
+        List<CodeQuarkusExtensions> notSupportedExtensionsSubsetB = notSupportedEx.get(0).subList(Math.min(10, notSupportedEx.get(0).size()), Math.min(20, notSupportedEx.get(0).size()));
+        // resteasy or spring-web extension is needed to provide index.html file
+        // content from index.html file is checked to ensure the application is up and running
+        notSupportedExtensionsSubsetB.add(CodeQuarkusExtensions.QUARKUS_RESTEASY);
+        testRuntime(testInfo, notSupportedExtensionsSubsetB, MvnCmds.MVNW_DEV);
     }
 
     @Test
@@ -241,24 +244,14 @@ public class CodeQuarkusTest {
 
     @ParameterizedTest
     @MethodSource("supportedExWithCodeStarter")
-    public void supportedExtensionWithCodeStarterWorksInJVM(CodeQuarkusExtensions extension, TestInfo testInfo) throws Exception {
-        List<CodeQuarkusExtensions> extensions = new ArrayList<>();
-        extensions.add(extension);
-        if (extension.equals(CodeQuarkusExtensions.QUARKUS_SMALLRYE_HEALTH)) {
-            extensions.add(CodeQuarkusExtensions.QUARKUS_RESTEASY);
-        }
+    public void supportedExtensionWithCodeStarterWorksInJVM(List<CodeQuarkusExtensions> extensions, TestInfo testInfo) throws Exception {
         testRuntime(testInfo, extensions, MvnCmds.MVNW_JVM);
     }
     
     @Tag("native")
     @ParameterizedTest
     @MethodSource("supportedExWithCodeStarter")
-    public void supportedExtensionWithCodeStarterWorksInNative(CodeQuarkusExtensions extension, TestInfo testInfo) throws Exception {
-        List<CodeQuarkusExtensions> extensions = new ArrayList<>();
-        extensions.add(extension);
-        if (extension.equals(CodeQuarkusExtensions.QUARKUS_SMALLRYE_HEALTH)) {
-            extensions.add(CodeQuarkusExtensions.QUARKUS_RESTEASY);
-        }
+    public void supportedExtensionWithCodeStarterWorksInNative(List<CodeQuarkusExtensions> extensions, TestInfo testInfo) throws Exception {
         testRuntime(testInfo, extensions, MvnCmds.MVNW_NATIVE);
     }
 }
