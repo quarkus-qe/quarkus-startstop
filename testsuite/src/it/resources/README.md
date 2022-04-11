@@ -44,3 +44,6 @@ This is a utility that generates a convenience enum from a Code Quarkus website 
 ```
 javac JSONtoEnum.java  &&  java JSONtoEnum https://code.quarkus.stage.redhat.com/api/extensions
 ```
+
+# API of code.quarkus
+https://editor.swagger.io/?url=https://code.quarkus.io/q/openapi

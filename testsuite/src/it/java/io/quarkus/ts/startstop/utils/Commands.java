@@ -315,6 +315,12 @@ public class Commands {
         return download(downloadURL, destinationZipFile);
     }
 
+    // possible URL length concern when many extensions are selected, you have two options:
+    // 1. Use the POST method /api/download when the call is made from code to get the zip directly
+    // 2. Use the POST method /api/project when the url is needed to be used in a browser, it will return the path to use to download the project.
+    //     An error 400 is returned if the number of extensions is not sensible. The '/api/project' is optimizing the returned url to make
+    //     it as short as possible.
+
     /**
      * Download a zip file with an example project
      *
