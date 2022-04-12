@@ -101,6 +101,7 @@ public class ArtifactGeneratorTest {
             "micrometer",
             "micrometer-registry-prometheus",
             "quarkus-openshift-client",
+            "quarkus-smallrye-graphql-client",
     };
 
     public static final String[] supportedExtensionsSubsetSetB = new String[]{
@@ -145,6 +146,8 @@ public class ArtifactGeneratorTest {
             "spring-cache",
             "websockets",
             "websockets-client",
+            "quarkus-smallrye-graphql",
+            "quarkus-hibernate-search-orm-elasticsearch",
     };
 
     public static final String[] supportedReactiveExtensionsSubsetSetA = new String[]{
@@ -185,6 +188,7 @@ public class ArtifactGeneratorTest {
             "micrometer",
             "micrometer-registry-prometheus",
             "quarkus-openshift-client",
+            "quarkus-smallrye-graphql",
     };
 
     public static final String[] supportedReactiveExtensionsSubsetSetB = new String[]{
@@ -230,8 +234,9 @@ public class ArtifactGeneratorTest {
             "spring-cloud-config-client",
             "spring-scheduled",
             "spring-cache",
-             "websockets",
-             "websockets-client",
+            "websockets",
+            "websockets-client",
+            "quarkus-smallrye-graphql-client",
     };
 
     public void testRuntime(TestInfo testInfo, String[] extensions, Set<TestFlags> flags) throws Exception {
