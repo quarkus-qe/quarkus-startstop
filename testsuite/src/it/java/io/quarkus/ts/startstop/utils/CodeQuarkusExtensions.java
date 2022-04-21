@@ -27,7 +27,6 @@ public enum CodeQuarkusExtensions {
     QUARKUS_MONGODB_REST_DATA_PANACHE("quarkus-mongodb-rest-data-panache", "REST resources for MongoDB with Panache", "2nT", false),
     QUARKUS_RESTEASY_JAXB("quarkus-resteasy-jaxb", "RESTEasy JAXB", "d7W", true),
     QUARKUS_RESTEASY_MULTIPART("quarkus-resteasy-multipart", "RESTEasy Multipart", "kV0", true),
-    QUARKUS_RESTEASY_MUTINY("quarkus-resteasy-mutiny", "RESTEasy Mutiny", "8Tx", false),
     QUARKUS_RESTEASY_QUTE("quarkus-resteasy-qute", "RESTEasy Qute", "ju", false),
     // TODO Introduce buckets with reactive jax-rs extensions once they move from experimental / unsupported level
     // To avoid java.lang.IllegalStateException: The 'quarkus-resteasy-reactive' and 'quarkus-resteasy' extensions cannot be used at the same time.
