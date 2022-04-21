@@ -20,7 +20,6 @@ public enum CodeQuarkusExtensions {
     // QUARKUS_REST_CLIENT_REACTIVE_JACKSON("quarkus-rest-client-reactive-jackson", "REST Client Reactive Jackson", "Kcq", true),
     // QUARKUS_REST_CLIENT_REACTIVE_KOTLIN_SERIALIZATION("quarkus-rest-client-reactive-kotlin-serialization", "REST Client Reactive Kotlin Serialization", "65Z", false),
     QUARKUS_REST_CLIENT_JAXB("quarkus-rest-client-jaxb", "REST Client JAXB", "8iY", true),
-    QUARKUS_RESTEASY_LINKS("quarkus-resteasy-links", "RESTEasy Links", "rK1", false),
     QUARKUS_REST_CLIENT_JSONB("quarkus-rest-client-jsonb", "REST Client JSON-B", "Q3z", true),
     QUARKUS_REST_CLIENT_JACKSON("quarkus-rest-client-jackson", "REST Client Jackson", "pJg", true),
     // TODO clarify vvvv
@@ -37,7 +36,6 @@ public enum CodeQuarkusExtensions {
 //    QUARKUS_RESTEASY_REACTIVE_JACKSON("quarkus-resteasy-reactive-jackson", "RESTEasy Reactive Jackson", "tEq", true),
 //    QUARKUS_RESTEASY_REACTIVE_JAXB("quarkus-resteasy-reactive-jaxb", "RESTEasy Reactive JAXB", "Uku", false),
 //    QUARKUS_RESTEASY_REACTIVE_KOTLIN_SERIALIZATION("quarkus-resteasy-reactive-kotlin-serialization", "RESTEasy Reactive Kotlin Serialization", "9wf", false),
-//    QUARKUS_RESTEASY_REACTIVE_LINKS("quarkus-resteasy-reactive-links", "RESTEasy Reactive Links", "6hi", false),
 //    QUARKUS_RESTEASY_REACTIVE_QUTE("quarkus-resteasy-reactive-qute", "RESTEasy Reactive Qute", "X8W", false),
     // replaces quarkus-vertx-web - https://github.com/quarkusio/quarkus/wiki/Migration-Guide-2.3#reactive-routes
     QUARKUS_REACTIVE_ROUTES("quarkus-reactive-routes", "Reactive Routes", "0pm", true),
