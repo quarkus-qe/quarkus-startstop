@@ -91,7 +91,7 @@ public class ArtifactGeneratorTest {
             "spring-data-jpa",
             "spring-di",
             "spring-security",
-            "spring-web",
+//            "spring-web",  // spring-web-codestart uses quarkus-resteasy-reactive-jackson, see https://github.com/quarkusio/quarkus/pull/24890
             "undertow",
             "vertx",
             "quarkus-reactive-routes",
@@ -140,7 +140,7 @@ public class ArtifactGeneratorTest {
             "spring-data-rest",
             "spring-di",
             "spring-security",
-            "spring-web",
+//            "spring-web",  // spring-web-codestart uses quarkus-resteasy-reactive-jackson, see https://github.com/quarkusio/quarkus/pull/24890
             "spring-cloud-config-client",
             "spring-scheduled",
             "spring-cache",
@@ -177,8 +177,7 @@ public class ArtifactGeneratorTest {
             "spring-data-jpa",
             "spring-di",
             "spring-security",
-            // codestart is problematic with reactive - https://issues.redhat.com/browse/QUARKUS-1300 / https://github.com/quarkusio/quarkus/issues/23265
-//            "spring-web",
+            "spring-web",
             "undertow",
             "vertx",
             "quarkus-reactive-routes",
@@ -229,8 +228,7 @@ public class ArtifactGeneratorTest {
             "spring-data-rest",
             "spring-di",
             "spring-security",
-            // codestart is problematic with reactive - https://issues.redhat.com/browse/QUARKUS-1300 / https://github.com/quarkusio/quarkus/issues/23265
-//            "spring-web",
+            "spring-web",
             "spring-cloud-config-client",
             "spring-scheduled",
             "spring-cache",
@@ -311,8 +309,7 @@ public class ArtifactGeneratorTest {
             LOGGER.info("Testing reload...");
             // modify existing class
             Path srcFile = Paths.get(appDir + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator +
-                    "org" + File.separator + "my" + File.separator + "group" + File.separator +
-                    (flags.contains(TestFlags.RESTEASY_REACTIVE)?"ReactiveGreetingResource.java":"GreetingController.java"));
+                    "org" + File.separator + "my" + File.separator + "group" + File.separator +"GreetingResource.java");
             appendlnSection(whatIDidReport, "Reloading class: " + srcFile.toAbsolutePath());
             try (Stream<String> src = Files.lines(srcFile)) {
                 Files.write(srcFile, src.map(l -> l.replaceAll("Hello", "Bye")).collect(Collectors.toList()));

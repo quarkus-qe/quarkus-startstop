@@ -19,6 +19,7 @@ public enum WhitelistLogLines {
             Pattern.compile(".*TestSecureController.java.*"),
             // Well, the RestClient demo probably should do some cleanup before shutdown...?
             Pattern.compile(".*Closing a class org.jboss.resteasy.client.jaxrs.engines.ApacheHttpClient.*"),
+            Pattern.compile(".*GC warning.*"),
     }),
     GENERATED_SKELETON(new Pattern[]{
             // It so happens that the dummy skeleton tries to find Mongo. This is expected.
@@ -84,6 +85,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Unable to properly register the hierarchy of the following classes for reflection as they are not in the Jandex index.*"),
             // https://github.com/quarkusio/quarkus/issues/23387
             Pattern.compile(".*The configuration.*auto.offset.reset.* was supplied but isn't a known config.*"),
+            // https://github.com/quarkusio/quarkus/issues/25821
+            Pattern.compile(".*Failed to index org.springframework.web.bind.annotation.Mapping: Class does not exist in ClassLoader.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
