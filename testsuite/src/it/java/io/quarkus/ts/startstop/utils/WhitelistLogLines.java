@@ -84,6 +84,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Unable to properly register the hierarchy of the following classes for reflection as they are not in the Jandex index.*"),
             // https://github.com/quarkusio/quarkus/issues/23387
             Pattern.compile(".*The configuration.*auto.offset.reset.* was supplied but isn't a known config.*"),
+            // https://github.com/quarkusio/quarkus/issues/25821
+            Pattern.compile(".*Failed to index org.springframework.web.bind.annotation.Mapping: Class does not exist in ClassLoader.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
