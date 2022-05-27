@@ -19,6 +19,7 @@ public enum WhitelistLogLines {
             Pattern.compile(".*TestSecureController.java.*"),
             // Well, the RestClient demo probably should do some cleanup before shutdown...?
             Pattern.compile(".*Closing a class org.jboss.resteasy.client.jaxrs.engines.ApacheHttpClient.*"),
+            Pattern.compile(".*GC warning.*"),
     }),
     GENERATED_SKELETON(new Pattern[]{
             // It so happens that the dummy skeleton tries to find Mongo. This is expected.
