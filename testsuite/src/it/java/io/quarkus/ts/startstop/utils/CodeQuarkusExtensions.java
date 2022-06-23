@@ -22,9 +22,10 @@ public enum CodeQuarkusExtensions {
     QUARKUS_REST_CLIENT_JAXB("quarkus-rest-client-jaxb", "REST Client JAXB", "8iY", true),
     QUARKUS_REST_CLIENT_JSONB("quarkus-rest-client-jsonb", "REST Client JSON-B", "Q3z", true),
     QUARKUS_REST_CLIENT_JACKSON("quarkus-rest-client-jackson", "REST Client Jackson", "pJg", true),
-    // TODO clarify vvvv
-    QUARKUS_HIBERNATE_ORM_REST_DATA_PANACHE("quarkus-hibernate-orm-rest-data-panache", "REST resources for Hibernate ORM with Panache", "CPa", false),
-    QUARKUS_MONGODB_REST_DATA_PANACHE("quarkus-mongodb-rest-data-panache", "REST resources for MongoDB with Panache", "2nT", false),
+    //    https://github.com/quarkusio/quarkus/issues/26318
+//    QUARKUS_HIBERNATE_ORM_REST_DATA_PANACHE("quarkus-hibernate-orm-rest-data-panache", "REST resources for Hibernate ORM with Panache", "CPa", false),
+    //    https://github.com/quarkusio/quarkus/issues/26318
+//    QUARKUS_MONGODB_REST_DATA_PANACHE("quarkus-mongodb-rest-data-panache", "REST resources for MongoDB with Panache", "2nT", false),
     QUARKUS_RESTEASY_JAXB("quarkus-resteasy-jaxb", "RESTEasy JAXB", "d7W", true),
     QUARKUS_RESTEASY_MULTIPART("quarkus-resteasy-multipart", "RESTEasy Multipart", "kV0", true),
     QUARKUS_RESTEASY_QUTE("quarkus-resteasy-qute", "RESTEasy Qute", "ju", false),
@@ -78,7 +79,8 @@ public enum CodeQuarkusExtensions {
     QUARKUS_HIBERNATE_SEARCH_ORM_ELASTICSEARCH("quarkus-hibernate-search-orm-elasticsearch", "Hibernate Search + Elasticsearch", "oHk", true),
     QUARKUS_HIBERNATE_SEARCH_ORM_COORDINATION_OUTBOX_POLLING("quarkus-hibernate-search-orm-coordination-outbox-polling", "Hibernate Search Coordination with Outbox Polling", "HoS", false),
     QUARKUS_INFINISPAN_CLIENT("quarkus-infinispan-client", "Infinispan Client", "sOv", true),
-    QUARKUS_LIQUIBASE("quarkus-liquibase", "Liquibase", "Xkd", false),
+    // quarkus-liquibase expects available datasource, we are running without dev services to avoid Docker dependency
+//    QUARKUS_LIQUIBASE("quarkus-liquibase", "Liquibase", "Xkd", false),
     QUARKUS_LIQUIBASE_MONGODB("quarkus-liquibase-mongodb", "Liquibase MongoDB", "QWC", false),
     QUARKUS_MONGODB_CLIENT("quarkus-mongodb-client", "MongoDB client", "ThS", false),
     QUARKUS_MONGODB_PANACHE("quarkus-mongodb-panache", "MongoDB with Panache", "y3v", false),
@@ -186,7 +188,8 @@ public enum CodeQuarkusExtensions {
     QUARKUS_SPRING_CLOUD_CONFIG_CLIENT("quarkus-spring-cloud-config-client", "Quarkus Extension for Spring Cloud Config Client", "egg", true),
     QUARKUS_SPRING_DI("quarkus-spring-di", "Quarkus Extension for Spring DI API", "VOH", true),
     QUARKUS_SPRING_DATA_JPA("quarkus-spring-data-jpa", "Quarkus Extension for Spring Data JPA API", "2ec", true),
-    QUARKUS_SPRING_DATA_REST("quarkus-spring-data-rest", "Quarkus Extension for Spring Data REST", "kdX", false),
+    //    https://github.com/quarkusio/quarkus/issues/26318
+//    QUARKUS_SPRING_DATA_REST("quarkus-spring-data-rest", "Quarkus Extension for Spring Data REST", "kdX", false),
     QUARKUS_SPRING_SCHEDULED("quarkus-spring-scheduled", "Quarkus Extension for Spring Scheduled", "RUR", true),
     QUARKUS_SPRING_SECURITY("quarkus-spring-security", "Quarkus Extension for Spring Security API", "mek", true),
     QUARKUS_SPRING_WEB("quarkus-spring-web", "Quarkus Extension for Spring Web API", "0D7", true),

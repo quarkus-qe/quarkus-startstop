@@ -137,7 +137,7 @@ public class ArtifactGeneratorTest {
 //            "smallrye-reactive-messaging-amqp",
             "smallrye-reactive-messaging-kafka",
             "spring-data-jpa",
-            "spring-data-rest",
+//            "spring-data-rest",  https://github.com/quarkusio/quarkus/issues/26318
             "spring-di",
             "spring-security",
 //            "spring-web",  // spring-web-codestart uses quarkus-resteasy-reactive-jackson, see https://github.com/quarkusio/quarkus/pull/24890
