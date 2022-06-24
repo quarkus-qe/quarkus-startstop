@@ -12,7 +12,6 @@ public enum WhitelistProductBomJars {
             "com.microsoft.azure.adal4j",
             "com.nimbusds.oauth2-oidc-sdk",
             "com.nimbusds.content-type",
-            "io.quarkus.quarkus-resteasy-reactive-links", // TODO https://issues.redhat.com/browse/QUARKUS-2033
     });
 
     public final String[] jarNames;
