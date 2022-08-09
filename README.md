@@ -141,7 +141,7 @@ Example command:
 mvn clean verify -Ptestsuite -Dtest=SpecialCharsTest#diacriticsNative \
     -Dquarkus.version=1.6.0.Final -Dquarkus.platform.version=1.6.0.Final \
     -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=docker\
-    -Dquarkus.native.builder-image=quay.io/quarkus/ubi-quarkus-native-image:20.1.0-java11
+    -Dquarkus.native.builder-image=quay.io/quarkus/ubi-quarkus-native-image:22.2.0-java11
 ```
 
 ## Values
