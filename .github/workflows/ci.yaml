@@ -1,4 +1,4 @@
-name: "Quarkus QE Start-Stop CI"
+name: "Start-Stop CI"
 on:
   pull_request:
   workflow_dispatch:
@@ -27,7 +27,7 @@ jobs:
         run: |
           mvn -V -B -s .github/mvn-settings.xml validate -Pide,validate-format
   linux-build-released-jvm:
-    name: Linux - JVM build - released Quarkus
+    name: Linux - JVM build
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -58,7 +58,7 @@ jobs:
           name: ci-artifacts
           path: artifacts-jvm${{ matrix.java }}.zip
   linux-build-released-native:
-      name: Linux - Native build - released Quarkus
+      name: Linux - Native build
       runs-on: ubuntu-latest
       strategy:
         matrix:
@@ -89,7 +89,7 @@ jobs:
             name: ci-artifacts
             path: artifacts-native${{ matrix.java }}.zip
   build-code-start:
-    name: Code Quarkus build - released Quarkus
+    name: Code Quarkus build
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -120,7 +120,7 @@ jobs:
           name: ci-artifacts
           path: artifacts-code-start${{ matrix.java }}.zip
   windows-build-released-jvm:
-    name: Windows - JVM build - released Quarkus
+    name: Windows - JVM build
     runs-on: windows-latest
     strategy:
       matrix:
@@ -154,7 +154,7 @@ jobs:
           name: ci-artifacts
           path: artifacts-windows-jvm${{ matrix.java }}.tar
   windows-build-released-native:
-    name: Windows - Native build - released Quarkus
+    name: Windows - Native build
     runs-on: windows-latest
     strategy:
       matrix:
