@@ -7,6 +7,8 @@ import org.jboss.logging.Logger;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Verify that debug symbols are created as well as the source cache
  */
 @Tag("native")
+@EnabledOnOs({OS.LINUX}) // debug details are available only on Linux
 public class NativeDebugTest {
 
     private final Apps app = Apps.JAX_RS_MINIMAL;
