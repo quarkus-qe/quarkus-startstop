@@ -88,6 +88,6 @@ public class NativeDebugTest {
     public void debugSymbolsCheck(TestInfo testInfo) throws IOException, InterruptedException {
         testRuntime(testInfo, new File[]{
                 new File(BASE_DIR + File.separator + app.dir + File.separator + "target" + File.separator + "quarkus-runner.debug"),
-                new File(BASE_DIR + File.separator + app.dir + File.separator + "target" + File.separator + "sources")});
+                new File(BASE_DIR + File.separator + app.dir + File.separator + "target" + File.separator + "quarkus-native-image-source-jar")});
     }
 }
