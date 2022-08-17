@@ -1,4 +1,4 @@
-name: "Quarkus QE Start-Stop CI"
+name: "Start-Stop CI"
 on:
   pull_request:
   workflow_dispatch:
@@ -27,7 +27,7 @@ jobs:
         run: |
           mvn -V -B -s .github/mvn-settings.xml validate -Pide,validate-format
   linux-build-released-jvm:
-    name: Linux - JVM build - released Quarkus
+    name: Linux - JVM build
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -58,7 +58,7 @@ jobs:
           name: ci-artifacts
           path: artifacts-jvm${{ matrix.java }}.zip
   linux-build-released-native:
-      name: Linux - Native build - released Quarkus
+      name: Linux - Native build
       runs-on: ubuntu-latest
       strategy:
         matrix:
@@ -77,7 +77,7 @@ jobs:
             java-version: ${{ matrix.java }}
         - name: Build with Maven
           run: |
-            mvn -V -B -s .github/mvn-settings.xml clean verify -DexcludeTags=product,codequarkus -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=docker
+            mvn -V -B -s .github/mvn-settings.xml clean verify -DincludeTags="native" -DexcludeTags=product,codequarkus -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=docker
         - name: Zip Artifacts
           if: failure()
           run: |
@@ -88,8 +88,8 @@ jobs:
           with:
             name: ci-artifacts
             path: artifacts-native${{ matrix.java }}.zip
-  build-code-start:
-    name: Code Quarkus build - released Quarkus
+  linux-build-code-start:
+    name: Linux - Code Quarkus build
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -120,7 +120,7 @@ jobs:
           name: ci-artifacts
           path: artifacts-code-start${{ matrix.java }}.zip
   windows-build-released-jvm:
-    name: Windows - JVM build - released Quarkus
+    name: Windows - JVM build
     runs-on: windows-latest
     strategy:
       matrix:
@@ -154,7 +154,7 @@ jobs:
           name: ci-artifacts
           path: artifacts-windows-jvm${{ matrix.java }}.tar
   windows-build-released-native:
-    name: Windows - Native build - released Quarkus
+    name: Windows - Native build
     runs-on: windows-latest
     strategy:
       matrix:
@@ -190,7 +190,7 @@ jobs:
         uses: al-cheb/configure-pagefile-action@v1.2
       - name: Build with Maven
         run: |
-          mvn -V -B -s .github/mvn-settings.xml clean verify -DexcludeTags="product,codequarkus" -Dquarkus.native.native-image-xmx=6g
+          mvn -V -B -s .github/mvn-settings.xml clean verify -DincludeTags="native" -DexcludeTags="product,codequarkus" -Dquarkus.native.native-image-xmx=6g
         shell: cmd
       - name: Zip Artifacts
         if: failure()

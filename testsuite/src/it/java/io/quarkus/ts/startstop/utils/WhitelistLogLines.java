@@ -10,6 +10,8 @@ public enum WhitelistLogLines {
             // Some artifacts names...
             Pattern.compile(".*maven-error-diagnostics.*"),
             Pattern.compile(".*errorprone.*"),
+            // https://github.com/quarkusio/quarkus/issues/27307
+            Pattern.compile(".*Unknown module: org.graalvm.nativeimage.llvm specified to --add-exports.*"),
     }),
     FULL_MICROPROFILE(new Pattern[]{
             // Some artifacts names...
@@ -20,6 +22,14 @@ public enum WhitelistLogLines {
             // Well, the RestClient demo probably should do some cleanup before shutdown...?
             Pattern.compile(".*Closing a class org.jboss.resteasy.client.jaxrs.engines.ApacheHttpClient.*"),
             Pattern.compile(".*GC warning.*"),
+            // https://github.com/quarkusio/quarkus/issues/27307
+            Pattern.compile(".*Unknown module: org.graalvm.nativeimage.llvm specified to --add-exports.*"),
+            // https://github.com/quarkusio/quarkus/issues/27308
+            Pattern.compile(".*An illegal reflective access operation has occurred.*"),
+            Pattern.compile(".*Illegal reflective access by com.fasterxml.jackson.databind.util.ClassUtil.*"),
+            Pattern.compile(".*Please consider reporting this to the maintainers of com.fasterxml.jackson.databind.util.ClassUtil.*"),
+            Pattern.compile(".*Use --illegal-access=warn to enable warnings of further illegal reflective access operations.*"),
+            Pattern.compile(".*All illegal access operations will be denied in a future release.*"),
     }),
     GENERATED_SKELETON(new Pattern[]{
             // It so happens that the dummy skeleton tries to find Mongo. This is expected.
@@ -87,6 +97,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*The configuration.*auto.offset.reset.* was supplied but isn't a known config.*"),
             // https://github.com/quarkusio/quarkus/issues/25821
             Pattern.compile(".*Failed to index org.springframework.web.bind.annotation.Mapping: Class does not exist in ClassLoader.*"),
+            // https://github.com/quarkusio/quarkus/issues/27307
+            Pattern.compile(".*Unknown module: org.graalvm.nativeimage.llvm specified to --add-exports.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
