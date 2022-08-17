@@ -88,8 +88,8 @@ jobs:
           with:
             name: ci-artifacts
             path: artifacts-native${{ matrix.java }}.zip
-  build-code-start:
-    name: Code Quarkus build
+  linux-build-code-start:
+    name: Linux - Code Quarkus build
     runs-on: ubuntu-latest
     strategy:
       matrix:
