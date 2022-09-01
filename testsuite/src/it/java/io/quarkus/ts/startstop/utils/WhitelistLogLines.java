@@ -99,6 +99,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Failed to index org.springframework.web.bind.annotation.Mapping: Class does not exist in ClassLoader.*"),
             // https://github.com/quarkusio/quarkus/issues/27307
             Pattern.compile(".*Unknown module: org.graalvm.nativeimage.llvm specified to --add-exports.*"),
+            // https://github.com/quarkusio/quarkus/issues/27487
+            Pattern.compile(".*Offending field is 'clientName' of class 'io.quarkus.oidc.client.filter.OidcClientRequestFilter'.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
