@@ -65,9 +65,9 @@ public class CodeQuarkusTest {
     
     public static final Stream<List<CodeQuarkusExtensions>> supportedExWithCodeStarter() {
         return Arrays.asList(
-                Arrays.asList(CodeQuarkusExtensions.QUARKUS_SMALLRYE_HEALTH, CodeQuarkusExtensions.QUARKUS_RESTEASY),
-                Arrays.asList(CodeQuarkusExtensions.QUARKUS_LOGGING_JSON, CodeQuarkusExtensions.QUARKUS_RESTEASY),
-                Arrays.asList(CodeQuarkusExtensions.QUARKUS_RESTEASY),
+                Arrays.asList(CodeQuarkusExtensions.QUARKUS_SMALLRYE_HEALTH, CodeQuarkusExtensions.QUARKUS_RESTEASY_REACTIVE),
+                Arrays.asList(CodeQuarkusExtensions.QUARKUS_LOGGING_JSON, CodeQuarkusExtensions.QUARKUS_RESTEASY_REACTIVE),
+                Arrays.asList(CodeQuarkusExtensions.QUARKUS_RESTEASY_REACTIVE),
                 Arrays.asList(CodeQuarkusExtensions.QUARKUS_SPRING_WEB),
                 Arrays.asList(CodeQuarkusExtensions.QUARKUS_WEBSOCKETS)
         ).stream();
@@ -189,7 +189,7 @@ public class CodeQuarkusTest {
         List<CodeQuarkusExtensions> supportedExtensionsSubsetC = supportedEx.get(2);
         // resteasy or spring-web extension is needed to provide index.html file
         // content from index.html file is checked to ensure the application is up and running
-        supportedExtensionsSubsetC.add(CodeQuarkusExtensions.QUARKUS_RESTEASY);
+        supportedExtensionsSubsetC.add(CodeQuarkusExtensions.QUARKUS_RESTEASY_REACTIVE);
         testRuntime(testInfo, supportedExtensionsSubsetC, MvnCmds.MVNW_DEV);
     }
 
@@ -208,7 +208,7 @@ public class CodeQuarkusTest {
         List<CodeQuarkusExtensions> notSupportedExtensionsSubsetB = notSupportedEx.get(0).subList(Math.min(10, notSupportedEx.get(0).size()), Math.min(20, notSupportedEx.get(0).size()));
         // resteasy or spring-web extension is needed to provide index.html file
         // content from index.html file is checked to ensure the application is up and running
-        notSupportedExtensionsSubsetB.add(CodeQuarkusExtensions.QUARKUS_RESTEASY);
+        notSupportedExtensionsSubsetB.add(CodeQuarkusExtensions.QUARKUS_RESTEASY_REACTIVE);
         testRuntime(testInfo, notSupportedExtensionsSubsetB, MvnCmds.MVNW_DEV);
     }
 
@@ -229,7 +229,7 @@ public class CodeQuarkusTest {
             appendln(whatIDidReport, "# " + cn + ", " + mn);
             appendln(whatIDidReport, (new Date()).toString());
             LOGGER.info("Downloading...");
-            appendln(whatIDidReport, "Download URL: " + download(List.of(CodeQuarkusExtensions.QUARKUS_RESTEASY), zipFile, 17));
+            appendln(whatIDidReport, "Download URL: " + download(List.of(CodeQuarkusExtensions.QUARKUS_RESTEASY_REACTIVE), zipFile, 17));
             LOGGER.info("Unzipping...");
             unzip(zipFile, GEN_BASE_DIR);
 

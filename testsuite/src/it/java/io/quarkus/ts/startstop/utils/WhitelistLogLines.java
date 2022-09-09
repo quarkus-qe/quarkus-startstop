@@ -78,7 +78,7 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Hibernate Reactive is disabled because no JPA entities were found.*"),
             Pattern.compile(".*Skipping registration of ReactiveSessionFactoryProducer and ReactiveSessionProducer because exactly one persistence unit is required for their registration.*"),
             // https://github.com/netty/netty/issues/11020
-            Pattern.compile(".*Can not find \\{\\} in the classpath, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS.*"),
+            Pattern.compile(".*Can not find io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider in the classpath, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS.*"),
             // comes with https://github.com/quarkusio/quarkus/pull/19969
             Pattern.compile(".*OIDC metadata discovery failed:.*Connection refused.*localhost/127.0.0.1:6661.*"),
             // Attempted to read Testcontainers configuration file at file:/home/runner/.testcontainers.properties but the file was not found.
