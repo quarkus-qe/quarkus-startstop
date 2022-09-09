@@ -7,40 +7,40 @@ import java.util.stream.Stream;
 
 public enum CodeQuarkusExtensions {
 
-    QUARKUS_RESTEASY("quarkus-resteasy", "RESTEasy JAX-RS", "98e", true),
-    QUARKUS_RESTEASY_JACKSON("quarkus-resteasy-jackson", "RESTEasy Jackson", "pV1", true),
-    QUARKUS_RESTEASY_JSONB("quarkus-resteasy-jsonb", "RESTEasy JSON-B", "49J", true),
+    QUARKUS_RESTEASY_REACTIVE("quarkus-resteasy-reactive", "RESTEasy Reactive", "WJu", true),
+    QUARKUS_RESTEASY_REACTIVE_JSONB("quarkus-resteasy-reactive-jsonb", "RESTEasy Reactive JSON-B", "sTz", true),
+    QUARKUS_RESTEASY_REACTIVE_JACKSON("quarkus-resteasy-reactive-jackson", "RESTEasy Reactive Jackson", "tEq", true),
+    QUARKUS_RESTEASY_REACTIVE_JAXB("quarkus-resteasy-reactive-jaxb", "RESTEasy Reactive JAXB", "Uku", false),
+    QUARKUS_RESTEASY_REACTIVE_KOTLIN_SERIALIZATION("quarkus-resteasy-reactive-kotlin-serialization", "RESTEasy Reactive Kotlin Serialization", "9wf", false),
+    QUARKUS_RESTEASY_REACTIVE_LINKS("quarkus-resteasy-reactive-links", "RESTEasy Reactive Links", "6hi", false),
+    QUARKUS_RESTEASY_REACTIVE_QUTE("quarkus-resteasy-reactive-qute", "RESTEasy Reactive Qute", "X8W", false),
+    QUARKUS_REST_CLIENT_REACTIVE("quarkus-rest-client-reactive", "REST Client Reactive", "6iu", true),
+    QUARKUS_REST_CLIENT_REACTIVE_JACKSON("quarkus-rest-client-reactive-jackson", "REST Client Reactive Jackson", "Kcq", true),
+    QUARKUS_REST_CLIENT_REACTIVE_JAXB("quarkus-rest-client-reactive-jaxb", "REST Client Reactive JAXB", "ignored", true),
+    QUARKUS_REST_CLIENT_REACTIVE_JSONB("quarkus-rest-client-reactive-jsonb", "REST Client Reactive JSON-B", "ignored", true),
+    QUARKUS_REST_CLIENT_REACTIVE_KOTLIN_SERIALIZATION("quarkus-rest-client-reactive-kotlin-serialization", "REST Client Reactive Kotlin Serialization", "65Z", false),
+
+    // TODO Introduce buckets with reactive jax-rs extensions
+    // To avoid java.lang.IllegalStateException: The 'quarkus-resteasy-reactive' and 'quarkus-resteasy' extensions cannot be used at the same time.
+//    QUARKUS_RESTEASY("quarkus-resteasy", "RESTEasy JAX-RS", "98e", true),
+//    QUARKUS_RESTEASY_JACKSON("quarkus-resteasy-jackson", "RESTEasy Jackson", "pV1", true),
+//    QUARKUS_RESTEASY_JSONB("quarkus-resteasy-jsonb", "RESTEasy JSON-B", "49J", true),
+//    QUARKUS_RESTEASY_JAXB("quarkus-resteasy-jaxb", "RESTEasy JAXB", "d7W", true),
+//    QUARKUS_RESTEASY_MULTIPART("quarkus-resteasy-multipart", "RESTEasy Multipart", "kV0", true),
+//    QUARKUS_RESTEASY_QUTE("quarkus-resteasy-qute", "RESTEasy Qute", "ju", false),
+//    QUARKUS_RESTEASY_LINKS("quarkus-resteasy-links", "RESTEasy Links", "rK1", false),
+//    QUARKUS_REST_CLIENT_MUTINY("quarkus-rest-client-mutiny", "Mutiny support for REST Client", "Ph0", false),
+//    QUARKUS_REST_CLIENT("quarkus-rest-client", "REST Client", "ekA", true),
+//    QUARKUS_REST_CLIENT_JAXB("quarkus-rest-client-jaxb", "REST Client JAXB", "8iY", true),
+//    QUARKUS_REST_CLIENT_JSONB("quarkus-rest-client-jsonb", "REST Client JSON-B", "Q3z", true),
+//    QUARKUS_REST_CLIENT_JACKSON("quarkus-rest-client-jackson", "REST Client Jackson", "pJg", true),
+
     QUARKUS_VERTX_GRAPHQL("quarkus-vertx-graphql", "Eclipse Vert.x GraphQL", "F9R", false),
     QUARKUS_HIBERNATE_VALIDATOR("quarkus-hibernate-validator", "Hibernate Validator", "YjV", true),
-    QUARKUS_REST_CLIENT_MUTINY("quarkus-rest-client-mutiny", "Mutiny support for REST Client", "Ph0", false),
-    QUARKUS_REST_CLIENT("quarkus-rest-client", "REST Client", "ekA", true),
-    // TODO Introduce buckets with reactive jax-rs extensions
-    // QUARKUS_JAXRS_CLIENT_REACTIVE("quarkus-jaxrs-client-reactive", "JAX-RS Client Reactive", "7Bc", true),
-    // QUARKUS_REST_CLIENT_REACTIVE("quarkus-rest-client-reactive", "REST Client Reactive", "6iu", true),
-    // QUARKUS_REST_CLIENT_REACTIVE_JACKSON("quarkus-rest-client-reactive-jackson", "REST Client Reactive Jackson", "Kcq", true),
-    // QUARKUS_REST_CLIENT_REACTIVE_JAXB("quarkus-rest-client-reactive-jaxb", "REST Client Reactive JAXB", "ignored", false),
-    // QUARKUS_REST_CLIENT_REACTIVE_JSONB("quarkus-rest-client-reactive-jsonb", "REST Client Reactive JSON-B", "ignored", false),
-    // QUARKUS_REST_CLIENT_REACTIVE_KOTLIN_SERIALIZATION("quarkus-rest-client-reactive-kotlin-serialization", "REST Client Reactive Kotlin Serialization", "65Z", false),
-    QUARKUS_REST_CLIENT_JAXB("quarkus-rest-client-jaxb", "REST Client JAXB", "8iY", true),
-    QUARKUS_RESTEASY_LINKS("quarkus-resteasy-links", "RESTEasy Links", "rK1", false),
-    QUARKUS_REST_CLIENT_JSONB("quarkus-rest-client-jsonb", "REST Client JSON-B", "Q3z", true),
-    QUARKUS_REST_CLIENT_JACKSON("quarkus-rest-client-jackson", "REST Client Jackson", "pJg", true),
     //    https://github.com/quarkusio/quarkus/issues/26318
 //    QUARKUS_HIBERNATE_ORM_REST_DATA_PANACHE("quarkus-hibernate-orm-rest-data-panache", "REST resources for Hibernate ORM with Panache", "CPa", false),
     //    https://github.com/quarkusio/quarkus/issues/26318
 //    QUARKUS_MONGODB_REST_DATA_PANACHE("quarkus-mongodb-rest-data-panache", "REST resources for MongoDB with Panache", "2nT", false),
-    QUARKUS_RESTEASY_JAXB("quarkus-resteasy-jaxb", "RESTEasy JAXB", "d7W", true),
-    QUARKUS_RESTEASY_MULTIPART("quarkus-resteasy-multipart", "RESTEasy Multipart", "kV0", true),
-    QUARKUS_RESTEASY_QUTE("quarkus-resteasy-qute", "RESTEasy Qute", "ju", false),
-    // TODO Introduce buckets with reactive jax-rs extensions once they move from experimental / unsupported level
-    // To avoid java.lang.IllegalStateException: The 'quarkus-resteasy-reactive' and 'quarkus-resteasy' extensions cannot be used at the same time.
-//    QUARKUS_RESTEASY_REACTIVE("quarkus-resteasy-reactive", "RESTEasy Reactive", "WJu", true),
-//    QUARKUS_RESTEASY_REACTIVE_JSONB("quarkus-resteasy-reactive-jsonb", "RESTEasy Reactive JSON-B", "sTz", true),
-//    QUARKUS_RESTEASY_REACTIVE_JACKSON("quarkus-resteasy-reactive-jackson", "RESTEasy Reactive Jackson", "tEq", true),
-//    QUARKUS_RESTEASY_REACTIVE_JAXB("quarkus-resteasy-reactive-jaxb", "RESTEasy Reactive JAXB", "Uku", false),
-//    QUARKUS_RESTEASY_REACTIVE_KOTLIN_SERIALIZATION("quarkus-resteasy-reactive-kotlin-serialization", "RESTEasy Reactive Kotlin Serialization", "9wf", false),
-//    QUARKUS_RESTEASY_REACTIVE_LINKS("quarkus-resteasy-reactive-links", "RESTEasy Reactive Links", "6hi", false),
-//    QUARKUS_RESTEASY_REACTIVE_QUTE("quarkus-resteasy-reactive-qute", "RESTEasy Reactive Qute", "X8W", false),
     // replaces quarkus-vertx-web - https://github.com/quarkusio/quarkus/wiki/Migration-Guide-2.3#reactive-routes
     QUARKUS_REACTIVE_ROUTES("quarkus-reactive-routes", "Reactive Routes", "0pm", true),
     QUARKUS_SMALLRYE_GRAPHQL("quarkus-smallrye-graphql", "SmallRye GraphQL", "jjB", true),
