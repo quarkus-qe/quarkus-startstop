@@ -79,8 +79,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Skipping registration of ReactiveSessionFactoryProducer and ReactiveSessionProducer because exactly one persistence unit is required for their registration.*"),
             // https://github.com/netty/netty/issues/11020
             Pattern.compile(".*Can not find io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider in the classpath, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS.*"),
-            // comes with https://github.com/quarkusio/quarkus/pull/19969
-            Pattern.compile(".*OIDC metadata discovery failed:.*Connection refused.*localhost/127.0.0.1:6661.*"),
+            // comes with https://github.com/quarkusio/quarkus/pull/19969 https://github.com/quarkusio/quarkus/pull/26868 https://github.com/quarkusio/quarkus/pull/27811
+            Pattern.compile(".*OIDC Server is not available.*Connection refused.*localhost/127.0.0.1:6661.*"),
             // Attempted to read Testcontainers configuration file at file:/home/runner/.testcontainers.properties but the file was not found.
             Pattern.compile(".*Attempted to read Testcontainers configuration file at.*"),
             // 2021-12-23 12:57:02,610 WARN  [org.apa.kaf.cli.NetworkClient] (smallrye-kafka-consumer-thread-0) [Consumer clientId=kafka-consumer-uppercase-in, groupId=code-with-quarkus] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Broker may not be available.
@@ -88,8 +88,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*org.apache.kafka.clients.NetworkClient.*"),
             Pattern.compile(".*SRMSG18216: No `group.id` set in the configuration, generate a random id:.*"),
             // Kafka codestart without dev service enabled is not super stable in reload scenario
-            Pattern.compile(".*Message .* was not sent to Kafka topic 'words' - nacking message:.*"),
-            Pattern.compile(".*Unable to write to Kafka from channel words-out.*"),
+            Pattern.compile(".*SRMSG18212: Message.*was not sent to Kafka topic.*nacking message.*"),
+            Pattern.compile(".*SRMSG18206: Unable to write to Kafka from channel.*"),
             Pattern.compile(".*io.smallrye.mutiny.subscription.MultiSubscriber.onError\\(MultiSubscriber.java.*"),
             // https://github.com/quarkusio/quarkus/issues/23382
             Pattern.compile(".*Unable to properly register the hierarchy of the following classes for reflection as they are not in the Jandex index.*"),
