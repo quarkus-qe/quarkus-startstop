@@ -244,7 +244,7 @@ public class ArtifactGeneratorTest {
         StringBuilder whatIDidReport = new StringBuilder();
         String cn = testInfo.getTestClass().get().getCanonicalName();
         String mn = testInfo.getTestMethod().get().getName();
-        File appBaseDir = new File(getArtifactGeneBaseDir());
+        File appBaseDir = new File(getArtifactGeneBaseDir(), mn);
         File appDir = new File(appBaseDir, Apps.GENERATED_SKELETON.dir);
         String logsDir = appBaseDir.getAbsolutePath() + File.separator + Apps.GENERATED_SKELETON.dir + "-logs";
         List<String> generatorCmd = getGeneratorCommand(MvnCmds.GENERATOR.mvnCmds[0], extensions);
@@ -258,7 +258,7 @@ public class ArtifactGeneratorTest {
 
         try {
             // Cleanup
-            cleanDirOrFile(appDir.getAbsolutePath(), logsDir);
+            cleanDirOrFile(appBaseDir.getAbsolutePath());
             Files.createDirectories(Paths.get(logsDir));
 
             // Build
@@ -374,7 +374,7 @@ public class ArtifactGeneratorTest {
                 archiveLog(cn, mn, runLogA);
             }
             writeReport(cn, mn, whatIDidReport.toString());
-            cleanDirOrFile(appDir.getAbsolutePath(), logsDir);
+            cleanDirOrFile(appBaseDir.getAbsolutePath());
         }
     }
 

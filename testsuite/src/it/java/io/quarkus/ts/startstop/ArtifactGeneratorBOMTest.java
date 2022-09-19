@@ -63,7 +63,7 @@ public class ArtifactGeneratorBOMTest {
         StringBuilder whatIDidReport = new StringBuilder();
         String cn = testInfo.getTestClass().get().getCanonicalName();
         String mn = testInfo.getTestMethod().get().getName();
-        File appBaseDir = new File(getArtifactGeneBaseDir());
+        File appBaseDir = new File(getArtifactGeneBaseDir(), mn);
         File appDir = new File(appBaseDir, Apps.GENERATED_SKELETON.dir);
         String logsDir = appBaseDir.getAbsolutePath() + File.separator + Apps.GENERATED_SKELETON.dir + "-logs";
         String repoDir = getLocalMavenRepoDir();
@@ -78,7 +78,7 @@ public class ArtifactGeneratorBOMTest {
 
         try {
             // Cleanup
-            cleanDirOrFile(appDir.getAbsolutePath(), logsDir);
+            cleanDirOrFile(appBaseDir.getAbsolutePath());
             Files.createDirectories(Paths.get(logsDir));
             Files.createDirectories(Paths.get(repoDir));
 
@@ -153,7 +153,7 @@ public class ArtifactGeneratorBOMTest {
                 archiveLog(cn, mn, runLogA);
             }
             writeReport(cn, mn, whatIDidReport.toString());
-            cleanDirOrFile(appDir.getAbsolutePath(), logsDir);
+            cleanDirOrFile(appBaseDir.getAbsolutePath());
         }
     }
 
