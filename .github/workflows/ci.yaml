@@ -1,4 +1,4 @@
-name: "CI"
+name: "StartStop CI"
 on:
   pull_request:
   workflow_dispatch:
@@ -89,7 +89,7 @@ jobs:
             name: ci-artifacts
             path: artifacts-native${{ matrix.java }}.zip
   linux-build-code-start:
-    name: Linux - Code Quarkus build
+    name: Linux - Code Quarkus
     runs-on: ubuntu-latest
     strategy:
       matrix:
