@@ -93,7 +93,7 @@ public class CodeQuarkusTest {
             appendln(whatIDidReport, "# " + cn + ", " + mn);
             appendln(whatIDidReport, (new Date()).toString());
             LOGGER.info("Downloading...");
-            appendln(whatIDidReport, "Download URL: " + download(extensions, zipFile));
+            appendln(whatIDidReport, "Download URL: " + download(extensions, zipFile, 11));
             LOGGER.info("Unzipping...");
             unzipLog = unzip(zipFile, GEN_BASE_DIR);
             LOGGER.info("Removing repositories and pluginRepositories from pom.xml ...");
@@ -178,9 +178,8 @@ public class CodeQuarkusTest {
     @Test
     public void supportedExtensionsSubsetB(TestInfo testInfo) throws Exception {
         List<CodeQuarkusExtensions> supportedExtensionsSubsetB = supportedEx.get(1);
-        // quarkus-reactive-routes extension to open port 8080 and provide index.html file
-        // https://github.com/quarkusio/quarkus/issues/21132
-        supportedExtensionsSubsetB.add(CodeQuarkusExtensions.QUARKUS_REACTIVE_ROUTES);
+        // resteasy-reactive extension to open port 8080 and provide index.html file
+        supportedExtensionsSubsetB.add(CodeQuarkusExtensions.QUARKUS_RESTEASY_REACTIVE);
         testRuntime(testInfo, supportedExtensionsSubsetB, MvnCmds.MVNW_DEV);
     }
 
