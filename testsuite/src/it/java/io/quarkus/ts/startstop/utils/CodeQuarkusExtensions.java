@@ -150,7 +150,6 @@ public enum CodeQuarkusExtensions {
     QUARKUS_MICROMETER("quarkus-micrometer", "Micrometer metrics", "Svz", true),
     QUARKUS_MICROMETER_REGISTRY_PROMETHEUS("quarkus-micrometer-registry-prometheus", "Micrometer Registry Prometheus", "DTu", true),
     QUARKUS_OPENTELEMETRY("quarkus-opentelemetry", "OpenTelemetry", "y6J", false),
-    QUARKUS_OPENTELEMETRY_EXPORTER_JAEGER("quarkus-opentelemetry-exporter-jaeger", "OpenTelemetry exporter: Jaeger", "DTW", false),
     QUARKUS_OPENTELEMETRY_EXPORTER_OTLP("quarkus-opentelemetry-exporter-otlp", "OpenTelemetry exporter: OTLP", "CGl", false),
     QUARKUS_SMALLRYE_METRICS("quarkus-smallrye-metrics", "SmallRye Metrics", "Ll4", false), //intentionally because of micrometer
     QUARKUS_SMALLRYE_OPENTRACING("quarkus-smallrye-opentracing", "SmallRye OpenTracing", "f7", true),
