@@ -56,6 +56,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class CodeQuarkusTest {
 
     private static final Logger LOGGER = Logger.getLogger(CodeQuarkusTest.class.getName());
+    private static final int JAVA_11 = 11;
+    private static final int JAVA_17 = 17;
 
     public static final String GEN_BASE_DIR = getArtifactGeneBaseDir();
 
@@ -73,7 +75,7 @@ public class CodeQuarkusTest {
         ).stream();
     }
 
-    public void testRuntime(TestInfo testInfo, List<CodeQuarkusExtensions> extensions, MvnCmds mvnCmds) throws Exception {
+    public void testRuntime(TestInfo testInfo, List<CodeQuarkusExtensions> extensions, MvnCmds mvnCmds, int javaVersion) throws Exception {
         Process pA = null;
         File unzipLog = null;
         File buildLogA = null;
@@ -93,7 +95,7 @@ public class CodeQuarkusTest {
             appendln(whatIDidReport, "# " + cn + ", " + mn);
             appendln(whatIDidReport, (new Date()).toString());
             LOGGER.info("Downloading...");
-            appendln(whatIDidReport, "Download URL: " + download(extensions, zipFile));
+            appendln(whatIDidReport, "Download URL: " + download(extensions, zipFile, javaVersion));
             LOGGER.info("Unzipping...");
             unzipLog = unzip(zipFile, GEN_BASE_DIR);
             LOGGER.info("Removing repositories and pluginRepositories from pom.xml ...");
@@ -172,7 +174,7 @@ public class CodeQuarkusTest {
 
     @Test
     public void supportedExtensionsSubsetA(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedEx.get(0), MvnCmds.MVNW_DEV);
+        testRuntime(testInfo, supportedEx.get(0), MvnCmds.MVNW_DEV, JAVA_11);
     }
 
     @Test
@@ -181,7 +183,7 @@ public class CodeQuarkusTest {
         // quarkus-reactive-routes extension to open port 8080 and provide index.html file
         // https://github.com/quarkusio/quarkus/issues/21132
         supportedExtensionsSubsetB.add(CodeQuarkusExtensions.QUARKUS_REACTIVE_ROUTES);
-        testRuntime(testInfo, supportedExtensionsSubsetB, MvnCmds.MVNW_DEV);
+        testRuntime(testInfo, supportedExtensionsSubsetB, MvnCmds.MVNW_DEV, JAVA_11);
     }
 
     @Test
@@ -190,17 +192,17 @@ public class CodeQuarkusTest {
         // resteasy or spring-web extension is needed to provide index.html file
         // content from index.html file is checked to ensure the application is up and running
         supportedExtensionsSubsetC.add(CodeQuarkusExtensions.QUARKUS_RESTEASY);
-        testRuntime(testInfo, supportedExtensionsSubsetC, MvnCmds.MVNW_DEV);
+        testRuntime(testInfo, supportedExtensionsSubsetC, MvnCmds.MVNW_DEV, JAVA_11);
     }
 
     @Test
     public void supportedExtensionsSubsetD(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, supportedEx.get(3), MvnCmds.MVNW_DEV);
+        testRuntime(testInfo, supportedEx.get(3), MvnCmds.MVNW_DEV, JAVA_11);
     }
 
     @Test
     public void notSupportedExtensionsSubsetA(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, notSupportedEx.get(0).subList(0, Math.min(10, notSupportedEx.get(0).size())), MvnCmds.MVNW_DEV);
+        testRuntime(testInfo, notSupportedEx.get(0).subList(0, Math.min(10, notSupportedEx.get(0).size())), MvnCmds.MVNW_DEV, JAVA_11);
     }
     
     @Test
@@ -209,12 +211,12 @@ public class CodeQuarkusTest {
         // resteasy or spring-web extension is needed to provide index.html file
         // content from index.html file is checked to ensure the application is up and running
         notSupportedExtensionsSubsetB.add(CodeQuarkusExtensions.QUARKUS_RESTEASY);
-        testRuntime(testInfo, notSupportedExtensionsSubsetB, MvnCmds.MVNW_DEV);
+        testRuntime(testInfo, notSupportedExtensionsSubsetB, MvnCmds.MVNW_DEV, JAVA_11);
     }
 
     @Test
     public void mixExtensions(TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, mixedEx.get(0).subList(0, Math.min(20, mixedEx.get(0).size())), MvnCmds.MVNW_DEV);
+        testRuntime(testInfo, mixedEx.get(0).subList(0, Math.min(20, mixedEx.get(0).size())), MvnCmds.MVNW_DEV, JAVA_11);
     }
 
     @Test
@@ -229,7 +231,7 @@ public class CodeQuarkusTest {
             appendln(whatIDidReport, "# " + cn + ", " + mn);
             appendln(whatIDidReport, (new Date()).toString());
             LOGGER.info("Downloading...");
-            appendln(whatIDidReport, "Download URL: " + download(List.of(CodeQuarkusExtensions.QUARKUS_RESTEASY), zipFile, 17));
+            appendln(whatIDidReport, "Download URL: " + download(List.of(CodeQuarkusExtensions.QUARKUS_RESTEASY), zipFile, JAVA_17));
             LOGGER.info("Unzipping...");
             unzip(zipFile, GEN_BASE_DIR);
 
@@ -245,13 +247,13 @@ public class CodeQuarkusTest {
     @ParameterizedTest
     @MethodSource("supportedExWithCodeStarter")
     public void supportedExtensionWithCodeStarterWorksInJVM(List<CodeQuarkusExtensions> extensions, TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, extensions, MvnCmds.MVNW_JVM);
+        testRuntime(testInfo, extensions, MvnCmds.MVNW_JVM, JAVA_11);
     }
     
     @Tag("native")
     @ParameterizedTest
     @MethodSource("supportedExWithCodeStarter")
     public void supportedExtensionWithCodeStarterWorksInNative(List<CodeQuarkusExtensions> extensions, TestInfo testInfo) throws Exception {
-        testRuntime(testInfo, extensions, MvnCmds.MVNW_NATIVE);
+        testRuntime(testInfo, extensions, MvnCmds.MVNW_NATIVE, JAVA_11);
     }
 }
