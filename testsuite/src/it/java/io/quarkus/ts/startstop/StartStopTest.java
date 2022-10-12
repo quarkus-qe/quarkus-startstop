@@ -100,7 +100,8 @@ public class StartStopTest {
 
             List<Long> rssKbList = new ArrayList<>(10);
             List<Long> timeToFirstOKRequestList = new ArrayList<>(10);
-            for (int i = 0; i < 10; i++) {
+            int iterations = Integer.getInteger("start-stop.iterations", 10);
+            for (int i = 0; i < iterations; i++) {
                 // Run
                 LOGGER.info("Running... round " + i);
                 runLogA = new File(appDir.getAbsolutePath() + File.separator + "logs" + File.separator + mvnCmds.name().toLowerCase() + "-run.log");
