@@ -49,6 +49,9 @@ You may also want to disable native tests with ```-Ptestsuite-no-native``` if yo
 The goal is to build and start applications with some real source code that actually
 exercises some rudimentary business logic of selected extensions.
 
+`start-stop.iterations` property - adjustment of the number of the start-stop cycles
+ - append for example `-Dstart-stop.iterations=25` to the mvn command
+
 Collect results:
 
 ```
