@@ -331,7 +331,7 @@ public class Commands {
      * @throws IOException
      */
     public static String download(Collection<CodeQuarkusExtensions> extensions, String destinationZipFile, int javaVersion) throws IOException {
-        String downloadURL = getCodeQuarkusURL() + "/api/download?s=" +
+        String downloadURL = getCodeQuarkusURL() + "/api/download?" +
                 extensions.stream().map(x -> "e=" + x.id).collect(Collectors.joining("&")) +
                 "&j=" + javaVersion;
         return download(downloadURL, destinationZipFile);
