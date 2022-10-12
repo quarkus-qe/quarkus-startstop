@@ -241,6 +241,34 @@ public class CodeQuarkusTest {
         }
     }
 
+    /*
+     * Similar to java17BasedProject test, but not forcing concrete java version
+     */
+    @Test
+    public void defaultJavaBasedProject(TestInfo testInfo) throws Exception {
+        StringBuilder whatIDidReport = new StringBuilder();
+        String cn = testInfo.getTestClass().get().getCanonicalName();
+        String mn = testInfo.getTestMethod().get().getName();
+        File appDir = new File(GEN_BASE_DIR + File.separator + "code-with-quarkus");
+        String zipFile = GEN_BASE_DIR + File.separator + "code-with-quarkus.zip";
+
+        try {
+            appendln(whatIDidReport, "# " + cn + ", " + mn);
+            appendln(whatIDidReport, (new Date()).toString());
+            LOGGER.info("Downloading...");
+            appendln(whatIDidReport, "Download URL: " + download(List.of(CodeQuarkusExtensions.QUARKUS_RESTEASY_REACTIVE), zipFile));
+            LOGGER.info("Unzipping...");
+            unzip(zipFile, GEN_BASE_DIR);
+
+            String pom = Files.readString(Paths.get(GEN_BASE_DIR + File.separator + "code-with-quarkus" + File.separator + "pom.xml"));
+            assertTrue(pom.contains("<maven.compiler.release>17"), "Downloaded app doesn't have pom.xml file Java 17 based, Java 17 is the default");
+
+        } finally {
+            writeReport(cn, mn, whatIDidReport.toString());
+            cleanDirOrFile(appDir.getAbsolutePath());
+        }
+    }
+
     @ParameterizedTest
     @MethodSource("supportedExWithCodeStarter")
     public void supportedExtensionWithCodeStarterWorksInJVM(List<CodeQuarkusExtensions> extensions, TestInfo testInfo) throws Exception {
