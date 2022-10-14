@@ -6,6 +6,7 @@ import io.quarkus.ts.startstop.utils.LogBuilder;
 import io.quarkus.ts.startstop.utils.Logs;
 import io.quarkus.ts.startstop.utils.MvnCmds;
 import io.quarkus.ts.startstop.utils.WebpageTester;
+import org.apache.commons.io.FileUtils;
 import org.jboss.logging.Logger;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -94,6 +95,16 @@ public class StartStopTest {
             buildService.shutdown();
             buildService.awaitTermination(30, TimeUnit.MINUTES);
             long buildEnds = System.currentTimeMillis();
+
+            if (mvnCmds == MvnCmds.NATIVE) {
+                String nativeBinaryLocation = mvnCmds.mvnCmds[1][0];
+                Path nativeBinaryPath = Paths.get(appDir.getAbsolutePath(), nativeBinaryLocation);
+                appendln(whatIDidReport, "Native binary path: " + nativeBinaryPath);
+                long bytes = Files.size(nativeBinaryPath);
+                String prettySize = FileUtils.byteCountToDisplaySize(bytes);
+                LOGGER.info("Native binary SIZE: " + prettySize);
+                appendlnSection(whatIDidReport, "   SIZE: " + prettySize);
+            }
 
             assertTrue(buildLogA.exists());
             checkLog(cn, mn, app, mvnCmds, buildLogA);
