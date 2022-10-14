@@ -21,7 +21,7 @@ public enum MvnCmds {
     NATIVE(new String[][]{
             Stream.concat(Stream.of("mvn", "clean", "compile", "package", "-Pnative"),
                     getQuarkusNativeProperties().stream()).toArray(String[]::new),
-            new String[]{Commands.isThisWindows ? "target\\quarkus-runner" : "./target/quarkus-runner"}
+            new String[]{Commands.isThisWindows ? "target\\quarkus-runner.exe" : "./target/quarkus-runner"}
     }),
     GENERATOR(new String[][]{
             new String[]{
