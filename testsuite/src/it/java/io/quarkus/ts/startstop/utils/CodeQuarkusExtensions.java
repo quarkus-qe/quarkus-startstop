@@ -19,6 +19,8 @@ public enum CodeQuarkusExtensions {
     QUARKUS_REST_CLIENT_REACTIVE_JAXB("quarkus-rest-client-reactive-jaxb", "REST Client Reactive JAXB", "ignored", true),
     QUARKUS_REST_CLIENT_REACTIVE_JSONB("quarkus-rest-client-reactive-jsonb", "REST Client Reactive JSON-B", "ignored", true),
     QUARKUS_REST_CLIENT_REACTIVE_KOTLIN_SERIALIZATION("quarkus-rest-client-reactive-kotlin-serialization", "REST Client Reactive Kotlin Serialization", "65Z", false),
+    // Should be directly in RESTEasy Reactive
+    // QUARKUS_CSRF_REACTIVE("quarkus-csrf-reactive", "Cross-Site Request Forgery Prevention Filter Reactive", "ignored", false),
 
     // TODO Introduce buckets with reactive jax-rs extensions
     // To avoid java.lang.IllegalStateException: The 'quarkus-resteasy-reactive' and 'quarkus-resteasy' extensions cannot be used at the same time.
@@ -207,6 +209,7 @@ public enum CodeQuarkusExtensions {
     QUARKUS_KOTLIN("quarkus-kotlin", "Kotlin", "OxX", false),
     QUARKUS_SCALA("quarkus-scala", "Scala", "3e", false),
     QUARKUS_AMAZON_DYNAMODB("quarkus-amazon-dynamodb", "Amazon DynamoDB", "8QU", false),
+    QUARKUS_AMAZON_DYNAMODB_ENHANCED("quarkus-amazon-dynamodb-enhanced", "Amazon DynamoDB Enhanced", "ignored", false),
     QUARKUS_AMAZON_IAM("quarkus-amazon-iam", "Amazon IAM", "m2P", false),
     QUARKUS_AMAZON_KMS("quarkus-amazon-kms", "Amazon KMS", "mqJ", false),
     QUARKUS_AMAZON_S3("quarkus-amazon-s3", "Amazon S3", "MUc", false),
@@ -314,6 +317,7 @@ public enum CodeQuarkusExtensions {
     CAMEL_QUARKUS_JACKSON("camel-quarkus-jackson", "Camel Jackson", "Sbp", false),
     CAMEL_QUARKUS_JACKSONXML("camel-quarkus-jacksonxml", "Camel JacksonXML", "RQA", false),
     CAMEL_QUARKUS_JAXB("camel-quarkus-jaxb", "Camel JAXB", "in0", false),
+    CAMEL_QUARKUS_JCACHE("camel-quarkus-jcache", "Camel JCache", "ignored", false),
     CAMEL_QUARKUS_JDBC("camel-quarkus-jdbc", "Camel JDBC", "hOD", false),
     CAMEL_QUARKUS_JFR("camel-quarkus-jfr", "Camel Jfr", "vAQ", false),
     CAMEL_QUARKUS_JING("camel-quarkus-jing", "Camel Jing", "gs5", false),
