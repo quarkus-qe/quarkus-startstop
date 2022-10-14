@@ -124,6 +124,7 @@ public class ArtifactGeneratorTest {
             "oidc-client-filter",
             "reactive-mysql-client",
             "resteasy-multipart",
+            "resteasy-qute",
             "smallrye-context-propagation",
             "smallrye-fault-tolerance",
             "smallrye-health",
@@ -154,6 +155,7 @@ public class ArtifactGeneratorTest {
             "quarkus-jaxrs-client-reactive",
             "quarkus-resteasy-reactive",
             "quarkus-resteasy-reactive-jackson",
+            "quarkus-resteasy-reactive-qute",
             "quarkus-rest-client-reactive",
             "quarkus-rest-client-reactive-jackson",
             "core",
@@ -211,6 +213,7 @@ public class ArtifactGeneratorTest {
             "oidc-client",
             // problematic with reactive - https://issues.redhat.com/browse/QUARKUS-1300
 //            "oidc-client-filter",
+            "quarkus-qute",
             "reactive-mysql-client",
             "smallrye-context-propagation",
             "smallrye-fault-tolerance",
