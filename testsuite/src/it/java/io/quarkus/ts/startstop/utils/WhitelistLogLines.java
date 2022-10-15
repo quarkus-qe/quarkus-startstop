@@ -105,12 +105,12 @@ public enum WhitelistLogLines {
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
     WINDOWS_DEV_MODE_ERRORS(new Pattern[]{
-            Pattern.compile(".*Re-run Maven using the -X switch to enable full debug logging.*"),
-            Pattern.compile(".*For more information about the errors and possible solutions, please read the following articles.*"),
-            Pattern.compile(".*Failed to run: Dev mode process did not complete successfully.*"),
-            Pattern.compile(".*http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException.*"),
-            Pattern.compile(".*To see the full stack trace of the errors, re-run Maven with the -e switch.*"),
-            Pattern.compile("\\[ERROR\\] *"),
+//            Pattern.compile(".*Re-run Maven using the -X switch to enable full debug logging.*"),
+//            Pattern.compile(".*For more information about the errors and possible solutions, please read the following articles.*"),
+//            Pattern.compile(".*Failed to run: Dev mode process did not complete successfully.*"),
+//            Pattern.compile(".*http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException.*"),
+//            Pattern.compile(".*To see the full stack trace of the errors, re-run Maven with the -e switch.*"),
+//            Pattern.compile("\\[ERROR\\] *"),
     });
     
     // Depending to the OS and also on the Quarkus extensions, the Native build might print some warnings about duplicate entries
