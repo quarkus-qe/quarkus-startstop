@@ -17,24 +17,12 @@ public enum WhitelistLogLines {
             // Some artifacts names...
             Pattern.compile(".*maven-error-diagnostics.*"),
             Pattern.compile(".*errorprone.*"),
-            // Needs fixing in the demo app?
-            Pattern.compile(".*TestSecureController.java.*"),
             // Well, the RestClient demo probably should do some cleanup before shutdown...?
             Pattern.compile(".*Closing a class org.jboss.resteasy.client.jaxrs.engines.ApacheHttpClient.*"),
-            Pattern.compile(".*GC warning.*"),
             // https://github.com/quarkusio/quarkus/issues/27307
             Pattern.compile(".*Unknown module: org.graalvm.nativeimage.llvm specified to --add-exports.*"),
-            // https://github.com/quarkusio/quarkus/issues/27308
-            Pattern.compile(".*An illegal reflective access operation has occurred.*"),
-            Pattern.compile(".*Illegal reflective access by com.fasterxml.jackson.databind.util.ClassUtil.*"),
-            Pattern.compile(".*Please consider reporting this to the maintainers of com.fasterxml.jackson.databind.util.ClassUtil.*"),
-            Pattern.compile(".*Use --illegal-access=warn to enable warnings of further illegal reflective access operations.*"),
-            Pattern.compile(".*All illegal access operations will be denied in a future release.*"),
     }),
     GENERATED_SKELETON(new Pattern[]{
-            // It so happens that the dummy skeleton tries to find Mongo. This is expected.
-            // See app-generated-skeleton/README.md for explanation of the scope.
-            Pattern.compile(".*The remote computer refused the network connection.*"),
             // Harmless warning
             Pattern.compile(".*The Agroal dependency is present but no JDBC datasources have been defined.*"),
             // Due to our not exactly accurate application.properties, these expected warnings occur...
@@ -56,27 +44,15 @@ public enum WhitelistLogLines {
             // Some artifacts names...
             Pattern.compile(".*maven-error-diagnostics.*"),
             Pattern.compile(".*errorprone.*"),
-            Pattern.compile(".*google-cloud-errorreporting-bom.*"),
-            // When GraalVM is used; unrelated to the test
-            Pattern.compile(".*forcing TieredStopAtLevel to full optimization because JVMCI is enabled.*"),
             Pattern.compile(".*error_prone_annotations.*"),
-            Pattern.compile(".*SRGQL010000: Schema is null, or it has no operations. Not bootstrapping SmallRye GraphQL.*"),
             Pattern.compile(".*No WebJars were found in the project.*"),
-            Pattern.compile(".*This application uses the MP Metrics API. The micrometer extension currently provides a compatibility layer that supports the MP Metrics API, but metric names and recorded values will be different. Note that the MP Metrics compatibility layer will move to a different extension in the future.*"),
             // kubernetes-client tries to configure client from service account
             Pattern.compile(".*Error reading service account token from.*"),
-            // hibernate-orm issues this warning when default datasource is ambiguous
-            // (no explicit configuration, none or multiple JDBC driver extensions)
-            // Result of DevServices support https://github.com/quarkusio/quarkus/pull/14960
-            Pattern.compile(".*Unable to determine a database type for default datasource.*"),
-            // Maven 3.8.1 throw a warn msg related to a mirror default configuration
-            Pattern.compile(".*org.apache.maven.settings.io.SettingsParseException: Unrecognised tag: 'blocked'.*"),
             // We have disabled the Quarkus Registry Client (-DquarkusRegistryClient=false)
             Pattern.compile(".*The extension catalog will be narrowed to.*"),
             // comes with https://github.com/quarkusio/quarkus/pull/20182
             Pattern.compile(".*Hibernate ORM is disabled because no JPA entities were found.*"),
             Pattern.compile(".*Hibernate Reactive is disabled because no JPA entities were found.*"),
-            Pattern.compile(".*Skipping registration of ReactiveSessionFactoryProducer and ReactiveSessionProducer because exactly one persistence unit is required for their registration.*"),
             // https://github.com/netty/netty/issues/11020
             Pattern.compile(".*Can not find io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider in the classpath, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS.*"),
             // comes with https://github.com/quarkusio/quarkus/pull/19969 https://github.com/quarkusio/quarkus/pull/26868 https://github.com/quarkusio/quarkus/pull/27811
@@ -91,16 +67,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*SRMSG18212: Message.*was not sent to Kafka topic.*nacking message.*"),
             Pattern.compile(".*SRMSG18206: Unable to write to Kafka from channel.*"),
             Pattern.compile(".*io.smallrye.mutiny.subscription.MultiSubscriber.onError\\(MultiSubscriber.java.*"),
-            // https://github.com/quarkusio/quarkus/issues/23382
-            Pattern.compile(".*Unable to properly register the hierarchy of the following classes for reflection as they are not in the Jandex index.*"),
-            // https://github.com/quarkusio/quarkus/issues/23387
-            Pattern.compile(".*The configuration.*auto.offset.reset.* was supplied but isn't a known config.*"),
-            // https://github.com/quarkusio/quarkus/issues/25821
-            Pattern.compile(".*Failed to index org.springframework.web.bind.annotation.Mapping: Class does not exist in ClassLoader.*"),
             // https://github.com/quarkusio/quarkus/issues/27307
             Pattern.compile(".*Unknown module: org.graalvm.nativeimage.llvm specified to --add-exports.*"),
-            // https://github.com/quarkusio/quarkus/issues/27487
-            Pattern.compile(".*Offending field is 'clientName' of class 'io.quarkus.oidc.client.filter.OidcClientRequestFilter'.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
@@ -114,12 +82,8 @@ public enum WhitelistLogLines {
     });
     
     // Depending to the OS and also on the Quarkus extensions, the Native build might print some warnings about duplicate entries
-    private static final Pattern COMMON_WARNING_DUPLICATE_ENTRY_NATIVE = Pattern.compile(".*Duplicate entry about.html entry.*");
-    private static final Pattern COMMON_WARNING_DUPLICATE_ENTRIES_NATIVE = Pattern.compile(".*Dependencies with duplicate files detected.*");
     private static final Pattern COMMON_SLF4J_API_DEPENDENCY_TREE = Pattern.compile(".*org.slf4j:slf4j-api:jar.*");
     private static final Pattern COMMON_SLF4J_JBOSS_LOGMANAGER_DEPENDENCY_TREE = Pattern.compile(".*org.jboss.slf4j:slf4j-jboss-logmanager:jar.*");
-    private static final Pattern COMMON_XML_APIS_DEPENDENCY_TREE = Pattern.compile(".*The artifact xml-apis:xml-apis:jar:2.0.2 has been relocated to xml-apis:xml-apis:.*");
-    // When
     private static final Pattern WARNING_MISSING_OBJCOPY_NATIVE = Pattern.compile(".*objcopy executable not found in PATH.*");
     private static final Pattern WARNING_MISSING_OBJCOPY_RESULT_NATIVE = Pattern.compile(".*That also means that resulting native executable is larger as it embeds the debug symbols..*");
 
@@ -133,41 +97,24 @@ public enum WhitelistLogLines {
         switch (OS.current()) {
             case MAC:
                 return new Pattern[] {
-                        COMMON_WARNING_DUPLICATE_ENTRY_NATIVE,
-                        COMMON_WARNING_DUPLICATE_ENTRIES_NATIVE,
                         COMMON_SLF4J_API_DEPENDENCY_TREE,
                         COMMON_SLF4J_JBOSS_LOGMANAGER_DEPENDENCY_TREE,
-                        COMMON_XML_APIS_DEPENDENCY_TREE,
                         WARNING_MISSING_OBJCOPY_NATIVE,
                         WARNING_MISSING_OBJCOPY_RESULT_NATIVE,
                 };
             case WINDOWS:
                 return new Pattern[] {
-                        COMMON_WARNING_DUPLICATE_ENTRY_NATIVE,
-                        COMMON_WARNING_DUPLICATE_ENTRIES_NATIVE,
                         COMMON_SLF4J_API_DEPENDENCY_TREE,
                         COMMON_SLF4J_JBOSS_LOGMANAGER_DEPENDENCY_TREE,
-                        COMMON_XML_APIS_DEPENDENCY_TREE,
                         WARNING_MISSING_OBJCOPY_NATIVE,
                         WARNING_MISSING_OBJCOPY_RESULT_NATIVE,
-                        Pattern.compile(".*Uber JAR strategy is used for native image source JAR generation on Windows.*"),
                         // Randomly prints some SLF4J traces. Reported by https://github.com/quarkusio/quarkus/issues/16896
                         Pattern.compile(".*SLF4J:.*"),
-                        // When network failures, Windows uses translateErrorToIOException method to throw IO exceptions
-                        // The problem is that the method name contains "Error" and hence it became an offending line.
-                        // For example: this is happening with using Mongo extension (without a Mongo instance).
-                        Pattern.compile(".*translateErrorToIOException.*"),
-                        // In Windows, randomly prints traces like:
-                        // TRACE [io.qua.builder] (build-49) Starting step "io.quarkus.jaxb.deployment.JaxbProcessor..."
-                        Pattern.compile(".*Starting step.*"),
                 };
             case LINUX:
             	return new Pattern[] {
-                        COMMON_WARNING_DUPLICATE_ENTRY_NATIVE,
-                        COMMON_WARNING_DUPLICATE_ENTRIES_NATIVE,
                         COMMON_SLF4J_API_DEPENDENCY_TREE,
                         COMMON_SLF4J_JBOSS_LOGMANAGER_DEPENDENCY_TREE,
-                        COMMON_XML_APIS_DEPENDENCY_TREE,
                 };
         }
         return new Pattern[] {};
