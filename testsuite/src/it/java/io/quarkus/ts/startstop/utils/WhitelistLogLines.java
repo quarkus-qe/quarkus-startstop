@@ -12,6 +12,10 @@ public enum WhitelistLogLines {
             Pattern.compile(".*errorprone.*"),
             // https://github.com/quarkusio/quarkus/issues/27307
             Pattern.compile(".*Unknown module: org.graalvm.nativeimage.llvm specified to --add-exports.*"),
+            // https://github.com/quarkusio/quarkus/issues/28799 (should be removed once 2.14.0.Final is out)
+            Pattern.compile(".*java.lang.RuntimeException: Error reading stream.*"),
+            // https://github.com/quarkusio/quarkus/pull/28810
+            Pattern.compile(".*Stream is closed, ignoring and trying to continue.*"),
     }),
     FULL_MICROPROFILE(new Pattern[]{
             // Some artifacts names...
@@ -21,6 +25,10 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Closing a class org.jboss.resteasy.client.jaxrs.engines.ApacheHttpClient.*"),
             // https://github.com/quarkusio/quarkus/issues/27307
             Pattern.compile(".*Unknown module: org.graalvm.nativeimage.llvm specified to --add-exports.*"),
+            // https://github.com/quarkusio/quarkus/issues/28799 (should be removed once 2.14.0.Final is out)
+            Pattern.compile(".*java.lang.RuntimeException: Error reading stream.*"),
+            // https://github.com/quarkusio/quarkus/pull/28810
+            Pattern.compile(".*Stream is closed, ignoring and trying to continue.*"),
     }),
     GENERATED_SKELETON(new Pattern[]{
             // Harmless warning
@@ -69,6 +77,10 @@ public enum WhitelistLogLines {
             Pattern.compile(".*io.smallrye.mutiny.subscription.MultiSubscriber.onError\\(MultiSubscriber.java.*"),
             // https://github.com/quarkusio/quarkus/issues/27307
             Pattern.compile(".*Unknown module: org.graalvm.nativeimage.llvm specified to --add-exports.*"),
+            // https://github.com/quarkusio/quarkus/issues/28799 (should be removed once 2.14.0.Final is out)
+            Pattern.compile(".*java.lang.RuntimeException: Error reading stream.*"),
+            // https://github.com/quarkusio/quarkus/pull/28810
+            Pattern.compile(".*Stream is closed, ignoring and trying to continue.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
