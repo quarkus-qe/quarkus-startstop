@@ -6,6 +6,7 @@ import io.quarkus.ts.startstop.utils.MvnCmds;
 import io.quarkus.ts.startstop.utils.TestFlags;
 import io.quarkus.ts.startstop.utils.URLContent;
 import io.quarkus.ts.startstop.utils.WebpageTester;
+import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -37,6 +38,7 @@ import static io.quarkus.ts.startstop.utils.Commands.getLocalMavenRepoDir;
 import static io.quarkus.ts.startstop.utils.Commands.getRunCommand;
 import static io.quarkus.ts.startstop.utils.Commands.parsePort;
 import static io.quarkus.ts.startstop.utils.Commands.processStopper;
+import static io.quarkus.ts.startstop.utils.Commands.removeRepositoriesAndPluginRepositories;
 import static io.quarkus.ts.startstop.utils.Commands.runCommand;
 import static io.quarkus.ts.startstop.utils.Commands.waitForTcpClosed;
 import static io.quarkus.ts.startstop.utils.Logs.appendln;
@@ -101,6 +103,10 @@ public class ArtifactGeneratorBOMTest {
             confAppPropsForSkeleton(appDir.getAbsolutePath());
             adjustPrettyPrintForJsonLogging(appDir.getAbsolutePath());
             dropEntityAnnotations(appDir.getAbsolutePath());
+            if (StringUtils.isBlank(System.getProperty("gh.actions"))) {
+                LOGGER.info("Removing repositories and pluginRepositories from pom.xml ...");
+                removeRepositoriesAndPluginRepositories(appDir + File.separator + "pom.xml");
+            }
 
             // Build
             LOGGER.info(mn + ": Build command " + String.join(" ", buildCmd));

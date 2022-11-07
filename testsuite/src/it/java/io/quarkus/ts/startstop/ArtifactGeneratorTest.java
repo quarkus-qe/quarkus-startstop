@@ -12,6 +12,7 @@ import static io.quarkus.ts.startstop.utils.Commands.getRSSkB;
 import static io.quarkus.ts.startstop.utils.Commands.getRunCommand;
 import static io.quarkus.ts.startstop.utils.Commands.parsePort;
 import static io.quarkus.ts.startstop.utils.Commands.processStopper;
+import static io.quarkus.ts.startstop.utils.Commands.removeRepositoriesAndPluginRepositories;
 import static io.quarkus.ts.startstop.utils.Commands.runCommand;
 import static io.quarkus.ts.startstop.utils.Commands.waitForTcpClosed;
 import static io.quarkus.ts.startstop.utils.Logs.SKIP;
@@ -39,6 +40,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -102,6 +104,7 @@ public class ArtifactGeneratorTest {
             "micrometer-registry-prometheus",
             "quarkus-openshift-client",
             "quarkus-smallrye-graphql-client",
+            "qpid-jms",
     };
 
     public static final String[] supportedExtensionsSubsetSetB = new String[]{
@@ -289,6 +292,10 @@ public class ArtifactGeneratorTest {
             confAppPropsForSkeleton(appDir.getAbsolutePath());
             adjustPrettyPrintForJsonLogging(appDir.getAbsolutePath());
             dropEntityAnnotations(appDir.getAbsolutePath());
+            if (StringUtils.isBlank(System.getProperty("gh.actions"))) {
+                LOGGER.info("Removing repositories and pluginRepositories from pom.xml ...");
+                removeRepositoriesAndPluginRepositories(appDir + File.separator + "pom.xml");
+            }
 
             // Run
             LOGGER.info("Running... " + runCmd);
