@@ -83,6 +83,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Stream is closed, ignoring and trying to continue.*"),
             // https://github.com/quarkusio/quarkus/issues/29206
             Pattern.compile(".*Failed to index org.osgi.annotation.bundle.Requirements.*"),
+            // https://github.com/quarkusio/quarkus/issues/29215
+            Pattern.compile(".*These configurations '\\[wildfly.sasl.relax\\-compliance\\]' were supplied but are not used yet.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
