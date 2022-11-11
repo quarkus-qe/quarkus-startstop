@@ -81,6 +81,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*java.lang.RuntimeException: Error reading stream.*"),
             // https://github.com/quarkusio/quarkus/pull/28810
             Pattern.compile(".*Stream is closed, ignoring and trying to continue.*"),
+            // https://github.com/quarkusio/quarkus/issues/29206
+            Pattern.compile(".*Failed to index org.osgi.annotation.bundle.Requirements.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
