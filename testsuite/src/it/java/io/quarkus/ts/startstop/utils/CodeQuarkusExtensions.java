@@ -97,7 +97,7 @@ public enum CodeQuarkusExtensions {
     QUARKUS_SMALLRYE_REACTIVE_MESSAGING_KAFKA("quarkus-smallrye-reactive-messaging-kafka", "SmallRye Reactive Messaging - Kafka Connector", "9qf", true),
     QUARKUS_SMALLRYE_REACTIVE_MESSAGING_MQTT("quarkus-smallrye-reactive-messaging-mqtt", "SmallRye Reactive Messaging - MQTT Connector", "ZsB", false),
     QUARKUS_SMALLRYE_REACTIVE_MESSAGING_RABBITMQ("quarkus-smallrye-reactive-messaging-rabbitmq", "SmallRye Reactive Messaging - RabbitMQ Connector", "haH", false),
-    QUARKUS_QPID_JMS("quarkus-qpid-jms", "AMQP 1.0 JMS client - Apache Qpid JMS", "Zdm", false),
+    QUARKUS_QPID_JMS("quarkus-qpid-jms", "AMQP 1.0 JMS client - Apache Qpid JMS", "Zdm", true),
     QUARKUS_KAFKA_CLIENT("quarkus-kafka-client", "Apache Kafka Client", "FKK", true),
     // SRCFG00014: Property quarkus.kafka-streams.topics is required but the value was not found or is empty
     // https://github.com/quarkusio/quarkus/issues/8506
