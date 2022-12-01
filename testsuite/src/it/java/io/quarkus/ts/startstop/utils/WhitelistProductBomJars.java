@@ -12,6 +12,7 @@ public enum WhitelistProductBomJars {
             "com.microsoft.azure.adal4j",
             "com.nimbusds.oauth2-oidc-sdk",
             "com.nimbusds.content-type",
+            "io.github.crac",
     });
 
     public final String[] jarNames;
