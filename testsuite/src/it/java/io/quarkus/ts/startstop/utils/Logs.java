@@ -147,7 +147,9 @@ public class Logs {
                 }
             }
             assertFalse(containsNotWhitelisted, "There are not-whitelisted artifacts without expected string " + jarSuffix + " suffix, see: \n"
-                    + String.join("\n", reportArtifacts));
+                    + String.join("\n", reportArtifacts) +
+                    "\nTo ensure the artifacts are expected to be productized, please check 'extras/quarkus-bom-deps-to-build.txt' (covers quarkus-bom based artifacts). \n" +
+                    "Another place to check is pom.xml from internal quarkus-platform repo, search for excludes in 'dependenciesToBuild'");
             if (!reportArtifacts.isEmpty()) {
                 LOGGER.warn("There are whitelisted artifacts without expected string " + jarSuffix + " suffix, see: \n"
                         + String.join("\n", reportArtifacts));
