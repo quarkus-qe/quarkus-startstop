@@ -96,6 +96,9 @@ public class StartStopTest {
             buildService.awaitTermination(30, TimeUnit.MINUTES);
             long buildEnds = System.currentTimeMillis();
 
+            assertTrue(buildLogA.exists());
+            checkLog(cn, mn, app, mvnCmds, buildLogA);
+
             if (mvnCmds == MvnCmds.NATIVE) {
                 String nativeBinaryLocation = mvnCmds.mvnCmds[1][0];
                 Path nativeBinaryPath = Paths.get(appDir.getAbsolutePath(), nativeBinaryLocation);
@@ -105,9 +108,6 @@ public class StartStopTest {
                 LOGGER.info("Native binary SIZE: " + prettySize);
                 appendlnSection(whatIDidReport, "   SIZE: " + prettySize);
             }
-
-            assertTrue(buildLogA.exists());
-            checkLog(cn, mn, app, mvnCmds, buildLogA);
 
             List<Long> rssKbList = new ArrayList<>(10);
             List<Long> timeToFirstOKRequestList = new ArrayList<>(10);
