@@ -161,15 +161,19 @@ public class Commands {
     }
 
     public static String getBaseDir() {
-        String env = System.getenv().get("basedir");
-        String sys = System.getProperty("basedir");
-        if (StringUtils.isNotBlank(env)) {
-            return new File(env).getParent();
+        String baseDir = System.getenv().get("basedir");
+        if ( baseDir == null ) {
+            baseDir = System.getProperty("basedir");
         }
-        if (StringUtils.isBlank(sys)) {
+        if (baseDir == null) {
+            // IDE PWD env variable
+            baseDir = System.getenv().get("PWD");
+        }
+
+        if (StringUtils.isBlank(baseDir)) {
             throw new IllegalArgumentException("Unable to determine project.basedir.");
         }
-        return new File(sys).getParent();
+        return new File(baseDir).getParent();
     }
 
     public static String getCodeQuarkusURL() {
