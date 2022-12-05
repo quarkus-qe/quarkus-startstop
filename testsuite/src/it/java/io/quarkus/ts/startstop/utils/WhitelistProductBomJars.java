@@ -13,6 +13,11 @@ public enum WhitelistProductBomJars {
             "com.nimbusds.oauth2-oidc-sdk",
             "com.nimbusds.content-type",
             "io.github.crac",
+            "org.jboss.spec.javax.resource.jboss-connector-api_1.7_spec",
+            "io.perfmark.perfmark-api",
+            "com.graphql-java.graphql-java",
+            "com.graphql-java.java-dataloader",
+            "org.apache.thrift.libthrift",
     });
 
     public final String[] jarNames;
