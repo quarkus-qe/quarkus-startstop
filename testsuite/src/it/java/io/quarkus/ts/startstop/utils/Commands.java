@@ -607,6 +607,15 @@ public class Commands {
         pidKiller(p.pid(), force);
     }
 
+    public static boolean disableCleanup(){
+
+        if (System.getProperty("disableCleanup") != null) {
+            return true;
+        }
+
+        return false;
+    }
+
     private static void disableSslVerification() {
         try
         {

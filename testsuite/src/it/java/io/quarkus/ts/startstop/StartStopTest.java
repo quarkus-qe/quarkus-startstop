@@ -38,6 +38,7 @@ import static io.quarkus.ts.startstop.utils.Commands.parsePort;
 import static io.quarkus.ts.startstop.utils.Commands.processStopper;
 import static io.quarkus.ts.startstop.utils.Commands.runCommand;
 import static io.quarkus.ts.startstop.utils.Commands.waitForTcpClosed;
+import static io.quarkus.ts.startstop.utils.Commands.disableCleanup;
 import static io.quarkus.ts.startstop.utils.Logs.SKIP;
 import static io.quarkus.ts.startstop.utils.Logs.appendln;
 import static io.quarkus.ts.startstop.utils.Logs.appendlnSection;
@@ -63,6 +64,7 @@ public class StartStopTest {
 
     public void testRuntime(TestInfo testInfo, Apps app, MvnCmds mvnCmds) throws IOException, InterruptedException {
         LOGGER.info("Testing app: " + app.toString() + ", mode: " + mvnCmds.toString());
+        LOGGER.info("Cleanup Enabled: " + !disableCleanup());
 
         Process pA = null;
         File buildLogA = null;
@@ -178,7 +180,9 @@ public class StartStopTest {
             archiveLog(cn, mn, buildLogA);
             archiveLog(cn, mn, runLogA);
             writeReport(cn, mn, whatIDidReport.toString());
-            cleanTarget(app);
+            if ( !disableCleanup() ){
+                cleanTarget(app);
+            }
         }
     }
 
