@@ -18,6 +18,7 @@ public enum WhitelistProductBomJars {
             "com.graphql-java.graphql-java",
             "com.graphql-java.java-dataloader",
             "org.apache.thrift.libthrift",
+            "com.aayushatharva.brotli4j.native-osx-x86_64",
     });
 
     public final String[] jarNames;
