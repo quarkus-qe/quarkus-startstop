@@ -85,6 +85,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Failed to index org.osgi.annotation.bundle.Requirements.*"),
             // https://github.com/quarkusio/quarkus/issues/29215
             Pattern.compile(".*These configurations '\\[wildfly.sasl.relax\\-compliance\\]' were supplied but are not used yet.*"),
+            // https://github.com/quarkusio/quarkus/pull/28654
+            Pattern.compile(".*Using legacy gRPC support, with separate new HTTP server instance. Switch to single HTTP server instance usage with quarkus.grpc.server.use-separate-server=false property.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
