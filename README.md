@@ -6,6 +6,11 @@ Generates, starts, tests, stops small Quarkus applications and measures time and
 The TS expects you run Apache Maven 3.6.3+, Java 11+ and have ```ps``` program available on your Linux/Mac and ```wmic``` (by default present) on your Windows system.
 Native image build requires GraalVM with Native image toolchain installed. Refer to [Building Native Image Guide](https://quarkus.io/guides/building-native-image) for details. 
 
+## Branches
+Branches are created for important Quarkus versions, usually related to RHBQ releases.
+
+When creating new branch please consult [New branch adjustments](https://github.com/quarkus-qe/quarkus-startstop/wiki/New-branch-adjustments) document.
+
 ## Usage
 
 Run with a community version without native images:
