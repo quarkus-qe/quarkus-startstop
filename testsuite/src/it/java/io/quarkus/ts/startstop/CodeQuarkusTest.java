@@ -96,8 +96,10 @@ public class CodeQuarkusTest {
             appendln(whatIDidReport, "Download URL: " + download(extensions, zipFile, 11));
             LOGGER.info("Unzipping...");
             unzipLog = unzip(zipFile, GEN_BASE_DIR);
-            LOGGER.info("Removing repositories and pluginRepositories from pom.xml ...");
-            removeRepositoriesAndPluginRepositories(appDir + File.separator + "pom.xml");
+            if (StringUtils.isBlank(System.getProperty("gh.actions"))) {
+                LOGGER.info("Removing repositories and pluginRepositories from pom.xml ...");
+                removeRepositoriesAndPluginRepositories(appDir + File.separator + "pom.xml");
+            }
             adjustPrettyPrintForJsonLogging(appDir.getAbsolutePath());
             disableDevServices(appDir.getAbsolutePath());
             dropEntityAnnotations(appDir.getAbsolutePath());
