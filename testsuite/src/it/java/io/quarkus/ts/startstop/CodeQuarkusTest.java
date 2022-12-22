@@ -100,7 +100,6 @@ public class CodeQuarkusTest {
                 LOGGER.info("Removing repositories and pluginRepositories from pom.xml ...");
                 removeRepositoriesAndPluginRepositories(appDir + File.separator + "pom.xml");
             }
-            removeRepositoriesAndPluginRepositories(appDir + File.separator + "pom.xml");
             adjustPrettyPrintForJsonLogging(appDir.getAbsolutePath());
             disableDevServices(appDir.getAbsolutePath());
             dropEntityAnnotations(appDir.getAbsolutePath());
