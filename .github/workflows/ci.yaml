@@ -12,17 +12,14 @@ jobs:
       matrix:
         java: [ 11 ]
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/cache@v1
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+      - uses: actions/checkout@v3
       - name: Install JDK {{ matrix.java }}
-        uses: joschi/setup-jdk@e87a7cec853d2dd7066adf837fe12bf0f3d45e52
+        uses: actions/setup-java@v3
         with:
+          distribution: 'temurin'
           java-version: ${{ matrix.java }}
+          check-latest: true
+          cache: 'maven'
       - name: Build with Maven
         run: |
           mvn -V -B -s .github/mvn-settings.xml validate -Pide,validate-format
@@ -33,17 +30,14 @@ jobs:
       matrix:
         java: [ 11, 17 ]
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/cache@v1
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+      - uses: actions/checkout@v3
       - name: Install JDK {{ matrix.java }}
-        uses: joschi/setup-jdk@e87a7cec853d2dd7066adf837fe12bf0f3d45e52
+        uses: actions/setup-java@v3
         with:
+          distribution: 'temurin'
           java-version: ${{ matrix.java }}
+          check-latest: true
+          cache: 'maven'
       - name: Build with Maven
         run: |
           mvn -V -B -s .github/mvn-settings.xml clean verify -DexcludeTags=product,native,codequarkus -Dgh.actions
@@ -52,7 +46,7 @@ jobs:
         run: |
           zip -r artifacts-jvm${{ matrix.java }}.zip . -i '*-reports/*' '*/archived-logs/*'
       - name: Archive artifacts
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: ci-artifacts
@@ -64,17 +58,14 @@ jobs:
         matrix:
           java: [ 11 ]
       steps:
-        - uses: actions/checkout@v1
-        - uses: actions/cache@v1
-          with:
-            path: ~/.m2/repository
-            key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-            restore-keys: |
-              ${{ runner.os }}-maven-
+        - uses: actions/checkout@v3
         - name: Install JDK {{ matrix.java }}
-          uses: joschi/setup-jdk@e87a7cec853d2dd7066adf837fe12bf0f3d45e52
+          uses: actions/setup-java@v3
           with:
+            distribution: 'temurin'
             java-version: ${{ matrix.java }}
+            check-latest: true
+            cache: 'maven'
         - name: Build with Maven
           run: |
             mvn -V -B -s .github/mvn-settings.xml clean verify -DincludeTags="native" -DexcludeTags=product,codequarkus -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=docker -Dgh.actions
@@ -83,7 +74,7 @@ jobs:
           run: |
             zip -r artifacts-native${{ matrix.java }}.zip . -i '*-reports/*' '*/archived-logs/*'
         - name: Archive artifacts
-          uses: actions/upload-artifact@v1
+          uses: actions/upload-artifact@v3
           if: failure()
           with:
             name: ci-artifacts
@@ -95,17 +86,14 @@ jobs:
       matrix:
         java: [ 11, 17 ]
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/cache@v1
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+      - uses: actions/checkout@v3
       - name: Install JDK {{ matrix.java }}
-        uses: joschi/setup-jdk@e87a7cec853d2dd7066adf837fe12bf0f3d45e52
+        uses: actions/setup-java@v3
         with:
+          distribution: 'temurin'
           java-version: ${{ matrix.java }}
+          check-latest: true
+          cache: 'maven'
       - name: Build with Maven
         run: |
           mvn -V -B -s .github/mvn-settings.xml clean verify -Ptestsuite -DincludeTags=codequarkus -Dgh.actions
@@ -114,7 +102,7 @@ jobs:
         run: |
           zip -r artifacts-code-start${{ matrix.java }}.zip . -i '*-reports/*' '*/archived-logs/*'
       - name: Archive artifacts
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: ci-artifacts
@@ -126,17 +114,14 @@ jobs:
       matrix:
         java: [ 11, 17 ]
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/cache@v1
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+      - uses: actions/checkout@v3
       - name: Install JDK {{ matrix.java }}
-        uses: joschi/setup-jdk@e87a7cec853d2dd7066adf837fe12bf0f3d45e52
+        uses: actions/setup-java@v3
         with:
+          distribution: 'temurin'
           java-version: ${{ matrix.java }}
+          check-latest: true
+          cache: 'maven'
       - name: Build with Maven
         shell: bash
         run: |
@@ -148,7 +133,7 @@ jobs:
           # Disambiguate windows find from cygwin find
           /usr/bin/find . -name '*-reports' -o -name 'archived-logs' -type d | tar -czf artifacts-windows-jvm${{ matrix.java }}.tar -T -
       - name: Archive artifacts
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: ci-artifacts
@@ -159,35 +144,29 @@ jobs:
     strategy:
       matrix:
         java: [ 11 ]
-        graalvm-version: [ "22.2.0.java17" ]
+        graalvm-version: [ "22.3.0" ]
+        graalvm-java-version: [ "17" ]
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/cache@v1
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+      - uses: actions/checkout@v3
       - name: Install JDK {{ matrix.java }}
-        uses: joschi/setup-jdk@e87a7cec853d2dd7066adf837fe12bf0f3d45e52
+        uses: actions/setup-java@v3
         with:
+          distribution: 'temurin'
           java-version: ${{ matrix.java }}
-      - name: Install cl.exe
-        uses: ilammy/msvc-dev-cmd@v1
-      - uses: microsoft/setup-msbuild@v1
+          check-latest: true
+          cache: 'maven'
       - name: Setup GraalVM
         id: setup-graalvm
-        uses: DeLaGuardo/setup-graalvm@master
+        uses: graalvm/setup-graalvm@v1
         with:
-          graalvm-version: ${{ matrix.graalvm-version }}
-          java: java${{ matrix.graalvm-version }}
-      - name: Install native-image component
-        run: |
-          gu.cmd install native-image
+          version: ${{ matrix.graalvm-version }}
+          java-version: ${{ matrix.graalvm-java-version }}
+          components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Configure Pagefile
         # Increased the page-file size due to memory-consumption of native-image command
         # For details see https://github.com/actions/virtual-environments/issues/785
-        uses: al-cheb/configure-pagefile-action@v1.2
+        uses: al-cheb/configure-pagefile-action@v1.3
       - name: Build with Maven
         run: |
           mvn -V -B -s .github/mvn-settings.xml clean verify -DincludeTags="native" -DexcludeTags="product,codequarkus" -Dquarkus.native.native-image-xmx=6g -Dgh.actions
@@ -199,7 +178,7 @@ jobs:
           # Disambiguate windows find from cygwin find
           /usr/bin/find . -name '*-reports' -o -name 'archived-logs' -type d | tar -czf artifacts-windows-native${{ matrix.java }}.tar -T -
       - name: Archive artifacts
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: ci-artifacts
