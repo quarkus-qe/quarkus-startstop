@@ -13,11 +13,9 @@ public enum WhitelistLogLines {
             // https://github.com/quarkusio/quarkus/issues/27307
             Pattern.compile(".*Unknown module: org.graalvm.nativeimage.llvm specified to --add-exports.*"),
             // https://github.com/quarkusio/quarkus/issues/28799 (should be removed once 2.14.0.Final is out)
-            Pattern.compile(".*java.lang.RuntimeException: Error reading stream.*"),
-            // https://github.com/quarkusio/quarkus/pull/28810
-            Pattern.compile(".*Stream is closed, ignoring and trying to continue.*"),
+            Commons.STREAM_ERROR,
+            Commons.CLOSED_STREAM,
             Commons.NETTY_HANDLERS,
-            Commons.NO_IMAGE,
     }),
     FULL_MICROPROFILE(new Pattern[]{
             // Some artifacts names...
@@ -27,12 +25,9 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Closing a class org.jboss.resteasy.client.jaxrs.engines.ApacheHttpClient.*"),
             // https://github.com/quarkusio/quarkus/issues/27307
             Pattern.compile(".*Unknown module: org.graalvm.nativeimage.llvm specified to --add-exports.*"),
-            // https://github.com/quarkusio/quarkus/issues/28799 (should be removed once 2.14.0.Final is out)
-            Pattern.compile(".*java.lang.RuntimeException: Error reading stream.*"),
-            // https://github.com/quarkusio/quarkus/pull/28810
-            Pattern.compile(".*Stream is closed, ignoring and trying to continue.*"),
+            Commons.STREAM_ERROR,
+            Commons.CLOSED_STREAM,
             Commons.NETTY_HANDLERS,
-            Commons.NO_IMAGE,
     }),
     GENERATED_SKELETON(new Pattern[]{
             // Harmless warning
@@ -82,11 +77,9 @@ public enum WhitelistLogLines {
             // https://github.com/quarkusio/quarkus/issues/27307
             Pattern.compile(".*Unknown module: org.graalvm.nativeimage.llvm specified to --add-exports.*"),
             // https://github.com/quarkusio/quarkus/issues/28799 (should be removed once 2.14.0.Final is out)
-            Pattern.compile(".*java.lang.RuntimeException: Error reading stream.*"),
-            // https://github.com/quarkusio/quarkus/pull/28810
-            Pattern.compile(".*Stream is closed, ignoring and trying to continue.*"),
+            Commons.STREAM_ERROR,
+            Commons.CLOSED_STREAM,
             Commons.NETTY_HANDLERS,
-            Commons.NO_IMAGE,
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
