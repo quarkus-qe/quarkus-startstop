@@ -16,6 +16,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*java.lang.RuntimeException: Error reading stream.*"),
             // https://github.com/quarkusio/quarkus/pull/28810
             Pattern.compile(".*Stream is closed, ignoring and trying to continue.*"),
+            Commons.NETTY_HANDLERS,
+            Commons.NO_IMAGE,
     }),
     FULL_MICROPROFILE(new Pattern[]{
             // Some artifacts names...
@@ -29,26 +31,28 @@ public enum WhitelistLogLines {
             Pattern.compile(".*java.lang.RuntimeException: Error reading stream.*"),
             // https://github.com/quarkusio/quarkus/pull/28810
             Pattern.compile(".*Stream is closed, ignoring and trying to continue.*"),
+            Commons.NETTY_HANDLERS,
+            Commons.NO_IMAGE,
     }),
     GENERATED_SKELETON(new Pattern[]{
             // Harmless warning
             Pattern.compile(".*The Agroal dependency is present but no JDBC datasources have been defined.*"),
             // Due to our not exactly accurate application.properties, these expected warnings occur...
             Pattern.compile(".*Unrecognized configuration key[ \\\\\"]*(" +
-                    "quarkus.oidc.auth-server-url|" +
-                    "quarkus.oidc.client-id|" +
-                    "quarkus.oidc-client.auth-server-url|" +
-                    "quarkus.oidc-client.client-id|" +
-                    "quarkus.oidc-client.token-path|" +
-                    "quarkus.oidc-client.discovery-enabled|" +
-                    "quarkus.smallrye-jwt.enabled|" +
-                    "quarkus.devservices.enabled|" +
-                    "quarkus.jaeger.enabled|" +
-                    "quarkus.jaeger.service-name|" +
-                    "quarkus.jaeger.sampler-param|" +
-                    "quarkus.jaeger.endpoint|" +
-                    "quarkus.jaeger.sampler-type" +
-                    ")[ \\\\\"]*was provided.*"),
+                                    "quarkus.oidc.auth-server-url|" +
+                                    "quarkus.oidc.client-id|" +
+                                    "quarkus.oidc-client.auth-server-url|" +
+                                    "quarkus.oidc-client.client-id|" +
+                                    "quarkus.oidc-client.token-path|" +
+                                    "quarkus.oidc-client.discovery-enabled|" +
+                                    "quarkus.smallrye-jwt.enabled|" +
+                                    "quarkus.devservices.enabled|" +
+                                    "quarkus.jaeger.enabled|" +
+                                    "quarkus.jaeger.service-name|" +
+                                    "quarkus.jaeger.sampler-param|" +
+                                    "quarkus.jaeger.endpoint|" +
+                                    "quarkus.jaeger.sampler-type" +
+                                    ")[ \\\\\"]*was provided.*"),
             // Some artifacts names...
             Pattern.compile(".*maven-error-diagnostics.*"),
             Pattern.compile(".*errorprone.*"),
@@ -81,6 +85,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*java.lang.RuntimeException: Error reading stream.*"),
             // https://github.com/quarkusio/quarkus/pull/28810
             Pattern.compile(".*Stream is closed, ignoring and trying to continue.*"),
+            Commons.NETTY_HANDLERS,
+            Commons.NO_IMAGE,
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
@@ -92,7 +98,7 @@ public enum WhitelistLogLines {
             Pattern.compile(".*To see the full stack trace of the errors, re-run Maven with the -e switch.*"),
             Pattern.compile("\\[ERROR\\] *"),
     });
-    
+
     // Depending to the OS and also on the Quarkus extensions, the Native build might print some warnings about duplicate entries
     private static final Pattern COMMON_SLF4J_API_DEPENDENCY_TREE = Pattern.compile(".*org.slf4j:slf4j-api:jar.*");
     private static final Pattern COMMON_SLF4J_JBOSS_LOGMANAGER_DEPENDENCY_TREE = Pattern.compile(".*org.jboss.slf4j:slf4j-jboss-logmanager:jar.*");
@@ -108,14 +114,14 @@ public enum WhitelistLogLines {
     public final Pattern[] platformErrs() {
         switch (OS.current()) {
             case MAC:
-                return new Pattern[] {
+                return new Pattern[]{
                         COMMON_SLF4J_API_DEPENDENCY_TREE,
                         COMMON_SLF4J_JBOSS_LOGMANAGER_DEPENDENCY_TREE,
                         WARNING_MISSING_OBJCOPY_NATIVE,
                         WARNING_MISSING_OBJCOPY_RESULT_NATIVE,
                 };
             case WINDOWS:
-                return new Pattern[] {
+                return new Pattern[]{
                         COMMON_SLF4J_API_DEPENDENCY_TREE,
                         COMMON_SLF4J_JBOSS_LOGMANAGER_DEPENDENCY_TREE,
                         WARNING_MISSING_OBJCOPY_NATIVE,
@@ -124,16 +130,17 @@ public enum WhitelistLogLines {
                         Pattern.compile(".*SLF4J:.*"),
                 };
             case LINUX:
-            	return new Pattern[] {
+                return new Pattern[]{
                         COMMON_SLF4J_API_DEPENDENCY_TREE,
                         COMMON_SLF4J_JBOSS_LOGMANAGER_DEPENDENCY_TREE,
                 };
         }
-        return new Pattern[] {};
+        return new Pattern[]{};
     }
 
     enum OS {
         MAC, LINUX, WINDOWS, UNKNOWN;
+
         public static OS current() {
             if (isMac()) {
                 return MAC;
@@ -146,12 +153,15 @@ public enum WhitelistLogLines {
             }
         }
     }
+
     private static boolean isMac() {
         return System.getProperty("os.name").toLowerCase().contains("mac");
     }
+
     private static boolean isWindows() {
         return System.getProperty("os.name").toLowerCase().contains("windows");
     }
+
     private static boolean isLinux() {
         return System.getProperty("os.name").toLowerCase().contains("linux");
     }
