@@ -104,7 +104,7 @@ public class ArtifactGeneratorTest {
             "micrometer-registry-prometheus",
             "quarkus-openshift-client",
             "quarkus-smallrye-graphql-client",
-//            "qpid-jms",  // not part of the initial RHBQ 2.13 release
+            "qpid-jms",
     };
 
     public static final String[] supportedExtensionsSubsetSetB = new String[]{
