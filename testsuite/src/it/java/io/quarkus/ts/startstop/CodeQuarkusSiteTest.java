@@ -68,7 +68,7 @@ public class CodeQuarkusSiteTest {
 
     @Test
     public void validatePresenceOfIcon(TestInfo testInfo) {
-        Page page = loadPage(webPageUrl, 60);
+        Page page = loadPage(webPageUrl + "?S=com.redhat.quarkus.platform%3A2.13", 60);
         LOGGER.info("Trying to find element: " + elementIconByXpath);
         Locator icon = page.locator(elementIconByXpath);
         assertEquals(1, icon.count(), "Element: " + elementIconByXpath + " is missing!");
@@ -76,7 +76,7 @@ public class CodeQuarkusSiteTest {
 
     @Test
     public void validatePresenceOfTitle(TestInfo testInfo) {
-        Page page = loadPage(webPageUrl, 60);
+        Page page = loadPage(webPageUrl + "?S=com.redhat.quarkus.platform%3A2.13", 60);
         LOGGER.info("Verify page title is: " + elementTitleByText);
         assertEquals(elementTitleByText, page.title(),
                 "Title doesn't match. Found on the web: " + page.title() + ". Expected: " + elementTitleByText);
@@ -84,7 +84,7 @@ public class CodeQuarkusSiteTest {
 
     @Test
     public void validatePresenceOfRedHatLogo(TestInfo testInfo) {
-        Page page = loadPage(webPageUrl, 60);
+        Page page = loadPage(webPageUrl + "?S=com.redhat.quarkus.platform%3A2.13", 60);
         LOGGER.info("Trying to find element: " + elementRedHatLogoByXpath);
         Locator redHatLogo = page.locator(elementRedHatLogoByXpath);
         redHatLogo.elementHandle().waitForElementState(ElementState.VISIBLE);
@@ -93,7 +93,7 @@ public class CodeQuarkusSiteTest {
 
     @Test
     public void validatePresenceOfSupportedFlags(TestInfo testInfo) {
-        Page page = loadPage(webPageUrl, 60);
+        Page page = loadPage(webPageUrl + "?S=com.redhat.quarkus.platform%3A2.13", 60);
         LOGGER.info("Trying to find element: " + elementSupportedFlagByXpath);
         Locator supportedExtensions = page.locator(elementSupportedFlagByXpath);
         assertTrue(supportedExtensions.count() > 1, "Element: " + elementSupportedFlagByXpath + " is missing!");
@@ -101,7 +101,7 @@ public class CodeQuarkusSiteTest {
 
     @Test
     public void validatePresenceOfJavaVersionSelect(TestInfo testInfo) {
-        Page page = loadPage(webPageUrl, 60);
+        Page page = loadPage(webPageUrl + "?S=com.redhat.quarkus.platform%3A2.13", 60);
         LOGGER.info("Trying to find element: " + elementJavaVersionSelectByXpath);
         Locator javaVersionSelect = page.locator(elementJavaVersionSelectByXpath);
         assertTrue(javaVersionSelect.count() == 1, "Element: " + elementJavaVersionSelectByXpath + " is missing!");
@@ -113,7 +113,7 @@ public class CodeQuarkusSiteTest {
 
     @Test
     public void validatePresenceOfStreamVersionSelect(TestInfo testInfo) {
-        Page page = loadPage(webPageUrl, 60);
+        Page page = loadPage(webPageUrl + "?S=com.redhat.quarkus.platform%3A2.13", 60);
         LOGGER.info("Trying to find element: " + elementStreamPickerByXpath);
         Locator streamPicker = page.locator(elementStreamPickerByXpath);
         assertTrue(streamPicker.isVisible(), "Element: " + streamPicker + " is missing!");
