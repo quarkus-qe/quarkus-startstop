@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
  */
 public enum WhitelistLogLines {
     JAX_RS_MINIMAL(new Pattern[]{
+            Pattern.compile(".*Error stacktraces are turned on.*"),
             // Some artifacts names...
             Pattern.compile(".*maven-error-diagnostics.*"),
             Pattern.compile(".*errorprone.*"),
@@ -18,6 +19,7 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Stream is closed, ignoring and trying to continue.*"),
     }),
     FULL_MICROPROFILE(new Pattern[]{
+            Pattern.compile(".*Error stacktraces are turned on.*"),
             // Some artifacts names...
             Pattern.compile(".*maven-error-diagnostics.*"),
             Pattern.compile(".*errorprone.*"),
@@ -31,6 +33,7 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Stream is closed, ignoring and trying to continue.*"),
     }),
     GENERATED_SKELETON(new Pattern[]{
+            Pattern.compile(".*Error stacktraces are turned on.*"),
             // Harmless warning
             Pattern.compile(".*The Agroal dependency is present but no JDBC datasources have been defined.*"),
             // Due to our not exactly accurate application.properties, these expected warnings occur...
