@@ -126,6 +126,7 @@ jobs:
         uses: s4u/setup-maven-action@v1.6.0
         with:
           maven-version: 3.8.7
+          java-version: ${{ matrix.java }}
       - name: Build with Maven
         shell: bash
         run: |
