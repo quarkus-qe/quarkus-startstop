@@ -675,6 +675,7 @@ public class Commands {
 
         @Override
         public void run() {
+            LOGGER.debugv("Running {0} in {1}", command, directory);
             ProcessBuilder pb = new ProcessBuilder(command);
             Map<String, String> env = pb.environment();
             env.put("PATH", System.getenv("PATH"));
