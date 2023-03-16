@@ -64,7 +64,8 @@ public enum WhitelistLogLines {
             // https://github.com/netty/netty/issues/11020
             Pattern.compile(".*Can not find io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider in the classpath, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS.*"),
             // comes with https://github.com/quarkusio/quarkus/pull/19969 https://github.com/quarkusio/quarkus/pull/26868 https://github.com/quarkusio/quarkus/pull/27811
-            Pattern.compile(".*OIDC Server is not available.*Connection refused.*localhost/127.0.0.1:6661.*"),
+            Pattern.compile(".*OIDC Server is not available.*"),
+            Pattern.compile(".*localhost:6661.*"),
             // Attempted to read Testcontainers configuration file at file:/home/runner/.testcontainers.properties but the file was not found.
             Pattern.compile(".*Attempted to read Testcontainers configuration file at.*"),
             // 2021-12-23 12:57:02,610 WARN  [org.apa.kaf.cli.NetworkClient] (smallrye-kafka-consumer-thread-0) [Consumer clientId=kafka-consumer-uppercase-in, groupId=code-with-quarkus] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Broker may not be available.
@@ -87,6 +88,9 @@ public enum WhitelistLogLines {
             Pattern.compile(".*These configurations '\\[wildfly.sasl.relax\\-compliance\\]' were supplied but are not used yet.*"),
             // https://github.com/quarkusio/quarkus/pull/28654
             Pattern.compile(".*Using legacy gRPC support, with separate new HTTP server instance. Switch to single HTTP server instance usage with quarkus.grpc.server.use-separate-server=false property.*"),
+            // GH Action runners are slow, graceful shutdown is not guaranteed on Quarkus
+            // RESTEASY004687: Closing a class org.jboss.resteasy.client.jaxrs.engines.ManualClosingApacheHttpClient43Engine$CleanupAction instance for you.
+            Pattern.compile(".*RESTEASY004687: Closing a class.*CleanupAction.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
