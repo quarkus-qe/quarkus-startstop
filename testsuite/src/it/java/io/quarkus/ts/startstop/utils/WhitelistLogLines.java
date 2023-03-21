@@ -64,8 +64,6 @@ public enum WhitelistLogLines {
             // comes with https://github.com/quarkusio/quarkus/pull/20182
             Pattern.compile(".*Hibernate ORM is disabled because no JPA entities were found.*"),
             Pattern.compile(".*Hibernate Reactive is disabled because no JPA entities were found.*"),
-            // https://github.com/netty/netty/issues/11020
-            Pattern.compile(".*Can not find io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider in the classpath, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS.*"),
             // comes with https://github.com/quarkusio/quarkus/pull/19969 https://github.com/quarkusio/quarkus/pull/26868 https://github.com/quarkusio/quarkus/pull/27811
             Pattern.compile(".*OIDC Server is not available.*"),
             Pattern.compile(".*localhost:6661.*"),
@@ -123,6 +121,8 @@ public enum WhitelistLogLines {
                         COMMON_SLF4J_JBOSS_LOGMANAGER_DEPENDENCY_TREE,
                         WARNING_MISSING_OBJCOPY_NATIVE,
                         WARNING_MISSING_OBJCOPY_RESULT_NATIVE,
+                        // https://github.com/netty/netty/issues/11020
+                        Pattern.compile(".*Can not find io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider in the classpath, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS.*"),
                 };
             case WINDOWS:
                 return new Pattern[] {
