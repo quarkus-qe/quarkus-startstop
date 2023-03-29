@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -33,6 +34,7 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -60,6 +62,7 @@ public class Commands {
     private static final Logger LOGGER = Logger.getLogger(Commands.class.getName());
 
     public static final boolean isThisWindows = System.getProperty("os.name").matches(".*[Ww]indows.*");
+    public static final boolean isThisLinux = System.getProperty("os.name").matches(".*[Ll]inux.*");
     private static final Pattern numPattern = Pattern.compile("[ \t]*[0-9]+[ \t]*");
     private static final Pattern quarkusVersionPattern = Pattern.compile("[ \t]*<quarkus.version>([^<]*)</quarkus.version>.*");
     private static final Pattern trailingSlash = Pattern.compile("/+$");
@@ -569,6 +572,29 @@ public class Commands {
             p.waitFor();
         }
         return count;
+    }
+
+    public static void dropCaches() throws IOException, UnsupportedOperationException, InterruptedException {
+        if (isThisLinux) {
+            // sync && sudo sh -c "echo 3 > /proc/sys/vm/drop_caches"
+            ProcessBuilder syncProcess = new ProcessBuilder("sync");
+            ProcessBuilder dropProcess = new ProcessBuilder("sudo", "-n", "sh", "-c", "echo 3 > /proc/sys/vm/drop_caches");
+
+            Process proc = syncProcess.redirectErrorStream(true).start();
+            int exitCode = proc.waitFor();
+            if (exitCode != 0) {
+                throw new UnsupportedOperationException("Execution of 'sync' command failed.");
+            }
+
+            proc = dropProcess.redirectErrorStream(true).start();
+            exitCode = proc.waitFor();
+            if (exitCode != 0) {
+                throw new UnsupportedOperationException("Execution of 'sudo sh -c \"echo 3 > /proc/sys/vm/drop_caches\"' command " +
+                        "failed with exit code " + exitCode + ". Is sudo enabled for the current user?");
+            }
+        } else {
+            throw new UnsupportedOperationException("Caches can be dropped only on Linux machines");
+        }
     }
 
     /*
