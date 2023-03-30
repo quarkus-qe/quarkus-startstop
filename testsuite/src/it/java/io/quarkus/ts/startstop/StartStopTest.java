@@ -27,6 +27,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import static io.quarkus.ts.startstop.utils.Commands.cleanTarget;
+import static io.quarkus.ts.startstop.utils.Commands.dropCaches;
 import static io.quarkus.ts.startstop.utils.Commands.getBaseDir;
 import static io.quarkus.ts.startstop.utils.Commands.getBuildCommand;
 import static io.quarkus.ts.startstop.utils.Commands.getOpenedFDs;
@@ -114,6 +115,7 @@ public class StartStopTest {
             List<Long> rssKbList = new ArrayList<>(10);
             List<Long> timeToFirstOKRequestList = new ArrayList<>(10);
             int iterations = Integer.getInteger("start-stop.iterations", 10);
+            boolean coldStart = Boolean.getBoolean("start-stop.cold-start");
             for (int i = 0; i < iterations; i++) {
                 // Run
                 LOGGER.info("Running... round " + i);
@@ -121,6 +123,10 @@ public class StartStopTest {
                 cmd = getRunCommand(mvnCmds.mvnCmds[1]);
                 appendln(whatIDidReport, appDir.getAbsolutePath());
                 appendlnSection(whatIDidReport, String.join(" ", cmd));
+                if (coldStart) {
+                    LOGGER.info("Using COLD start");
+                    dropCaches();
+                }
                 pA = runCommand(cmd, appDir, runLogA);
 
                 // Test web pages

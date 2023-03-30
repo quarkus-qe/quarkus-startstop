@@ -57,6 +57,9 @@ exercises some rudimentary business logic of selected extensions.
 `start-stop.iterations` property - adjustment of the number of the start-stop cycles
  - append for example `-Dstart-stop.iterations=25` to the mvn command
 
+`start-stop.cold-start` property - use cold start mode to drop OS page cache entries, dentries and inodes.
+- append for example `-Dstart-stop.cold-start` to the mvn command
+
 Collect results:
 
 ```
