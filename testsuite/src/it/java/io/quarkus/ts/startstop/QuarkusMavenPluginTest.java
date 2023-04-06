@@ -3,6 +3,7 @@ package io.quarkus.ts.startstop;
 import io.quarkus.ts.startstop.utils.Apps;
 import io.quarkus.ts.startstop.utils.Commands;
 import org.jboss.logging.Logger;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
@@ -92,6 +93,7 @@ public class QuarkusMavenPluginTest {
     }
 
     @Test
+    @Disabled("https://github.com/quarkusio/quarkus/issues/32288")
     public void updateTarget(TestInfo testInfo) throws IOException, InterruptedException {
         runQuarkusMavenPluginGoal(testInfo, Apps.JAX_RS_MINIMAL, "update", "quarkus:update goal is experimental");
     }

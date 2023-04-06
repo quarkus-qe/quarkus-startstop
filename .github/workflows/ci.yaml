@@ -31,10 +31,6 @@ jobs:
         java: [ 11, 17 ]
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Maven 3.8.7 #TODO: https://github.com/quarkusio/quarkus/issues/31011#issuecomment-1453522507
-        uses: stCarolas/setup-maven@v4.5
-        with:
-          maven-version: 3.8.7
       - name: Install JDK {{ matrix.java }}
         uses: actions/setup-java@v3
         with:
@@ -126,11 +122,6 @@ jobs:
           java-version: ${{ matrix.java }}
           check-latest: true
           cache: 'maven'
-      - name: Setup Maven
-        uses: s4u/setup-maven-action@v1.6.0
-        with:
-          maven-version: 3.8.7
-          java-version: ${{ matrix.java }}
       - name: Build with Maven
         shell: bash
         run: |
