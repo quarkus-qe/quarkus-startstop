@@ -89,6 +89,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*These configurations '\\[wildfly.sasl.relax\\-compliance\\]' were supplied but are not used yet.*"),
             // https://github.com/quarkusio/quarkus/pull/28654
             Pattern.compile(".*Using legacy gRPC support, with separate new HTTP server instance. Switch to single HTTP server instance usage with quarkus.grpc.server.use-separate-server=false property.*"),
+            // https://github.com/quarkusio/quarkus/issues/32461
+            Pattern.compile(".*Cannot find the `native-image` in the GRAALVM_HOME, JAVA_HOME and System PATH. Install it using `gu install native-image` Attempting to fall back to container build.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
