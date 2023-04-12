@@ -3,7 +3,7 @@ on:
   pull_request:
   workflow_dispatch:
   schedule:
-    - cron: '0 23 * * *'
+    - cron: '0 22 * * *'
 jobs:
   linux-validate-format:
     name: Linux - Validate format
