@@ -35,7 +35,7 @@ public enum MvnCmds {
             }
     }),
     MVNW_DEV(new String[][]{
-            new String[]{Commands.mvnw(), "quarkus:dev"}
+            new String[]{Commands.mvnw(), "-e", "quarkus:dev"}
     }),
     MVNW_JVM(new String[][]{
         new String[]{Commands.mvnw(), "clean", "dependency:tree", "compile", "quarkus:build", "-Dquarkus.package.output-name=quarkus"},

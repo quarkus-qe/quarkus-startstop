@@ -93,7 +93,6 @@ public class QuarkusMavenPluginTest {
     }
 
     @Test
-    @Disabled("https://github.com/quarkusio/quarkus/issues/32288")
     public void updateTarget(TestInfo testInfo) throws IOException, InterruptedException {
         runQuarkusMavenPluginGoal(testInfo, Apps.JAX_RS_MINIMAL, "update", "quarkus:update goal is experimental");
     }
