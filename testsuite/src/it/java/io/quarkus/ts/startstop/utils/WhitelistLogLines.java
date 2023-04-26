@@ -73,6 +73,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Stream is closed, ignoring and trying to continue.*"),
             // https://github.com/quarkusio/quarkus/pull/28654
             Pattern.compile(".*Using legacy gRPC support, with separate new HTTP server instance. Switch to single HTTP server instance usage with quarkus.grpc.server.use-separate-server=false property.*"),
+            // Full stack trace switch enabled for dev mode command
+            Pattern.compile(".*Error stacktraces are turned on.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
