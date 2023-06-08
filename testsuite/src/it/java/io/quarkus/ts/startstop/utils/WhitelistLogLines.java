@@ -77,6 +77,10 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Error stacktraces are turned on.*"),
             // https://github.com/quarkusio/quarkus/issues/33825
             Pattern.compile(".*Detected bean archive with bean discovery mode of 'all', this is not portable in CDI Lite and is treated as 'annotated' in Quarkus! Path to beans.xml: io.smallrye:smallrye-graphql-cdi.*"),
+            // arquillian-bom has wrong sha1 and md5sum, discussed with jfang who uploaded it, there is nothing he can do about it
+            Pattern.compile(".*Checksum validation failed, expected 2811ba27a71a8bda0602161ffe2f6e1429da8068 but is 36257165a0945753efb3f9d473d86c6f4c6c6f6e.*"),
+            Pattern.compile(".*Could not validate integrity of download from https://repo.maven.apache.org/maven2/org/jboss/arquillian/arquillian-bom/1.7.0.Final/arquillian-bom-1.7.0.Final.pom.*"),
+            Pattern.compile(".*org.eclipse.aether.util.concurrency.RunnableErrorForwarder.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
