@@ -283,4 +283,16 @@ public class CodeQuarkusTest {
     public void supportedExtensionWithCodeStarterWorksInNative(List<CodeQuarkusExtensions> extensions, TestInfo testInfo) throws Exception {
         testRuntime(testInfo, extensions, MvnCmds.MVNW_NATIVE);
     }
+
+    @Tag("native")
+    @Test
+    public void notSupportedExtensionsWorksInNative(TestInfo testInfo) throws Exception {
+        List<CodeQuarkusExtensions> notSupportedExtensionsSubset = List.of(
+                CodeQuarkusExtensions.QUARKUS_MONGODB_CLIENT, // verifies QUARKUS-3194
+                // resteasy or spring-web extension is needed to provide index.html file
+                // content from index.html file is checked to ensure the application is up and running
+                CodeQuarkusExtensions.QUARKUS_RESTEASY_REACTIVE
+        );
+        testRuntime(testInfo, notSupportedExtensionsSubset, MvnCmds.MVNW_NATIVE);
+    }
 }
