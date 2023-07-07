@@ -14,6 +14,10 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Stream is closed, ignoring and trying to continue.*"),
             // To be able to run on Quarkus < 3.2 which does not support analytics
             Pattern.compile(".*Unrecognized configuration key \"quarkus.analytics.disabled\" was provided.*"),
+            // arquillian-bom has wrong sha1 and md5sum, discussed with jfang who uploaded it, there is nothing he can do about it
+            Pattern.compile(".*Checksum validation failed, expected 2811ba27a71a8bda0602161ffe2f6e1429da8068 but is 36257165a0945753efb3f9d473d86c6f4c6c6f6e.*"),
+            Pattern.compile(".*Could not validate integrity of download from https://repo.maven.apache.org/maven2/org/jboss/arquillian/arquillian-bom/1.7.0.Final/arquillian-bom-1.7.0.Final.pom.*"),
+            Pattern.compile(".*org.eclipse.aether.util.concurrency.RunnableErrorForwarder.*"),
     }),
     FULL_MICROPROFILE(new Pattern[]{
             // Some artifacts names...
