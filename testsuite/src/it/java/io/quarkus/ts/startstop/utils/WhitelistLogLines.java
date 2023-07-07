@@ -12,6 +12,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*errorprone.*"),
             // https://github.com/quarkusio/quarkus/pull/28810
             Pattern.compile(".*Stream is closed, ignoring and trying to continue.*"),
+            // To be able to run on Quarkus < 3.2 which does not support analytics
+            Pattern.compile(".*Unrecognized configuration key \"quarkus.analytics.disabled\" was provided.*"),
     }),
     FULL_MICROPROFILE(new Pattern[]{
             // Some artifacts names...
@@ -81,6 +83,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Checksum validation failed, expected 2811ba27a71a8bda0602161ffe2f6e1429da8068 but is 36257165a0945753efb3f9d473d86c6f4c6c6f6e.*"),
             Pattern.compile(".*Could not validate integrity of download from https://repo.maven.apache.org/maven2/org/jboss/arquillian/arquillian-bom/1.7.0.Final/arquillian-bom-1.7.0.Final.pom.*"),
             Pattern.compile(".*org.eclipse.aether.util.concurrency.RunnableErrorForwarder.*"),
+            // To be able to run on Quarkus < 3.2 which does not support analytics
+            Pattern.compile(".*Unrecognized configuration key \"quarkus.analytics.disabled\" was provided.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
