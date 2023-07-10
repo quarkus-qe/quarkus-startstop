@@ -18,6 +18,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Checksum validation failed, expected 2811ba27a71a8bda0602161ffe2f6e1429da8068 but is 36257165a0945753efb3f9d473d86c6f4c6c6f6e.*"),
             Pattern.compile(".*Could not validate integrity of download from https://repo.maven.apache.org/maven2/org/jboss/arquillian/arquillian-bom/1.7.0.Final/arquillian-bom-1.7.0.Final.pom.*"),
             Pattern.compile(".*org.eclipse.aether.util.concurrency.RunnableErrorForwarder.*"),
+            // https://github.com/quarkusio/quarkus/issues/34626
+            Pattern.compile("\\[Quarkus build analytics\\] Analytics remote config not received."),
     }),
     FULL_MICROPROFILE(new Pattern[]{
             // Some artifacts names...
@@ -30,6 +32,8 @@ public enum WhitelistLogLines {
             // GH Action runners are slow, graceful shutdown is not guaranteed on Quarkus
             // RESTEASY004687: Closing a class org.jboss.resteasy.client.jaxrs.engines.ManualClosingApacheHttpClient43Engine$CleanupAction instance for you.
             Pattern.compile(".*RESTEASY004687: Closing a class.*CleanupAction.*"),
+            // https://github.com/quarkusio/quarkus/issues/34626
+            Pattern.compile("\\[Quarkus build analytics\\] Analytics remote config not received."),
     }),
     GENERATED_SKELETON(new Pattern[]{
             // Harmless warning
@@ -89,6 +93,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*org.eclipse.aether.util.concurrency.RunnableErrorForwarder.*"),
             // To be able to run on Quarkus < 3.2 which does not support analytics
             Pattern.compile(".*Unrecognized configuration key \"quarkus.analytics.disabled\" was provided.*"),
+            // https://github.com/quarkusio/quarkus/issues/34626
+            Pattern.compile("\\[Quarkus build analytics\\] Analytics remote config not received."),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
@@ -99,6 +105,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException.*"),
             Pattern.compile(".*To see the full stack trace of the errors, re-run Maven with the -e switch.*"),
             Pattern.compile("\\[ERROR\\] *"),
+            // https://github.com/quarkusio/quarkus/issues/34626
+            Pattern.compile("\\[Quarkus build analytics\\] Analytics remote config not received."),
     });
     
     // Depending to the OS and also on the Quarkus extensions, the Native build might print some warnings about duplicate entries
