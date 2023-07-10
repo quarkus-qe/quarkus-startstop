@@ -16,7 +16,7 @@ public enum MvnCmds {
             new String[]{"java", "-jar", "target/quarkus-app/quarkus-run.jar"}
     }),
     DEV(new String[][]{
-            new String[]{"mvn", "clean", "quarkus:dev", "-Dmaven.repo.local=" + getLocalMavenRepoDir()}
+            new String[]{"mvn", "clean", "quarkus:dev", "-Dmaven.repo.local=" + getLocalMavenRepoDir(), "-Dquarkus.analytics.disabled=true"}
     }),
     NATIVE(new String[][]{
             Stream.concat(Stream.of("mvn", "clean", "compile", "package", "-Pnative"),
@@ -35,7 +35,7 @@ public enum MvnCmds {
             }
     }),
     MVNW_DEV(new String[][]{
-            new String[]{Commands.mvnw(), "-e", "quarkus:dev"}
+            new String[]{Commands.mvnw(), "-e", "quarkus:dev", "-Dquarkus.analytics.disabled=true"}
     }),
     MVNW_JVM(new String[][]{
         new String[]{Commands.mvnw(), "clean", "dependency:tree", "compile", "quarkus:build", "-Dquarkus.package.output-name=quarkus"},
