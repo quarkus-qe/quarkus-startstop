@@ -24,9 +24,9 @@ public enum CodeQuarkusExtensions {
     QUARKUS_OIDC_CLIENT_REACTIVE_FILTER("quarkus-oidc-client-reactive-filter", "OpenID Connect Client Filter Reactive", "YqA", true),
     QUARKUS_OIDC_TOKEN_PROPAGATION_REACTIVE("quarkus-oidc-token-propagation-reactive", "OpenID Connect Token Propagation Reactive", "ignored", false),
 
-    // TODO Introduce buckets with non reactive jax-rs extensions
+    // TODO Introduce buckets with non reactive jakarta-rest extensions
     // To avoid java.lang.IllegalStateException: The 'quarkus-resteasy-reactive' and 'quarkus-resteasy' extensions cannot be used at the same time.
-//    QUARKUS_RESTEASY("quarkus-resteasy", "RESTEasy JAX-RS", "98e", true),
+//    QUARKUS_RESTEASY("quarkus-resteasy", "RESTEasy Jakarta REST", "98e", true),
 //    QUARKUS_RESTEASY_JACKSON("quarkus-resteasy-jackson", "RESTEasy Jackson", "pV1", true),
 //    QUARKUS_RESTEASY_JSONB("quarkus-resteasy-jsonb", "RESTEasy JSON-B", "49J", true),
 //    QUARKUS_RESTEASY_JAXB("quarkus-resteasy-jaxb", "RESTEasy JAXB", "d7W", true),
@@ -170,7 +170,7 @@ public enum CodeQuarkusExtensions {
     QUARKUS_OIDC_CLIENT("quarkus-oidc-client", "OpenID Connect Client", "wfZ", true),
     QUARKUS_OIDC_CLIENT_FILTER("quarkus-oidc-client-filter", "OpenID Connect Client Filter", "T0U", true),
     QUARKUS_OIDC_TOKEN_PROPAGATION("quarkus-oidc-token-propagation", "OpenID Connect Token Propagation", "Bg9", false),
-    QUARKUS_SECURITY_JPA("quarkus-security-jpa", "Security JPA", "W8w", false),
+    QUARKUS_SECURITY_JAKARTA_PERSISTENCE("quarkus-security-jakarta-persistence", "Security Jakarta Persistence", "W8w", false),
     QUARKUS_SECURITY_WEBAUTHN("quarkus-security-webauthn", "Security WebAuthn", "ignored", false),
     QUARKUS_SMALLRYE_JWT_BUILD("quarkus-smallrye-jwt-build", "SmallRye JWT Build", "Phi", true),
     QUARKUS_VAULT("quarkus-vault", "Vault", "ZRf", false),
@@ -193,7 +193,7 @@ public enum CodeQuarkusExtensions {
     QUARKUS_SPRING_CACHE("quarkus-spring-cache", "Quarkus Extension for Spring Cache API", "DG", true),
     QUARKUS_SPRING_CLOUD_CONFIG_CLIENT("quarkus-spring-cloud-config-client", "Quarkus Extension for Spring Cloud Config Client", "egg", true),
     QUARKUS_SPRING_DI("quarkus-spring-di", "Quarkus Extension for Spring DI API", "VOH", true),
-    QUARKUS_SPRING_DATA_JPA("quarkus-spring-data-jpa", "Quarkus Extension for Spring Data JPA API", "2ec", true),
+    QUARKUS_SPRING_DATA_JAKARTA_PERSISTENCE("quarkus-spring-data-jakarta-persistence", "Quarkus Extension for Spring Data Jakarta Persistence API", "2ec", true),
     QUARKUS_SPRING_DATA_REST("quarkus-spring-data-rest", "Quarkus Extension for Spring Data REST", "kdX", true),
     QUARKUS_SPRING_SCHEDULED("quarkus-spring-scheduled", "Quarkus Extension for Spring Scheduled", "RUR", true),
     QUARKUS_SPRING_SECURITY("quarkus-spring-security", "Quarkus Extension for Spring Security API", "mek", true),
@@ -317,7 +317,7 @@ public enum CodeQuarkusExtensions {
     CAMEL_QUARKUS_JMS("camel-quarkus-jms", "Camel JMS", "vEm", false),
     CAMEL_QUARKUS_JOHNZON("camel-quarkus-johnzon", "Camel Johnzon", "MqU", false),
     CAMEL_QUARKUS_JOLT("camel-quarkus-jolt", "Camel JOLT", "eYR", false),
-    CAMEL_QUARKUS_JPA("camel-quarkus-jpa", "Camel JPA", "vFz", false),
+    CAMEL_QUARKUS_JAKARTA_PERSISTENCE("camel-quarkus-jakarta-persistence", "Camel Jakarta Persistence", "vFz", false),
     CAMEL_QUARKUS_JSLT("camel-quarkus-jslt", "Camel JSLT", "dYR", false),
     CAMEL_QUARKUS_JSONPATH("camel-quarkus-jsonpath", "Camel JSON Path", "kWp", false),
     CAMEL_QUARKUS_JSON_VALIDATOR("camel-quarkus-json-validator", "Camel JSON Schema Validator", "YZZ", false),

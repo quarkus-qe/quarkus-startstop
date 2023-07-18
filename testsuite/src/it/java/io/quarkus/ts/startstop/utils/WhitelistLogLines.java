@@ -6,24 +6,34 @@ import java.util.regex.Pattern;
  * Whitelists errors in log files.
  */
 public enum WhitelistLogLines {
-    JAX_RS_MINIMAL(new Pattern[]{
+    JAKARTA_REST_MINIMAL(new Pattern[]{
             // Some artifacts names...
             Pattern.compile(".*maven-error-diagnostics.*"),
             Pattern.compile(".*errorprone.*"),
             // https://github.com/quarkusio/quarkus/pull/28810
             Pattern.compile(".*Stream is closed, ignoring and trying to continue.*"),
+            // To be able to run on Quarkus < 3.2 which does not support analytics
+            Pattern.compile(".*Unrecognized configuration key \"quarkus.analytics.disabled\" was provided.*"),
+            // arquillian-bom has wrong sha1 and md5sum, discussed with jfang who uploaded it, there is nothing he can do about it
+            Pattern.compile(".*Checksum validation failed, expected 2811ba27a71a8bda0602161ffe2f6e1429da8068 but is 36257165a0945753efb3f9d473d86c6f4c6c6f6e.*"),
+            Pattern.compile(".*Could not validate integrity of download from https://repo.maven.apache.org/maven2/org/jboss/arquillian/arquillian-bom/1.7.0.Final/arquillian-bom-1.7.0.Final.pom.*"),
+            Pattern.compile(".*org.eclipse.aether.util.concurrency.RunnableErrorForwarder.*"),
+            // https://github.com/quarkusio/quarkus/issues/34626
+            Pattern.compile("\\[Quarkus build analytics\\] Analytics remote config not received."),
     }),
     FULL_MICROPROFILE(new Pattern[]{
             // Some artifacts names...
             Pattern.compile(".*maven-error-diagnostics.*"),
             Pattern.compile(".*errorprone.*"),
             // Well, the RestClient demo probably should do some cleanup before shutdown...?
-            Pattern.compile(".*Closing a class org.jboss.resteasy.client.jaxrs.engines.ApacheHttpClient.*"),
+            Pattern.compile(".*Closing a class org.jboss.resteasy.client.jakarta-rest.engines.ApacheHttpClient.*"),
             // https://github.com/quarkusio/quarkus/pull/28810
             Pattern.compile(".*Stream is closed, ignoring and trying to continue.*"),
             // GH Action runners are slow, graceful shutdown is not guaranteed on Quarkus
-            // RESTEASY004687: Closing a class org.jboss.resteasy.client.jaxrs.engines.ManualClosingApacheHttpClient43Engine$CleanupAction instance for you.
+            // RESTEASY004687: Closing a class org.jboss.resteasy.client.jakarta-rest.engines.ManualClosingApacheHttpClient43Engine$CleanupAction instance for you.
             Pattern.compile(".*RESTEASY004687: Closing a class.*CleanupAction.*"),
+            // https://github.com/quarkusio/quarkus/issues/34626
+            Pattern.compile("\\[Quarkus build analytics\\] Analytics remote config not received."),
     }),
     GENERATED_SKELETON(new Pattern[]{
             // Harmless warning
@@ -54,8 +64,8 @@ public enum WhitelistLogLines {
             // We have disabled the Quarkus Registry Client (-DquarkusRegistryClient=false)
             Pattern.compile(".*The extension catalog will be narrowed to.*"),
             // comes with https://github.com/quarkusio/quarkus/pull/20182
-            Pattern.compile(".*Hibernate ORM is disabled because no JPA entities were found.*"),
-            Pattern.compile(".*Hibernate Reactive is disabled because no JPA entities were found.*"),
+            Pattern.compile(".*Hibernate ORM is disabled because no Jakarta Persistence entities were found.*"),
+            Pattern.compile(".*Hibernate Reactive is disabled because no Jakarta Persistence entities were found.*"),
             // comes with https://github.com/quarkusio/quarkus/pull/19969 https://github.com/quarkusio/quarkus/pull/26868 https://github.com/quarkusio/quarkus/pull/27811
             Pattern.compile(".*OIDC Server is not available.*"),
             Pattern.compile(".*localhost:6661.*"),
@@ -81,6 +91,10 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Checksum validation failed, expected 2811ba27a71a8bda0602161ffe2f6e1429da8068 but is 36257165a0945753efb3f9d473d86c6f4c6c6f6e.*"),
             Pattern.compile(".*Could not validate integrity of download from https://repo.maven.apache.org/maven2/org/jboss/arquillian/arquillian-bom/1.7.0.Final/arquillian-bom-1.7.0.Final.pom.*"),
             Pattern.compile(".*org.eclipse.aether.util.concurrency.RunnableErrorForwarder.*"),
+            // To be able to run on Quarkus < 3.2 which does not support analytics
+            Pattern.compile(".*Unrecognized configuration key \"quarkus.analytics.disabled\" was provided.*"),
+            // https://github.com/quarkusio/quarkus/issues/34626
+            Pattern.compile("\\[Quarkus build analytics\\] Analytics remote config not received."),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
@@ -91,6 +105,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException.*"),
             Pattern.compile(".*To see the full stack trace of the errors, re-run Maven with the -e switch.*"),
             Pattern.compile("\\[ERROR\\] *"),
+            // https://github.com/quarkusio/quarkus/issues/34626
+            Pattern.compile("\\[Quarkus build analytics\\] Analytics remote config not received."),
     });
     
     // Depending to the OS and also on the Quarkus extensions, the Native build might print some warnings about duplicate entries

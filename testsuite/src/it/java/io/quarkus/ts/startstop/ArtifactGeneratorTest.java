@@ -90,7 +90,7 @@ public class ArtifactGeneratorTest {
             "scheduler",
             "spring-boot-properties",
             "smallrye-reactive-streams-operators",
-            "spring-data-jpa",
+            "spring-data-jakarta-persistence",
             "spring-di",
             "spring-security",
 //            "spring-web",  // spring-web-codestart uses quarkus-resteasy-reactive-jackson, see https://github.com/quarkusio/quarkus/pull/24890
@@ -143,7 +143,7 @@ public class ArtifactGeneratorTest {
             // https://github.com/quarkusio/quarkus/issues/23383
 //            "smallrye-reactive-messaging-amqp",
             "smallrye-reactive-messaging-kafka",
-            "spring-data-jpa",
+            "spring-data-jakarta-persistence",
             "spring-data-rest",
             "spring-di",
             "spring-security",
@@ -158,7 +158,7 @@ public class ArtifactGeneratorTest {
     };
 
     public static final String[] supportedReactiveExtensionsSubsetSetA = new String[]{
-            "quarkus-jaxrs-client-reactive",
+            "quarkus-jakarta-rest-client-reactive",
             "quarkus-resteasy-reactive",
             "quarkus-resteasy-reactive-jackson",
             "quarkus-resteasy-reactive-qute",
@@ -184,7 +184,7 @@ public class ArtifactGeneratorTest {
             "scheduler",
             "spring-boot-properties",
             "smallrye-reactive-streams-operators",
-            "spring-data-jpa",
+            "spring-data-jakarta-persistence",
             "spring-di",
             "spring-security",
             "spring-web",
@@ -201,7 +201,7 @@ public class ArtifactGeneratorTest {
     };
 
     public static final String[] supportedReactiveExtensionsSubsetSetB = new String[]{
-            "quarkus-jaxrs-client-reactive",
+            "quarkus-jakarta-rest-client-reactive",
             "quarkus-resteasy-reactive",
             "quarkus-resteasy-reactive-jsonb",
             "quarkus-rest-client-reactive",
@@ -235,7 +235,7 @@ public class ArtifactGeneratorTest {
             // https://github.com/quarkusio/quarkus/issues/23383
 //            "smallrye-reactive-messaging-amqp",
             "smallrye-reactive-messaging-kafka",
-            "spring-data-jpa",
+            "spring-data-jakarta-persistence",
             "spring-data-rest",
             "spring-di",
             "spring-security",

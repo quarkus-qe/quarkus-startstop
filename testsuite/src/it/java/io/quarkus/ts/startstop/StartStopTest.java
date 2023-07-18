@@ -199,14 +199,14 @@ public class StartStopTest {
     }
 
     @Test
-    public void jaxRsMinimalJVM(TestInfo testInfo) throws IOException, InterruptedException {
-        testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.JVM);
+    public void jakartaRESTMinimalJVM(TestInfo testInfo) throws IOException, InterruptedException {
+        testRuntime(testInfo, Apps.JAKARTA_REST_MINIMAL, MvnCmds.JVM);
     }
 
     @Test
     @Tag("native")
-    public void jaxRsMinimalNative(TestInfo testInfo) throws IOException, InterruptedException {
-        testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.NATIVE);
+    public void jakartaRESTMinimalNative(TestInfo testInfo) throws IOException, InterruptedException {
+        testRuntime(testInfo, Apps.JAKARTA_REST_MINIMAL, MvnCmds.NATIVE);
     }
 
     @Test
