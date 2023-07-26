@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
  * Whitelists errors in log files.
  */
 public enum WhitelistLogLines {
-    JAX_RS_MINIMAL(new Pattern[]{
+    JAKARTA_REST_MINIMAL(new Pattern[]{
             // Some artifacts names...
             Pattern.compile(".*maven-error-diagnostics.*"),
             Pattern.compile(".*errorprone.*"),

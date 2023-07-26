@@ -71,7 +71,7 @@ e.g. on Windows:
 λ type testsuite\target\archived-logs\io.quarkus.ts.startstop.StartStopTest\measurements.csv
 App,Mode,buildTimeMs,timeToFirstOKRequestMs,startedInMs,stoppedInMs,RSSKb,FDs
 FULL_MICROPROFILE,JVM,9391,2162,1480,54,3820,78
-JAX_RS_MINIMAL,JVM,6594,1645,949,34,3824,78
+JAKARTA_REST_MINIMAL,JVM,6594,1645,949,34,3824,78
 ```
 
 and on Linux:
@@ -80,8 +80,8 @@ $ cat ./testsuite/target/archived-logs/io.quarkus.ts.startstop.StartStopTest/mea
 App,Mode,buildTimeMs,timeToFirstOKRequestMs,startedInMs,stoppedInMs,RSSKb,FDs
 FULL_MICROPROFILE,JVM,9117,1439,1160,18,179932,307
 FULL_MICROPROFILE,NATIVE,142680,22,17,1,51592,129
-JAX_RS_MINIMAL,JVM,5934,1020,745,22,141996,162
-JAX_RS_MINIMAL,NATIVE,93943,10,7,3,29768,74
+JAKARTA_REST_MINIMAL,JVM,5934,1020,745,22,141996,162
+JAKARTA_REST_MINIMAL,NATIVE,93943,10,7,3,29768,74
 ```
 
 ## ArtifactGeneratorTest
@@ -174,12 +174,12 @@ Both build logs and runtime logs are checked for error messages. Expected error 
 To examine logs yourself see ```./testsuite/target/archived-logs/``` , e.g. 
 
 ```
-./testsuite/target/archived-logs/io.quarkus.ts.startstop.StartStopTest/jaxRsMinimalNative/native-build.log
-./testsuite/target/archived-logs/io.quarkus.ts.startstop.StartStopTest/jaxRsMinimalNative/native-run.log
+./testsuite/target/archived-logs/io.quarkus.ts.startstop.StartStopTest/jakartaRESTMinimalNative/native-build.log
+./testsuite/target/archived-logs/io.quarkus.ts.startstop.StartStopTest/jakartaRESTMinimalNative/native-run.log
 ./testsuite/target/archived-logs/io.quarkus.ts.startstop.StartStopTest/fullMicroProfileJVM/jvm-run.log
 ./testsuite/target/archived-logs/io.quarkus.ts.startstop.StartStopTest/fullMicroProfileJVM/jvm-build.log
-./testsuite/target/archived-logs/io.quarkus.ts.startstop.StartStopTest/jaxRsMinimalJVM/jvm-run.log
-./testsuite/target/archived-logs/io.quarkus.ts.startstop.StartStopTest/jaxRsMinimalJVM/jvm-build.log
+./testsuite/target/archived-logs/io.quarkus.ts.startstop.StartStopTest/jakartaRESTMinimalJVM/jvm-run.log
+./testsuite/target/archived-logs/io.quarkus.ts.startstop.StartStopTest/jakartaRESTMinimalJVM/jvm-build.log
 ./testsuite/target/archived-logs/io.quarkus.ts.startstop.StartStopTest/fullMicroProfileNative/native-build.log
 ./testsuite/target/archived-logs/io.quarkus.ts.startstop.StartStopTest/fullMicroProfileNative/native-run.log
 ```
@@ -190,13 +190,13 @@ The test suite records Maven commands it used, the directories where those comma
 a neat markdown file for each test run. e.g.
 
 ```
-# io.quarkus.ts.startstop.StartStopTest, jaxRsMinimalJVM
-/home/karm/workspaceRH/quarkus-startstop/app-jax-rs-minimal
+# io.quarkus.ts.startstop.StartStopTest, jakartaRESTMinimalJVM
+/home/karm/workspaceRH/quarkus-startstop/app-jakarta-rest-minimal
 
 mvn clean compile quarkus:build -Dquarkus.package.output-name=quarkus -Dmaven.repo.local=/home/karm/QUARKUS/quarkus-1.3.2.CR1/maven-repository
 
 ---
-/home/karm/workspaceRH/quarkus-startstop/app-jax-rs-minimal
+/home/karm/workspaceRH/quarkus-startstop/app-jakarta-rest-minimal
 
 java -jar target/quarkus-runner.jar
 
@@ -205,7 +205,7 @@ Measurements:
 
 |App|Mode|buildTimeMs|timeToFirstOKRequestMs|startedInMs|stoppedInMs|RSSKb|FDs|
 | --- | --- | --- | --- | --- | --- | --- | --- |
-|JAX_RS_MINIMAL|JVM|4787|906|643|18|140504|162|
+|JAKARTA_REST_MINIMAL|JVM|4787|906|643|18|140504|162|
 
 ```
 
@@ -219,7 +219,7 @@ Subsequent test suite executions without ```mvn clean``` keep appending to this 
 
 ## Thresholds
 
-The test suite works with ```threshold.properties``` for each test app. E.g. ```app-jax-rs-minimal/threshold.properties```:
+The test suite works with ```threshold.properties``` for each test app. E.g. ```app-jakarta-rest-minimal/threshold.properties```:
 
 ```
 linux.jvm.time.to.first.ok.request.threshold.ms=1500
@@ -234,7 +234,7 @@ The measured values are simply compared to be less or equal to the set threshold
 by using env variables or system properties (in this order). All letter are capitalized and dot is replaced with underscore, e.g.
 
 ```
-APP_JAX_RS_MINIMAL_LINUX_JVM_TIME_TO_FIRST_OK_REQUEST_THRESHOLD_MS=500 mvn clean verify -Ptestsuite
+APP_JAKARTA_REST_MINIMAL_LINUX_JVM_TIME_TO_FIRST_OK_REQUEST_THRESHOLD_MS=500 mvn clean verify -Ptestsuite
 ```
 
 Results in:
@@ -243,7 +243,7 @@ Results in:
 [INFO] Results:
 [INFO] 
 [ERROR] Failures: 
-[ERROR]   StartStopTest.jaxRsMinimalJVM:137->testRuntime:121 Application JAX_RS_MINIMAL 
+[ERROR]   StartStopTest.jakartaRESTMinimalJVM:137->testRuntime:121 Application JAKARTA_REST_MINIMAL 
           in JVM mode took 957 ms to get the first OK request, which is over 500 ms threshold. 
           ==> expected: <true> but was: <false>
 [INFO] 

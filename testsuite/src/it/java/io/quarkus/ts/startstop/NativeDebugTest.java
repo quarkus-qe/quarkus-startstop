@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @EnabledOnOs({OS.LINUX}) // debug details are available only on Linux
 public class NativeDebugTest {
 
-    private final Apps app = Apps.JAX_RS_MINIMAL;
+    private final Apps app = Apps.JAKARTA_REST_MINIMAL;
     private final MvnCmds mvnCmds = MvnCmds.NATIVE;
 
     private static final Logger LOGGER = Logger.getLogger(StartStopTest.class.getName());

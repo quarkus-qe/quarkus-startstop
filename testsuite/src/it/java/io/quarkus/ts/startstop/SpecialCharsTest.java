@@ -159,90 +159,90 @@ public class SpecialCharsTest {
 
     @Test
     public void spacesJVM(TestInfo testInfo) throws IOException, InterruptedException {
-        testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.JVM, "s p a c e s j v m");
+        testRuntime(testInfo, Apps.JAKARTA_REST_MINIMAL, MvnCmds.JVM, "s p a c e s j v m");
     }
 
     @Test
     public void spacesDEV(TestInfo testInfo) throws IOException, InterruptedException {
-        testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.DEV, "s p a c e s d e v");
+        testRuntime(testInfo, Apps.JAKARTA_REST_MINIMAL, MvnCmds.DEV, "s p a c e s d e v");
     }
 
     @Test
     @Tag("native")
     public void spacesNative(TestInfo testInfo) throws IOException, InterruptedException {
-        testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.NATIVE, "s p a c e s n a t i v e");
+        testRuntime(testInfo, Apps.JAKARTA_REST_MINIMAL, MvnCmds.NATIVE, "s p a c e s n a t i v e");
     }
 
     @Test
     public void specialJVM(TestInfo testInfo) throws IOException, InterruptedException {
-        testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.JVM, ",;~!@#$%^&()");
+        testRuntime(testInfo, Apps.JAKARTA_REST_MINIMAL, MvnCmds.JVM, ",;~!@#$%^&()");
     }
 
     @Test
     @DisabledOnOs({OS.WINDOWS}) // https://github.com/quarkusio/quarkus/issues/9707
     public void specialDEV(TestInfo testInfo) throws IOException, InterruptedException {
-        testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.DEV, ",;~!@#$%^&()");
+        testRuntime(testInfo, Apps.JAKARTA_REST_MINIMAL, MvnCmds.DEV, ",;~!@#$%^&()");
     }
 
     @Test
     @Tag("native")
     @DisabledOnOs({OS.WINDOWS}) // https://github.com/quarkusio/quarkus/issues/9707
     public void specialNative(TestInfo testInfo) throws IOException, InterruptedException {
-        testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.NATIVE, ",;~!@#$%^&()");
+        testRuntime(testInfo, Apps.JAKARTA_REST_MINIMAL, MvnCmds.NATIVE, ",;~!@#$%^&()");
     }
 
     @Test
     public void diacriticsJVM(TestInfo testInfo) throws IOException, InterruptedException {
-        testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.JVM, "ěščřžýáíéůú");
+        testRuntime(testInfo, Apps.JAKARTA_REST_MINIMAL, MvnCmds.JVM, "ěščřžýáíéůú");
     }
 
     @Test
     @DisabledOnOs({OS.WINDOWS}) // https://github.com/quarkusio/quarkus/issues/9707
     public void diacriticsDEV(TestInfo testInfo) throws IOException, InterruptedException {
-        testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.DEV, "ěščřžýáíéůú");
+        testRuntime(testInfo, Apps.JAKARTA_REST_MINIMAL, MvnCmds.DEV, "ěščřžýáíéůú");
     }
 
     @Test
     @Tag("native")
     @DisabledOnOs({OS.WINDOWS}) // https://github.com/quarkusio/quarkus/issues/9707
     public void diacriticsNative(TestInfo testInfo) throws IOException, InterruptedException {
-        testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.NATIVE, "ěščřžýáíéůú");
+        testRuntime(testInfo, Apps.JAKARTA_REST_MINIMAL, MvnCmds.NATIVE, "ěščřžýáíéůú");
     }
 
     @Test
     public void japaneseJVM(TestInfo testInfo) throws IOException, InterruptedException {
-        testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.JVM, "元気かい");
+        testRuntime(testInfo, Apps.JAKARTA_REST_MINIMAL, MvnCmds.JVM, "元気かい");
     }
 
     @Test
     @DisabledOnOs({OS.WINDOWS}) // https://github.com/quarkusio/quarkus/issues/9707
     public void japaneseDEV(TestInfo testInfo) throws IOException, InterruptedException {
-        testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.DEV, "元気かい");
+        testRuntime(testInfo, Apps.JAKARTA_REST_MINIMAL, MvnCmds.DEV, "元気かい");
     }
 
     @Test
     @Tag("native")
     @DisabledOnOs({OS.WINDOWS}) // https://github.com/quarkusio/quarkus/issues/9707
     public void japaneseNative(TestInfo testInfo) throws IOException, InterruptedException {
-        testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.NATIVE, "元気かい");
+        testRuntime(testInfo, Apps.JAKARTA_REST_MINIMAL, MvnCmds.NATIVE, "元気かい");
     }
 
     @Test
     public void otherJVM(TestInfo testInfo) throws IOException, InterruptedException {
-        testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.JVM, "Îñţérñåţîöñåļîžåţîờñ");
+        testRuntime(testInfo, Apps.JAKARTA_REST_MINIMAL, MvnCmds.JVM, "Îñţérñåţîöñåļîžåţîờñ");
     }
 
     @Test
     @DisabledOnOs({OS.WINDOWS}) // https://github.com/quarkusio/quarkus/issues/9707
     public void otherDEV(TestInfo testInfo) throws IOException, InterruptedException {
-        testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.DEV, "Îñţérñåţîöñåļîžåţîờñ");
+        testRuntime(testInfo, Apps.JAKARTA_REST_MINIMAL, MvnCmds.DEV, "Îñţérñåţîöñåļîžåţîờñ");
     }
 
     @Test
     @Tag("native")
     @DisabledOnOs({OS.WINDOWS}) // https://github.com/quarkusio/quarkus/issues/9707
     public void otherNative(TestInfo testInfo) throws IOException, InterruptedException {
-        testRuntime(testInfo, Apps.JAX_RS_MINIMAL, MvnCmds.NATIVE, "Îñţérñåţîöñåļîžåţîờñ");
+        testRuntime(testInfo, Apps.JAKARTA_REST_MINIMAL, MvnCmds.NATIVE, "Îñţérñåţîöñåļîžåţîờñ");
     }
 
     private void removeDirWithSpecialCharacters(File appDestDir) {
