@@ -14,7 +14,7 @@ import static io.quarkus.ts.startstop.StartStopTest.BASE_DIR;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public enum Apps {
-    JAX_RS_MINIMAL("app-jax-rs-minimal", URLContent.JAX_RS_MINIMAL, WhitelistLogLines.JAX_RS_MINIMAL),
+    JAKARTA_REST_MINIMAL("app-jakarta-rest-minimal", URLContent.JAKARTA_REST_MINIMAL, WhitelistLogLines.JAKARTA_REST_MINIMAL),
     FULL_MICROPROFILE("app-full-microprofile", URLContent.FULL_MICROPROFILE, WhitelistLogLines.FULL_MICROPROFILE),
     GENERATED_SKELETON("app-generated-skeleton", URLContent.GENERATED_SKELETON, WhitelistLogLines.GENERATED_SKELETON);
 

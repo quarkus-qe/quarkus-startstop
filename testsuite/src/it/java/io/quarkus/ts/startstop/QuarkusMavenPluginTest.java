@@ -86,18 +86,18 @@ public class QuarkusMavenPluginTest {
 
     @Test
     public void helpTarget(TestInfo testInfo) throws IOException, InterruptedException {
-        runQuarkusMavenPluginGoal(testInfo, Apps.JAX_RS_MINIMAL, "help", "quarkus:info", "quarkus:update");
+        runQuarkusMavenPluginGoal(testInfo, Apps.JAKARTA_REST_MINIMAL, "help", "quarkus:info", "quarkus:update");
     }
 
     @Test
     public void infoTarget(TestInfo testInfo) throws IOException, InterruptedException {
-        runQuarkusMavenPluginGoal(testInfo, Apps.JAX_RS_MINIMAL, "info", "io.quarkus:quarkus-resteasy");
+        runQuarkusMavenPluginGoal(testInfo, Apps.JAKARTA_REST_MINIMAL, "info", "io.quarkus:quarkus-resteasy");
     }
 
     @Test
     @DisabledOnOs({OS.WINDOWS}) // https://github.com/quarkusio/quarkus/issues/33403
     public void updateTarget(TestInfo testInfo) throws IOException, InterruptedException {
-        runQuarkusMavenPluginGoal(testInfo, Apps.JAX_RS_MINIMAL, "update", "quarkus:update goal is experimental");
+        runQuarkusMavenPluginGoal(testInfo, Apps.JAKARTA_REST_MINIMAL, "update", "quarkus:update goal is experimental");
     }
 
 }

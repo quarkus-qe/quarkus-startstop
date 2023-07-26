@@ -24,9 +24,9 @@ public enum CodeQuarkusExtensions {
     QUARKUS_OIDC_CLIENT_REACTIVE_FILTER("quarkus-oidc-client-reactive-filter", "OpenID Connect Client Filter Reactive", "YqA", true),
     QUARKUS_OIDC_TOKEN_PROPAGATION_REACTIVE("quarkus-oidc-token-propagation-reactive", "OpenID Connect Token Propagation Reactive", "ignored", false),
 
-    // TODO Introduce buckets with non reactive jax-rs extensions
+    // TODO Introduce buckets with non reactive jakarta-rest extensions
     // To avoid java.lang.IllegalStateException: The 'quarkus-resteasy-reactive' and 'quarkus-resteasy' extensions cannot be used at the same time.
-//    QUARKUS_RESTEASY("quarkus-resteasy", "RESTEasy JAX-RS", "98e", true),
+//    QUARKUS_RESTEASY("quarkus-resteasy", "RESTEasy Jakarta REST", "98e", true),
 //    QUARKUS_RESTEASY_JACKSON("quarkus-resteasy-jackson", "RESTEasy Jackson", "pV1", true),
 //    QUARKUS_RESTEASY_JSONB("quarkus-resteasy-jsonb", "RESTEasy JSON-B", "49J", true),
 //    QUARKUS_RESTEASY_JAXB("quarkus-resteasy-jaxb", "RESTEasy JAXB", "d7W", true),

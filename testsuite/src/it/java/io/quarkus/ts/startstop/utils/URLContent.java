@@ -4,8 +4,8 @@ package io.quarkus.ts.startstop.utils;
  * Available endpoitns and expected content.
  */
 public enum URLContent {
-    JAX_RS_MINIMAL(new String[][]{
-            new String[]{"http://localhost:8080", "Hello from a simple JAX-RS app."},
+    JAKARTA_REST_MINIMAL(new String[][]{
+            new String[]{"http://localhost:8080", "Hello from a simple Jakarta REST app."},
             new String[]{"http://localhost:8080/data/hello", "Hello World"}
     }),
     FULL_MICROPROFILE(new String[][]{
