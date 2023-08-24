@@ -50,7 +50,7 @@ public class Logs {
     private static final Pattern startedPatternControlSymbols = Pattern.compile(".* started in .*188m([0-9\\.]+).*", Pattern.DOTALL);
     private static final Pattern stoppedPatternControlSymbols = Pattern.compile(".* stopped in .*188m([0-9\\.]+).*", Pattern.DOTALL);
 
-    private static final Pattern warnErrorDetectionPattern = Pattern.compile("(?i:.*(ERROR|WARN|SLF4J:).*)");
+    private static final Pattern warnErrorDetectionPattern = Pattern.compile("(?i:.*(ERROR|WARN).*)|(?:.*SLF4J:.*)");
     private static final Pattern devModeError = Pattern.compile(".*Failed to run: Dev mode process did not complete successfully.*");
     private static final Pattern listeningOnDetectionPattern = Pattern.compile("(?i:.*Listening on:.*)");
     private static final Pattern devExpectedHostPattern = Pattern.compile("(?i:.*localhost:.*)");
