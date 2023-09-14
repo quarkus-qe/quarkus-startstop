@@ -122,8 +122,10 @@ public class CodeQuarkusSiteTest {
         streamPicker.click();
         Locator streamItems = page.locator(elementStreamItemsByXpath);
         assertTrue(streamItems.count() > 0, "No stream is defined");
-        assertTrue(streamItems.count() > 1, "Two (or more) streams are expected to be defined defined, streamItems count: " + streamItems.count() + "\n" +
-                "Product Update and Support Policy: https://access.redhat.com/support/policy/updates/jboss_notes#p_quarkus");
+        if (!webPageUrl.contains("apps.ocp-c1")) {  // build-scoped instances have just the current stream defined
+            assertTrue(streamItems.count() > 1, "Two (or more) streams are expected to be defined defined, streamItems count: " + streamItems.count() + "\n" +
+                    "Product Update and Support Policy: https://access.redhat.com/support/policy/updates/jboss_notes#p_quarkus");
+        }
     }
 
     @Test
