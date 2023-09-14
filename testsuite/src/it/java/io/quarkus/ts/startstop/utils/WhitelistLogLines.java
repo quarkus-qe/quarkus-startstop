@@ -114,6 +114,7 @@ public enum WhitelistLogLines {
     private static final Pattern COMMON_SLF4J_JBOSS_LOGMANAGER_DEPENDENCY_TREE = Pattern.compile(".*org.jboss.slf4j:slf4j-jboss-logmanager:jar.*");
     private static final Pattern WARNING_MISSING_OBJCOPY_NATIVE = Pattern.compile(".*objcopy executable not found in PATH.*");
     private static final Pattern WARNING_MISSING_OBJCOPY_RESULT_NATIVE = Pattern.compile(".*That also means that resulting native executable is larger as it embeds the debug symbols..*");
+    private static final Pattern XML_APIS_RELOCATED = Pattern.compile(".*The artifact xml-apis:xml-apis:jar:2.0.2 has been relocated to xml-apis:xml-apis:jar:1.0.b2.*");
 
     public final Pattern[] errs;
 
@@ -125,6 +126,7 @@ public enum WhitelistLogLines {
         switch (OS.current()) {
             case MAC:
                 return new Pattern[] {
+                        XML_APIS_RELOCATED,
                         COMMON_SLF4J_API_DEPENDENCY_TREE,
                         COMMON_SLF4J_JBOSS_LOGMANAGER_DEPENDENCY_TREE,
                         WARNING_MISSING_OBJCOPY_NATIVE,
@@ -134,6 +136,7 @@ public enum WhitelistLogLines {
                 };
             case WINDOWS:
                 return new Pattern[] {
+                        XML_APIS_RELOCATED,
                         COMMON_SLF4J_API_DEPENDENCY_TREE,
                         COMMON_SLF4J_JBOSS_LOGMANAGER_DEPENDENCY_TREE,
                         WARNING_MISSING_OBJCOPY_NATIVE,
@@ -143,6 +146,7 @@ public enum WhitelistLogLines {
                 };
             case LINUX:
             	return new Pattern[] {
+                        XML_APIS_RELOCATED,
                         COMMON_SLF4J_API_DEPENDENCY_TREE,
                         COMMON_SLF4J_JBOSS_LOGMANAGER_DEPENDENCY_TREE,
                 };
