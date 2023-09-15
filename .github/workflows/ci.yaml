@@ -144,7 +144,7 @@ jobs:
     strategy:
       matrix:
         java: [ 11 ]
-        graalvm-version: [ "22.3.2" ]
+        graalvm-version: [ "mandrel-23.0.1.2-Final" ]
         graalvm-java-version: [ "17" ]
     steps:
       - uses: actions/checkout@v3
