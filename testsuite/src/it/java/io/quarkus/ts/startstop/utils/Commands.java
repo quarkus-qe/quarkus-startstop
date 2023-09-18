@@ -68,7 +68,9 @@ public class Commands {
     private static final Pattern trailingSlash = Pattern.compile("/+$");
     private static final String QUARKUS_PLATFORM_GROUP_ID = "com.redhat.quarkus.platform";
     private static final String QUARKUS_UPSTREAM_GROUP_ID = "io.quarkus.platform";
+    private static final String QUARKUS_CORE_GROUP_ID = "io.quarkus";
     private static final String REDHAT_VERSION_TAG = "-redhat-";
+    private static final String QUARKUS_MAIN_VERSION = "999-SNAPSHOT";
 
     public static String mvnw() {
         return Commands.isThisWindows ? "mvnw.cmd" : "./mvnw";
@@ -158,6 +160,8 @@ public class Commands {
     public static String getQuarkusGroupId() {
         if (getQuarkusVersion().contains(REDHAT_VERSION_TAG)) {
             return QUARKUS_PLATFORM_GROUP_ID;
+        } else if (getQuarkusVersion().contains(QUARKUS_MAIN_VERSION)) {
+            return QUARKUS_CORE_GROUP_ID;
         }
 
         return QUARKUS_UPSTREAM_GROUP_ID;
