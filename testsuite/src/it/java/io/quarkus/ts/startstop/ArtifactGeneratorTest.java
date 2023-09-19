@@ -155,6 +155,7 @@ public class ArtifactGeneratorTest {
             "websockets-client",
             "quarkus-smallrye-graphql",
             "quarkus-hibernate-search-orm-elasticsearch",
+            "quarkus-elasticsearch-rest-client",
     };
 
     public static final String[] supportedReactiveExtensionsSubsetSetA = new String[]{
