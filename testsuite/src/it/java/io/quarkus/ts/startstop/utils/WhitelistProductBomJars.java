@@ -13,6 +13,9 @@ public enum WhitelistProductBomJars {
             "com.nimbusds.oauth2-oidc-sdk",
             "com.nimbusds.content-type",
             "io.github.crac",
+            // jna and jna-platform is dependency of io.quarkus:quarkus-jdbc-mariadb
+            "net.java.dev.jna.jna",
+            "net.java.dev.jna.jna-platform",
     });
 
     public final String[] jarNames;
