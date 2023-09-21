@@ -143,6 +143,8 @@ public enum WhitelistLogLines {
                         WARNING_MISSING_OBJCOPY_RESULT_NATIVE,
                         // Randomly prints some SLF4J traces. Reported by https://github.com/quarkusio/quarkus/issues/16896
                         Pattern.compile(".*SLF4J:.*"),
+                        // TODO https://github.com/quarkusio/quarkus/issues/36053
+                        Pattern.compile(".*Unknown module: org.graalvm.nativeimage.*"),
                 };
             case LINUX:
             	return new Pattern[] {
