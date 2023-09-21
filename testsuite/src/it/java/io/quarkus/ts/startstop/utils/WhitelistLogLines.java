@@ -149,6 +149,8 @@ public enum WhitelistLogLines {
                         XML_APIS_RELOCATED,
                         COMMON_SLF4J_API_DEPENDENCY_TREE,
                         COMMON_SLF4J_JBOSS_LOGMANAGER_DEPENDENCY_TREE,
+                        // TODO https://github.com/quarkusio/quarkus/issues/36053
+                        Pattern.compile(".*Unknown module: org.graalvm.nativeimage.*"),
                 };
         }
         return new Pattern[] {};
