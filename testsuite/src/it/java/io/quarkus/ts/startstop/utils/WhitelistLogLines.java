@@ -95,6 +95,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Unrecognized configuration key \"quarkus.analytics.disabled\" was provided.*"),
             // https://github.com/quarkusio/quarkus/issues/34626
             Pattern.compile("\\[Quarkus build analytics\\] Analytics remote config not received."),
+            // Artifact org.slf4j:slf4j-parent:pom:2.0.6 is present in the local repository, but cached from a remote repository ID that is unavailable
+            Pattern.compile(".*present in the local repository, but cached from a remote repository ID that is unavailable in current build context, verifying that is downloadable.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
