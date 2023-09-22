@@ -38,6 +38,7 @@ public enum CodeQuarkusExtensions {
 //    QUARKUS_REST_CLIENT_JAXB("quarkus-rest-client-jaxb", "REST Client JAXB", "8iY", true),
 //    QUARKUS_REST_CLIENT_JSONB("quarkus-rest-client-jsonb", "REST Client JSON-B", "Q3z", true),
 //    QUARKUS_REST_CLIENT_JACKSON("quarkus-rest-client-jackson", "REST Client Jackson", "pJg", true),
+//    QUARKUS_OIDC_CLIENT_FILTER("quarkus-oidc-client-filter", "OpenID Connect Client Filter", "T0U", true),
 
     QUARKUS_VERTX_GRAPHQL("quarkus-vertx-graphql", "Eclipse Vert.x GraphQL", "F9R", false),
     QUARKUS_HIBERNATE_VALIDATOR("quarkus-hibernate-validator", "Hibernate Validator", "YjV", true),
@@ -168,7 +169,6 @@ public enum CodeQuarkusExtensions {
     QUARKUS_KEYCLOAK_ADMIN_CLIENT_REACTIVE("quarkus-keycloak-admin-client-reactive", "Quarkus - Keycloak Admin Client - Reactive - Runtime", "ignored", false),
     QUARKUS_KEYCLOAK_AUTHORIZATION("quarkus-keycloak-authorization", "Keycloak Authorization", "2Bx", true),
     QUARKUS_OIDC_CLIENT("quarkus-oidc-client", "OpenID Connect Client", "wfZ", true),
-    QUARKUS_OIDC_CLIENT_FILTER("quarkus-oidc-client-filter", "OpenID Connect Client Filter", "T0U", true),
     QUARKUS_OIDC_TOKEN_PROPAGATION("quarkus-oidc-token-propagation", "OpenID Connect Token Propagation", "Bg9", false),
     QUARKUS_SECURITY_JPA("quarkus-security-jpa", "Security JPA", "W8w", false),
     QUARKUS_SECURITY_WEBAUTHN("quarkus-security-webauthn", "Security WebAuthn", "ignored", false),
