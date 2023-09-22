@@ -91,8 +91,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Checksum validation failed, expected 2811ba27a71a8bda0602161ffe2f6e1429da8068 but is 36257165a0945753efb3f9d473d86c6f4c6c6f6e.*"),
             Pattern.compile(".*Could not validate integrity of download from https://repo.maven.apache.org/maven2/org/jboss/arquillian/arquillian-bom/1.7.0.Final/arquillian-bom-1.7.0.Final.pom.*"),
             Pattern.compile(".*org.eclipse.aether.util.concurrency.RunnableErrorForwarder.*"),
-            // To be able to run on Quarkus < 3.2 which does not support analytics
-            Pattern.compile(".*Unrecognized configuration key \"quarkus.analytics.disabled\" was provided.*"),
+            // To be able to run on Quarkus < 3.2 which does not support analytics (e.g. RHBQ 2.13)
+            Pattern.compile(".*Unrecognized configuration key.*quarkus.analytics.disabled.*"),
             // https://github.com/quarkusio/quarkus/issues/34626
             Pattern.compile("\\[Quarkus build analytics\\] Analytics remote config not received."),
             // Artifact org.slf4j:slf4j-parent:pom:2.0.6 is present in the local repository, but cached from a remote repository ID that is unavailable
