@@ -107,6 +107,8 @@ public enum WhitelistLogLines {
             Pattern.compile("\\[ERROR\\] *"),
             // https://github.com/quarkusio/quarkus/issues/34626
             Pattern.compile("\\[Quarkus build analytics\\] Analytics remote config not received."),
+            // GH Actions runners are sometimes slow
+            Pattern.compile("\\[io.ver.cor.imp.BlockedThreadChecker\\] (vertx-blocked-thread-checker) Thread.*has been blocked for.*"),
     });
     
     // Depending to the OS and also on the Quarkus extensions, the Native build might print some warnings about duplicate entries
