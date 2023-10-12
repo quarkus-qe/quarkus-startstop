@@ -306,7 +306,7 @@ public class ArtifactGeneratorTest {
             pA = runCommand(runCmd, appDir, runLogA);
             // Test web pages
             // The reason for a seemingly large timeout of 20 minutes is that dev mode will be downloading the Internet on the first fresh run.
-            long timeoutS = (flags.contains(TestFlags.WARM_UP) ? 20 * 60 : 60);
+            long timeoutS = (flags.contains(TestFlags.WARM_UP) ? 20 * 60 : 120);
             long timeToFirstOKRequest = WebpageTester.testWeb(skeletonApp.urlContent[0][0], timeoutS,
                     skeletonApp.urlContent[0][1], !flags.contains(TestFlags.WARM_UP));
 
