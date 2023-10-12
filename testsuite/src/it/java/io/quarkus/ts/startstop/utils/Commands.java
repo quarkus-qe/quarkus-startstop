@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.URL;
+import java.net.URI;
 import java.net.UnknownHostException;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
@@ -351,7 +351,7 @@ public class Commands {
     private static String download(String downloadURL, String destinationZipFile) throws IOException {
         disableSslVerification();
         try (ReadableByteChannel readableByteChannel = Channels.newChannel(
-                new URL(downloadURL).openStream());
+                URI.create(downloadURL).toURL().openStream());
                 FileChannel fileChannel = new FileOutputStream(destinationZipFile).getChannel()) {
             fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
         }
