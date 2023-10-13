@@ -1,4 +1,4 @@
-import java.net.URL;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 import java.util.Set;
@@ -17,7 +17,8 @@ public class JSONtoEnum {
         StringBuilder s = new StringBuilder();
         s.append("public enum CodeQuarkusExtensions {\n\n");
         Set<String> usedIds = new TreeSet<>();
-        new Scanner(new URL(args[0]).openStream(), StandardCharsets.UTF_8).useDelimiter("},\\{").tokens().forEach(x -> {
+        URI uri = URI.create(args[0]);
+        new Scanner(uri.toURL().openStream(), StandardCharsets.UTF_8).useDelimiter("},\\{").tokens().forEach(x -> {
             Matcher m = pattern.matcher(x);
             if (m.matches() && m.groupCount() == 4) {
                 String id = m.group(1);

@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
 
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
@@ -38,7 +38,7 @@ public class WebpageTester {
         boolean found = false;
         long foundTimestamp = -1L;
         while (now - startTime < 1000 * timeoutS) {
-            URLConnection c = new URL(url).openConnection();
+            URLConnection c = URI.create(url).toURL().openConnection();
             c.setRequestProperty("Accept", "*/*");
             c.setConnectTimeout(500);
             try (Scanner scanner = new Scanner(c.getInputStream(), StandardCharsets.UTF_8.toString())) {
