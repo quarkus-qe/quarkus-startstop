@@ -146,7 +146,7 @@ public class CodeQuarkusSiteTest {
             throw new UncheckedIOException(e);
         }
 
-        Page page = loadPage(webPageUrl, 60);
+        Page page = loadPage(webPageUrl + "?S=com.redhat.quarkus.platform%3A3.2", 60);
         LOGGER.info("Trying to find element: " + elementQuarkusPlatformVersionByXpath);
         String quarkusPlatformVersionFromWeb = page.locator(elementQuarkusPlatformVersionByXpath).elementHandle().getAttribute("title");
 
