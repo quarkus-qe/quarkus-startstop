@@ -95,6 +95,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Unrecognized configuration key \"quarkus.analytics.disabled\" was provided.*"),
             // https://github.com/quarkusio/quarkus/issues/34626
             Pattern.compile("\\[Quarkus build analytics\\] Analytics remote config not received."),
+            // https://github.com/quarkusio/quarkus/issues/36775
+            Pattern.compile("(?i:.*quarkus.mongodb.native.dns.*config property is deprecated.*)"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
