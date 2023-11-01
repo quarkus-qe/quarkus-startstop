@@ -158,6 +158,8 @@ public enum WhitelistLogLines {
                         Pattern.compile(".*SLF4J:.*"),
                         // TODO https://github.com/quarkusio/quarkus/issues/36053
                         Pattern.compile(".*Unknown module: org.graalvm.nativeimage.*"),
+                        // TODO https://github.com/quarkusio/quarkus/issues/36813
+                        Pattern.compile(".*Unrecognized configuration file .*application.yml found.*"),
                 };
             case LINUX:
             	return new Pattern[] {
