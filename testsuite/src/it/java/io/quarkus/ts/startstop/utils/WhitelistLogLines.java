@@ -20,6 +20,9 @@ public enum WhitelistLogLines {
             Pattern.compile(".*org.eclipse.aether.util.concurrency.RunnableErrorForwarder.*"),
             // https://github.com/quarkusio/quarkus/issues/34626
             Pattern.compile("\\[Quarkus build analytics\\] Analytics remote config not received."),
+            // netty 4 which doesn't have the relevant native config in the lib. See https://github.com/netty/netty/pull/13596
+            Pattern.compile(".*Warning: Please re-evaluate whether any experimental option is required, and either remove or unlock it\\..*"),
+            Pattern.compile(".*Warning: The option '-H:ReflectionConfigurationResources=META-INF/native-image/io\\.netty/netty-transport/reflection-config\\.json' is experimental and must be enabled via.*"),
     }),
     FULL_MICROPROFILE(new Pattern[]{
             // Some artifacts names...
@@ -34,6 +37,12 @@ public enum WhitelistLogLines {
             Pattern.compile(".*RESTEASY004687: Closing a class.*CleanupAction.*"),
             // https://github.com/quarkusio/quarkus/issues/34626
             Pattern.compile("\\[Quarkus build analytics\\] Analytics remote config not received."),
+            // netty 4 which doesn't have the relevant native config in the lib. See https://github.com/netty/netty/pull/13596
+            Pattern.compile(".*Warning: Please re-evaluate whether any experimental option is required, and either remove or unlock it\\..*"),
+            Pattern.compile(".*Warning: The option '-H:ReflectionConfigurationResources=META-INF/native-image/io\\.netty/netty-transport/reflection-config\\.json' is experimental and must be enabled via.*"),
+            // native options added explicitly by FULL_MICROPROFILE application.properies
+            Pattern.compile(".*Warning: The option '-H:Log=registerResource:' is experimental and must be enabled via.*"),
+            Pattern.compile(".*Warning: The option '-H:IncludeResources=privateKey\\.pem' is experimental and must be enabled via.*"),
     }),
     GENERATED_SKELETON(new Pattern[]{
             // Harmless warning
@@ -149,6 +158,8 @@ public enum WhitelistLogLines {
                         Pattern.compile(".*SLF4J:.*"),
                         // TODO https://github.com/quarkusio/quarkus/issues/36053
                         Pattern.compile(".*Unknown module: org.graalvm.nativeimage.*"),
+                        // TODO https://github.com/quarkusio/quarkus/issues/36813
+                        Pattern.compile(".*Unrecognized configuration file .*application.yml found.*"),
                 };
             case LINUX:
             	return new Pattern[] {
