@@ -80,6 +80,8 @@ public enum WhitelistLogLines {
             Commons.STREAM_ERROR,
             Commons.CLOSED_STREAM,
             Commons.NETTY_HANDLERS,
+            // org.slf4j warning about cached artifacts from a remote repository ID that is unavailable
+            Pattern.compile(".*present in the local repository, but cached from a remote repository ID that is unavailable in current build context, verifying that is downloadable.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
