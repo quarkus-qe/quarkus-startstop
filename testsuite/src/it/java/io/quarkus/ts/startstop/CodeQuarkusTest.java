@@ -93,7 +93,7 @@ public class CodeQuarkusTest {
             appendln(whatIDidReport, "# " + cn + ", " + mn);
             appendln(whatIDidReport, (new Date()).toString());
             LOGGER.info("Downloading...");
-            appendln(whatIDidReport, "Download URL: " + download(extensions, zipFile, 11));
+            appendln(whatIDidReport, "Download URL: " + download(extensions, zipFile, 17));
             LOGGER.info("Unzipping...");
             unzipLog = unzip(zipFile, GEN_BASE_DIR);
             if (StringUtils.isBlank(System.getProperty("gh.actions"))) {
@@ -219,7 +219,7 @@ public class CodeQuarkusTest {
     }
 
     @Test
-    public void java17BasedProject(TestInfo testInfo) throws Exception {
+    public void java21BasedProject(TestInfo testInfo) throws Exception {
         StringBuilder whatIDidReport = new StringBuilder();
         String cn = testInfo.getTestClass().get().getCanonicalName();
         String mn = testInfo.getTestMethod().get().getName();
@@ -230,12 +230,12 @@ public class CodeQuarkusTest {
             appendln(whatIDidReport, "# " + cn + ", " + mn);
             appendln(whatIDidReport, (new Date()).toString());
             LOGGER.info("Downloading...");
-            appendln(whatIDidReport, "Download URL: " + download(List.of(CodeQuarkusExtensions.QUARKUS_RESTEASY_REACTIVE), zipFile, 17));
+            appendln(whatIDidReport, "Download URL: " + download(List.of(CodeQuarkusExtensions.QUARKUS_RESTEASY_REACTIVE), zipFile, 21));
             LOGGER.info("Unzipping...");
             unzip(zipFile, GEN_BASE_DIR);
 
             String pom = Files.readString(Paths.get(GEN_BASE_DIR + File.separator + "code-with-quarkus" + File.separator + "pom.xml"));
-            assertTrue(pom.contains("<maven.compiler.release>17"), "Downloaded app doesn't have pom.xml file Java 17 based");
+            assertTrue(pom.contains("<maven.compiler.release>21"), "Downloaded app doesn't have pom.xml file Java 21 based");
 
         } finally {
             writeReport(cn, mn, whatIDidReport.toString());
@@ -244,7 +244,7 @@ public class CodeQuarkusTest {
     }
 
     /*
-     * Similar to java17BasedProject test, but not forcing concrete java version
+     * Similar to java21BasedProject test, but not forcing concrete java version
      */
     @Test
     public void defaultJavaBasedProject(TestInfo testInfo) throws Exception {

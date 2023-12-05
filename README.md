@@ -3,7 +3,7 @@ Generates, starts, tests, stops small Quarkus applications and measures time and
 
 ## Prerequisites
 
-The TS expects you run Apache Maven 3.6.3+, Java 11+ and have ```ps``` program available on your Linux/Mac and ```wmic``` (by default present) on your Windows system.
+The TS expects you run Apache Maven 3.6.3+, Java 17+ and have ```ps``` program available on your Linux/Mac and ```wmic``` (by default present) on your Windows system.
 Native image build requires GraalVM with Native image toolchain installed. Refer to [Building Native Image Guide](https://quarkus.io/guides/building-native-image) for details. 
 
 ## Branches
@@ -107,7 +107,7 @@ Build and run logs are archived and checked for errors, see:
 **/io.quarkus.ts.startstop.ArtifactGeneratorTest/manyExtensions/warmup-dev-run.log
 ```
 
-Measurements example, e.g. Windows and OpenJDK 11 J9:
+Measurements example, e.g. Windows and OpenJDK 17 J9:
 
 ```
 λ type testsuite\target\archived-logs\io.quarkus.ts.startstop.ArtifactGeneratorTest\measurements.csv
@@ -118,7 +118,7 @@ GENERATED_SKELETON,GENERATOR,3766,37064,8859,18249,1172,4240,81
 e.g. it took 3.766s to generate the skeleton project, it took 37.064s to build and start the Dev mode and it
 took 8.859s to do the live reload and get the expected response to a request.
 
-Linux and OpenJDK 11 HotSpot:
+Linux and OpenJDK 17 HotSpot:
 
 ```
 App,Mode,buildTimeMs,timeToFirstOKRequestMs,timeToReloadMs,startedInMs,stoppedInMs,RSSKb,FDs
