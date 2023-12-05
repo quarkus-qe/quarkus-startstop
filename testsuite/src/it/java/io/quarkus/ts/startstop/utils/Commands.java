@@ -337,7 +337,7 @@ public class Commands {
      *
      * @param extensions         collection of extension codes, @See {@link io.quarkus.ts.startstop.utils.CodeQuarkusExtensions}
      * @param destinationZipFile path where the zip file will be written
-     * @param javaVersion        Java version used in generated project (11 or 17)
+     * @param javaVersion        Java version used in generated project (17 or 21)
      * @return the actual URL used for audit and logging purposes
      * @throws IOException
      */
