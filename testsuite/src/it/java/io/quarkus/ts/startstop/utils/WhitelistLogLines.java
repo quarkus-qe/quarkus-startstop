@@ -57,11 +57,6 @@ public enum WhitelistLogLines {
                     "quarkus.oidc-client.discovery-enabled|" +
                     "quarkus.smallrye-jwt.enabled|" +
                     "quarkus.devservices.enabled|" +
-                    "quarkus.jaeger.enabled|" +
-                    "quarkus.jaeger.service-name|" +
-                    "quarkus.jaeger.sampler-param|" +
-                    "quarkus.jaeger.endpoint|" +
-                    "quarkus.jaeger.sampler-type" +
                     ")[ \\\\\"]*was provided.*"),
             // Some artifacts names...
             Pattern.compile(".*maven-error-diagnostics.*"),

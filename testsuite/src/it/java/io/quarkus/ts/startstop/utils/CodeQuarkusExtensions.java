@@ -157,7 +157,6 @@ public enum CodeQuarkusExtensions {
     QUARKUS_OPENTELEMETRY_EXPORTER_JAEGER("quarkus-opentelemetry-exporter-jaeger", "OpenTelemetry exporter: Jaeger", "DTW", false),
     QUARKUS_OPENTELEMETRY_EXPORTER_OTLP("quarkus-opentelemetry-exporter-otlp", "OpenTelemetry exporter: OTLP", "CGl", false),
     QUARKUS_SMALLRYE_METRICS("quarkus-smallrye-metrics", "SmallRye Metrics", "Ll4", false), //intentionally because of micrometer
-    QUARKUS_SMALLRYE_OPENTRACING("quarkus-smallrye-opentracing", "SmallRye OpenTracing", "f7", true),
     QUARKUS_OIDC("quarkus-oidc", "OpenID Connect", "fgL", true),
     QUARKUS_ELYTRON_SECURITY_JDBC("quarkus-elytron-security-jdbc", "Elytron Security JDBC", "Pxs", false),
     QUARKUS_ELYTRON_SECURITY_LDAP("quarkus-elytron-security-ldap", "Elytron Security LDAP Realm", "z3K", false),
