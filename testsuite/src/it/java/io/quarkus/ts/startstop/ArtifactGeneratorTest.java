@@ -79,6 +79,7 @@ public class ArtifactGeneratorTest {
             "kafka-client",
             "narayana-jta",
             "oidc",
+            "opentelemetry",
             "quarkus-quartz", // "quartz" is ambiguous with org.apache.camel.quarkus:camel-quarkus-quartz
             "reactive-pg-client",
             "rest-client",
@@ -138,7 +139,7 @@ public class ArtifactGeneratorTest {
             "smallrye-jwt-build",
             "smallrye-metrics",
             "smallrye-openapi",
-            "smallrye-opentracing",
+            "opentelemetry",
             "smallrye-reactive-messaging",
             // https://github.com/quarkusio/quarkus/issues/23383
 //            "smallrye-reactive-messaging-amqp",
@@ -180,6 +181,7 @@ public class ArtifactGeneratorTest {
             "mailer",
             "narayana-jta",
             "oidc",
+            "opentelemetry",
             "quarkus-quartz",
             "reactive-pg-client",
             "scheduler",
@@ -231,7 +233,7 @@ public class ArtifactGeneratorTest {
             "smallrye-jwt-build",
             "smallrye-metrics",
             "smallrye-openapi",
-            "smallrye-opentracing",
+            "opentelemetry",
             "smallrye-reactive-messaging",
             // https://github.com/quarkusio/quarkus/issues/23383
 //            "smallrye-reactive-messaging-amqp",
