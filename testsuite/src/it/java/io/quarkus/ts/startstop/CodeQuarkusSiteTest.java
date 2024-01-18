@@ -41,12 +41,12 @@ public class CodeQuarkusSiteTest {
     public static final String pageLoadedSelector = ".extension-category";
     public static final String webPageUrl = Commands.getCodeQuarkusURL("https://code.quarkus.redhat.com/");
     public static final String elementTitleByText = "Quarkus - Start coding with code.quarkus.redhat.com";
-    public static final String elementIconByXpath = "//link[@rel=\"shortcut icon\"][@href=\"https://www.redhat.com/themes/custom/rhdc/favicon.ico\"]";
+    public static final String elementIconByXpath = "//link[@rel=\"shortcut icon\"][@href=\"https://www.redhat.com/favicon.ico\"]";
     public static final String elementJavaVersionSelectByXpath = "//select[@id=\"javaversion\"]";
     public static final String elementRedHatLogoByXpath= "//img[@class=\"logo\"][@alt=\"Red Hat Logo\"]";
     public static final String elementStreamPickerByXpath= "//div[@class=\"stream-picker dropdown\"]";
     public static final String elementStreamItemsByXpath= "//div[@class=\"dropdown-item\"]";
-    public static final String elementSupportedFlagByXpath = "//div[@class=\"extension-tag redhat-support:supported dropdown-toggle\"]";
+    public static final String elementSupportedFlagByXpath = "//div[@class=\"extension-tag redhat-support-supported dropdown-toggle\"]";
     public static final String elementQuarkusPlatformVersionByXpath = "//div[@class=\"quarkus-stream\"]";
 
     private BrowserContext browserContext; // Operates in incognito mode
