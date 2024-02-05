@@ -10,21 +10,16 @@ import com.microsoft.playwright.options.ElementState;
 import io.quarkus.ts.startstop.utils.Commands;
 import org.jboss.logging.Logger;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+import static io.quarkus.ts.startstop.utils.Commands.getQuarkusVersion;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -130,21 +125,8 @@ public class CodeQuarkusSiteTest {
 
     @Test
     public void validateQuarkusVersionMatch(TestInfo testInfo) {
-        String quarkusPlatformVersion = "";
-        if(System.getProperty("maven.repo.local") == null){
-            LOGGER.warn("System property 'maven.repo.local' is not specified. Skip test execution.");
-            return;
-        }
-        Path quarkusProductBomPath = Paths.get(System.getProperty("maven.repo.local")).resolve("com/redhat/quarkus/platform/quarkus-bom");
-        try (Stream<Path> paths = Files.list(quarkusProductBomPath)) {
-            List<String> folders = paths.filter(Files::isDirectory)
-                    .map(path -> path.getFileName().toString())
-                    .sorted()
-                    .collect(Collectors.toList());
-            quarkusPlatformVersion = folders.get(folders.size() - 1); // get the last directory from the sorted list
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        String quarkusPlatformVersion = getQuarkusVersion();
+        Assumptions.assumeTrue(quarkusPlatformVersion.contains("redhat"));
 
         Page page = loadPage(webPageUrl + "?S=com.redhat.quarkus.platform%3A3.2", 60);
         LOGGER.info("Trying to find element: " + elementQuarkusPlatformVersionByXpath);
