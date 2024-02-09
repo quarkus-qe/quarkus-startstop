@@ -102,7 +102,9 @@ public enum WhitelistLogLines {
             // https://github.com/quarkusio/quarkus/issues/36775
             Pattern.compile("(?i:.*quarkus.mongodb.native.dns.*config property is deprecated.*)"),
             // https://github.com/quarkusio/quarkus/issues/37532
-            Pattern.compile(".*Annotation processing is enabled because one or more processors were found.*")
+            Pattern.compile(".*Annotation processing is enabled because one or more processors were found.*"),
+            // https://github.com/quarkusio/quarkus/issues/38711
+            Pattern.compile(".*SplitPackageProcessor.*Following packages were detected in multiple archives.*")
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
