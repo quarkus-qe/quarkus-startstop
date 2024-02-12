@@ -356,7 +356,6 @@ public enum CodeQuarkusExtensions {
     CAMEL_QUARKUS_OPENAPI_JAVA("camel-quarkus-openapi-java", "Camel OpenAPI Java", "Hbh", false),
     CAMEL_QUARKUS_OPENSTACK("camel-quarkus-openstack", "Camel OpenStack", "ntQ", false),
     CAMEL_QUARKUS_OPENTELEMETRY("camel-quarkus-opentelemetry", "Camel OpenTelemetry", "DlR", false),
-    CAMEL_QUARKUS_OPENTRACING("camel-quarkus-opentracing", "Camel OpenTracing", "0Q1", false),
     CAMEL_QUARKUS_OPTAPLANNER("camel-quarkus-optaplanner", "Camel OptaPlanner", "Xai", false),
     CAMEL_QUARKUS_PAHO("camel-quarkus-paho", "Camel Paho", "y2W", false),
     CAMEL_QUARKUS_PAHO_MQTT5("camel-quarkus-paho-mqtt5", "Camel Paho MQTT5", "Bfa", false),
