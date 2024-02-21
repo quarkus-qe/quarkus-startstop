@@ -104,9 +104,7 @@ public enum WhitelistLogLines {
             // https://github.com/quarkusio/quarkus/issues/37532
             Pattern.compile(".*Annotation processing is enabled because one or more processors were found.*"),
             // https://github.com/quarkusio/quarkus/issues/38711
-            Pattern.compile(".*SplitPackageProcessor.*Following packages were detected in multiple archives.*"),
-            // TODO: remove next line when 3.7.3 is released, see https://github.com/quarkusio/quarkus/pull/38710
-            Pattern.compile(".*This instance of GraphiQLHandler has been created with a deprecated method.*")
+            Pattern.compile(".*SplitPackageProcessor.*Following packages were detected in multiple archives.*")
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
