@@ -62,7 +62,7 @@ public class SpecialCharsTest {
         File logsDir = new File(appDir, "special-chars-logs");
         String cn = testInfo.getTestClass().get().getCanonicalName();
         String mn = testInfo.getTestMethod().get().getName();
-        LOGGER.info("Testing app: " + app.toString() + ", mode: " + mvnCmds.toString() + ", on path " + appDestDir);
+        LOGGER.info("Testing app: " + app + ", mode: " + mvnCmds.toString() + ", on path " + appDestDir);
         try {
             // Clean target directory
             cleanTarget(app);
@@ -80,7 +80,9 @@ public class SpecialCharsTest {
             // Replace relative path to parent project
             Path path = appPomXml.toPath();
             String content = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
-            content = content.replaceAll("<relativePath>..</relativePath>", "<relativePath>../..</relativePath>");
+            content = content
+                    .replaceAll("<relativePath>..</relativePath>", "<relativePath>../..</relativePath>")
+                    .replaceAll("app-jakarta-rest-minimal", "app-jakarta-rest-minimal-copy");
             Files.write(path, content.getBytes(StandardCharsets.UTF_8));
 
             // Create logs directory
