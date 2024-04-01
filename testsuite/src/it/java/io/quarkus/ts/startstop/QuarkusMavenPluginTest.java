@@ -91,7 +91,7 @@ public class QuarkusMavenPluginTest {
 
     @Test
     public void infoTarget(TestInfo testInfo) throws IOException, InterruptedException {
-        runQuarkusMavenPluginGoal(testInfo, Apps.JAKARTA_REST_MINIMAL, "info", "io.quarkus:quarkus-resteasy");
+        runQuarkusMavenPluginGoal(testInfo, Apps.JAKARTA_REST_MINIMAL, "info", "io.quarkus:quarkus-rest");
     }
 
     @Test

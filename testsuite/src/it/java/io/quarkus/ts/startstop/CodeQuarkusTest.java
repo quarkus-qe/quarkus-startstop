@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 
 import static io.quarkus.ts.startstop.utils.Commands.adjustPrettyPrintForJsonLogging;
 import static io.quarkus.ts.startstop.utils.Commands.cleanDirOrFile;
+import static io.quarkus.ts.startstop.utils.Commands.confIndexPageForSkeleton;
 import static io.quarkus.ts.startstop.utils.Commands.disableDevServices;
 import static io.quarkus.ts.startstop.utils.Commands.download;
 import static io.quarkus.ts.startstop.utils.Commands.dropEntityAnnotations;
@@ -101,6 +102,7 @@ public class CodeQuarkusTest {
                 removeRepositoriesAndPluginRepositories(appDir + File.separator + "pom.xml");
             }
             adjustPrettyPrintForJsonLogging(appDir.getAbsolutePath());
+            confIndexPageForSkeleton(appDir.getAbsolutePath());
             disableDevServices(appDir.getAbsolutePath());
             dropEntityAnnotations(appDir.getAbsolutePath());
             List<String> cmd;

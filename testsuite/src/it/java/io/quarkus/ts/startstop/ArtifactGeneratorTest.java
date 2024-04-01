@@ -3,6 +3,7 @@ package io.quarkus.ts.startstop;
 import static io.quarkus.ts.startstop.utils.Commands.adjustPrettyPrintForJsonLogging;
 import static io.quarkus.ts.startstop.utils.Commands.cleanDirOrFile;
 import static io.quarkus.ts.startstop.utils.Commands.confAppPropsForSkeleton;
+import static io.quarkus.ts.startstop.utils.Commands.confIndexPageForSkeleton;
 import static io.quarkus.ts.startstop.utils.Commands.copyFileForSkeleton;
 import static io.quarkus.ts.startstop.utils.Commands.dropEntityAnnotations;
 import static io.quarkus.ts.startstop.utils.Commands.getArtifactGeneBaseDir;
@@ -128,7 +129,7 @@ public class ArtifactGeneratorTest {
             "mailer",
             "mutiny",
             "oidc-client",
-            "oidc-client-filter",
+            "resteasy-client-oidc-filter",
             "reactive-mysql-client",
             "resteasy-multipart",
             "resteasy-qute",
@@ -140,10 +141,10 @@ public class ArtifactGeneratorTest {
             "smallrye-metrics",
             "smallrye-openapi",
             "opentelemetry",
-            "smallrye-reactive-messaging",
+            "messaging",
             // https://github.com/quarkusio/quarkus/issues/23383
 //            "smallrye-reactive-messaging-amqp",
-            "smallrye-reactive-messaging-kafka",
+            "messaging-kafka",
             "spring-data-jpa",
             "spring-data-rest",
             "spring-di",
@@ -160,12 +161,12 @@ public class ArtifactGeneratorTest {
     };
 
     public static final String[] supportedReactiveExtensionsSubsetSetA = new String[]{
-            "quarkus-jaxrs-client-reactive",
-            "quarkus-resteasy-reactive",
-            "quarkus-resteasy-reactive-jackson",
-            "quarkus-resteasy-reactive-qute",
-            "quarkus-rest-client-reactive",
-            "quarkus-rest-client-reactive-jackson",
+            "quarkus-rest-client-jaxrs",
+            "quarkus-rest",
+            "quarkus-rest-jackson",
+            "quarkus-rest-qute",
+            "quarkus-rest-client",
+            "quarkus-rest-client-jackson",
             "core",
             "hibernate-orm",
             "hibernate-orm-panache",
@@ -204,10 +205,10 @@ public class ArtifactGeneratorTest {
     };
 
     public static final String[] supportedReactiveExtensionsSubsetSetB = new String[]{
-            "quarkus-jaxrs-client-reactive",
-            "quarkus-resteasy-reactive",
-            "quarkus-resteasy-reactive-jsonb",
-            "quarkus-rest-client-reactive",
+            "quarkus-rest-client-jaxrs",
+            "quarkus-rest",
+            "quarkus-rest-jsonb",
+            "quarkus-rest-client",
             "agroal",
             "quarkus-avro",
             "config-yaml",
@@ -223,7 +224,7 @@ public class ArtifactGeneratorTest {
             "jdbc-mssql",
             "mutiny",
             "oidc-client",
-            "quarkus-oidc-client-reactive-filter",
+            "quarkus-rest-client-oidc-filter",
             "quarkus-qute",
             "reactive-mysql-client",
             "smallrye-context-propagation",
@@ -234,10 +235,10 @@ public class ArtifactGeneratorTest {
             "smallrye-metrics",
             "smallrye-openapi",
             "opentelemetry",
-            "smallrye-reactive-messaging",
+            "messaging",
             // https://github.com/quarkusio/quarkus/issues/23383
 //            "smallrye-reactive-messaging-amqp",
-            "smallrye-reactive-messaging-kafka",
+            "messaging-kafka",
             "spring-data-jpa",
             "spring-data-rest",
             "spring-di",
@@ -293,6 +294,7 @@ public class ArtifactGeneratorTest {
 
             // Config, see app-generated-skeleton/README.md
             confAppPropsForSkeleton(appDir.getAbsolutePath());
+            confIndexPageForSkeleton(appDir.getAbsolutePath());
             adjustPrettyPrintForJsonLogging(appDir.getAbsolutePath());
             dropEntityAnnotations(appDir.getAbsolutePath());
             if (StringUtils.isBlank(System.getProperty("gh.actions"))) {
