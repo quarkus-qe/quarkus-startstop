@@ -22,10 +22,10 @@ public enum URLContent {
             new String[]{"http://localhost:8080/data/client/test/parameterValue=xxx", "Processed parameter value 'parameterValue=xxx'"}
     }),
     GENERATED_SKELETON(new String[][]{
-            new String[]{"http://localhost:8080", "Congratulations"},
+            new String[]{"http://localhost:8080/", "Congratulation! You are on landing page."},
             new String[]{"http://localhost:8080/hello", "Bye RESTEasy"},
             new String[]{"http://localhost:8080/hello-added", "Hello added"},
-            new String[]{"http://localhost:8080/hello", "Bye from RESTEasy Reactive"},
+            new String[]{"http://localhost:8080/hello", "Bye from Quarkus REST"},
     });
 
     public final String[][] urlContent;
