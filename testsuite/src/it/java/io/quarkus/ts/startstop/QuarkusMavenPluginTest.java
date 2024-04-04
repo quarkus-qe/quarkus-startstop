@@ -96,6 +96,7 @@ public class QuarkusMavenPluginTest {
 
     @Test
     @DisabledOnOs({OS.WINDOWS}) // https://github.com/quarkusio/quarkus/issues/33403
+    @Disabled("Updates to the latest version. Branch 3.8 uses a fixed version, so this doesn't make sense in our case")
     public void updateTarget(TestInfo testInfo) throws IOException, InterruptedException {
         runQuarkusMavenPluginGoal(testInfo, Apps.JAKARTA_REST_MINIMAL, "update", "quarkus:update goal is experimental");
     }
