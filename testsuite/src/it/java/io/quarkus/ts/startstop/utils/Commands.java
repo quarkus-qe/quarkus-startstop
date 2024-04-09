@@ -322,7 +322,8 @@ public class Commands {
      */
     public static String download(Collection<CodeQuarkusExtensions> extensions, String destinationZipFile) throws IOException {
         String downloadURL = getCodeQuarkusURL() + "/api/download?" +
-                extensions.stream().map(x -> "e=" + x.id).collect(Collectors.joining("&"));
+                extensions.stream().map(x -> "e=" + x.id).collect(Collectors.joining("&")) +
+                "&S=3.8";
         return download(downloadURL, destinationZipFile);
     }
 
@@ -344,6 +345,7 @@ public class Commands {
     public static String download(Collection<CodeQuarkusExtensions> extensions, String destinationZipFile, int javaVersion) throws IOException {
         String downloadURL = getCodeQuarkusURL() + "/api/download?" +
                 extensions.stream().map(x -> "e=" + x.id).collect(Collectors.joining("&")) +
+                "&S=3.8" +
                 "&j=" + javaVersion;
         return download(downloadURL, destinationZipFile);
     }
@@ -424,6 +426,14 @@ public class Commands {
         final String appRelativePath =
                 "src" + File.separator + "main" + File.separator + "resources" + File.separator + "application.properties";
         copyFileForSkeleton("application.properties", Paths.get(appDir + File.separator + appRelativePath));
+    }
+
+    public static void confIndexPageForSkeleton(String appDir) throws IOException {
+        final String appRelativePath =
+                "src" + File.separator + "main" + File.separator + "resources" + File.separator + "META-INF" + File.separator + "resources";
+        final String appIndexRelativePath = appRelativePath + File.separator + "index.html";
+        Files.createDirectories(Paths.get(appDir + File.separator + appRelativePath));
+        copyFileForSkeleton("index.html", Paths.get(appDir + File.separator + appIndexRelativePath));
     }
 
     public static void copyFileForSkeleton(String skeletonFileRelativePath, Path destPath)
