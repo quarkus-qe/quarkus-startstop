@@ -69,7 +69,7 @@ public class Commands {
     private static final String QUARKUS_PLATFORM_GROUP_ID = "com.redhat.quarkus.platform";
     private static final String QUARKUS_UPSTREAM_GROUP_ID = "io.quarkus.platform";
     private static final String QUARKUS_CORE_GROUP_ID = "io.quarkus";
-    private static final String REDHAT_VERSION_TAG = "-redhat-";
+    private static final String REDHAT_VERSION_TAG = "redhat-";
     private static final String QUARKUS_MAIN_VERSION = "999-SNAPSHOT";
 
     public static String mvnw() {
