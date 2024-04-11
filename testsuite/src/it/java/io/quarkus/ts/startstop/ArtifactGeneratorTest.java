@@ -3,6 +3,7 @@ package io.quarkus.ts.startstop;
 import static io.quarkus.ts.startstop.utils.Commands.adjustPrettyPrintForJsonLogging;
 import static io.quarkus.ts.startstop.utils.Commands.cleanDirOrFile;
 import static io.quarkus.ts.startstop.utils.Commands.confAppPropsForSkeleton;
+import static io.quarkus.ts.startstop.utils.Commands.confIndexPageForSkeleton;
 import static io.quarkus.ts.startstop.utils.Commands.copyFileForSkeleton;
 import static io.quarkus.ts.startstop.utils.Commands.dropEntityAnnotations;
 import static io.quarkus.ts.startstop.utils.Commands.getArtifactGeneBaseDir;
@@ -137,7 +138,6 @@ public class ArtifactGeneratorTest {
             "smallrye-health",
             "smallrye-jwt",
             "smallrye-jwt-build",
-            "smallrye-metrics",
             "smallrye-openapi",
             "opentelemetry",
             "smallrye-reactive-messaging",
@@ -231,7 +231,6 @@ public class ArtifactGeneratorTest {
             "smallrye-health",
             "smallrye-jwt",
             "smallrye-jwt-build",
-            "smallrye-metrics",
             "smallrye-openapi",
             "opentelemetry",
             "smallrye-reactive-messaging",
@@ -293,6 +292,7 @@ public class ArtifactGeneratorTest {
 
             // Config, see app-generated-skeleton/README.md
             confAppPropsForSkeleton(appDir.getAbsolutePath());
+            confIndexPageForSkeleton(appDir.getAbsolutePath());
             adjustPrettyPrintForJsonLogging(appDir.getAbsolutePath());
             dropEntityAnnotations(appDir.getAbsolutePath());
             if (StringUtils.isBlank(System.getProperty("gh.actions"))) {
