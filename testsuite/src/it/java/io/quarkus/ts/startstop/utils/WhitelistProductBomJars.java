@@ -16,6 +16,9 @@ public enum WhitelistProductBomJars {
             // jna and jna-platform is dependency of io.quarkus:quarkus-jdbc-mariadb
             "net.java.dev.jna.jna",
             "net.java.dev.jna.jna-platform",
+            // https://issues.redhat.com/browse/QUARKUS-4078
+            "org.jetbrains.kotlin.kotlin-stdlib",
+            "org.jetbrains.kotlinx.kotlinx-metadata-jvm"
     });
 
     public final String[] jarNames;
