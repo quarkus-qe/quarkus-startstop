@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -34,7 +33,6 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -71,6 +69,8 @@ public class Commands {
     private static final String QUARKUS_CORE_GROUP_ID = "io.quarkus";
     private static final String REDHAT_VERSION_TAG = "redhat-";
     private static final String QUARKUS_MAIN_VERSION = "999-SNAPSHOT";
+    public static final String JAVA_BIN = String.format("%s/bin/java", System.getProperty("java.home"));
+
 
     public static String mvnw() {
         return Commands.isThisWindows ? "mvnw.cmd" : "./mvnw";
