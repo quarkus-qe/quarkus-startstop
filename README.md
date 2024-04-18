@@ -273,8 +273,8 @@ index 0c02537..6278605 100755
  public enum MvnCmds {
      JVM(new String[][]{
              new String[]{"mvn", "clean", "compile", "quarkus:build", "-Dquarkus.package.output-name=quarkus"},
--            new String[]{"java", "-jar", "target/quarkus-runner.jar"}
-+            new String[]{"java",
+-            new String[]{Commands.JAVA_BIN, "-jar", "target/quarkus-runner.jar"}
++            new String[]{Commands.JAVA_BIN,
 +                    "-agentpath:/var/lib/jenkins/async-profiler-1.8.1-linux-x64/build/libasyncProfiler.so=start,event=cpu,file=/tmp/startup-cpu-profile.svg,interval=1000000,width=1600,simple",
 +                    "-jar", "target/quarkus-runner.jar"}
      }),
