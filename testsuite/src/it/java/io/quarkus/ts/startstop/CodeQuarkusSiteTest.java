@@ -49,7 +49,7 @@ public class CodeQuarkusSiteTest {
     public static final String elementStreamPickerByXpath= "//div[@class=\"stream-picker dropdown\"]";
     public static final String elementStreamItemsByXpath= "//div[@class=\"dropdown-item\"]";
     public static final String elementSupportedFlagByXpath = "//div[@class=\"extension-tag redhat-support-supported dropdown-toggle\"]";
-    public static final String elementQuarkusPlatformVersionByXpath = "//div[@class=\"quarkus-stream\"]";
+    public static final String elementQuarkusPlatformVersionByXpath = "//div[contains(@class, 'quarkus-stream')]";
 
     private BrowserContext browserContext; // Operates in incognito mode
 
