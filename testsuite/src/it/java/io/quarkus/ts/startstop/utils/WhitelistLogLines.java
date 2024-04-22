@@ -129,6 +129,7 @@ public enum WhitelistLogLines {
     private static final Pattern WARNING_MISSING_OBJCOPY_NATIVE = Pattern.compile(".*objcopy executable not found in PATH.*");
     private static final Pattern WARNING_MISSING_OBJCOPY_RESULT_NATIVE = Pattern.compile(".*That also means that resulting native executable is larger as it embeds the debug symbols..*");
     private static final Pattern XML_APIS_RELOCATED = Pattern.compile(".*The artifact xml-apis:xml-apis:jar:2.0.2 has been relocated to xml-apis:xml-apis:jar:1.0.b2.*");
+    private static final Pattern WARNING_SYS_MODULE_PATH = Pattern.compile(".*\\[WARNING\\] system modules path not set in conjunction with -source \\d+");
 
     public final Pattern[] errs;
 
@@ -147,6 +148,7 @@ public enum WhitelistLogLines {
                         WARNING_MISSING_OBJCOPY_RESULT_NATIVE,
                         // https://github.com/netty/netty/issues/11020
                         Pattern.compile(".*Can not find io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider in the classpath, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS.*"),
+                        WARNING_SYS_MODULE_PATH
                 };
             case WINDOWS:
                 return new Pattern[] {
@@ -161,6 +163,7 @@ public enum WhitelistLogLines {
                         Pattern.compile(".*Unknown module: org.graalvm.nativeimage.*"),
                         // TODO https://github.com/quarkusio/quarkus/issues/36813
                         Pattern.compile(".*Unrecognized configuration file .*application.yml found.*"),
+                        WARNING_SYS_MODULE_PATH
                 };
             case LINUX:
             	return new Pattern[] {
@@ -169,6 +172,7 @@ public enum WhitelistLogLines {
                         COMMON_SLF4J_JBOSS_LOGMANAGER_DEPENDENCY_TREE,
                         // TODO https://github.com/quarkusio/quarkus/issues/36053
                         Pattern.compile(".*Unknown module: org.graalvm.nativeimage.*"),
+                        WARNING_SYS_MODULE_PATH
                 };
         }
         return new Pattern[] {};
