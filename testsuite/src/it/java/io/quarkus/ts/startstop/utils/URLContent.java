@@ -22,7 +22,7 @@ public enum URLContent {
             new String[]{"http://localhost:8080/data/client/test/parameterValue=xxx", "Processed parameter value 'parameterValue=xxx'"}
     }),
     GENERATED_SKELETON(new String[][]{
-            new String[]{"http://localhost:8080", "Congratulations"},
+            new String[]{"http://localhost:8080", "Congratulations! You are on a landing page."},
             new String[]{"http://localhost:8080/hello", "Bye RESTEasy"},
             new String[]{"http://localhost:8080/hello-added", "Hello added"},
             new String[]{"http://localhost:8080/hello", "Bye from RESTEasy Reactive"},
