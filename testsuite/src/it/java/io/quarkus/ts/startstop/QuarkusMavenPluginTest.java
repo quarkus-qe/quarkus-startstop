@@ -2,6 +2,7 @@ package io.quarkus.ts.startstop;
 
 import io.quarkus.ts.startstop.utils.Apps;
 import io.quarkus.ts.startstop.utils.Commands;
+import org.apache.commons.io.FileUtils;
 import org.jboss.logging.Logger;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
@@ -12,7 +13,9 @@ import org.junit.jupiter.api.condition.OS;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,15 +46,28 @@ public class QuarkusMavenPluginTest {
 
         File logFile = null;
         StringBuilder whatIDidReport = new StringBuilder();
-        File appDir = new File(BASE_DIR + File.separator + app.dir);
+        File sourceDir = new File(BASE_DIR + File.separator + app.dir);
+        File appDestDir = sourceDir
+                .getParentFile().toPath().toAbsolutePath()
+                .resolve("target")
+                .resolve(goalName).toFile();
+
         String cn = testInfo.getTestClass().get().getCanonicalName();
         String mn = testInfo.getTestMethod().get().getName();
         try {
-            // Cleanup
-            Files.createDirectories(Paths.get(appDir.getAbsolutePath() + File.separator + "logs"));
+            // Create  a testdir
+            if (!appDestDir.mkdirs()) {
+                throw new RuntimeException("Cannot create directory " + appDestDir);
+            }
 
+            // Copy to path
+            FileUtils.copyDirectory(sourceDir, appDestDir, true);
+            LOGGER.info("Copying " + sourceDir +" to the " + appDestDir);
+            // Cleanup
+            Files.createDirectories(Paths.get(appDestDir.getAbsolutePath() + File.separator + "logs"));
+            fixPom(appDestDir, goalName);
             // Run quarkus-maven-plugin goal
-            logFile = new File(appDir.getAbsolutePath() + File.separator + "logs" + File.separator + goalName + ".log");
+            logFile = new File(appDestDir.getAbsolutePath() + File.separator + "logs" + File.separator + goalName + ".log");
             ExecutorService buildService = Executors.newFixedThreadPool(1);
 
             List<String> baseBuildCmd = new ArrayList<>();
@@ -60,10 +76,12 @@ public class QuarkusMavenPluginTest {
             baseBuildCmd.add("-Dquarkus.platform.group-id=" + getQuarkusGroupId());
             List<String> cmd = getBuildCommand(baseBuildCmd.toArray(new String[0]));
 
-            buildService.submit(new Commands.ProcessRunner(appDir, logFile, cmd, 5));
+            LOGGER.info("Running " + String.join(" ",cmd) +" in " + appDestDir);
+
+            buildService.submit(new Commands.ProcessRunner(appDestDir, logFile, cmd, 5));
             appendln(whatIDidReport, "# " + cn + ", " + mn);
             appendln(whatIDidReport, (new Date()).toString());
-            appendln(whatIDidReport, appDir.getAbsolutePath());
+            appendln(whatIDidReport, appDestDir.getAbsolutePath());
             appendlnSection(whatIDidReport, String.join(" ", cmd));
             buildService.shutdown();
             buildService.awaitTermination(5, TimeUnit.MINUTES);
@@ -82,6 +100,15 @@ public class QuarkusMavenPluginTest {
             archiveLog(cn, mn, logFile);
             writeReport(cn, mn, whatIDidReport.toString());
         }
+    }
+
+    private static void fixPom(File workingDir, String name) throws IOException {
+        Path path = workingDir.toPath().resolve("pom.xml");
+        String content = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
+        content = content
+                .replaceAll("<relativePath>..</relativePath>", "<relativePath>../..</relativePath>")
+                .replaceAll("app-jakarta-rest-minimal", "app-jakarta-rest-minimal-" + name);
+        Files.write(path, content.getBytes(StandardCharsets.UTF_8));
     }
 
     @Test

@@ -423,6 +423,14 @@ public class Commands {
         copyFileForSkeleton("application.properties", Paths.get(appDir + File.separator + appRelativePath));
     }
 
+    public static void confIndexPageForSkeleton(String appDir) throws IOException {
+        final String appRelativePath =
+                "src" + File.separator + "main" + File.separator + "resources" + File.separator + "META-INF" + File.separator + "resources";
+        final String appIndexRelativePath = appRelativePath + File.separator + "index.html";
+        Files.createDirectories(Paths.get(appDir + File.separator + appRelativePath));
+        copyFileForSkeleton("index.html", Paths.get(appDir + File.separator + appIndexRelativePath));
+    }
+
     public static void copyFileForSkeleton(String skeletonFileRelativePath, Path destPath)
             throws IOException {
         final String srcPath = BASE_DIR + File.separator + Apps.GENERATED_SKELETON.dir + File.separator + skeletonFileRelativePath;
