@@ -206,7 +206,20 @@ public class Logs {
         Path destDir = getLogsDir(testClass, testMethod);
         Files.createDirectories(destDir);
         String filename = log.getName();
-        Files.copy(log.toPath(), Paths.get(destDir.toString(), filename), REPLACE_EXISTING);
+
+        if (log.isDirectory()) {
+            // copy all files in the directory to the destination directory
+            File[] files = log.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (!file.isDirectory()) {
+                        Files.copy(file.toPath(), Paths.get(destDir.toString(), file.getName()), REPLACE_EXISTING);
+                    }
+                }
+            }
+        } else {
+            Files.copy(log.toPath(), Paths.get(destDir.toString(), filename), REPLACE_EXISTING);
+        }
     }
 
     public static void writeReport(String testClass, String testMethod, String text) throws IOException {

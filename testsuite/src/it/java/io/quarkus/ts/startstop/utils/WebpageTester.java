@@ -4,10 +4,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
+import java.util.concurrent.locks.LockSupport;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -41,7 +43,8 @@ public class WebpageTester {
             URLConnection c = URI.create(url).toURL().openConnection();
             c.setRequestProperty("Accept", "*/*");
             c.setConnectTimeout(500);
-            try (Scanner scanner = new Scanner(c.getInputStream(), StandardCharsets.UTF_8.toString())) {
+            try (InputStream in = c.getInputStream();
+                 Scanner scanner = new Scanner(in, StandardCharsets.UTF_8.toString())) {
                 scanner.useDelimiter("\\A");
                 webPage = scanner.hasNext() ? scanner.next() : "";
             } catch (Exception e) {
@@ -57,7 +60,7 @@ public class WebpageTester {
             if (!measureTime) {
                 Thread.sleep(500);
             } else {
-                Thread.sleep(0, 100000);
+                LockSupport.parkNanos(100000);
             }
             now = System.currentTimeMillis();
         }

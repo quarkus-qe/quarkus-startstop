@@ -494,7 +494,9 @@ public class Commands {
         envA.put("PATH", System.getenv("PATH"));
         pa.directory(directory);
         pa.redirectErrorStream(true);
-        pa.redirectOutput(ProcessBuilder.Redirect.to(logFile));
+        if (logFile != null) {
+            pa.redirectOutput(ProcessBuilder.Redirect.to(logFile));
+        }
         Process pA = null;
         try {
             pA = pa.start();

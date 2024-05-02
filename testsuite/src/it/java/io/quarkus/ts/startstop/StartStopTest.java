@@ -1,6 +1,7 @@
 package io.quarkus.ts.startstop;
 
 import io.quarkus.ts.startstop.utils.Apps;
+import io.quarkus.ts.startstop.utils.AsyncProfiler;
 import io.quarkus.ts.startstop.utils.Commands;
 import io.quarkus.ts.startstop.utils.LogBuilder;
 import io.quarkus.ts.startstop.utils.Logs;
@@ -22,6 +23,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -72,10 +74,12 @@ public class StartStopTest {
         File runLogA = null;
         StringBuilder whatIDidReport = new StringBuilder();
         File appDir = new File(BASE_DIR + File.separator + app.dir);
+        Optional<AsyncProfiler> asyncProfiler = mvnCmds == MvnCmds.JVM ? AsyncProfiler.create() : Optional.empty();
         String cn = testInfo.getTestClass().get().getCanonicalName();
         String mn = testInfo.getTestMethod().get().getName();
         try {
             // Cleanup
+            asyncProfiler.ifPresent(ignore -> AsyncProfiler.cleanProfilingResults(app));
             cleanTarget(app);
             Files.createDirectories(Paths.get(appDir.getAbsolutePath() + File.separator + "logs"));
 
@@ -87,13 +91,13 @@ public class StartStopTest {
             baseBuildCmd.addAll(Arrays.asList(mvnCmds.mvnCmds[0]));
             baseBuildCmd.add("-Dquarkus.version=" + getQuarkusVersion());
             baseBuildCmd.add("-Dquarkus.platform.group-id=" + getQuarkusGroupId());
-            List<String> cmd = getBuildCommand(baseBuildCmd.toArray(new String[0]));
+            final List<String> buildCommand = getBuildCommand(baseBuildCmd.toArray(new String[0]));
 
-            buildService.submit(new Commands.ProcessRunner(appDir, buildLogA, cmd, 20));
+            buildService.submit(new Commands.ProcessRunner(appDir, buildLogA, buildCommand, 20));
             appendln(whatIDidReport, "# " + cn + ", " + mn);
             appendln(whatIDidReport, (new Date()).toString());
             appendln(whatIDidReport, appDir.getAbsolutePath());
-            appendlnSection(whatIDidReport, String.join(" ", cmd));
+            appendlnSection(whatIDidReport, String.join(" ", buildCommand));
             long buildStarts = System.currentTimeMillis();
             buildService.shutdown();
             buildService.awaitTermination(30, TimeUnit.MINUTES);
@@ -120,17 +124,24 @@ public class StartStopTest {
                 // Run
                 LOGGER.info("Running... round " + i);
                 runLogA = new File(appDir.getAbsolutePath() + File.separator + "logs" + File.separator + mvnCmds.name().toLowerCase() + "-run.log");
-                cmd = getRunCommand(mvnCmds.mvnCmds[1]);
                 appendln(whatIDidReport, appDir.getAbsolutePath());
-                appendlnSection(whatIDidReport, String.join(" ", cmd));
+                var runCommand = asyncProfiler.map(control -> control.createJavaProfiledRunCommand(mvnCmds.mvnCmds[1]))
+                        .orElseGet(() -> getRunCommand(mvnCmds.mvnCmds[1]));
+
+                appendlnSection(whatIDidReport, String.join(" ", runCommand));
                 if (coldStart) {
                     LOGGER.info("Using COLD start");
                     dropCaches();
                 }
-                pA = runCommand(cmd, appDir, runLogA);
+                pA = runCommand(runCommand, appDir, runLogA);
 
                 // Test web pages
                 long timeToFirstOKRequest = WebpageTester.testWeb(app.urlContent.urlContent[0][0], 10, app.urlContent.urlContent[0][1], true);
+
+                final Process currentProcess = pA;
+                final int runId = i;
+                asyncProfiler.ifPresent(control ->  control.stopProfing(appDir, mvnCmds, currentProcess, runId));
+
                 LOGGER.info("Testing web page content...");
                 for (String[] urlContent : app.urlContent.urlContent) {
                     WebpageTester.testWeb(urlContent[0], 5, urlContent[1], false);
@@ -182,7 +193,7 @@ public class StartStopTest {
             if (pA != null) {
                 processStopper(pA, true);
             }
-            // Archive logs no matter what
+            asyncProfiler.ifPresent(profiler -> profiler.archiveProfilingResults(cn, mn, appDir));
             archiveLog(cn, mn, buildLogA);
             archiveLog(cn, mn, runLogA);
             writeReport(cn, mn, whatIDidReport.toString());
