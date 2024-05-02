@@ -136,7 +136,7 @@ public class CodeQuarkusSiteTest {
         String quarkusPlatformVersion = getQuarkusVersion();
         Assumptions.assumeTrue(quarkusPlatformVersion.contains("redhat"));
 
-        Page page = loadPage(webPageUrl, 60);
+        Page page = loadPage(webPageUrl + "?S=com.redhat.quarkus.platform%3A3.8", 60);
         LOGGER.info("Trying to find element: " + elementQuarkusPlatformVersionByXpath);
         String quarkusPlatformVersionFromWeb = page.locator(elementQuarkusPlatformVersionByXpath).elementHandle().getAttribute("title");
 
