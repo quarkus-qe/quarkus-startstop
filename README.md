@@ -263,25 +263,14 @@ One of the best way to gather performance insights is to generate CPU and alloca
 Very good starting point is https://github.com/quarkusio/quarkus/blob/main/TROUBLESHOOTING.md document.
 Please follow the instructions from `Installing Async Profiler` section of the guide.
 
-On TS side perform modification similar to this change:
-```diff
-diff --git a/testsuite/src/it/java/io/quarkus/ts/startstop/utils/MvnCmds.java b/testsuite/src/it/java/io/quarkus/ts/startstop/utils/MvnCmds.java
-index 0c02537..6278605 100755
---- a/testsuite/src/it/java/io/quarkus/ts/startstop/utils/MvnCmds.java
-+++ b/testsuite/src/it/java/io/quarkus/ts/startstop/utils/MvnCmds.java
-@@ -33,7 +33,9 @@ import static io.quarkus.ts.startstop.utils.Commands.getQuarkusVersion;
- public enum MvnCmds {
-     JVM(new String[][]{
-             new String[]{"mvn", "clean", "compile", "quarkus:build", "-Dquarkus.package.output-name=quarkus"},
--            new String[]{Commands.JAVA_BIN, "-jar", "target/quarkus-runner.jar"}
-+            new String[]{Commands.JAVA_BIN,
-+                    "-agentpath:/var/lib/jenkins/async-profiler-1.8.1-linux-x64/build/libasyncProfiler.so=start,event=cpu,file=/tmp/startup-cpu-profile.svg,interval=1000000,width=1600,simple",
-+                    "-jar", "target/quarkus-runner.jar"}
-     }),
-     DEV(new String[][]{
-             new String[]{"mvn", "clean", "quarkus:dev", "-Dmaven.repo.local=" + getLocalMavenRepoDir()}
-```
-Similar change is needed for `alloc` instead of `cpu` insights.
+async-profiler can be enabled by passing 2 parameters (as both env variables or `-D` properties to the `mvn` command) to the test suite:
+- `ASYNC_PROFILER_DIR`: path to the async-profiler directory which should contain the `lib` and `bin` folders with the agent library and the profiler executable
+- `ASYNC_PROFILER_AGENT_CONFIG`: this is the command-line configuration passed to the async-profiler agent. It is optional and if not configured the default configuration is `start,event=cpu,interval=1000000`   
+
+The profiler is attached on JVM start-up and stopped right after the first successfull first request, while the profiling data are
+archived together with the measurements and report files.
+
+It supports just Linux and the async-profiler version past (included) 3.0 (see https://github.com/async-profiler/async-profiler/releases/tag/v3.0).
 
 In case of StartStopTest, you should consider reducing the number of iterations performed for start command in [StartStopTest.java#L121](https://github.com/quarkus-qe/quarkus-startstop/blob/main/testsuite/src/it/java/io/quarkus/ts/startstop/StartStopTest.java#L121)
 
