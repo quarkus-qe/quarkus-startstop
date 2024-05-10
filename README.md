@@ -267,12 +267,13 @@ async-profiler can be enabled by passing 2 parameters (as both env variables or 
 - `ASYNC_PROFILER_DIR`: path to the async-profiler directory which should contain the `lib` and `bin` folders with the agent library and the profiler executable
 - `ASYNC_PROFILER_AGENT_CONFIG`: this is the command-line configuration passed to the async-profiler agent. It is optional and if not configured the default configuration is `start,event=cpu,interval=1000000`   
 
-The profiler is attached on JVM start-up and stopped right after the first successfull first request, while the profiling data are
+The profiler is attached on JVM start-up and stopped right after the first successful request, while the profiling data are
 archived together with the measurements and report files.
 
-It supports just Linux and the async-profiler version past (included) 3.0 (see https://github.com/async-profiler/async-profiler/releases/tag/v3.0).
+The current implementation supports Linux and the async-profiler version past (included) 3.0 (see https://github.com/async-profiler/async-profiler/releases/tag/v3.0).
+The need for async-profiler is assumed just for StartStopTest at this stage, see [StartStopTest](#startstoptest) section for execution customization.
 
-In case of StartStopTest, you should consider reducing the number of iterations performed for start command in [StartStopTest.java#L121](https://github.com/quarkus-qe/quarkus-startstop/blob/main/testsuite/src/it/java/io/quarkus/ts/startstop/StartStopTest.java#L121)
+Ensure the system is prepared for async-profiler executions preventing unexpected warnings, details are mentioned in the above linked `TROUBLESHOOTING.md document.
 
 ## Windows notes
 
