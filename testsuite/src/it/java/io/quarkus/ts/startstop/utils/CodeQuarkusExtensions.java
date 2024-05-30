@@ -50,7 +50,7 @@ public enum CodeQuarkusExtensions {
     QUARKUS_SMALLRYE_OPENAPI("quarkus-smallrye-openapi", "SmallRye OpenAPI", "ARC", true),
     QUARKUS_UNDERTOW("quarkus-undertow", "Undertow Servlet", "LMC", true),
     QUARKUS_SMALLRYE_STORK("quarkus-smallrye-stork", "SmallRye Stork", "ignored", false),
-    QUARKUS_WEBJARS_LOCATOR("quarkus-webjars-locator", "WebJar Locator", "XSP", false),
+    QUARKUS_WEBJARS_LOCATOR("quarkus-web-dependency-locator", "Web Dependency Locator", "ignored", false),
     QUARKUS_HAL("quarkus-hal", "Hypertext Application Language (HAL)", "ignored", false),
     QUARKUS_WEBSOCKETS("quarkus-websockets", "WebSockets", "JPE", true),
     QUARKUS_WEBSOCKETS_CLIENT("quarkus-websockets-client", "WebSockets Client", "YcS", true),
