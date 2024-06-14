@@ -5,12 +5,12 @@ package io.quarkus.ts.startstop.utils;
  */
 public enum URLContent {
     JAKARTA_REST_MINIMAL(new String[][]{
-            new String[]{"http://localhost:8080", "Hello from a simple Jakarta REST app."},
-            new String[]{"http://localhost:8080/data/hello", "Hello World"}
+            new String[]{"http://localhost:8080/data/hello", "Hello World"},
+            new String[]{"http://localhost:8080", "Hello from a simple Jakarta REST app."}
     }),
     FULL_MICROPROFILE(new String[][]{
-            new String[]{"http://localhost:8080", "Hello from a full MicroProfile suite"},
             new String[]{"http://localhost:8080/data/hello", "Hello World"},
+            new String[]{"http://localhost:8080", "Hello from a full MicroProfile suite"},
             new String[]{"http://localhost:8080/data/config/injected", "Config value as Injected by CDI Injected value"},
             new String[]{"http://localhost:8080/data/config/lookup", "Config value from ConfigProvider lookup value"},
             new String[]{"http://localhost:8080/data/resilience", "Fallback answer due to timeout"},
