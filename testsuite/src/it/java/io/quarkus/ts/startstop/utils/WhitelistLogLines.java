@@ -61,7 +61,7 @@ public enum WhitelistLogLines {
             Pattern.compile(".*maven-error-diagnostics.*"),
             Pattern.compile(".*errorprone.*"),
             Pattern.compile(".*error_prone_annotations.*"),
-            Pattern.compile(".*No WebJars or mvnpm jars were found in the project.*"),
+            Pattern.compile(".*No WebJars were found in the project.*"),
             // kubernetes-client tries to configure client from service account
             Pattern.compile(".*Error reading service account token from.*"),
             // We have disabled the Quarkus Registry Client (-DquarkusRegistryClient=false)
