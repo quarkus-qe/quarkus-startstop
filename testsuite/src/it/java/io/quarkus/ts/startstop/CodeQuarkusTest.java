@@ -265,7 +265,7 @@ public class CodeQuarkusTest {
             unzip(zipFile, GEN_BASE_DIR);
 
             String pom = Files.readString(Paths.get(GEN_BASE_DIR + File.separator + "code-with-quarkus" + File.separator + "pom.xml"));
-            assertTrue(pom.contains("<maven.compiler.release>21"), "Downloaded app doesn't have Java 21 as a default in pom.xml");
+            assertTrue(pom.contains("<maven.compiler.release>17"), "Downloaded app doesn't have Java 17 as a default in pom.xml");
 
         } finally {
             writeReport(cn, mn, whatIDidReport.toString());

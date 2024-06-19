@@ -32,7 +32,7 @@ public enum URLContent {
             new String[]{"http://localhost:8080/", "Congratulation! You are on landing page."},
             new String[]{"http://localhost:8080/hello", "Bye RESTEasy"},
             new String[]{"http://localhost:8080/hello-added", "Hello added"},
-            new String[]{"http://localhost:8080/hello", "Bye from Quarkus REST"},
+            new String[]{"http://localhost:8080/hello", "Bye from RESTEasy Reactive"},
     });
 
     public final String[][] urlContent;
