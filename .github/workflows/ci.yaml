@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ 17, 21 ]
+        java: [ 17 ]
     steps:
       - uses: actions/checkout@v3
       - name: Install JDK {{ matrix.java }}
@@ -52,39 +52,39 @@ jobs:
           name: ci-artifacts
           path: artifacts-jvm${{ matrix.java }}.zip
   linux-build-released-native:
-      name: Linux - Native build
-      runs-on: ubuntu-latest
-      strategy:
-        matrix:
-          java: [ 17 ]
-      steps:
-        - uses: actions/checkout@v3
-        - name: Install JDK {{ matrix.java }}
-          uses: actions/setup-java@v3
-          with:
-            distribution: 'temurin'
-            java-version: ${{ matrix.java }}
-            check-latest: true
-            cache: 'maven'
-        - name: Build with Maven
-          run: |
-            mvn -V -B -s .github/mvn-settings.xml clean verify -DincludeTags="native" -DexcludeTags=product,codequarkus -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=docker -Dgh.actions
-        - name: Zip Artifacts
-          if: failure()
-          run: |
-            zip -r artifacts-native${{ matrix.java }}.zip . -i '*-reports/*' '*/archived-logs/*'
-        - name: Archive artifacts
-          uses: actions/upload-artifact@v3
-          if: failure()
-          with:
-            name: ci-artifacts
-            path: artifacts-native${{ matrix.java }}.zip
+    name: Linux - Native build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ 17 ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install JDK {{ matrix.java }}
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: ${{ matrix.java }}
+          check-latest: true
+          cache: 'maven'
+      - name: Build with Maven
+        run: |
+          mvn -V -B -s .github/mvn-settings.xml clean verify -DincludeTags="native" -DexcludeTags=product,codequarkus -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=docker -Dgh.actions
+      - name: Zip Artifacts
+        if: failure()
+        run: |
+          zip -r artifacts-native${{ matrix.java }}.zip . -i '*-reports/*' '*/archived-logs/*'
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: ci-artifacts
+          path: artifacts-native${{ matrix.java }}.zip
   linux-build-code-start:
     name: Linux - Code Quarkus
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ 17, 21 ]
+        java: [ 17 ]
     steps:
       - uses: actions/checkout@v3
       - name: Install JDK {{ matrix.java }}
@@ -112,7 +112,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        java: [ 17, 21 ]
+        java: [ 17 ]
     steps:
       - uses: actions/checkout@v3
       - name: Install JDK {{ matrix.java }}
@@ -144,8 +144,8 @@ jobs:
     strategy:
       matrix:
         java: [ 17 ]
-        graalvm-version: [ "mandrel-latest" ]
-        graalvm-java-version: [ "21" ]
+        graalvm-version: [ "mandrel-23.0.1.2-Final" ]
+        graalvm-java-version: [ "17" ]
     steps:
       - uses: actions/checkout@v3
       - name: Install JDK {{ matrix.java }}

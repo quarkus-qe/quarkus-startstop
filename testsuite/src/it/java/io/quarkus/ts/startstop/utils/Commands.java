@@ -321,7 +321,7 @@ public class Commands {
      * @throws IOException
      */
     public static String download(Collection<CodeQuarkusExtensions> extensions, String destinationZipFile) throws IOException {
-        String downloadURL = getCodeQuarkusURL() + "/api/download?" +
+        String downloadURL = getCodeQuarkusURL() + "/api/download?S=io.quarkus.platform%3A3.2&" +
                 extensions.stream().map(x -> "e=" + x.id).collect(Collectors.joining("&"));
         return download(downloadURL, destinationZipFile);
     }
@@ -342,7 +342,7 @@ public class Commands {
      * @throws IOException
      */
     public static String download(Collection<CodeQuarkusExtensions> extensions, String destinationZipFile, int javaVersion) throws IOException {
-        String downloadURL = getCodeQuarkusURL() + "/api/download?" +
+        String downloadURL = getCodeQuarkusURL() + "/api/download?S=io.quarkus.platform%3A3.2&" +
                 extensions.stream().map(x -> "e=" + x.id).collect(Collectors.joining("&")) +
                 "&j=" + javaVersion;
         return download(downloadURL, destinationZipFile);
