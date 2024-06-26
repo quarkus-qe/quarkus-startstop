@@ -40,9 +40,8 @@ public enum WhitelistLogLines {
             // netty 4 which doesn't have the relevant native config in the lib. See https://github.com/netty/netty/pull/13596
             Pattern.compile(".*Warning: Please re-evaluate whether any experimental option is required, and either remove or unlock it\\..*"),
             Pattern.compile(".*Warning: The option '-H:ReflectionConfigurationResources=META-INF/native-image/io\\.netty/netty-transport/reflection-config\\.json' is experimental and must be enabled via.*"),
-            // native options added explicitly by FULL_MICROPROFILE application.properies
-            Pattern.compile(".*Warning: The option '-H:Log=registerResource:' is experimental and must be enabled via.*"),
-            Pattern.compile(".*Warning: The option '-H:IncludeResources=privateKey\\.pem' is experimental and must be enabled via.*"),
+            // TODO: remove next line when https://github.com/quarkusio/quarkus/issues/41351 gets fixed
+            Pattern.compile(".*Error Occurred After Shutdown.*java.lang.NullPointerException.*Cannot invoke.*io.smallrye.context.SmallRyeContextManager.defaultThreadContext.*"),
     }),
     GENERATED_SKELETON(new Pattern[]{
             // Harmless warning

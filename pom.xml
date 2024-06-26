@@ -12,6 +12,7 @@
         <quarkus-ide-config.version>3.11.0</quarkus-ide-config.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.release>17</maven.compiler.release>
         <maven.compiler.version>3.10.1</maven.compiler.version>
         <maven.surefire.version>2.22.2</maven.surefire.version>
         <maven.failsafe.version>2.22.2</maven.failsafe.version>
@@ -23,6 +24,7 @@
         <jboss-logging.version>3.5.0.Final</jboss-logging.version>
         <log4j.version>2.19.0</log4j.version>
         <playwright.version>1.30.0</playwright.version>
+        <vertx-grpc-server.version>4.5.7</vertx-grpc-server.version>
         <formatter-maven-plugin.version>2.22.0</formatter-maven-plugin.version>
         <impsort-maven-plugin.version>1.8.0</impsort-maven-plugin.version>
         <xml-format-maven-plugin>3.2.2</xml-format-maven-plugin>
