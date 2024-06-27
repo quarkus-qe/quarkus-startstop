@@ -2,14 +2,10 @@ package com.example.quarkus.metric;
 
 import java.util.Random;
 
-import org.eclipse.microprofile.metrics.Counter;
-import org.eclipse.microprofile.metrics.MetricUnits;
-import org.eclipse.microprofile.metrics.annotation.Gauge;
-import org.eclipse.microprofile.metrics.annotation.Metric;
-import org.eclipse.microprofile.metrics.annotation.Timed;
-
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 
@@ -17,15 +13,15 @@ import jakarta.ws.rs.Path;
 @ApplicationScoped //Required for @Gauge
 public class MetricController {
 
-    @Inject
-    @Metric(name = "endpoint_counter")
+    private final MeterRegistry registry;
 
-    // https://quarkus.io/guides/cdi-reference#private-members
-    // - private Counter counter;
-    Counter counter;
+    public MetricController(MeterRegistry registry) {
+        this.registry = registry;
+        registry.gauge("counter_gauge", this, MetricController::getCustomerCount);
+    }
 
     @Path("timed")
-    @Timed(name = "timed-request")
+    @Timed(value = "timed-request")
     @GET
     public String timedRequest() {
         // Demo, not production style
@@ -43,12 +39,15 @@ public class MetricController {
     @Path("increment")
     @GET
     public long doIncrement() {
-        counter.inc();
-        return counter.getCount();
+        getEndpointCounter().increment();
+        return (long) getEndpointCounter().count();
     }
 
-    @Gauge(name = "counter_gauge", unit = MetricUnits.NONE)
     long getCustomerCount() {
-        return counter.getCount();
+        return (long) getEndpointCounter().count();
+    }
+
+    private Counter getEndpointCounter() {
+        return registry.counter("endpoint_counter");
     }
 }
