@@ -21,7 +21,7 @@ public class OpenTelemetryCollector implements UnitTestResource {
     /**
      * If you change this port, you must also change respective 'quarkus.otel.exporter.otlp.traces.endpoint' value.
      */
-    private static final int OTEL_COLLECTOR_PORT = 4317;
+    private static final int OTEL_COLLECTOR_PORT = 4313;
     private static final String GET_HELLO_TRACES_PATH = "/recorded-traces/get-hello";
     static final String GET_HELLO_TRACES_URL = "http://localhost:" + OTEL_COLLECTOR_PORT + GET_HELLO_TRACES_PATH;
     static final String GET_HELLO_INVOCATION_TRACED = HELLO_ENDPOINT_OPERATION_NAME + " invocation traced";

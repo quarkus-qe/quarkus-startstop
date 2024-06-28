@@ -42,6 +42,7 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Warning: The option '-H:ReflectionConfigurationResources=META-INF/native-image/io\\.netty/netty-transport/reflection-config\\.json' is experimental and must be enabled via.*"),
             // TODO: remove next line when https://github.com/quarkusio/quarkus/issues/41351 gets fixed
             Pattern.compile(".*Error Occurred After Shutdown.*java.lang.NullPointerException.*Cannot invoke.*io.smallrye.context.SmallRyeContextManager.defaultThreadContext.*"),
+            Pattern.compile(".*No BatchSpanProcessor delegate specified, no action taken.*"),
     }),
     GENERATED_SKELETON(new Pattern[]{
             // Harmless warning
