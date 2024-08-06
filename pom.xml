@@ -28,6 +28,7 @@
         <formatter-maven-plugin.version>2.22.0</formatter-maven-plugin.version>
         <impsort-maven-plugin.version>1.8.0</impsort-maven-plugin.version>
         <xml-format-maven-plugin>3.2.2</xml-format-maven-plugin>
+        <opentelemetry-proto.version>1.3.2-alpha</opentelemetry-proto.version>
         <!-- Test to be executed by default (should be all of them) -->
         <includeTags>generator,startstop,bomtests,codequarkus,special-chars</includeTags>
         <!-- Default values for format -->
@@ -58,6 +59,12 @@
             <groupId>com.microsoft.playwright</groupId>
             <artifactId>playwright</artifactId>
             <version>${playwright.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry.proto</groupId>
+            <artifactId>opentelemetry-proto</artifactId>
+            <version>${opentelemetry-proto.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
