@@ -7,27 +7,27 @@
     <packaging>pom</packaging>
     <name>Quarkus StartStop TS: Parent</name>
     <properties>
-        <quarkus.version>3.11.0</quarkus.version>
+        <quarkus.version>3.13.0</quarkus.version>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <quarkus-ide-config.version>3.11.0</quarkus-ide-config.version>
+        <quarkus-ide-config.version>3.13.0</quarkus-ide-config.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.release>17</maven.compiler.release>
-        <maven.compiler.version>3.10.1</maven.compiler.version>
-        <maven.surefire.version>2.22.2</maven.surefire.version>
-        <maven.failsafe.version>2.22.2</maven.failsafe.version>
-        <maven.build.helper.version>3.3.0</maven.build.helper.version>
+        <maven.compiler.version>3.13.0</maven.compiler.version>
+        <maven.surefire.version>3.3.1</maven.surefire.version>
+        <maven.failsafe.version>3.3.1</maven.failsafe.version>
+        <maven.build.helper.version>3.6.0</maven.build.helper.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <junit.jupiter.version>5.9.2</junit.jupiter.version>
-        <commons.io.version>2.11.0</commons.io.version>
-        <commons.lang.version>3.12.0</commons.lang.version>
-        <jboss-logging.version>3.5.0.Final</jboss-logging.version>
-        <log4j.version>2.19.0</log4j.version>
-        <playwright.version>1.30.0</playwright.version>
-        <vertx-grpc-server.version>4.5.7</vertx-grpc-server.version>
-        <formatter-maven-plugin.version>2.22.0</formatter-maven-plugin.version>
-        <impsort-maven-plugin.version>1.8.0</impsort-maven-plugin.version>
-        <xml-format-maven-plugin>3.2.2</xml-format-maven-plugin>
+        <junit.jupiter.version>5.10.3</junit.jupiter.version>
+        <commons.io.version>2.16.1</commons.io.version>
+        <commons.lang.version>3.15.0</commons.lang.version>
+        <jboss-logging.version>3.6.0.Final</jboss-logging.version>
+        <log4j.version>2.23.1</log4j.version>
+        <playwright.version>1.45.0</playwright.version>
+        <vertx-grpc-server.version>4.5.9</vertx-grpc-server.version>
+        <formatter-maven-plugin.version>2.24.1</formatter-maven-plugin.version>
+        <impsort-maven-plugin.version>1.9.0</impsort-maven-plugin.version>
+        <xml-format-maven-plugin>3.3.1</xml-format-maven-plugin>
         <opentelemetry-proto.version>1.3.2-alpha</opentelemetry-proto.version>
         <!-- Test to be executed by default (should be all of them) -->
         <includeTags>generator,startstop,bomtests,codequarkus,special-chars</includeTags>

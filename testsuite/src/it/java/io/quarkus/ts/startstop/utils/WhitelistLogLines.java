@@ -40,9 +40,6 @@ public enum WhitelistLogLines {
             // netty 4 which doesn't have the relevant native config in the lib. See https://github.com/netty/netty/pull/13596
             Pattern.compile(".*Warning: Please re-evaluate whether any experimental option is required, and either remove or unlock it\\..*"),
             Pattern.compile(".*Warning: The option '-H:ReflectionConfigurationResources=META-INF/native-image/io\\.netty/netty-transport/reflection-config\\.json' is experimental and must be enabled via.*"),
-            // TODO: remove next two lines when update to quarkus 3.13 or newer and fix from https://github.com/quarkusio/quarkus/issues/41351 is applied
-            Pattern.compile(".*Error Occurred After Shutdown.*java.lang.NullPointerException.*Cannot invoke.*io.smallrye.context.SmallRyeContextManager.defaultThreadContext.*"),
-            Pattern.compile(".*vert.x-eventloop-thread-2.*Error Occurred After Shutdown.*java.lang.NullPointerException"),
     }),
     GENERATED_SKELETON(new Pattern[]{
             // Harmless warning
@@ -105,8 +102,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Annotation processing is enabled because one or more processors were found.*"),
             // https://github.com/quarkusio/quarkus/issues/38711
             Pattern.compile(".*SplitPackageProcessor.*Following packages were detected in multiple archives.*"),
-            // TODO: remove next line when 3.7.3 is released, see https://github.com/quarkusio/quarkus/pull/38710
-            Pattern.compile(".*This instance of GraphiQLHandler has been created with a deprecated method.*")
+            // TODO: https://github.com/quarkusio/quarkus/issues/42237
+            Pattern.compile(".*Failed to index org.springframework.aot.hint.annotation.Reflective.*")
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
@@ -159,10 +156,6 @@ public enum WhitelistLogLines {
                         WARNING_MISSING_OBJCOPY_RESULT_NATIVE,
                         // Randomly prints some SLF4J traces. Reported by https://github.com/quarkusio/quarkus/issues/16896
                         Pattern.compile(".*SLF4J:.*"),
-                        // TODO https://github.com/quarkusio/quarkus/issues/36053
-                        Pattern.compile(".*Unknown module: org.graalvm.nativeimage.*"),
-                        // TODO https://github.com/quarkusio/quarkus/issues/36813
-                        Pattern.compile(".*Unrecognized configuration file .*application.yml found.*"),
                         WARNING_SYS_MODULE_PATH
                 };
             case LINUX:
@@ -170,8 +163,6 @@ public enum WhitelistLogLines {
                         XML_APIS_RELOCATED,
                         COMMON_SLF4J_API_DEPENDENCY_TREE,
                         COMMON_SLF4J_JBOSS_LOGMANAGER_DEPENDENCY_TREE,
-                        // TODO https://github.com/quarkusio/quarkus/issues/36053
-                        Pattern.compile(".*Unknown module: org.graalvm.nativeimage.*"),
                         WARNING_SYS_MODULE_PATH
                 };
         }
