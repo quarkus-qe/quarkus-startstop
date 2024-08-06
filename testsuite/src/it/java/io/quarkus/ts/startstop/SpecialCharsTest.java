@@ -60,8 +60,8 @@ public class SpecialCharsTest {
         File appDir = new File(appDestDir, app.dir);
         File appPomXml = new File(appDir, "pom.xml");
         File logsDir = new File(appDir, "special-chars-logs");
-        String cn = testInfo.getTestClass().get().getCanonicalName();
-        String mn = testInfo.getTestMethod().get().getName();
+        String canonicalName = testInfo.getTestClass().get().getCanonicalName();
+        String methodName = testInfo.getTestMethod().get().getName();
         LOGGER.info("Testing app: " + app + ", mode: " + mvnCmds.toString() + ", on path " + appDestDir);
         try {
             // Clean target directory
@@ -75,6 +75,7 @@ public class SpecialCharsTest {
             }
 
             // Copy to path with special characters
+            LOGGER.info("Copying " + appBaseDir + "to" + appDestDir);
             FileUtils.copyDirectoryToDirectory(appBaseDir, appDestDir);
 
             // Replace relative path to parent project
@@ -99,7 +100,7 @@ public class SpecialCharsTest {
                 baseBuildCmd.add("-Dquarkus.platform.group-id=" + getQuarkusGroupId());
                 cmd = getBuildCommand(baseBuildCmd.toArray(new String[0]));
 
-                appendln(whatIDidReport, "# " + cn + ", " + mn);
+                appendln(whatIDidReport, "# " + canonicalName + ", " + methodName);
                 appendln(whatIDidReport, (new Date()).toString());
                 appendln(whatIDidReport, appDir.getAbsolutePath());
                 appendlnSection(whatIDidReport, String.join(" ", cmd));
@@ -111,11 +112,11 @@ public class SpecialCharsTest {
                 buildService.awaitTermination(30, TimeUnit.MINUTES);
 
                 assertTrue(buildLogA.exists());
-                checkLog(cn, mn, app, mvnCmds, buildLogA);
+                checkLog(canonicalName, methodName, app, mvnCmds, buildLogA);
             }
 
             // Run
-            runLogA = new File(logsDir + File.separator + subdir +  "-" + mvnCmds.name().toLowerCase() + "-run.log");
+            runLogA = new File(logsDir + File.separator + subdir + "-" + mvnCmds.name().toLowerCase() + "-run.log");
 
             if (mvnCmds == MvnCmds.DEV) {
                 List<String> baseBuildCmd = new ArrayList<>();
@@ -148,12 +149,12 @@ public class SpecialCharsTest {
 
             // Archive logs
             if (buildLogA != null) {
-                archiveLog(cn, mn, buildLogA);
+                archiveLog(canonicalName, methodName, buildLogA);
             }
             if (runLogA != null) {
-                archiveLog(cn, mn, runLogA);
+                archiveLog(canonicalName, methodName, runLogA);
             }
-            writeReport(cn, mn, whatIDidReport.toString());
+            writeReport(canonicalName, methodName, whatIDidReport.toString());
 
             removeDirWithSpecialCharacters(appDestDir);
         }

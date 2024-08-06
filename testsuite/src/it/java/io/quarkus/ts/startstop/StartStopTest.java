@@ -82,9 +82,9 @@ public class StartStopTest {
         StringBuilder whatIDidReport = new StringBuilder();
         File appDir = new File(BASE_DIR + File.separator + app.dir);
         Optional<AsyncProfiler> asyncProfiler = mvnCmds == MvnCmds.JVM ? AsyncProfiler.create() : Optional.empty();
-        String cn = testInfo.getTestClass().get().getCanonicalName();
-        String mn = testInfo.getTestMethod().get().getName();
-        try(var testResource = testResourceSupplier.get()) {
+        String canonicalName = testInfo.getTestClass().get().getCanonicalName();
+        String methodName = testInfo.getTestMethod().get().getName();
+        try (var testResource = testResourceSupplier.get()) {
             // Cleanup
             asyncProfiler.ifPresent(ignore -> AsyncProfiler.cleanProfilingResults(app));
             cleanTarget(app);
@@ -99,9 +99,10 @@ public class StartStopTest {
             baseBuildCmd.add("-Dquarkus.version=" + getQuarkusVersion());
             baseBuildCmd.add("-Dquarkus.platform.group-id=" + getQuarkusGroupId());
             final List<String> buildCommand = getBuildCommand(baseBuildCmd.toArray(new String[0]));
+            LOGGER.info("Running " + baseBuildCmd + " in the " + appDir.getAbsolutePath());
 
             buildService.submit(new Commands.ProcessRunner(appDir, buildLogA, buildCommand, 20));
-            appendln(whatIDidReport, "# " + cn + ", " + mn);
+            appendln(whatIDidReport, "# " + canonicalName + ", " + methodName);
             appendln(whatIDidReport, (new Date()).toString());
             appendln(whatIDidReport, appDir.getAbsolutePath());
             appendlnSection(whatIDidReport, String.join(" ", buildCommand));
@@ -111,7 +112,7 @@ public class StartStopTest {
             long buildEnds = System.currentTimeMillis();
 
             assertTrue(buildLogA.exists());
-            checkLog(cn, mn, app, mvnCmds, buildLogA);
+            checkLog(canonicalName, methodName, app, mvnCmds, buildLogA);
 
             if (mvnCmds == MvnCmds.NATIVE) {
                 String nativeBinaryLocation = mvnCmds.mvnCmds[1][0];
@@ -147,7 +148,7 @@ public class StartStopTest {
 
                 final Process currentProcess = pA;
                 final int runId = i;
-                asyncProfiler.ifPresent(control ->  control.stopProfing(appDir, mvnCmds, currentProcess, runId));
+                asyncProfiler.ifPresent(control -> control.stopProfing(appDir, mvnCmds, currentProcess, runId));
 
                 LOGGER.info("Testing web page content...");
                 for (String[] urlContent : app.urlContent.urlContent) {
@@ -166,12 +167,12 @@ public class StartStopTest {
                 // Release ports
                 assertTrue(waitForTcpClosed("localhost", parsePort(app.urlContent.urlContent[0][0]), 60),
                         "Main port is still open");
-                checkLog(cn, mn, app, mvnCmds, runLogA);
-                checkListeningHost(cn, mn, mvnCmds, runLogA);
+                checkLog(canonicalName, methodName, app, mvnCmds, runLogA);
+                checkListeningHost(canonicalName, methodName, mvnCmds, runLogA);
 
                 float[] startedStopped = parseStartStopTimestamps(runLogA);
 
-                Path measurementsLog = Paths.get(getLogsDir(cn, mn).toString(), "measurements.csv");
+                Path measurementsLog = Paths.get(getLogsDir(canonicalName, methodName).toString(), "measurements.csv");
                 LogBuilder.Log log = new LogBuilder()
                         .app(app)
                         .mode(mvnCmds)
@@ -191,7 +192,7 @@ public class StartStopTest {
 
                 testResource.reset();
             }
-
+            LOGGER.info("Calculating the stats");
             long rssKbAvgWithoutMinMax = getAvgWithoutMinMax(rssKbList);
             long timeToFirstOKRequestAvgWithoutMinMax = getAvgWithoutMinMax(timeToFirstOKRequestList);
             LOGGER.info("AVG timeToFirstOKRequest without min and max values: " + timeToFirstOKRequestAvgWithoutMinMax);
@@ -202,11 +203,11 @@ public class StartStopTest {
             if (pA != null) {
                 processStopper(pA, true);
             }
-            asyncProfiler.ifPresent(profiler -> profiler.archiveProfilingResults(cn, mn, appDir));
-            archiveLog(cn, mn, buildLogA);
-            archiveLog(cn, mn, runLogA);
-            writeReport(cn, mn, whatIDidReport.toString());
-            if ( !disableCleanup() ){
+            asyncProfiler.ifPresent(profiler -> profiler.archiveProfilingResults(canonicalName, methodName, appDir));
+            archiveLog(canonicalName, methodName, buildLogA);
+            archiveLog(canonicalName, methodName, runLogA);
+            writeReport(canonicalName, methodName, whatIDidReport.toString());
+            if (!disableCleanup()) {
                 cleanTarget(app);
             }
         }
