@@ -86,6 +86,7 @@ public class ArtifactGeneratorBOMTest {
             Files.createDirectories(Paths.get(repoDir));
 
             //Generator
+            LOGGER.info("Running inside " + appDir.getAbsolutePath());
             LOGGER.info(mn + ": Generator command " + String.join(" ", generatorCmd));
             generateLog = new File(logsDir + File.separator + "bom-artifact-generator.log");
             ExecutorService buildService = Executors.newFixedThreadPool(1);

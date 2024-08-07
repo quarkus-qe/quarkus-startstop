@@ -213,12 +213,16 @@ public class Logs {
             if (files != null) {
                 for (File file : files) {
                     if (!file.isDirectory()) {
-                        Files.copy(file.toPath(), Paths.get(destDir.toString(), file.getName()), REPLACE_EXISTING);
+                        Path target = Paths.get(destDir.toString(), file.getName());
+                        LOGGER.info("Saving log to " + target);
+                        Files.copy(file.toPath(), target, REPLACE_EXISTING);
                     }
                 }
             }
         } else {
-            Files.copy(log.toPath(), Paths.get(destDir.toString(), filename), REPLACE_EXISTING);
+            Path target = Paths.get(destDir.toString(), filename);
+            LOGGER.info("Saving log to " + target);
+            Files.copy(log.toPath(), target, REPLACE_EXISTING);
         }
     }
 
@@ -228,6 +232,7 @@ public class Logs {
         Files.write(Paths.get(destDir.toString(), "report.md"), text.getBytes(UTF_8), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         Path agregateReport = Paths.get(getLogsDir().toString(), "aggregated-report.md");
         if (Files.notExists(agregateReport)) {
+            LOGGER.info("Saving report to " + agregateReport);
             Files.write(agregateReport, ("# Aggregated Report\n\n").getBytes(UTF_8), StandardOpenOption.CREATE);
         }
         Files.write(agregateReport, text.getBytes(UTF_8), StandardOpenOption.APPEND);

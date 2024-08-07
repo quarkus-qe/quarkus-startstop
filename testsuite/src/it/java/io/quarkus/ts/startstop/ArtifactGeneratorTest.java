@@ -268,7 +268,7 @@ public class ArtifactGeneratorTest {
         } else {
             LOGGER.info(mn + ": Testing setup: " + String.join(" ", generatorCmd));
         }
-
+        LOGGER.info("Running inside " + appDir.getAbsolutePath());
         try {
             // Cleanup
             cleanDirOrFile(appBaseDir.getAbsolutePath());

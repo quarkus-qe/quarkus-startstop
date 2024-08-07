@@ -418,7 +418,7 @@ public class Commands {
         return false;
     }
 
-    // TODO we should get rid of it once Quarkus progresses with walid config per extension in generated examples
+    // TODO we should get rid of it once Quarkus progresses with valid config per extension in generated examples
     public static void confAppPropsForSkeleton(String appDir) throws IOException {
         // Config, see app-generated-skeleton/README.md
         final String appRelativePath =
