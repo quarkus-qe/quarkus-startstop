@@ -77,8 +77,8 @@ public class LogBuilder {
             return this;
         }
 
-        if (stoppedInMs <= 0) {
-            throw new IllegalArgumentException("stoppedInMs must be a positive long, was: " + stoppedInMs);
+        if (stoppedInMs < 0) {
+            throw new IllegalArgumentException("stoppedInMs must be a positive long or 0, was: " + stoppedInMs);
         }
         this.stoppedInMs = stoppedInMs;
         return this;
