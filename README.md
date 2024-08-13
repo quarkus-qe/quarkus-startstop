@@ -69,7 +69,7 @@ cat  testsuite/target/archived-logs/io.quarkus.ts.startstop.StartStopTest/measur
 e.g. on Windows:
 ```
 λ type testsuite\target\archived-logs\io.quarkus.ts.startstop.StartStopTest\measurements.csv
-App,Mode,buildTimeMs,timeToFirstOKRequestMs,startedInMs,stoppedInMs,RSSKb,FDs
+App,Mode,buildTimeMs,timeToFirstOKRequestMs,startedInMs,stoppedInMs,RSSkB,FDs
 FULL_MICROPROFILE,JVM,9391,2162,1480,54,3820,78
 JAKARTA_REST_MINIMAL,JVM,6594,1645,949,34,3824,78
 ```
@@ -77,7 +77,7 @@ JAKARTA_REST_MINIMAL,JVM,6594,1645,949,34,3824,78
 and on Linux:
 ```
 $ cat ./testsuite/target/archived-logs/io.quarkus.ts.startstop.StartStopTest/measurements.csv
-App,Mode,buildTimeMs,timeToFirstOKRequestMs,startedInMs,stoppedInMs,RSSKb,FDs
+App,Mode,buildTimeMs,timeToFirstOKRequestMs,startedInMs,stoppedInMs,RSSkB,FDs
 FULL_MICROPROFILE,JVM,9117,1439,1160,18,179932,307
 FULL_MICROPROFILE,NATIVE,142680,22,17,1,51592,129
 JAKARTA_REST_MINIMAL,JVM,5934,1020,745,22,141996,162
@@ -111,7 +111,7 @@ Measurements example, e.g. Windows and OpenJDK 17 J9:
 
 ```
 λ type testsuite\target\archived-logs\io.quarkus.ts.startstop.ArtifactGeneratorTest\measurements.csv
-App,Mode,buildTimeMs,timeToFirstOKRequestMs,timeToReloadMs,startedInMs,stoppedInMs,RSSKb,FDs
+App,Mode,buildTimeMs,timeToFirstOKRequestMs,timeToReloadMs,startedInMs,stoppedInMs,RSSkB,FDs
 GENERATED_SKELETON,GENERATOR,3766,37064,8859,18249,1172,4240,81
 ```
 
@@ -121,7 +121,7 @@ took 8.859s to do the live reload and get the expected response to a request.
 Linux and OpenJDK 17 HotSpot:
 
 ```
-App,Mode,buildTimeMs,timeToFirstOKRequestMs,timeToReloadMs,startedInMs,stoppedInMs,RSSKb,FDs
+App,Mode,buildTimeMs,timeToFirstOKRequestMs,timeToReloadMs,startedInMs,stoppedInMs,RSSkB,FDs
 GENERATED_SKELETON,GENERATOR,2644,13871,3091,5597,1154,565340,198
 ```
 
@@ -203,7 +203,7 @@ java -jar target/quarkus-runner.jar
 ---
 Measurements:
 
-|App|Mode|buildTimeMs|timeToFirstOKRequestMs|startedInMs|stoppedInMs|RSSKb|FDs|
+|App|Mode|buildTimeMs|timeToFirstOKRequestMs|startedInMs|stoppedInMs|RSSkB|FDs|
 | --- | --- | --- | --- | --- | --- | --- | --- |
 |JAKARTA_REST_MINIMAL|JVM|4787|906|643|18|140504|162|
 
