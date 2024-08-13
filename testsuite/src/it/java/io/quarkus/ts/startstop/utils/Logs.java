@@ -180,7 +180,7 @@ public class Logs {
         if (rssKb != SKIP) {
             long rssThresholdKb = app.thresholdProperties.get(propPrefix + ".RSS.threshold.kB");
             assertTrue(rssKb <= rssThresholdKb,
-                    "Application " + app + " in " + cmd + " consumed " + rssKb + " kB, which is over " +
+                    "Application " + app + " in " + cmd + " consumed " + rssKb + " kB of RSS memory, which is over " +
                             rssThresholdKb + " kB threshold.");
         }
         if (timeToReloadedOKRequest != SKIP) {
