@@ -28,7 +28,7 @@ public class LogBuilder {
     private long startedInMs = -1L;
     private static final String stoppedInMsHeader = "stoppedInMs";
     private long stoppedInMs = -1L;
-    private static final String rssKbHeader = "RSSKb";
+    private static final String rssKbHeader = "RSSkB";
     private long rssKb = -1L;
     private static final String openedFilesHeader = "FDs";
     private long openedFiles = -1L;
@@ -77,8 +77,8 @@ public class LogBuilder {
             return this;
         }
 
-        if (stoppedInMs <= 0) {
-            throw new IllegalArgumentException("stoppedInMs must be a positive long, was: " + stoppedInMs);
+        if (stoppedInMs < 0) {
+            throw new IllegalArgumentException("stoppedInMs must be a positive long or 0, was: " + stoppedInMs);
         }
         this.stoppedInMs = stoppedInMs;
         return this;
