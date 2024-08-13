@@ -195,8 +195,8 @@ public class StartStopTest {
             LOGGER.info("Calculating the stats");
             long rssKbAvgWithoutMinMax = getAvgWithoutMinMax(rssKbList);
             long timeToFirstOKRequestAvgWithoutMinMax = getAvgWithoutMinMax(timeToFirstOKRequestList);
-            LOGGER.info("AVG timeToFirstOKRequest without min and max values: " + timeToFirstOKRequestAvgWithoutMinMax);
-            LOGGER.info("AVG rssKb without min and max values: " + rssKbAvgWithoutMinMax);
+            LOGGER.info("AVG timeToFirstOKRequest (ms) without min and max values: " + timeToFirstOKRequestAvgWithoutMinMax);
+            LOGGER.info("AVG RSS (kB) without min and max values: " + rssKbAvgWithoutMinMax);
             checkThreshold(app, mvnCmds, rssKbAvgWithoutMinMax, timeToFirstOKRequestAvgWithoutMinMax, SKIP);
         } finally {
             // Make sure processes are down even if there was an exception / failure
