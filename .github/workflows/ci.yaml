@@ -12,9 +12,9 @@ jobs:
       matrix:
         java: [ 17 ]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install JDK {{ matrix.java }}
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java }}
@@ -30,9 +30,9 @@ jobs:
       matrix:
         java: [ 17, 21 ]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install JDK {{ matrix.java }}
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java }}
@@ -46,7 +46,7 @@ jobs:
         run: |
           zip -r artifacts-jvm${{ matrix.java }}.zip . -i '*-reports/*' '*/archived-logs/*'
       - name: Archive artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: ci-artifacts
@@ -58,9 +58,9 @@ jobs:
         matrix:
           java: [ 17 ]
       steps:
-        - uses: actions/checkout@v3
+        - uses: actions/checkout@v4
         - name: Install JDK {{ matrix.java }}
-          uses: actions/setup-java@v3
+          uses: actions/setup-java@v4
           with:
             distribution: 'temurin'
             java-version: ${{ matrix.java }}
@@ -74,7 +74,7 @@ jobs:
           run: |
             zip -r artifacts-native${{ matrix.java }}.zip . -i '*-reports/*' '*/archived-logs/*'
         - name: Archive artifacts
-          uses: actions/upload-artifact@v3
+          uses: actions/upload-artifact@v4
           if: failure()
           with:
             name: ci-artifacts
@@ -86,9 +86,9 @@ jobs:
       matrix:
         java: [ 17, 21 ]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install JDK {{ matrix.java }}
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java }}
@@ -102,7 +102,7 @@ jobs:
         run: |
           zip -r artifacts-code-start${{ matrix.java }}.zip . -i '*-reports/*' '*/archived-logs/*'
       - name: Archive artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: ci-artifacts
@@ -114,9 +114,9 @@ jobs:
       matrix:
         java: [ 17, 21 ]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install JDK {{ matrix.java }}
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java }}
@@ -133,7 +133,7 @@ jobs:
           # Disambiguate windows find from cygwin find
           /usr/bin/find . -name '*-reports' -o -name 'archived-logs' -type d | tar -czf artifacts-windows-jvm${{ matrix.java }}.tar -T -
       - name: Archive artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: ci-artifacts
@@ -147,9 +147,9 @@ jobs:
         graalvm-version: [ "mandrel-latest" ]
         graalvm-java-version: [ "21" ]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install JDK {{ matrix.java }}
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java }}
@@ -161,7 +161,6 @@ jobs:
         with:
           version: ${{ matrix.graalvm-version }}
           java-version: ${{ matrix.graalvm-java-version }}
-          components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Configure Pagefile
         # Increased the page-file size due to memory-consumption of native-image command
@@ -178,7 +177,7 @@ jobs:
           # Disambiguate windows find from cygwin find
           /usr/bin/find . -name '*-reports' -o -name 'archived-logs' -type d | tar -czf artifacts-windows-native${{ matrix.java }}.tar -T -
       - name: Archive artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: ci-artifacts
