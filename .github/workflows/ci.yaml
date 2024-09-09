@@ -22,7 +22,7 @@ jobs:
           cache: 'maven'
       - name: Build with Maven
         run: |
-          mvn -V -B -s .github/mvn-settings.xml validate -Pide,validate-format
+          mvn -V -B --no-transfer-progress -s .github/mvn-settings.xml validate -Pide,validate-format
   linux-build-released-jvm:
     name: Linux - JVM build
     runs-on: ubuntu-latest
@@ -40,7 +40,7 @@ jobs:
           cache: 'maven'
       - name: Build with Maven
         run: |
-          mvn -V -B -s .github/mvn-settings.xml clean verify -DexcludeTags=product,native,codequarkus -Dgh.actions
+          mvn -V -B --no-transfer-progress -s .github/mvn-settings.xml clean verify -DexcludeTags=product,native,codequarkus -Dgh.actions
       - name: Zip Artifacts
         if: failure()
         run: |
@@ -68,7 +68,7 @@ jobs:
           cache: 'maven'
       - name: Build with Maven
         run: |
-          mvn -V -B -s .github/mvn-settings.xml clean verify -DincludeTags="native" -DexcludeTags=product,codequarkus -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=docker -Dgh.actions
+          mvn -V -B --no-transfer-progress -s .github/mvn-settings.xml clean verify -DincludeTags="native" -DexcludeTags=product,codequarkus -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=docker -Dgh.actions
       - name: Zip Artifacts
         if: failure()
         run: |
@@ -96,7 +96,7 @@ jobs:
           cache: 'maven'
       - name: Build with Maven
         run: |
-          mvn -V -B -s .github/mvn-settings.xml clean verify -Ptestsuite -DincludeTags=codequarkus -Dgh.actions
+          mvn -V -B --no-transfer-progress -s .github/mvn-settings.xml clean verify -Ptestsuite -DincludeTags=codequarkus -Dgh.actions
       - name: Zip Artifacts
         if: failure()
         run: |
@@ -125,7 +125,7 @@ jobs:
       - name: Build with Maven
         shell: bash
         run: |
-          mvn -V -B -s .github/mvn-settings.xml clean verify -DexcludeTags='product,native,codequarkus' -Dgh.actions
+          mvn -V -B --no-transfer-progress -s .github/mvn-settings.xml clean verify -DexcludeTags='product,native,codequarkus' -Dgh.actions
       - name: Zip Artifacts
         if: failure()
         shell: bash
@@ -168,7 +168,7 @@ jobs:
         uses: al-cheb/configure-pagefile-action@v1.4
       - name: Build with Maven
         run: |
-          mvn -V -B -s .github/mvn-settings.xml clean verify -DincludeTags="native" -DexcludeTags="product,codequarkus" -Dquarkus.native.native-image-xmx=6g -Dgh.actions
+          mvn -V -B --no-transfer-progress -s .github/mvn-settings.xml clean verify -DincludeTags="native" -DexcludeTags="product,codequarkus" -Dquarkus.native.native-image-xmx=6g -Dgh.actions
         shell: cmd
       - name: Zip Artifacts
         if: failure()
