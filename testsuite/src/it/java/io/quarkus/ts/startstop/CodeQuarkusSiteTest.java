@@ -96,7 +96,7 @@ public class CodeQuarkusSiteTest {
 
     @Test
     public void validatePresenceOfJavaVersionSelect(TestInfo testInfo) {
-        Page page = loadPage(webPageUrl, 60);
+        Page page = loadPage(webPageUrl + "?S=com.redhat.quarkus.platform%3A3.2", 60);
         LOGGER.info("Trying to find element: " + elementJavaVersionSelectByXpath);
         Locator javaVersionSelect = page.locator(elementJavaVersionSelectByXpath);
         assertTrue(javaVersionSelect.count() == 1, "Element: " + elementJavaVersionSelectByXpath + " is missing!");
