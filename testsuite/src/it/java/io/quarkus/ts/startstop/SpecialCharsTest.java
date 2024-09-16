@@ -177,7 +177,6 @@ public class SpecialCharsTest {
     }
 
     @Test
-    @Disabled("TODO: https://github.com/quarkusio/quarkus/issues/42248")
     public void specialJVM(TestInfo testInfo) throws IOException, InterruptedException {
         testRuntime(testInfo, Apps.JAKARTA_REST_MINIMAL, MvnCmds.JVM, ",;~!@#$%^&()");
     }
@@ -191,7 +190,6 @@ public class SpecialCharsTest {
     @Test
     @Tag("native")
     @DisabledOnOs(value = {OS.WINDOWS}, disabledReason = "Native on Windows is not supported")
-    @Disabled("TODO: https://github.com/quarkusio/quarkus/issues/42248")
     public void specialNative(TestInfo testInfo) throws IOException, InterruptedException {
         testRuntime(testInfo, Apps.JAKARTA_REST_MINIMAL, MvnCmds.NATIVE, ",;~!@#$%^&()");
     }
