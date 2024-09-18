@@ -93,8 +93,6 @@ public enum CodeQuarkusExtensions {
     // Caused by: java.lang.IllegalStateException: 'quarkus-narayana-lra' can only work if 'quarkus-resteasy-jackson' or 'quarkus-resteasy-reactive-jackson' is present
     // QUARKUS_NARAYANA_LRA("quarkus-narayana-lra", "Narayana LRA - LRA Participant Support", "O8P", false),
     QUARKUS_NARAYANA_STM("quarkus-narayana-stm", "Narayana STM - Software Transactional Memory", "Nl9", false),
-    // https://issues.redhat.com/browse/QUARKUS-1294
-//    QUARKUS_REDIS_CLIENT("quarkus-redis-client", "Redis Client", "jlX", false),
     QUARKUS_MESSAGING("quarkus-messaging", "Messaging", "ignored", true),
     // https://github.com/quarkusio/quarkus/issues/23383
 //    QUARKUS_SMALLRYE_REACTIVE_MESSAGING_AMQP("quarkus-smallrye-reactive-messaging-amqp", "SmallRye Reactive Messaging - AMQP Connector", "ur3", true),
