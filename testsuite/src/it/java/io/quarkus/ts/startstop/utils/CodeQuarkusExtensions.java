@@ -78,8 +78,6 @@ public enum CodeQuarkusExtensions {
 //    QUARKUS_ELASTICSEARCH_REST_HIGH_LEVEL_CLIENT("quarkus-elasticsearch-rest-high-level-client", "Elasticsearch REST High Level Client", "OJe", false),
     QUARKUS_ELASTICSEARCH_REST_CLIENT("quarkus-elasticsearch-rest-client", "Elasticsearch REST client", "NhW", false),
     QUARKUS_FLYWAY("quarkus-flyway", "Flyway", "wTM", false),
-    // TODO Not present in the 3.0 platform
-//    QUARKUS_HAZELCAST_CLIENT("quarkus-hazelcast-client", "Hazelcast Client", "yii", false),
     QUARKUS_HIBERNATE_ENVERS("quarkus-hibernate-envers", "Hibernate Envers", "8j9", false),
     QUARKUS_HIBERNATE_ORM_PANACHE_KOTLIN("quarkus-hibernate-orm-panache-kotlin", "Hibernate ORM with Panache and Kotlin", "O3q", false),
     QUARKUS_HIBERNATE_REACTIVE("quarkus-hibernate-reactive", "Hibernate Reactive", "r1s", false),
