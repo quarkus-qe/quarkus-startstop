@@ -4,12 +4,9 @@ import io.quarkus.ts.startstop.utils.Apps;
 import io.quarkus.ts.startstop.utils.Commands;
 import org.apache.commons.io.FileUtils;
 import org.jboss.logging.Logger;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
-import org.junit.jupiter.api.condition.DisabledOnOs;
-import org.junit.jupiter.api.condition.OS;
 
 import java.io.File;
 import java.io.IOException;
@@ -122,7 +119,6 @@ public class QuarkusMavenPluginTest {
     }
 
     @Test
-    @DisabledOnOs({OS.WINDOWS}) // https://github.com/quarkusio/quarkus/issues/33403
     public void updateTarget(TestInfo testInfo) throws IOException, InterruptedException {
         runQuarkusMavenPluginGoal(testInfo, Apps.JAKARTA_REST_MINIMAL, "update", "quarkus:update goal is experimental");
     }
