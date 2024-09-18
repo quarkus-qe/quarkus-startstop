@@ -18,8 +18,7 @@ public enum CodeQuarkusExtensions {
     QUARKUS_REST_CLIENT_REACTIVE_JAXB("quarkus-rest-client-jaxb", "REST Client JAXB", "ignored", true),
     QUARKUS_REST_CLIENT_REACTIVE_JSONB("quarkus-rest-client-jsonb", "REST Client JSON-B", "ignored", true),
     QUARKUS_REST_CLIENT_REACTIVE_KOTLIN_SERIALIZATION("quarkus-rest-client-kotlin-serialization", "REST Client Kotlin Serialization", "ignored", false),
-    // Should be directly in RESTEasy Reactive
-    // QUARKUS_CSRF_REACTIVE("quarkus-csrf-reactive", "Cross-Site Request Forgery Prevention Filter Reactive", "ignored", false),
+    QUARKUS_REST_CSRF("quarkus-rest-csrf", "Quarkus REST Cross-Site Request Forgery Prevention Filter", "ignored", false),
     QUARKUS_OIDC_CLIENT_REACTIVE_FILTER("quarkus-rest-client-oidc-filter", "REST Client - OpenID Connect Filter", "ignored", true),
     QUARKUS_OIDC_TOKEN_PROPAGATION_REACTIVE("quarkus-rest-client-oidc-token-propagation", "REST Client - OpenID Connect Token Propagation", "ignored", false),
 
