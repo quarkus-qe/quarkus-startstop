@@ -109,8 +109,7 @@ public class CodeQuarkusSiteTest {
         assertTrue(javaVersionSelect.count() == 1, "Element: " + elementJavaVersionSelectByXpath + " is missing!");
 
         String javaVersionText = javaVersionSelect.textContent();
-        // TODO: enable Java 11 check when https://github.com/quarkusio/quarkus/issues/38732 is released
-        // assertTrue(javaVersionText.contains("11"), "Java 11 is missing in java version select! javaVersionText: " + javaVersionText);
+        assertTrue(javaVersionText.contains("21"), "Java 21 is missing in java version select! javaVersionText: " + javaVersionText);
         assertTrue(javaVersionText.contains("17"), "Java 17 is missing in java version select! javaVersionText: " + javaVersionText);
     }
 
