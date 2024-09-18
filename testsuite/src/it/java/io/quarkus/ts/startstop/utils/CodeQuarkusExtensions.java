@@ -1,6 +1,7 @@
 package io.quarkus.ts.startstop.utils;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -22,20 +23,16 @@ public enum CodeQuarkusExtensions {
     QUARKUS_OIDC_CLIENT_REACTIVE_FILTER("quarkus-rest-client-oidc-filter", "REST Client - OpenID Connect Filter", "ignored", true),
     QUARKUS_OIDC_TOKEN_PROPAGATION_REACTIVE("quarkus-rest-client-oidc-token-propagation", "REST Client - OpenID Connect Token Propagation", "ignored", false),
 
-    // TODO Introduce buckets with non reactive jakarta-rest extensions
-    // To avoid java.lang.IllegalStateException: The 'quarkus-resteasy-reactive' and 'quarkus-resteasy' extensions cannot be used at the same time.
-//    QUARKUS_RESTEASY("quarkus-resteasy", "RESTEasy Jakarta REST", "98e", true),
-//    QUARKUS_RESTEASY_JACKSON("quarkus-resteasy-jackson", "RESTEasy Jackson", "pV1", true),
-//    QUARKUS_RESTEASY_JSONB("quarkus-resteasy-jsonb", "RESTEasy JSON-B", "49J", true),
-//    QUARKUS_RESTEASY_JAXB("quarkus-resteasy-jaxb", "RESTEasy JAXB", "d7W", true),
-//    QUARKUS_RESTEASY_MULTIPART("quarkus-resteasy-multipart", "RESTEasy Multipart", "kV0", true),
-//    QUARKUS_RESTEASY_LINKS("quarkus-resteasy-links", "RESTEasy Links", "rK1", false),
-//    QUARKUS_REST_CLIENT_MUTINY("quarkus-rest-client-mutiny", "Mutiny support for REST Client", "Ph0", false),
-//    QUARKUS_REST_CLIENT("quarkus-rest-client", "REST Client", "ekA", true),
-//    QUARKUS_REST_CLIENT_JAXB("quarkus-rest-client-jaxb", "REST Client JAXB", "8iY", true),
-//    QUARKUS_REST_CLIENT_JSONB("quarkus-rest-client-jsonb", "REST Client JSON-B", "Q3z", true),
-//    QUARKUS_REST_CLIENT_JACKSON("quarkus-rest-client-jackson", "REST Client Jackson", "pJg", true),
-//    QUARKUS_OIDC_CLIENT_FILTER("quarkus-oidc-client-filter", "OpenID Connect Client Filter", "T0U", true),
+    QUARKUS_RESTEASY("quarkus-resteasy", "RESTEasy Jakarta REST", "98e", true, true),
+    QUARKUS_RESTEASY_JACKSON("quarkus-resteasy-jackson", "RESTEasy Jackson", "pV1", true, true),
+    QUARKUS_RESTEASY_JSONB("quarkus-resteasy-jsonb", "RESTEasy JSON-B", "49J", true, true),
+    QUARKUS_RESTEASY_JAXB("quarkus-resteasy-jaxb", "RESTEasy JAXB", "d7W", true, true),
+    QUARKUS_RESTEASY_MULTIPART("quarkus-resteasy-multipart", "RESTEasy Multipart", "kV0", true, true),
+    QUARKUS_RESTEASY_CLIENT("quarkus-resteasy-client", "REST Client", "ekA", true, true),
+    QUARKUS_RESTEASY_CLIENT_JAXB("quarkus-resteasy-client-jaxb", "REST Client JAXB", "8iY", true, true),
+    QUARKUS_RESTEASY_CLIENT_JSONB("quarkus-resteasy-client-jsonb", "REST Client JSON-B", "Q3z", true, true),
+    QUARKUS_RESTEASY_CLIENT_JACKSON("quarkus-resteasy-client-jackson", "REST Client Jackson", "pJg", true, true),
+    QUARKUS_RESTEASY_CLIENT_OIDC_FILTER("quarkus-resteasy-client-oidc-filter", "OpenID Connect Client Filter", "T0U", true, true),
 
     QUARKUS_VERTX_GRAPHQL("quarkus-vertx-graphql", "Eclipse Vert.x GraphQL", "F9R", false),
     QUARKUS_HIBERNATE_VALIDATOR("quarkus-hibernate-validator", "Hibernate Validator", "YjV", true),
@@ -436,12 +433,22 @@ public enum CodeQuarkusExtensions {
     public final String name;
     public final String shortId;
     public final boolean supported;
+    private final boolean onlyRestEasyClassicBucket;
 
     CodeQuarkusExtensions(String id, String name, String shortId, boolean supported) {
         this.id = id;
         this.name = name;
         this.shortId = shortId;
         this.supported = supported;
+        this.onlyRestEasyClassicBucket = false;
+    }
+
+    CodeQuarkusExtensions(String id, String name, String shortId, boolean supported, boolean onlyRestEasyClassicBucket) {
+        this.id = id;
+        this.name = name;
+        this.shortId = shortId;
+        this.supported = supported;
+        this.onlyRestEasyClassicBucket = onlyRestEasyClassicBucket;
     }
 
     public enum Flag {
@@ -454,7 +461,9 @@ public enum CodeQuarkusExtensions {
         if (buckets < 1) {
             throw new IllegalArgumentException("Nope, buckets must be bigger than 0.");
         }
-        List<CodeQuarkusExtensions> extensions = Stream.of(CodeQuarkusExtensions.values()).filter(x ->
+        List<CodeQuarkusExtensions> extensions = Stream.of(CodeQuarkusExtensions.values())
+                .filter(x -> !x.onlyRestEasyClassicBucket) // RESTEasy Classic has a separate bucket
+                .filter(x ->
                 flag == Flag.SUPPORTED && x.supported ||
                         flag == Flag.NOT_SUPPORTED && !x.supported ||
                         flag == Flag.MIXED).collect(Collectors.toUnmodifiableList());
@@ -477,5 +486,9 @@ public enum CodeQuarkusExtensions {
             i = i + chunk;
         }
         return result;
+    }
+
+    public static List<CodeQuarkusExtensions> getRestEasyClassicExtensions() {
+        return EnumSet.allOf(CodeQuarkusExtensions.class).stream().filter(x -> x.onlyRestEasyClassicBucket).toList();
     }
 }
