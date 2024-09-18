@@ -202,6 +202,11 @@ public class CodeQuarkusTest {
     }
 
     @Test
+    public void supportedRestEasyClassicExtensions(TestInfo testInfo) throws Exception {
+        testRuntime(testInfo, CodeQuarkusExtensions.getRestEasyClassicExtensions(), MvnCmds.MVNW_DEV);
+    }
+    
+    @Test
     public void notSupportedExtensionsSubsetA(TestInfo testInfo) throws Exception {
         testRuntime(testInfo, notSupportedEx.get(0).subList(0, Math.min(10, notSupportedEx.get(0).size())), MvnCmds.MVNW_DEV);
     }
