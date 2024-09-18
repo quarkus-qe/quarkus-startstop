@@ -74,8 +74,6 @@ public enum CodeQuarkusExtensions {
     // The Blaze-Persistence dependency is present but no persistence units have been defined.
     // BLAZE_PERSISTENCE_INTEGRATION_QUARKUS("blaze-persistence-integration-quarkus", "Blaze-Persistence", "weW", false),
     QUARKUS_CACHE("quarkus-cache", "Cache", "W1i", true),
-    // https://issues.redhat.com/browse/QUARKUS-1295
-//    QUARKUS_ELASTICSEARCH_REST_HIGH_LEVEL_CLIENT("quarkus-elasticsearch-rest-high-level-client", "Elasticsearch REST High Level Client", "OJe", false),
     QUARKUS_ELASTICSEARCH_REST_CLIENT("quarkus-elasticsearch-rest-client", "Elasticsearch REST client", "NhW", false),
     QUARKUS_FLYWAY("quarkus-flyway", "Flyway", "wTM", false),
     QUARKUS_HIBERNATE_ENVERS("quarkus-hibernate-envers", "Hibernate Envers", "8j9", false),
