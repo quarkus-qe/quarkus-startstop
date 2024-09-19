@@ -18,8 +18,6 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Checksum validation failed, expected 2811ba27a71a8bda0602161ffe2f6e1429da8068 but is 36257165a0945753efb3f9d473d86c6f4c6c6f6e.*"),
             Pattern.compile(".*Could not validate integrity of download from https://repo.maven.apache.org/maven2/org/jboss/arquillian/arquillian-bom/1.7.0.Final/arquillian-bom-1.7.0.Final.pom.*"),
             Pattern.compile(".*org.eclipse.aether.util.concurrency.RunnableErrorForwarder.*"),
-            // https://github.com/quarkusio/quarkus/issues/34626
-            Pattern.compile("\\[Quarkus build analytics\\] Analytics remote config not received."),
             // netty 4 which doesn't have the relevant native config in the lib. See https://github.com/netty/netty/pull/13596
             Pattern.compile(".*Warning: Please re-evaluate whether any experimental option is required, and either remove or unlock it\\..*"),
             Pattern.compile(".*Warning: The option '-H:ReflectionConfigurationResources=META-INF/native-image/io\\.netty/netty-transport/reflection-config\\.json' is experimental and must be enabled via.*"),
@@ -36,8 +34,6 @@ public enum WhitelistLogLines {
             // GH Action runners are slow, graceful shutdown is not guaranteed on Quarkus
             // RESTEASY004687: Closing a class org.jboss.resteasy.client.jaxrs.engines.ManualClosingApacheHttpClient43Engine$CleanupAction instance for you.
             Pattern.compile(".*RESTEASY004687: Closing a class.*CleanupAction.*"),
-            // https://github.com/quarkusio/quarkus/issues/34626
-            Pattern.compile("\\[Quarkus build analytics\\] Analytics remote config not received."),
             // netty 4 which doesn't have the relevant native config in the lib. See https://github.com/netty/netty/pull/13596
             Pattern.compile(".*Warning: Please re-evaluate whether any experimental option is required, and either remove or unlock it\\..*"),
             Pattern.compile(".*Warning: The option '-H:ReflectionConfigurationResources=META-INF/native-image/io\\.netty/netty-transport/reflection-config\\.json' is experimental and must be enabled via.*"),
@@ -88,22 +84,10 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Using legacy gRPC support, with separate new HTTP server instance. Switch to single HTTP server instance usage with quarkus.grpc.server.use-separate-server=false property.*"),
             // Full stack trace switch enabled for dev mode command
             Pattern.compile(".*Error stacktraces are turned on.*"),
-            // https://github.com/quarkusio/quarkus/issues/33825
-            Pattern.compile(".*Detected bean archive with bean discovery mode of 'all', this is not portable in CDI Lite and is treated as 'annotated' in Quarkus! Path to beans.xml: io.smallrye:smallrye-graphql-cdi.*"),
             // arquillian-bom has wrong sha1 and md5sum, discussed with jfang who uploaded it, there is nothing he can do about it
             Pattern.compile(".*Checksum validation failed, expected 2811ba27a71a8bda0602161ffe2f6e1429da8068 but is 36257165a0945753efb3f9d473d86c6f4c6c6f6e.*"),
             Pattern.compile(".*Could not validate integrity of download from https://repo.maven.apache.org/maven2/org/jboss/arquillian/arquillian-bom/1.7.0.Final/arquillian-bom-1.7.0.Final.pom.*"),
             Pattern.compile(".*org.eclipse.aether.util.concurrency.RunnableErrorForwarder.*"),
-            // To be able to run on Quarkus < 3.2 which does not support analytics
-            Pattern.compile(".*Unrecognized configuration key \"quarkus.analytics.disabled\" was provided.*"),
-            // https://github.com/quarkusio/quarkus/issues/34626
-            Pattern.compile("\\[Quarkus build analytics\\] Analytics remote config not received."),
-            // https://github.com/quarkusio/quarkus/issues/36775
-            Pattern.compile("(?i:.*quarkus.mongodb.native.dns.*config property is deprecated.*)"),
-            // https://github.com/quarkusio/quarkus/issues/37532
-            Pattern.compile(".*Annotation processing is enabled because one or more processors were found.*"),
-            // https://github.com/quarkusio/quarkus/issues/38711
-            Pattern.compile(".*SplitPackageProcessor.*Following packages were detected in multiple archives.*"),
             // TODO: https://github.com/quarkusio/quarkus/issues/42237
             Pattern.compile(".*Failed to index org.springframework.aot.hint.annotation.Reflective.*")
     }),
@@ -116,8 +100,6 @@ public enum WhitelistLogLines {
             Pattern.compile(".*http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException.*"),
             Pattern.compile(".*To see the full stack trace of the errors, re-run Maven with the -e switch.*"),
             Pattern.compile("\\[ERROR\\] *"),
-            // https://github.com/quarkusio/quarkus/issues/34626
-            Pattern.compile("\\[Quarkus build analytics\\] Analytics remote config not received."),
             // GH Actions runners are sometimes slow
             Pattern.compile("\\[io.ver.cor.imp.BlockedThreadChecker\\] (vertx-blocked-thread-checker) Thread.*has been blocked for.*"),
     });
