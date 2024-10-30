@@ -40,7 +40,7 @@ public class CodeQuarkusSiteTest {
 
     private static final Logger LOGGER = Logger.getLogger(CodeQuarkusSiteTest.class.getName());
 
-    public static final String pageLoadedSelector = ".extension-category";
+    public static final String pageLoadedSelector = ".project-extensions";
     public static final String webPageUrl = Commands.getCodeQuarkusURL("https://code.quarkus.redhat.com/");
     public static final String elementTitleByText = "Quarkus - Start coding with code.quarkus.redhat.com";
     public static final String elementIconByXpath = "//link[@rel=\"shortcut icon\"][@href=\"https://www.redhat.com/favicon.ico\"]";
@@ -95,10 +95,10 @@ public class CodeQuarkusSiteTest {
 
     @Test
     public void validatePresenceOfSupportedFlags(TestInfo testInfo) {
-        Page page = loadPage(webPageUrl, 60);
+        Page page = loadPage(webPageUrl + "/?e=grpc", 60);
         LOGGER.info("Trying to find element: " + elementSupportedFlagByXpath);
         Locator supportedExtensions = page.locator(elementSupportedFlagByXpath);
-        assertTrue(supportedExtensions.count() > 1, "Element: " + elementSupportedFlagByXpath + " is missing!");
+        assertTrue(supportedExtensions.count() >= 1, "Element: " + elementSupportedFlagByXpath + " is missing!");
     }
 
     @Test
