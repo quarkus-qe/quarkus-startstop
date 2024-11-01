@@ -56,9 +56,10 @@ public class CodeQuarkusSiteTest {
     @BeforeAll
     public void init(){
         Playwright playwright = Playwright.create();
-        Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions()
-                .setArgs(List.of("--headless", "--disable-gpu", "--no-sandbox")));
-        browserContext = browser.newContext();
+        Browser browser = playwright.firefox().launch(new BrowserType.LaunchOptions().setHeadless(true));
+        Browser.NewContextOptions options = new Browser.NewContextOptions();
+        options.ignoreHTTPSErrors = true;
+        browserContext = browser.newContext(options);
         LOGGER.info("Incognito browser session has been created");
     }
 
