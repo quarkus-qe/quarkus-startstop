@@ -19,7 +19,7 @@
         <maven.build.helper.version>3.6.0</maven.build.helper.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.jupiter.version>5.10.3</junit.jupiter.version>
-        <commons.io.version>2.16.1</commons.io.version>
+        <commons.io.version>2.17.0</commons.io.version>
         <commons.lang.version>3.15.0</commons.lang.version>
         <jboss-logging.version>3.6.0.Final</jboss-logging.version>
         <log4j.version>2.24.1</log4j.version>
