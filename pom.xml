@@ -26,7 +26,7 @@
         <playwright.version>1.48.0</playwright.version>
         <vertx-grpc-server.version>4.5.10</vertx-grpc-server.version>
         <formatter-maven-plugin.version>2.24.1</formatter-maven-plugin.version>
-        <impsort-maven-plugin.version>1.9.0</impsort-maven-plugin.version>
+        <impsort-maven-plugin.version>1.12.0</impsort-maven-plugin.version>
         <xml-format-maven-plugin>3.3.1</xml-format-maven-plugin>
         <opentelemetry-proto.version>1.3.2-alpha</opentelemetry-proto.version>
         <!-- Test to be executed by default (should be all of them) -->
