@@ -21,6 +21,8 @@ public enum WhitelistLogLines {
             // netty 4 which doesn't have the relevant native config in the lib. See https://github.com/netty/netty/pull/13596
             Pattern.compile(".*Warning: Please re-evaluate whether any experimental option is required, and either remove or unlock it\\..*"),
             Pattern.compile(".*Warning: The option '-H:ReflectionConfigurationResources=META-INF/native-image/io\\.netty/netty-transport/reflection-config\\.json' is experimental and must be enabled via.*"),
+            // TODO https://github.com/quarkusio/quarkus/issues/44914
+            Pattern.compile(".*LogManager error of type GENERIC_FAILURE: Section header cannot be encoded into charset \"windows-1252\".*")
     }),
     FULL_MICROPROFILE(new Pattern[]{
             // Some artifacts names...
@@ -36,6 +38,8 @@ public enum WhitelistLogLines {
             // netty 4 which doesn't have the relevant native config in the lib. See https://github.com/netty/netty/pull/13596
             Pattern.compile(".*Warning: Please re-evaluate whether any experimental option is required, and either remove or unlock it\\..*"),
             Pattern.compile(".*Warning: The option '-H:ReflectionConfigurationResources=META-INF/native-image/io\\.netty/netty-transport/reflection-config\\.json' is experimental and must be enabled via.*"),
+            // TODO https://github.com/quarkusio/quarkus/issues/44914
+            Pattern.compile(".*LogManager error of type GENERIC_FAILURE: Section header cannot be encoded into charset \"windows-1252\".*")
     }),
     GENERATED_SKELETON(new Pattern[]{
             // Harmless warning
@@ -87,7 +91,9 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Could not validate integrity of download from https://repo.maven.apache.org/maven2/org/jboss/arquillian/arquillian-bom/1.7.0.Final/arquillian-bom-1.7.0.Final.pom.*"),
             Pattern.compile(".*org.eclipse.aether.util.concurrency.RunnableErrorForwarder.*"),
             // TODO: https://github.com/quarkusio/quarkus/issues/42237
-            Pattern.compile(".*Failed to index org.springframework.aot.hint.annotation.Reflective.*")
+            Pattern.compile(".*Failed to index org.springframework.aot.hint.annotation.Reflective.*"),
+            // TODO https://github.com/quarkusio/quarkus/issues/44914
+            Pattern.compile(".*LogManager error of type GENERIC_FAILURE: Section header cannot be encoded into charset \"windows-1252\".*")
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
