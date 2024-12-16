@@ -1,14 +1,14 @@
 package com.example.quarkus.serialization;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
 import com.example.quarkus.serialization.dto.ComplexDto;
 import com.example.quarkus.serialization.dto.MyEnum;
 import com.example.quarkus.serialization.dto.NestedClass;
 import com.example.quarkus.serialization.dto.NestedInterface;
-
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
 
 /**
  * Tests DTO serialization as this is most likely done by majority of apps these days.

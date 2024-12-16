@@ -1,8 +1,8 @@
 package org.my.group;
 
-import jakarta.inject.Singleton;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
+import javax.inject.Singleton;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 
 @Path("/hello-added")
 @Singleton

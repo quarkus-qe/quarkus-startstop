@@ -1,10 +1,10 @@
 package com.example.quarkus.health;
 
+import javax.enterprise.context.ApplicationScoped;
+
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Liveness;
-
-import jakarta.enterprise.context.ApplicationScoped;
 
 @Liveness
 @ApplicationScoped

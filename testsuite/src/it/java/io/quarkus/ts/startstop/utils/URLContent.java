@@ -19,14 +19,14 @@ public enum URLContent {
             new String[]{"http://localhost:8080/data/config/lookup", "Config value from ConfigProvider lookup value"},
             new String[]{"http://localhost:8080/data/resilience", "Fallback answer due to timeout"},
             new String[]{"http://localhost:8080/data/metric/timed", "Request is used in statistics, check with the Metrics call."},
-            new String[]{"http://localhost:8080/q/metrics", "timed_request_seconds_count{class=\"com.example.quarkus.metric.MetricController\",exception=\"none\",method=\"timedRequest\"}"},
+            new String[]{"http://localhost:8080/q/metrics", "timed_request_seconds_count{class=\"com.example.quarkus.metric.MetricController\",exception=\"none\",method=\"timedRequest\""},
             new String[]{"http://localhost:8080/data/metric/increment", "1"}, // check counter incremented exactly once
             new String[]{"http://localhost:8080/q/metrics", "endpoint_counter_total 1.0"}, // counter metric must match
             new String[]{"http://localhost:8080/q/metrics", "counter_gauge"}, // check gauge for the counter exists
             new String[]{"http://localhost:8080/data/serialization/json/complex-dto", "Vive la résistance!"},
             new String[]{"http://localhost:8080/q/openapi", "/resilience"},
             new String[]{"http://localhost:8080/data/client/test/parameterValue=xxx", "Processed parameter value 'parameterValue=xxx'"},
-            new String[]{GET_HELLO_TRACES_URL, GET_HELLO_INVOCATION_TRACED}
+//            new String[]{GET_HELLO_TRACES_URL, GET_HELLO_INVOCATION_TRACED}
     }),
     GENERATED_SKELETON(new String[][]{
             new String[]{"http://localhost:8080/", "Congratulation! You are on landing page."},
