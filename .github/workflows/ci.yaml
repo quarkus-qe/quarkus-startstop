@@ -1,9 +1,6 @@
 name: "StartStop CI"
 on:
-  pull_request:
-  workflow_dispatch:
-  schedule:
-    - cron: '0 22 * * *'
+  - pull_request
 jobs:
   linux-validate-format:
     name: Linux - Validate format
