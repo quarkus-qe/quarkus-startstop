@@ -55,6 +55,8 @@ import static io.quarkus.ts.startstop.utils.Logs.checkThreshold;
 import static io.quarkus.ts.startstop.utils.Logs.getLogsDir;
 import static io.quarkus.ts.startstop.utils.Logs.parseStartStopTimestamps;
 import static io.quarkus.ts.startstop.utils.Logs.writeReport;
+import static io.quarkus.ts.startstop.utils.RunCommandAugmentor.setCommandPrefix;
+import static io.quarkus.ts.startstop.utils.RunCommandAugmentor.setMemoryLimits;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -114,7 +116,8 @@ public class StartStopTest {
             assertTrue(buildLogA.exists());
             checkLog(canonicalName, methodName, app, mvnCmds, buildLogA);
 
-            if (mvnCmds == MvnCmds.NATIVE) {
+            boolean isNative = mvnCmds == MvnCmds.NATIVE;
+            if (isNative) {
                 String nativeBinaryLocation = mvnCmds.mvnCmds[1][0];
                 Path nativeBinaryPath = Paths.get(appDir.getAbsolutePath(), nativeBinaryLocation);
                 appendln(whatIDidReport, "Native binary path: " + nativeBinaryPath);
@@ -128,6 +131,10 @@ public class StartStopTest {
             List<Long> timeToFirstOKRequestList = new ArrayList<>(10);
             int iterations = Integer.getInteger("start-stop.iterations", 10);
             boolean coldStart = Boolean.getBoolean("start-stop.cold-start");
+            boolean skipThresholdCheck = Boolean.getBoolean("start-stop.skip.threshold-check");
+            List<String> commandPrefix = getSystemPropertyAsList("start-stop.command.prefix", "");
+            List<String> jvmMemory = getSystemPropertyAsList("start-stop.jvm.memory", "-Xmx256m");
+            List<String> nativeMemory = getSystemPropertyAsList("start-stop.native.memory", "-Xmx96m");
             for (int i = 0; i < iterations; i++) {
                 // Run
                 LOGGER.info("Running... round " + i);
@@ -135,6 +142,9 @@ public class StartStopTest {
                 appendln(whatIDidReport, appDir.getAbsolutePath());
                 var runCommand = asyncProfiler.map(control -> control.createJavaProfiledRunCommand(mvnCmds.mvnCmds[1]))
                         .orElseGet(() -> getRunCommand(mvnCmds.mvnCmds[1]));
+
+                runCommand = setCommandPrefix(runCommand, commandPrefix);
+                runCommand = setMemoryLimits(runCommand, isNative ? nativeMemory:jvmMemory, isNative);
 
                 appendlnSection(whatIDidReport, String.join(" ", runCommand));
                 if (coldStart) {
@@ -170,6 +180,10 @@ public class StartStopTest {
                 checkLog(canonicalName, methodName, app, mvnCmds, runLogA);
                 checkListeningHost(canonicalName, methodName, mvnCmds, runLogA);
 
+                if (commandPrefix.size() > 0) {
+                    // unfortunately some active wait is needed to get stop message into logs
+                    Thread.sleep(1000l);
+                }
                 float[] startedStopped = parseStartStopTimestamps(runLogA);
 
                 Path measurementsLog = Paths.get(getLogsDir(canonicalName, methodName).toString(), "measurements.csv");
@@ -197,7 +211,9 @@ public class StartStopTest {
             long timeToFirstOKRequestAvgWithoutMinMax = getAvgWithoutMinMax(timeToFirstOKRequestList);
             LOGGER.info("AVG timeToFirstOKRequest (ms) without min and max values: " + timeToFirstOKRequestAvgWithoutMinMax);
             LOGGER.info("AVG RSS (kB) without min and max values: " + rssKbAvgWithoutMinMax);
-            checkThreshold(app, mvnCmds, rssKbAvgWithoutMinMax, timeToFirstOKRequestAvgWithoutMinMax, SKIP);
+            if (!skipThresholdCheck) {
+                checkThreshold(app, mvnCmds, rssKbAvgWithoutMinMax, timeToFirstOKRequestAvgWithoutMinMax, SKIP);
+            }
         } finally {
             // Make sure processes are down even if there was an exception / failure
             if (pA != null) {
@@ -211,6 +227,11 @@ public class StartStopTest {
                 cleanTarget(app);
             }
         }
+    }
+
+    private static List<String> getSystemPropertyAsList(String key, String def) {
+        String memoryString = System.getProperty(key, def);
+        return Arrays.asList(memoryString.split(" "));
     }
 
     private long getAvgWithoutMinMax(List<Long> listOfValues) {
