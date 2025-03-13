@@ -60,6 +60,18 @@ exercises some rudimentary business logic of selected extensions.
 `start-stop.cold-start` property - use cold start mode to drop OS page cache entries, dentries and inodes.
 - append for example `-Dstart-stop.cold-start` to the mvn command
 
+`start-stop.skip.threshold-check` property - skip checks against thresholds for RSS memory and time to first OK request
+- append for example `-Dstart-stop.skip.threshold-check` to the mvn command
+
+`start-stop.command.prefix` property - prefix the run command for the final Java and Native application, e.g. to limit CPU
+- append for example `-Dstart-stop.command.prefix="/opt/homebrew/bin/cpulimit -l 5 -i"` to the mvn command
+
+`start-stop.jvm.memory` property - configure memory limits for the run command for the final Java application
+- append for example `-Dstart-stop.jvm.memory=" -Xms256m -Xmx512m"` to the mvn command
+
+`start-stop.native.memory` property - configure memory limits for the run command for the final Native application
+- append for example `-Dstart-stop.native.memory="-Xms96m -Xmx96m"` to the mvn command
+
 Collect results:
 
 ```
