@@ -23,7 +23,7 @@
         <commons.lang.version>3.17.0</commons.lang.version>
         <jboss-logging.version>3.6.1.Final</jboss-logging.version>
         <log4j.version>2.24.3</log4j.version>
-        <playwright.version>1.50.0</playwright.version>
+        <playwright.version>1.51.0</playwright.version>
         <vertx-grpc-server.version>4.5.13</vertx-grpc-server.version>
         <formatter-maven-plugin.version>2.25.0</formatter-maven-plugin.version>
         <impsort-maven-plugin.version>1.12.0</impsort-maven-plugin.version>
