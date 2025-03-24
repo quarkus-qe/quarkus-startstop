@@ -114,7 +114,10 @@ public class StartStopTest {
             long buildEnds = System.currentTimeMillis();
 
             assertTrue(buildLogA.exists());
-            checkLog(canonicalName, methodName, app, mvnCmds, buildLogA);
+            boolean skipLogCheck = Boolean.getBoolean("start-stop.skip.log-check");
+            if (!skipLogCheck) {
+                checkLog(canonicalName, methodName, app, mvnCmds, buildLogA);
+            }
 
             boolean isNative = mvnCmds == MvnCmds.NATIVE;
             if (isNative) {
@@ -177,7 +180,9 @@ public class StartStopTest {
                 // Release ports
                 assertTrue(waitForTcpClosed("localhost", parsePort(app.urlContent.urlContent[0][0]), 60),
                         "Main port is still open");
-                checkLog(canonicalName, methodName, app, mvnCmds, runLogA);
+                if (!skipLogCheck) {
+                    checkLog(canonicalName, methodName, app, mvnCmds, runLogA);
+                }
                 checkListeningHost(canonicalName, methodName, mvnCmds, runLogA);
 
                 if (commandPrefix.size() > 0) {
