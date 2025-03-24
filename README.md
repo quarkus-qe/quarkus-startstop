@@ -63,6 +63,9 @@ exercises some rudimentary business logic of selected extensions.
 `start-stop.skip.threshold-check` property - skip checks against thresholds for RSS memory and time to first OK request
 - append for example `-Dstart-stop.skip.threshold-check` to the mvn command
 
+`start-stop.skip.log-check` property - skip checks against logs of the application
+- append for example `-Dstart-stop.skip.log-check` to the mvn command
+
 `start-stop.command.prefix` property - prefix the run command for the final Java and Native application, e.g. to limit CPU
 - append for example `-Dstart-stop.command.prefix="/opt/homebrew/bin/cpulimit -l 5 -i"` to the mvn command
 
