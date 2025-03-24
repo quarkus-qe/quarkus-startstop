@@ -21,6 +21,7 @@ public enum WhitelistLogLines {
             // netty 4 which doesn't have the relevant native config in the lib. See https://github.com/netty/netty/pull/13596
             Pattern.compile(".*Warning: Please re-evaluate whether any experimental option is required, and either remove or unlock it\\..*"),
             Pattern.compile(".*Warning: The option '-H:ReflectionConfigurationResources=META-INF/native-image/io\\.netty/netty-transport/reflection-config\\.json' is experimental and must be enabled via.*"),
+            Pattern.compile(".*Unrecognized configuration key \"quarkus.version\" was provided.*"),
     }),
     FULL_MICROPROFILE(new Pattern[]{
             // Some artifacts names...
@@ -36,6 +37,7 @@ public enum WhitelistLogLines {
             // netty 4 which doesn't have the relevant native config in the lib. See https://github.com/netty/netty/pull/13596
             Pattern.compile(".*Warning: Please re-evaluate whether any experimental option is required, and either remove or unlock it\\..*"),
             Pattern.compile(".*Warning: The option '-H:ReflectionConfigurationResources=META-INF/native-image/io\\.netty/netty-transport/reflection-config\\.json' is experimental and must be enabled via.*"),
+            Pattern.compile(".*Unrecognized configuration key \"quarkus.version\" was provided.*"),
     }),
     GENERATED_SKELETON(new Pattern[]{
             // Harmless warning
