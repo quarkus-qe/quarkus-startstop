@@ -7,10 +7,9 @@
     <packaging>pom</packaging>
     <name>Quarkus StartStop TS: Parent</name>
     <properties>
-        <quarkus.version>3.20.0.CR1</quarkus.version>
-        <!-- todo: when platform is released, use the platform version / group id -->
-        <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <quarkus-ide-config.version>3.20.0.CR1</quarkus-ide-config.version>
+        <quarkus.version>3.20.0</quarkus.version>
+        <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
+        <quarkus-ide-config.version>3.20.0</quarkus-ide-config.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.release>17</maven.compiler.release>
