@@ -117,7 +117,7 @@ public class ArtifactGeneratorTest {
             "core",
             "hibernate-orm",
             "hibernate-orm-panache",
-            "hibernate-orm-rest-data-panache",
+//            "hibernate-orm-rest-data-panache",  see https://github.com/quarkusio/quarkus/wiki/Migration-Guide-3.22
             "hibernate-validator",
             "resteasy-client",
             "resteasy-client-jackson",
@@ -145,7 +145,7 @@ public class ArtifactGeneratorTest {
 //            "smallrye-reactive-messaging-amqp",
             "messaging-kafka",
             "spring-data-jpa",
-            "spring-data-rest",
+//            "spring-data-rest",  see https://github.com/quarkusio/quarkus/wiki/Migration-Guide-3.22
             "spring-di",
             "spring-security",
 //            "spring-web",  // spring-web-codestart uses quarkus-resteasy-reactive-jackson, see https://github.com/quarkusio/quarkus/pull/24890
