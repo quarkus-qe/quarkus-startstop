@@ -81,7 +81,7 @@ public enum WhitelistLogLines {
             // https://github.com/quarkusio/quarkus/pull/28810
             Pattern.compile(".*Stream is closed, ignoring and trying to continue.*"),
             // https://github.com/quarkusio/quarkus/pull/28654
-            Pattern.compile(".*Using legacy gRPC support, with separate new HTTP server instance. Switch to single HTTP server instance usage with quarkus.grpc.server.use-separate-server=false property.*"),
+            Pattern.compile(".*Using legacy gRPC support with a separate HTTP server instance. This is the current default to maintain compatibility.*"),
             // Full stack trace switch enabled for dev mode command
             Pattern.compile(".*Error stacktraces are turned on.*"),
             // arquillian-bom has wrong sha1 and md5sum, discussed with jfang who uploaded it, there is nothing he can do about it
