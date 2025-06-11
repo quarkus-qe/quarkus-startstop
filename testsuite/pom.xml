@@ -30,8 +30,8 @@
         <!-- used to create OpenTelemetry collector -->
         <dependency>
             <groupId>io.vertx</groupId>
-            <artifactId>vertx-grpc-server</artifactId>
-            <version>${vertx-grpc-server.version}</version>
+            <artifactId>vertx-grpcio-server</artifactId>
+            <version>${vertx-grpcio-server.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

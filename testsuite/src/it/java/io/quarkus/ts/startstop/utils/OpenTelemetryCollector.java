@@ -1,16 +1,14 @@
 package io.quarkus.ts.startstop.utils;
 
-import io.opentelemetry.proto.collector.trace.v1.ExportTracePartialSuccess;
 import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest;
 import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceResponse;
 import io.opentelemetry.proto.collector.trace.v1.TraceServiceGrpc;
 import io.opentelemetry.proto.trace.v1.Span;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServer;
-import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.grpc.common.GrpcStatus;
-import io.vertx.grpc.server.GrpcServer;
+import io.vertx.grpcio.server.GrpcIoServer;
 import org.jboss.logging.Logger;
 
 import java.io.Closeable;
@@ -91,7 +89,7 @@ public class OpenTelemetryCollector implements UnitTestResource {
         private final HttpServer httpServer;
 
         public GRPCTraceHandler(Vertx vertx) {
-            GrpcServer grpcHandler = GrpcServer.server(vertx);
+            GrpcIoServer grpcHandler = GrpcIoServer.server(vertx);
 
             // record incoming traces
             grpcHandler.callHandler(TraceServiceGrpc.getExportMethod(), request -> {
