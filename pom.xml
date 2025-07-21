@@ -18,7 +18,7 @@
         <maven.failsafe.version>3.5.3</maven.failsafe.version>
         <maven.build.helper.version>3.6.1</maven.build.helper.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <junit.jupiter.version>5.13.2</junit.jupiter.version>
+        <junit.jupiter.version>5.13.4</junit.jupiter.version>
         <commons.io.version>2.19.0</commons.io.version>
         <commons.lang.version>3.18.0</commons.lang.version>
         <jboss-logging.version>3.6.1.Final</jboss-logging.version>
