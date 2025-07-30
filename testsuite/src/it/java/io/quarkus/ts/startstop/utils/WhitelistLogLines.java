@@ -88,6 +88,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Checksum validation failed, expected 2811ba27a71a8bda0602161ffe2f6e1429da8068 but is 36257165a0945753efb3f9d473d86c6f4c6c6f6e.*"),
             Pattern.compile(".*Could not validate integrity of download from https://repo.maven.apache.org/maven2/org/jboss/arquillian/arquillian-bom/1.7.0.Final/arquillian-bom-1.7.0.Final.pom.*"),
             Pattern.compile(".*org.eclipse.aether.util.concurrency.RunnableErrorForwarder.*"),
+            // https://github.com/quarkusio/quarkus/issues/49292
+            Pattern.compile(".*Run time configuration should not be consumed in Build Steps.*io.quarkus.reactive.db2.client.deployment.ReactiveDB2ClientProcessor.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
@@ -138,7 +140,11 @@ public enum WhitelistLogLines {
                         WARNING_MISSING_OBJCOPY_RESULT_NATIVE,
                         // Randomly prints some SLF4J traces. Reported by https://github.com/quarkusio/quarkus/issues/16896
                         Pattern.compile(".*SLF4J:.*"),
-                        WARNING_SYS_MODULE_PATH
+                        WARNING_SYS_MODULE_PATH,
+                        // It should be caused https://github.com/quarkusio/quarkus/issues/49118
+                        Pattern.compile(".*windows is currently not supported.*"),
+                        Pattern.compile(".*Could not find a valid Docker environment. Please check configuration.*"),
+                        Pattern.compile(".*See https://java.testcontainers.org/on_failure.html.*")
                 };
             case LINUX:
             	return new Pattern[] {
