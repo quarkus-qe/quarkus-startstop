@@ -200,7 +200,6 @@ public class SpecialCharsTest {
     }
 
     @Test
-    @DisabledOnOs(value = {OS.WINDOWS},disabledReason = "Needs env setup, https://github.com/quarkusio/quarkus/issues/9707 is fixed, tests pass on local Windows 10 with Czech language as default")
     public void diacriticsDEV(TestInfo testInfo) throws IOException, InterruptedException {
         testRuntime(testInfo, Apps.JAKARTA_REST_MINIMAL, MvnCmds.DEV, "ěščřžýáíéůú");
     }
@@ -218,7 +217,6 @@ public class SpecialCharsTest {
     }
 
     @Test
-    @DisabledOnOs(value = {OS.WINDOWS},disabledReason = "Needs env setup, https://github.com/quarkusio/quarkus/issues/9707 is fixed, tests pass on local Windows 10 with Czech language as default")
     public void japaneseDEV(TestInfo testInfo) throws IOException, InterruptedException {
         testRuntime(testInfo, Apps.JAKARTA_REST_MINIMAL, MvnCmds.DEV, "元気かい");
     }
@@ -236,7 +234,6 @@ public class SpecialCharsTest {
     }
 
     @Test
-    @DisabledOnOs(value = {OS.WINDOWS},disabledReason = "Needs env setup, https://github.com/quarkusio/quarkus/issues/9707 is fixed, tests pass on local Windows 10 with Czech language as default")
     public void otherDEV(TestInfo testInfo) throws IOException, InterruptedException {
         testRuntime(testInfo, Apps.JAKARTA_REST_MINIMAL, MvnCmds.DEV, "Îñţérñåţîöñåļîžåţîờñ");
     }
