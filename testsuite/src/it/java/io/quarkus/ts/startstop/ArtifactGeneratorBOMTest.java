@@ -23,6 +23,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import static io.quarkus.ts.startstop.ArtifactGeneratorTest.langchain4jExtensions;
 import static io.quarkus.ts.startstop.ArtifactGeneratorTest.supportedExtensionsSubsetSetA;
 import static io.quarkus.ts.startstop.ArtifactGeneratorTest.supportedExtensionsSubsetSetB;
 import static io.quarkus.ts.startstop.ArtifactGeneratorTest.supportedReactiveExtensionsSubsetSetA;
@@ -212,6 +213,18 @@ public class ArtifactGeneratorBOMTest {
     @Tag("product")
     public void quarkusProductBomReactiveExtensionsB(TestInfo testInfo) throws Exception {
         testRuntime(testInfo, supportedReactiveExtensionsSubsetSetB, EnumSet.of(TestFlags.PRODUCT_BOM));
+    }
+
+    @Test
+    @Tag("product-and-community")
+    public void langchainExtensions(TestInfo testInfo) throws Exception {
+        testRuntime(testInfo, langchain4jExtensions, EnumSet.of(TestFlags.QUARKUS_BOM));
+    }
+
+    @Test
+    @Tag("product")
+    public void productLangchainExtensions(TestInfo testInfo) throws Exception {
+        testRuntime(testInfo, langchain4jExtensions, EnumSet.of(TestFlags.PRODUCT_BOM));
     }
 
 }
