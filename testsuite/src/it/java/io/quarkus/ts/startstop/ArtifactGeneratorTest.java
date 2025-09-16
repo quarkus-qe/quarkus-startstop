@@ -250,6 +250,23 @@ public class ArtifactGeneratorTest {
             "quarkus-smallrye-graphql-client",
     };
 
+    public static final String[] langchain4jExtensions = new String[]{
+            // First, add some non-AI extensions, which are "required" by application.properties
+            "quarkus-rest",
+            "hibernate-orm-panache",
+            "jdbc-postgresql",
+            "quarkus-smallrye-graphql",
+            "opentelemetry",
+            // the above is explained there: https://github.com/quarkus-qe/quarkus-startstop/pull/594#discussion_r2354539902
+            "langchain4j-core",
+            "langchain4j-openai",
+            "langchain4j-ollama",
+            "langchain4j-parsers-base",
+            "langchain4j-mcp",
+            "mcp-server-sse",
+            "mcp-server-stdio",
+    };
+
     public void testRuntime(TestInfo testInfo, String[] extensions, Set<TestFlags> flags) throws Exception {
         Process pA = null;
         File buildLogA = null;
@@ -418,5 +435,11 @@ public class ArtifactGeneratorTest {
     public void manyReactiveExtensionsSetB(TestInfo testInfo) throws Exception {
         testRuntime(testInfo, supportedReactiveExtensionsSubsetSetB, EnumSet.of(TestFlags.WARM_UP, TestFlags.RESTEASY_REACTIVE));
         testRuntime(testInfo, supportedReactiveExtensionsSubsetSetB, EnumSet.of(TestFlags.RESTEASY_REACTIVE));
+    }
+
+    @Test
+    public void langchain4jExtensions(TestInfo testInfo) throws Exception {
+        testRuntime(testInfo, langchain4jExtensions, EnumSet.of(TestFlags.WARM_UP, TestFlags.RESTEASY_REACTIVE));
+        testRuntime(testInfo, langchain4jExtensions, EnumSet.of(TestFlags.RESTEASY_REACTIVE));
     }
 }
