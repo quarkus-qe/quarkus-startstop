@@ -42,7 +42,7 @@ int main(int argc, const char* argv[]) {
 This is a utility that generates a convenience enum from a Code Quarkus website instance, e.g:
 
 ```
-javac JSONtoEnum.java  &&  java JSONtoEnum https://code.quarkus.stage.redhat.com/api/extensions
+javac JSONtoEnum.java  &&  java JSONtoEnum https://code.quarkus.stage.redhat.com/api/extensions?platformOnly=false
 ```
 
 # API of code.quarkus
