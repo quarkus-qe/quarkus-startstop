@@ -22,6 +22,24 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Warning: Please re-evaluate whether any experimental option is required, and either remove or unlock it\\..*"),
             Pattern.compile(".*Warning: The option '-H:ReflectionConfigurationResources=META-INF/native-image/io\\.netty/netty-transport/reflection-config\\.json' is experimental and must be enabled via.*"),
             Pattern.compile(".*Unrecognized configuration key \"quarkus.version\" was provided.*"),
+            ///////////////////////
+            // OpenJDK 25 support
+            ///////////////////////
+            // - Jansi
+            Pattern.compile(".*WARNING: A restricted method in java\\.lang\\.System has been called.*"),
+            Pattern.compile(".*WARNING: java\\.lang\\.System::load has been called by org\\.fusesource\\.jansi\\.internal\\.JansiLoader in an unnamed module.*"),
+            Pattern.compile(".*WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module.*"),
+            Pattern.compile(".*WARNING: Restricted methods will be blocked in a future release unless native access is enabled.*"),
+            // - Guava
+            Pattern.compile(".*WARNING: A terminally deprecated method in sun\\.misc\\.Unsafe has been called.*"),
+            Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::objectFieldOffset has been called by com\\.google\\.common\\.util\\.concurrent\\.AbstractFuture\\$UnsafeAtomicHelper.*"),
+            Pattern.compile(".*WARNING: Please consider reporting this to the maintainers of class com\\.google\\.common\\.util\\.concurrent\\.AbstractFuture\\$UnsafeAtomicHelper.*"),
+            Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::objectFieldOffset will be removed in a future release.*"),
+            // - Netty
+            Pattern.compile(".*WARNING: A terminally deprecated method in sun\\.misc\\.Unsafe has been called.*"),
+            Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::allocateMemory has been called by io\\.netty\\.util\\.internal\\.PlatformDependent0\\$2.*"),
+            Pattern.compile(".*WARNING: Please consider reporting this to the maintainers of class io\\.netty\\.util\\.internal\\.PlatformDependent0\\$2.*"),
+            Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::allocateMemory will be removed in a future release.*"),
     }),
     FULL_MICROPROFILE(new Pattern[]{
             // Some artifacts names...
@@ -38,6 +56,24 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Warning: Please re-evaluate whether any experimental option is required, and either remove or unlock it\\..*"),
             Pattern.compile(".*Warning: The option '-H:ReflectionConfigurationResources=META-INF/native-image/io\\.netty/netty-transport/reflection-config\\.json' is experimental and must be enabled via.*"),
             Pattern.compile(".*Unrecognized configuration key \"quarkus.version\" was provided.*"),
+            ///////////////////////
+            // OpenJDK 25 support
+            ///////////////////////
+            // - Jansi
+            Pattern.compile(".*WARNING: A restricted method in java\\.lang\\.System has been called.*"),
+            Pattern.compile(".*WARNING: java\\.lang\\.System::load has been called by org\\.fusesource\\.jansi\\.internal\\.JansiLoader in an unnamed module.*"),
+            Pattern.compile(".*WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module.*"),
+            Pattern.compile(".*WARNING: Restricted methods will be blocked in a future release unless native access is enabled.*"),
+            // - Guava
+            Pattern.compile(".*WARNING: A terminally deprecated method in sun\\.misc\\.Unsafe has been called.*"),
+            Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::objectFieldOffset has been called by com\\.google\\.common\\.util\\.concurrent\\.AbstractFuture\\$UnsafeAtomicHelper.*"),
+            Pattern.compile(".*WARNING: Please consider reporting this to the maintainers of class com\\.google\\.common\\.util\\.concurrent\\.AbstractFuture\\$UnsafeAtomicHelper.*"),
+            Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::objectFieldOffset will be removed in a future release.*"),
+            // - Netty
+            Pattern.compile(".*WARNING: A terminally deprecated method in sun\\.misc\\.Unsafe has been called.*"),
+            Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::allocateMemory has been called by io\\.netty\\.util\\.internal\\.PlatformDependent0\\$2.*"),
+            Pattern.compile(".*WARNING: Please consider reporting this to the maintainers of class io\\.netty\\.util\\.internal\\.PlatformDependent0\\$2.*"),
+            Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::allocateMemory will be removed in a future release.*"),
     }),
     GENERATED_SKELETON(new Pattern[]{
             // Harmless warning
@@ -88,6 +124,39 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Checksum validation failed, expected 2811ba27a71a8bda0602161ffe2f6e1429da8068 but is 36257165a0945753efb3f9d473d86c6f4c6c6f6e.*"),
             Pattern.compile(".*Could not validate integrity of download from https://repo.maven.apache.org/maven2/org/jboss/arquillian/arquillian-bom/1.7.0.Final/arquillian-bom-1.7.0.Final.pom.*"),
             Pattern.compile(".*org.eclipse.aether.util.concurrency.RunnableErrorForwarder.*"),
+            ///////////////////////
+            // OpenJDK 25 support
+            ///////////////////////
+            // - Jansi
+            Pattern.compile(".*WARNING: A restricted method in java\\.lang\\.System has been called.*"),
+            Pattern.compile(".*WARNING: java\\.lang\\.System::load has been called by org\\.fusesource\\.jansi\\.internal\\.JansiLoader in an unnamed module.*"),
+            Pattern.compile(".*WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module.*"),
+            Pattern.compile(".*WARNING: Restricted methods will be blocked in a future release unless native access is enabled.*"),
+            // - Guava
+            Pattern.compile(".*WARNING: A terminally deprecated method in sun\\.misc\\.Unsafe has been called.*"),
+            Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::objectFieldOffset has been called by com\\.google\\.common\\.util\\.concurrent\\.AbstractFuture\\$UnsafeAtomicHelper.*"),
+            Pattern.compile(".*WARNING: Please consider reporting this to the maintainers of class com\\.google\\.common\\.util\\.concurrent\\.AbstractFuture\\$UnsafeAtomicHelper.*"),
+            Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::objectFieldOffset will be removed in a future release.*"),
+            // - Netty
+            Pattern.compile(".*WARNING: A terminally deprecated method in sun\\.misc\\.Unsafe has been called.*"),
+            Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::allocateMemory has been called by io\\.netty\\.util\\.internal\\.PlatformDependent0\\$2.*"),
+            Pattern.compile(".*WARNING: Please consider reporting this to the maintainers of class io\\.netty\\.util\\.internal\\.PlatformDependent0\\$2.*"),
+            Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::allocateMemory will be removed in a future release.*"),
+            // - GRPC
+            Pattern.compile(".*WARNING: A terminally deprecated method in sun\\.misc\\.Unsafe has been called.*"),
+            Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::arrayBaseOffset has been called by com\\.google\\.protobuf\\.UnsafeUtil\\$MemoryAccessor.*"),
+            Pattern.compile(".*WARNING: Please consider reporting this to the maintainers of class com\\.google\\.protobuf\\.UnsafeUtil\\$MemoryAccessor.*"),
+            Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::arrayBaseOffset will be removed in a future release.*"),
+            // Add-opens via smallrye process and GRPC
+            Pattern.compile(".*\\[WARNING\\] \\[io\\.smallrye\\.common\\.process\\] SRCOM05000: Command.*"),
+            // Undertow
+            Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::objectFieldOffset has been called by io\\.undertow\\.util\\.FastConcurrentDirectDeque\\$Node.*"),
+            Pattern.compile(".*WARNING: Please consider reporting this to the maintainers of class io\\.undertow\\.util\\.FastConcurrentDirectDeque\\$Node.*"),
+            // JNA
+            Pattern.compile(".*WARNING: A restricted method in java\\.lang\\.System has been called.*"),
+            Pattern.compile(".*WARNING: java\\.lang\\.System::load has been called by com\\.sun\\.jna\\.Native in an unnamed module.*"),
+            Pattern.compile(".*WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module.*"),
+            Pattern.compile(".*WARNING: Restricted methods will be blocked in a future release unless native access is enabled.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
