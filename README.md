@@ -49,6 +49,15 @@ mvn clean verify -Ptestsuite-no-native
 Native compilation is not yet supported on Windows. 
 You may also want to disable native tests with ```-Ptestsuite-no-native``` if you need just a quick check on the JVM mode. 
 
+### IBM profile
+
+The IBM profile can be activated using `-Pibm`.
+This profile disable the RedHat specific test (`**/*RedHat*Test.java`) and enable the IBM specific test (`**/*Ibm*Test.java`).
+You need to use it with combination with other profiles like this:
+```
+mvn clean verify -Ptestsuite,ibm
+```
+
 ## StartStopTest
 
 The goal is to build and start applications with some real source code that actually
