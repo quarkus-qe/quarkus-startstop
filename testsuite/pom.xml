@@ -51,6 +51,9 @@
                     <groups>${includeTags}</groups>
                     <!-- exclude -->
                     <excludedGroups>${excludeTags}</excludedGroups>
+                    <excludes>
+                        <exclude>${exclude.tests}</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <plugin>
