@@ -106,6 +106,7 @@ public class Commands {
 
     /**
      * Get system properties starting with `quarkus.native` prefix, for example quarkus.native.builder-image
+     *
      * @return List of `-Dquarkus.native.xyz=foo` strings
      */
     public static List<String> getQuarkusNativeProperties() {
@@ -169,7 +170,7 @@ public class Commands {
 
     public static String getBaseDir() {
         String baseDir = System.getenv().get("basedir");
-        if ( baseDir == null ) {
+        if (baseDir == null) {
             baseDir = System.getProperty("basedir");
         }
         if (baseDir == null) {
@@ -352,7 +353,7 @@ public class Commands {
         disableSslVerification();
         try (ReadableByteChannel readableByteChannel = Channels.newChannel(
                 URI.create(downloadURL).toURL().openStream());
-                FileChannel fileChannel = new FileOutputStream(destinationZipFile).getChannel()) {
+             FileChannel fileChannel = new FileOutputStream(destinationZipFile).getChannel()) {
             fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
         }
         return downloadURL;
@@ -512,7 +513,7 @@ public class Commands {
                 if (!force) {
                     Process p = Runtime.getRuntime().exec(new String[]{
                             BASE_DIR + File.separator + "testsuite" + File.separator + "src" + File.separator + "it" + File.separator + "resources" + File.separator +
-                            "CtrlC.exe ", Long.toString(pid)});
+                                    "CtrlC.exe ", Long.toString(pid)});
                     p.waitFor(1, TimeUnit.MINUTES);
                 }
                 Runtime.getRuntime().exec(new String[]{"cmd", "/C", "taskkill", "/PID", Long.toString(pid), "/F", "/T"});
@@ -529,7 +530,7 @@ public class Commands {
         if (isThisWindows) {
             // Note that PeakWorkingSetSize might be better, but we would need to change it on Linux too...
             // https://docs.microsoft.com/en-us/windows/win32/cimwin32prov/win32-process
-            pa = new ProcessBuilder("wmic", "process", "where", "processid=" + pid, "get", "WorkingSetSize");
+            pa = new ProcessBuilder("powershell", "-Command", "\"(Get-Process -Id " + pid + ").WorkingSet64\"");
         } else {
             pa = new ProcessBuilder("ps", "-p", Long.toString(pid), "-o", "rss=");
         }
@@ -538,7 +539,7 @@ public class Commands {
         pa.redirectErrorStream(true);
         Process p = pa.start();
         try (BufferedReader processOutputReader =
-                new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
+                     new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
             String l;
             while ((l = processOutputReader.readLine()) != null) {
                 if (numPattern.matcher(l).matches()) {
@@ -559,7 +560,7 @@ public class Commands {
         ProcessBuilder pa;
         long count = 0;
         if (isThisWindows) {
-            pa = new ProcessBuilder("wmic", "process", "where", "processid=" + pid, "get", "HandleCount");
+            pa = new ProcessBuilder("powershell", "-Command", "\"(Get-Process -Id " + pid + ").HandleCount\"");
         } else {
             pa = new ProcessBuilder("lsof", "-F0n", "-p", Long.toString(pid));
         }
@@ -568,7 +569,7 @@ public class Commands {
         pa.redirectErrorStream(true);
         Process p = pa.start();
         try (BufferedReader processOutputReader =
-                new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
+                     new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
             if (isThisWindows) {
                 String l;
                 // TODO: We just get a magical number with all FDs... Is it O.K.?
@@ -651,7 +652,7 @@ public class Commands {
         pidKiller(p.pid(), force);
     }
 
-    public static boolean disableCleanup(){
+    public static boolean disableCleanup() {
 
         if (System.getProperty("disableCleanup") != null) {
             return true;
@@ -661,17 +662,18 @@ public class Commands {
     }
 
     private static void disableSslVerification() {
-        try
-        {
+        try {
             // Create a trust manager that does not validate certificate chains
-            TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
+            TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
                 @Override
                 public java.security.cert.X509Certificate[] getAcceptedIssuers() {
                     return null;
                 }
+
                 @Override
                 public void checkClientTrusted(X509Certificate[] certs, String authType) {
                 }
+
                 @Override
                 public void checkServerTrusted(X509Certificate[] certs, String authType) {
                 }
