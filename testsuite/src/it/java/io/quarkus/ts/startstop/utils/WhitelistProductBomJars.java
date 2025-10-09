@@ -16,6 +16,7 @@ public enum WhitelistProductBomJars {
             // jna and jna-platform is dependency of io.quarkus:quarkus-jdbc-mariadb
             "net.java.dev.jna.jna",
             "net.java.dev.jna.jna-platform",
+            "com.github.victools.jsonschema-generator"  // https://issues.redhat.com/browse/QUARKUS-6713
     });
 
     public final String[] jarNames;
