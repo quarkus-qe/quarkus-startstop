@@ -17,7 +17,8 @@ public enum WhitelistProductBomJars {
             "net.java.dev.jna.jna",
             "net.java.dev.jna.jna-platform",
             "com.github.victools.jsonschema-generator",  // https://issues.redhat.com/browse/QUARKUS-6713
-            "org.apache.opennlp.opennlp-tools"           // https://issues.redhat.com/browse/QUARKUS-6715
+            "org.apache.opennlp.opennlp-tools",          // https://issues.redhat.com/browse/QUARKUS-6715
+            "com.knuddels.jtokkit"                       // https://issues.redhat.com/browse/QUARKUS-6716
     });
 
     public final String[] jarNames;
