@@ -24,7 +24,7 @@
         <jboss-logging.version>3.6.1.Final</jboss-logging.version>
         <log4j.version>2.25.2</log4j.version>
         <playwright.version>1.56.0</playwright.version>
-        <vertx-grpcio-server.version>5.0.4</vertx-grpcio-server.version>
+        <vertx-grpcio-server.version>5.0.5</vertx-grpcio-server.version>
         <formatter-maven-plugin.version>2.29.0</formatter-maven-plugin.version>
         <impsort-maven-plugin.version>1.12.0</impsort-maven-plugin.version>
         <xml-format-maven-plugin>4.1.0</xml-format-maven-plugin>
