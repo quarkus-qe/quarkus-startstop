@@ -29,6 +29,7 @@
         <impsort-maven-plugin.version>1.12.0</impsort-maven-plugin.version>
         <xml-format-maven-plugin>4.1.0</xml-format-maven-plugin>
         <opentelemetry-proto.version>1.7.0-alpha</opentelemetry-proto.version>
+        <snakeyaml.version>2.5</snakeyaml.version>
         <!-- Test to be executed by default (should be all of them) -->
         <includeTags>generator,startstop,bomtests,codequarkus,special-chars</includeTags>
         <include.tests/>
@@ -138,6 +139,12 @@
             <id>ibm</id>
             <properties>
                 <exclude.tests>**/*RedHat*Test.java</exclude.tests>
+            </properties>
+        </profile>
+        <profile>
+            <id>no-exclusion</id>
+            <properties>
+                <exclude.tests/>
             </properties>
         </profile>
     </profiles>

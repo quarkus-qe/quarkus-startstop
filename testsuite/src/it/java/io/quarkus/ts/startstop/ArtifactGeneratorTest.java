@@ -28,12 +28,18 @@ import static io.quarkus.ts.startstop.utils.Logs.writeReport;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -43,9 +49,12 @@ import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.Yaml;
 
 import io.quarkus.ts.startstop.utils.Apps;
 import io.quarkus.ts.startstop.utils.Commands;
@@ -267,6 +276,9 @@ public class ArtifactGeneratorTest {
             "mcp-server-stdio",
     };
 
+    public static final File QUARKUS_CONFIG = Paths.get(System.getProperty("user.home"), ".quarkus", "config.yaml").toFile();
+    private static final String QUARKUS_REGISTRY_ID = "testingregistry";
+
     public void testRuntime(TestInfo testInfo, String[] extensions, Set<TestFlags> flags) throws Exception {
         Process pA = null;
         File buildLogA = null;
@@ -290,6 +302,10 @@ public class ArtifactGeneratorTest {
             // Cleanup
             cleanDirOrFile(appBaseDir.getAbsolutePath());
             Files.createDirectories(Paths.get(logsDir));
+
+            // Prepare quarkus config
+            Files.createDirectories(Paths.get(appBaseDir.getAbsolutePath(), ".quarkus"));
+            prepareConfig(appBaseDir);
 
             // Build
             buildLogA = new File(logsDir + File.separator + (flags.contains(TestFlags.WARM_UP) ? "warmup-artifact-build.log" : "artifact-build.log"));
@@ -441,5 +457,65 @@ public class ArtifactGeneratorTest {
     public void langchain4jExtensions(TestInfo testInfo) throws Exception {
         testRuntime(testInfo, langchain4jExtensions, EnumSet.of(TestFlags.WARM_UP, TestFlags.RESTEASY_REACTIVE));
         testRuntime(testInfo, langchain4jExtensions, EnumSet.of(TestFlags.RESTEASY_REACTIVE));
+    }
+
+    protected String getOfferingString() {
+        return null;
+    }
+
+    /**
+     * Load data from ~/.quarkus/config.yaml and update them
+     * This method logic is same as
+     * https://github.com/quarkus-qe/quarkus-test-suite/blob/e37dddcbbb255997c65a48dc2340650c06e3d3d7/quarkus-cli/src/test/java/io/quarkus/ts/quarkus/cli/offering/QuarkusCliOfferingUtils.java#L83
+     *
+     * @param offering offering value e.g. ibm, redhat
+     * @throws IOException
+     */
+    private void prepareConfig(File appBaseDir) throws IOException {
+        if (getOfferingString() == null) {
+            return;
+        }
+        DumperOptions options = new DumperOptions();
+        options.setIndent(2);
+        options.setPrettyFlow(true);
+        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+
+        Yaml yaml = new Yaml(options);
+
+        Map<String, Object> data;
+        try (InputStream inputStream = new FileInputStream(QUARKUS_CONFIG)) {
+            data = yaml.load(inputStream);
+        }
+
+        updateRegistryConfig((List<Object>) data.get("registries"), getOfferingString());
+
+        File quarkusConfig = Paths.get(appBaseDir.getAbsolutePath(), ".quarkus", "config.yaml").toFile();
+
+        try (Writer writer = new FileWriter(quarkusConfig)) {
+            LOGGER.info("Quarkus config in use is: located at " + quarkusConfig.getAbsolutePath()
+                    + " and content of config is:\n" + data);
+            yaml.dump(data, writer);
+        }
+    }
+
+    /**
+     * Iterate over registries and add offering value to registry with name of {@link #QUARKUS_REGISTRY_ID}
+     *
+     * @param registries list of all set registries
+     * @param offering offering value e.g. ibm, redhat
+     */
+    private static void updateRegistryConfig(List<Object> registries, String offering) {
+        for (Object item : registries) {
+            if (item instanceof Map) {
+                Map<String, Object> registryMap = (Map<String, Object>) item;
+                if (registryMap.containsKey(QUARKUS_REGISTRY_ID)) {
+                    // Get the testing registry and set the offering
+                    Map<String, Object> details = (Map<String, Object>) registryMap.get(QUARKUS_REGISTRY_ID);
+                    details.put("offering", offering);
+                    return;
+                }
+            }
+        }
+        Assertions.fail(QUARKUS_REGISTRY_ID + " registry is not present in quarkus config");
     }
 }
