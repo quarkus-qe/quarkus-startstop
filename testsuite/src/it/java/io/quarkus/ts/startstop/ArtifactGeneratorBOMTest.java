@@ -8,6 +8,7 @@ import io.quarkus.ts.startstop.utils.URLContent;
 import io.quarkus.ts.startstop.utils.WebpageTester;
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
@@ -71,8 +72,10 @@ public class ArtifactGeneratorBOMTest {
         File appDir = new File(appBaseDir, Apps.GENERATED_SKELETON.dir);
         String logsDir = appBaseDir.getAbsolutePath() + File.separator + Apps.GENERATED_SKELETON.dir + "-logs";
         String repoDir = getLocalMavenRepoDir();
+        // The BOM test should run without online registry to verity that it's work
+        String[] additionalArgs = {"-DquarkusRegistryClient=false"};
 
-        List<String> generatorCmd = getGeneratorCommand(flags, MvnCmds.GENERATOR.mvnCmds[0], extensions, repoDir);
+        List<String> generatorCmd = getGeneratorCommand(flags, MvnCmds.GENERATOR.mvnCmds[0], extensions, repoDir, additionalArgs);
 
         List<String> buildCmd = getBuildCommand(MvnCmds.JVM.mvnCmds[0], repoDir);
 

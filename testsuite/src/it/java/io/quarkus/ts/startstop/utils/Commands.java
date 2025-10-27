@@ -271,7 +271,8 @@ public class Commands {
         return Collections.unmodifiableList(buildCmd);
     }
 
-    public static List<String> getGeneratorCommand(Set<TestFlags> flags, String[] baseCommand, String[] extensions, String repoDir) {
+    public static List<String> getGeneratorCommand(Set<TestFlags> flags, String[] baseCommand, String[] extensions,
+                                                   String repoDir, String[] additionalArgs) {
         List<String> generatorCmd = new ArrayList<>();
         if (isThisWindows) {
             generatorCmd.add("cmd");
@@ -288,6 +289,9 @@ public class Commands {
             if (getQuarkusVersion().equals("999-SNAPSHOT")) {
                 generatorCmd.add("-DplatformGroupId=io.quarkus");
             }
+        }
+        if (additionalArgs != null) {
+            generatorCmd.addAll(Arrays.asList(additionalArgs));
         }
         generatorCmd.add("-Dextensions=" + String.join(",", extensions));
         generatorCmd.add("-Dmaven.repo.local=" + repoDir);
