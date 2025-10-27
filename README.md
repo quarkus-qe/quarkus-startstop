@@ -58,6 +58,14 @@ You need to use it with combination with other profiles like this:
 mvn clean verify -Ptestsuite,ibm
 ```
 
+### No exclusion profile
+
+The IBM profile can be activated using `-Pno-exclusion`.
+This profile disable the default exclusion of IBM specific test (`**/*Ibm*Test.java`).
+This profile can be used for test which have some small differences (RH vs IBM setting),
+but not expecting different values for same maven arguments.
+For example see ArtifactGeneratorTest and it's child test classes, which have custom setting for quarkus config.
+
 ## StartStopTest
 
 The goal is to build and start applications with some real source code that actually
@@ -121,6 +129,10 @@ to verify that the new resource has been loaded. Response time is not measured i
 
 The whole run is executed as a warm-up to download the Internet and then again to measure the times.
 The properties for thresholds are stored in [app-generated-skeleton/threshold.properties](./app-generated-skeleton/threshold.properties).
+
+This test for product testing needs to set quarkus config which will be testing against.
+This config is copied and modified to include the offering for specific tests.
+For upstream testing the config is not needed as only upstream (registry.quarkus.io) is used. 
 
 Build and run logs are archived and checked for errors, see:
 
