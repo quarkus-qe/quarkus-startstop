@@ -1,4 +1,4 @@
-package io.quarkus.ts.startstop;
+package io.quarkus.ts.startstop.ibm;
 
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
@@ -13,8 +13,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestInstance;
 
 import static io.quarkus.ts.startstop.utils.Commands.getQuarkusVersion;
@@ -28,17 +28,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @Tag("codequarkus")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CodeQuarkusRedHatSiteTest {
+public class CodeQuarkusIbmSiteTest {
 
-    private static final Logger LOGGER = Logger.getLogger(CodeQuarkusRedHatSiteTest.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(CodeQuarkusIbmSiteTest.class.getName());
 
     public static final String pageLoadedSelector = ".project-extensions";
     public static final String pageWithExtensionLoadedSelector = ".extension-picker-list";
-    public static final String webPageUrl = Commands.getCodeQuarkusURL("https://code.quarkus.redhat.com/");
-    public static final String elementTitleByText = "Quarkus - Start coding with code.quarkus.redhat.com";
-    public static final String elementIconByXpath = "//link[@rel=\"shortcut icon\"][@href=\"https://www.redhat.com/favicon.ico\"]";
+    public static final String webPageUrl = Commands.getCodeQuarkusURL("https://code.quarkus.ibm.com/");
+    public static final String elementTitleByText = "Quarkus - Start coding with code.quarkus.ibm.com";
+    public static final String elementIconByXpath = "//link[@rel=\"shortcut icon\"][@href=\"https://www.ibm.com/content/dam/adobe-cms/default-images/icon-32x32.png\"]";
     public static final String elementJavaVersionSelectByXpath = "//select[@id=\"javaversion\"]";
-    public static final String elementRedHatLogoByXpath = "//img[@class=\"logo\"][@alt=\"Red Hat Logo\"]";
+    public static final String elementBrandNameByXpath = "//div[@class=\"brand\" and contains(text(), 'Enterprise Build of Quarkus')]";
     public static final String elementStreamPickerByXpath = "//div[@class=\"stream-picker dropdown\"]";
     public static final String elementStreamItemsByXpath = "//div[@class=\"dropdown-item\"]";
     public static final String elementSupportedFlagByXpath = "//div[@class=\"extension-tag support-full-support dropdown-toggle\"]";
@@ -87,12 +87,12 @@ public class CodeQuarkusRedHatSiteTest {
     }
 
     @Test
-    public void validatePresenceOfRedHatLogo(TestInfo testInfo) {
+    public void validatePresenceOfBrandName(TestInfo testInfo) {
         Page page = loadPage(webPageUrl, 60);
-        LOGGER.info("Trying to find element: " + elementRedHatLogoByXpath);
-        Locator redHatLogo = page.locator(elementRedHatLogoByXpath);
-        redHatLogo.elementHandle().waitForElementState(ElementState.VISIBLE);
-        assertTrue(redHatLogo.isVisible(), "Element: " + elementRedHatLogoByXpath + " is missing or not visible!");
+        LOGGER.info("Trying to find element: " + elementBrandNameByXpath);
+        Locator brandName = page.locator(elementBrandNameByXpath);
+        brandName.elementHandle().waitForElementState(ElementState.VISIBLE);
+        assertTrue(brandName.isVisible(), "Element: " + elementBrandNameByXpath + " is missing or not visible!");
     }
 
     @Test
@@ -126,13 +126,19 @@ public class CodeQuarkusRedHatSiteTest {
         streamPicker.click();
         Locator streamItems = page.locator(elementStreamItemsByXpath);
         assertTrue(streamItems.count() > 0, "No stream is defined");
-        assertTrue(streamItems.count() > 1, "Two (or more) streams are expected to be defined defined, streamItems count: " + streamItems.count() + "\n" +
-                "Product Update and Support Policy: https://access.redhat.com/support/policy/updates/jboss_notes#p_quarkus");
+        /*
+        TODO enable this when there is more then 1 stream. Atm only 3.27 will be available
+        if (!webPageUrl.contains("apps.ocp-c1")) {  // build-scoped instances have just the current stream defined
+            assertTrue(streamItems.count() > 1, "Two (or more) streams are expected to be defined defined, streamItems count: " + streamItems.count() + "\n" +
+                    "Product Update and Support Policy: https://access.redhat.com/support/policy/updates/jboss_notes#p_quarkus");
+        }
+        */
     }
 
     @Test
     public void validateQuarkusVersionMatch(TestInfo testInfo) {
         String quarkusPlatformVersion = getQuarkusVersion();
+        // TODO change this to IBM when it have standalone platform name
         Assumptions.assumeTrue(quarkusPlatformVersion.contains("redhat"));
 
         Page page = loadPage(webPageUrl, 60);
@@ -147,18 +153,16 @@ public class CodeQuarkusRedHatSiteTest {
     @Test
     public void validateQuarkusSearchForAllSupportedExtensions(TestInfo testInfo) {
         Page page = loadPageWithExtensions(webPageUrl + "?extension-search=support:*", 60);
-
         showAllExtension(page);
-
         // Check if the supported extension are visible
         LOGGER.info("Trying to find element: " + elementExtensionByXpath.formatted(QUARKUS_REST_EXTENSION));
         assertTrue(page.locator(elementExtensionByXpath.formatted(QUARKUS_REST_EXTENSION)).isVisible(),
                 "The extension " + QUARKUS_REST_EXTENSION + " should be visible as it's supported.");
+        LOGGER.info("Trying to find element: " + elementExtensionByXpath.formatted(QUARKUS_LANGCHAIN4J_OPENAI_EXTENSION));
+        assertTrue(page.locator(elementExtensionByXpath.formatted(QUARKUS_LANGCHAIN4J_OPENAI_EXTENSION)).isVisible(),
+                "The extension " + QUARKUS_LANGCHAIN4J_OPENAI_EXTENSION + " should be visible as it's supported.");
 
         // Check that the unsupported extension is not visible
-        LOGGER.info("Trying to find element: " + elementExtensionByXpath.formatted(QUARKUS_LANGCHAIN4J_OPENAI_EXTENSION));
-        assertFalse(page.locator(elementExtensionByXpath.formatted(QUARKUS_LANGCHAIN4J_OPENAI_EXTENSION)).isVisible(),
-                "The extension " + QUARKUS_LANGCHAIN4J_OPENAI_EXTENSION + " should not be visible as it isn't supported.");
         LOGGER.info("Trying to find element: " + elementExtensionByXpath.formatted(QUARKUS_REST_LINKS_EXTENSION));
         assertFalse(page.locator(elementExtensionByXpath.formatted(QUARKUS_REST_LINKS_EXTENSION)).isVisible(),
                 "The extension " + QUARKUS_REST_LINKS_EXTENSION + " should not be visible as it isn't supported.");
@@ -167,17 +171,16 @@ public class CodeQuarkusRedHatSiteTest {
     @Test
     public void validateQuarkusSearchForAllNotSupportedExtensions(TestInfo testInfo) {
         Page page = loadPageWithExtensions(webPageUrl + "?extension-search=!support", 60);
-
         showAllExtension(page);
         // Check if the supported extension are not visible
         LOGGER.info("Trying to find element: " + elementExtensionByXpath.formatted(QUARKUS_REST_EXTENSION));
         assertFalse(page.locator(elementExtensionByXpath.formatted(QUARKUS_REST_EXTENSION)).isVisible(),
                 "The extension " + QUARKUS_REST_EXTENSION + " should not be visible as it's supported.");
+        LOGGER.info("Trying to find element: " + elementExtensionByXpath.formatted(QUARKUS_LANGCHAIN4J_OPENAI_EXTENSION));
+        assertFalse(page.locator(elementExtensionByXpath.formatted(QUARKUS_LANGCHAIN4J_OPENAI_EXTENSION)).isVisible(),
+                "The extension " + QUARKUS_LANGCHAIN4J_OPENAI_EXTENSION + " should not be visible as it's supported.");
 
         // Check that the unsupported extension is visible
-        LOGGER.info("Trying to find element: " + elementExtensionByXpath.formatted(QUARKUS_LANGCHAIN4J_OPENAI_EXTENSION));
-        assertTrue(page.locator(elementExtensionByXpath.formatted(QUARKUS_LANGCHAIN4J_OPENAI_EXTENSION)).isVisible(),
-                "The extension " + QUARKUS_LANGCHAIN4J_OPENAI_EXTENSION + " should be visible as it isn't supported.");
         LOGGER.info("Trying to find element: " + elementExtensionByXpath.formatted(QUARKUS_REST_LINKS_EXTENSION));
         assertTrue(page.locator(elementExtensionByXpath.formatted(QUARKUS_REST_LINKS_EXTENSION)).isVisible(),
                 "The extension " + QUARKUS_REST_LINKS_EXTENSION + " should be visible as it isn't supported.");
@@ -195,12 +198,15 @@ public class CodeQuarkusRedHatSiteTest {
         closeIntroductionModalWindow(page);
         page.locator(elementSupportFilterXpath).click();
 
+        LOGGER.info("Trying to find element: " + supportButtonXpath.formatted("Add has support filter"));
         assertTrue(page.locator(supportButtonXpath.formatted("Add has support filter")).isVisible(),
                 "The option to show all supported extensions should be present under the support filter.");
+        LOGGER.info("Trying to find element: " + supportButtonXpath.formatted("Add no support filter"));
         assertTrue(page.locator(supportButtonXpath.formatted("Add no support filter")).isVisible(),
                 "The option to show all unsupported extensions should be present under the support filter.");
 
         for (String supportScope : supportScopes) {
+            LOGGER.info("Trying to find element: " + supportDivXpath.formatted(supportScope));
             assertTrue(page.locator(supportDivXpath.formatted(supportScope)).isVisible(),
                     "The support scope " + supportScope + "should be present under the support filter.");
         }
