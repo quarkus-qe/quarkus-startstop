@@ -264,6 +264,7 @@ public class ArtifactGeneratorTest {
             "quarkus-rest",
             "hibernate-orm-panache",
             "jdbc-postgresql",
+            "jdbc-mysql",
             "quarkus-smallrye-graphql",
             "opentelemetry",
             // the above is explained there: https://github.com/quarkus-qe/quarkus-startstop/pull/594#discussion_r2354539902
