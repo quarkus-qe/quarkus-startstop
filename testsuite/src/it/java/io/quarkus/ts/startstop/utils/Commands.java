@@ -665,6 +665,10 @@ public class Commands {
         return false;
     }
 
+    public static String getOfferingRegistryName() {
+        return System.getProperty("artifact-generator.offering.registry.name",  "testingregistry");
+    }
+
     private static void disableSslVerification() {
         try {
             // Create a trust manager that does not validate certificate chains

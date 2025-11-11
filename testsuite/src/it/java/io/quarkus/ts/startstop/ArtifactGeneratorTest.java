@@ -8,6 +8,7 @@ import static io.quarkus.ts.startstop.utils.Commands.copyFileForSkeleton;
 import static io.quarkus.ts.startstop.utils.Commands.dropEntityAnnotations;
 import static io.quarkus.ts.startstop.utils.Commands.getArtifactGeneBaseDir;
 import static io.quarkus.ts.startstop.utils.Commands.getGeneratorCommand;
+import static io.quarkus.ts.startstop.utils.Commands.getOfferingRegistryName;
 import static io.quarkus.ts.startstop.utils.Commands.getOpenedFDs;
 import static io.quarkus.ts.startstop.utils.Commands.getRSSkB;
 import static io.quarkus.ts.startstop.utils.Commands.getRunCommand;
@@ -36,8 +37,10 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -278,7 +281,7 @@ public class ArtifactGeneratorTest {
     };
 
     public static final File QUARKUS_CONFIG = Paths.get(System.getProperty("user.home"), ".quarkus", "config.yaml").toFile();
-    private static final String QUARKUS_REGISTRY_ID = "testingregistry";
+    private static final String QUARKUS_REGISTRY_ID = getOfferingRegistryName();
 
     public void testRuntime(TestInfo testInfo, String[] extensions, Set<TestFlags> flags) throws Exception {
         Process pA = null;
@@ -506,7 +509,8 @@ public class ArtifactGeneratorTest {
      * @param offering offering value e.g. ibm, redhat
      */
     private static void updateRegistryConfig(List<Object> registries, String offering) {
-        for (Object item : registries) {
+        var tmpRegistryList = new ArrayList<>(registries);
+        for (Object item : tmpRegistryList) {
             if (item instanceof Map) {
                 Map<String, Object> registryMap = (Map<String, Object>) item;
                 if (registryMap.containsKey(QUARKUS_REGISTRY_ID)) {
@@ -515,6 +519,17 @@ public class ArtifactGeneratorTest {
                     details.put("offering", offering);
                     return;
                 }
+            } else if (item instanceof String) {
+                // This covers the cases where the registry is defined on one line without additional details
+                Map<String, String> offeringMap = new LinkedHashMap<>();
+                Map<String, Object> registryIdReplacement = new LinkedHashMap<>();
+
+                offeringMap.put("offering", offering);
+                registryIdReplacement.put((String) item, offeringMap);
+
+                registries.remove(item);
+                registries.add(registryIdReplacement);
+                return;
             }
         }
         Assertions.fail(QUARKUS_REGISTRY_ID + " registry is not present in quarkus config");
