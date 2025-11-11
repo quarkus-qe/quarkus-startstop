@@ -92,6 +92,9 @@ exercises some rudimentary business logic of selected extensions.
 `start-stop.native.memory` property - configure memory limits for the run command for the final Native application
 - append for example `-Dstart-stop.native.memory="-Xms96m -Xmx96m"` to the mvn command
 
+`artifact-generator.offering.registry.name` property - configure the registry name (default `testingregistry`) to which the offering should be added.
+- append for example `-Dartifact-generator.offering.registry.name="registry.quarkus.redhat.com"` to the mvn command
+
 Collect results:
 
 ```
@@ -132,7 +135,7 @@ The properties for thresholds are stored in [app-generated-skeleton/threshold.pr
 
 This test for product testing needs to set quarkus config which will be testing against.
 This config is copied and modified to include the offering for specific tests.
-For upstream testing the config is not needed as only upstream (registry.quarkus.io) is used. 
+For upstream testing the config is not needed as only upstream (registry.quarkus.io) is used.
 
 Build and run logs are archived and checked for errors, see:
 
