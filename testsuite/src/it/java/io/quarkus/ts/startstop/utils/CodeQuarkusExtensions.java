@@ -59,7 +59,6 @@ public enum CodeQuarkusExtensions {
     QUARKUS_JDBC_MSSQL("quarkus-jdbc-mssql", "JDBC Driver - Microsoft SQL Server", "R6e", true),
     QUARKUS_JDBC_DB2("quarkus-jdbc-db2", "JDBC Driver - DB2", "bMO", false),
     QUARKUS_JDBC_H2("quarkus-jdbc-h2", "JDBC Driver - H2", "FBQ", false),
-    QUARKUS_JDBC_DERBY("quarkus-jdbc-derby", "JDBC Driver - Derby", "UCw", false),
     QUARKUS_JDBC_ORACLE("quarkus-jdbc-oracle", "JDBC Driver - Oracle", "H95", false),
     QUARKUS_REACTIVE_DB2_CLIENT("quarkus-reactive-db2-client", "Reactive DB2 client", "8XW", false),
     QUARKUS_REACTIVE_MSSQL_CLIENT("quarkus-reactive-mssql-client", "Reactive MS SQL client", "zGY", false),
