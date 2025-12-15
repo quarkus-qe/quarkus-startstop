@@ -158,6 +158,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*WARNING: java\\.lang\\.System::load has been called by com\\.sun\\.jna\\.Native in an unnamed module.*"),
             Pattern.compile(".*WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module.*"),
             Pattern.compile(".*WARNING: Restricted methods will be blocked in a future release unless native access is enabled.*"),
+            // Remove when https://github.com/quarkusio/quarkus/issues/51556 is fixed
+            Pattern.compile(".*Unrecognized configuration key \"quarkus.messaging.incoming.words-in.auto.offset.reset\" was provided.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
