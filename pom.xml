@@ -26,7 +26,7 @@
         <playwright.version>1.57.0</playwright.version>
         <vertx-grpcio-server.version>5.0.6</vertx-grpcio-server.version>
         <formatter-maven-plugin.version>2.29.0</formatter-maven-plugin.version>
-        <impsort-maven-plugin.version>1.12.0</impsort-maven-plugin.version>
+        <impsort-maven-plugin.version>1.13.0</impsort-maven-plugin.version>
         <xml-format-maven-plugin>4.1.0</xml-format-maven-plugin>
         <opentelemetry-proto.version>1.9.0-alpha</opentelemetry-proto.version>
         <snakeyaml.version>2.5</snakeyaml.version>
