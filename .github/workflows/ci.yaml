@@ -46,7 +46,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: ci-artifacts
+          name: ci-artifacts-jvm${{ matrix.java }}
           path: artifacts-jvm${{ matrix.java }}.zip
   linux-build-released-native:
     name: Linux - Native build
@@ -74,7 +74,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: ci-artifacts
+          name: ci-artifacts-native${{ matrix.java }}
           path: artifacts-native${{ matrix.java }}.zip
   linux-build-code-start:
     name: Linux - Code Quarkus
@@ -102,8 +102,36 @@ jobs:
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: ci-artifacts
-          path: artifacts-code-start${{ matrix.java }}.zip
+          name: ci-artifacts-redhat-code-start${{ matrix.java }}
+          path: artifacts-redhat-code-start${{ matrix.java }}.zip
+  linux-build-code-start-ibm:
+    name: Linux - IBM Code Quarkus
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ 21 ]
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install JDK {{ matrix.java }}
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: ${{ matrix.java }}
+          check-latest: true
+          cache: 'maven'
+      - name: Build with Maven
+        run: |
+          mvn -V -B --no-transfer-progress -s .github/mvn-settings.xml clean verify -Ptestsuite,ibm -DincludeTags=codequarkus -Dgh.actions
+      - name: Zip Artifacts
+        if: failure()
+        run: |
+          zip -r artifacts-code-start${{ matrix.java }}.zip . -i '*-reports/*' '*/archived-logs/*'
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: ci-artifacts-ibm-code-start${{ matrix.java }}
+          path: artifacts-ibm-code-start${{ matrix.java }}.zip
   windows-build-released-jvm:
     name: Windows - JVM build
     runs-on: windows-latest
@@ -133,7 +161,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: ci-artifacts
+          name: ci-artifacts-windows-jvm${{ matrix.java }}
           path: artifacts-windows-jvm${{ matrix.java }}.tar
   windows-build-released-native:
     name: Windows - Native build
@@ -177,5 +205,5 @@ jobs:
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: ci-artifacts
+          name: ci-artifacts-windows-native${{ matrix.java }}
           path: artifacts-windows-native${{ matrix.java }}.tar
