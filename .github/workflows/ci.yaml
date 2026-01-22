@@ -102,8 +102,8 @@ jobs:
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: ci-artifacts-code-start${{ matrix.java }}
-          path: artifacts-code-start${{ matrix.java }}.zip
+          name: ci-artifacts-redhat-code-start${{ matrix.java }}
+          path: artifacts-redhat-code-start${{ matrix.java }}.zip
   windows-build-released-jvm:
     name: Windows - JVM build
     runs-on: windows-latest

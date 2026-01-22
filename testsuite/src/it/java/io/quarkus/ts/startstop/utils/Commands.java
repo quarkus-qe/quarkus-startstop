@@ -345,7 +345,8 @@ public class Commands {
     public static String download(Collection<CodeQuarkusExtensions> extensions, String destinationZipFile, int javaVersion) throws IOException {
         String downloadURL = getCodeQuarkusURL() + "/api/download?" +
                 extensions.stream().map(x -> "e=" + x.id).collect(Collectors.joining("&")) +
-                "&j=" + javaVersion;
+                "&j=" + javaVersion +
+                "&S=io.quarkus.platform:3.20";
         return download(downloadURL, destinationZipFile);
     }
 
