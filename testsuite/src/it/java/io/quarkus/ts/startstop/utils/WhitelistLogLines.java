@@ -40,6 +40,7 @@ public enum WhitelistLogLines {
     GENERATED_SKELETON(new Pattern[]{
             // Harmless warning
             Pattern.compile(".*The Agroal dependency is present but no JDBC datasources have been defined.*"),
+            Pattern.compile(".*The Datasource Reactive dependency is present but no Reactive datasources have been defined.*"),
             // Due to our not exactly accurate application.properties, these expected warnings occur...
             Pattern.compile(".*Unrecognized configuration key[ \\\\\"]*(" +
                     "quarkus.oidc.auth-server-url|" +
