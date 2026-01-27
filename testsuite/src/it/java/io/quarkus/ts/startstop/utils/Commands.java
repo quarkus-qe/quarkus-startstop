@@ -347,10 +347,18 @@ public class Commands {
      * @throws IOException
      */
     public static String download(Collection<CodeQuarkusExtensions> extensions, String destinationZipFile, int javaVersion) throws IOException {
+        // Extract major.minor version for stream (example 3.27.2.redhat--002 -> "3.27)
+        String quarkusVersion = getQuarkusVersion();
+        String[] versionParts = quarkusVersion.replaceAll("\\.redhat-.*", "").split("\\.");
+        String streamVersion = versionParts.length >= 2 ? versionParts[0] + "." +  versionParts[1] : quarkusVersion;
+
+        // Build stream parameter dynamically based on a platform group id
+        String streamParameter = getQuarkusGroupId() + ":" + streamVersion;
+
         String downloadURL = getCodeQuarkusURL() + "/api/download?" +
                 extensions.stream().map(x -> "e=" + x.id).collect(Collectors.joining("&")) +
                 "&j=" + javaVersion +
-                "&S=io.quarkus.platform:3.27";
+                "&S=" + streamParameter;
         return download(downloadURL, destinationZipFile);
     }
 
