@@ -350,7 +350,7 @@ public class Commands {
         String downloadURL = getCodeQuarkusURL() + "/api/download?" +
                 extensions.stream().map(x -> "e=" + x.id).collect(Collectors.joining("&")) +
                 "&j=" + javaVersion +
-                "&S=io.quarkus.platform:3.27";
+                "&S=3.27";
         return download(downloadURL, destinationZipFile);
     }
 
