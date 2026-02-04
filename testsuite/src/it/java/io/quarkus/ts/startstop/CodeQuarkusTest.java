@@ -16,6 +16,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class CodeQuarkusTest {
     public static final List<List<CodeQuarkusExtensions>> supportedEx = CodeQuarkusExtensions.partition(4, CodeQuarkusExtensions.Flag.SUPPORTED);
     public static final List<List<CodeQuarkusExtensions>> notSupportedEx = CodeQuarkusExtensions.partition(1, CodeQuarkusExtensions.Flag.NOT_SUPPORTED);
     public static final List<List<CodeQuarkusExtensions>> mixedEx = CodeQuarkusExtensions.partition(1, CodeQuarkusExtensions.Flag.MIXED);
-    
+
     public static final Stream<List<CodeQuarkusExtensions>> supportedExWithCodeStarter() {
         return Arrays.asList(
                 Arrays.asList(CodeQuarkusExtensions.QUARKUS_SMALLRYE_HEALTH, CodeQuarkusExtensions.QUARKUS_RESTEASY_REACTIVE),
@@ -128,7 +129,7 @@ public class CodeQuarkusTest {
 
                 assertTrue(buildLogA.exists());
             }
-            
+
             // Run
             runLogA = new File(logsDir + File.separator + "dev-run.log");
             if (mvnCmds == MvnCmds.MVNW_DEV) {
@@ -136,14 +137,14 @@ public class CodeQuarkusTest {
             } else {
                 cmd = getRunCommand(mvnCmds.mvnCmds[1]);
             }
-            
+
             LOGGER.info("Running (" + cmd + ") in directory: " + appDir);
             appendln(whatIDidReport, "Extensions: " + extensions.toString());
             appendln(whatIDidReport, appDir.getAbsolutePath());
             appendlnSection(whatIDidReport, String.join(" ", cmd));
-            
+
             pA = runCommand(cmd, appDir, runLogA);
-            
+
             // It takes time to download the Internet
             long timeoutS = 10 * 60;
             LOGGER.info("Timeout: " + timeoutS + "s. Waiting for the web content...");
@@ -160,12 +161,12 @@ public class CodeQuarkusTest {
             if (pA != null) {
                 processStopper(pA, true);
             }
-            
+
             String tag = StringUtils.EMPTY;
             if (extensions.size() == 1) {
             	tag = "-" + extensions.get(0).id;
             }
-            
+
             archiveLog(cn, mn + tag, unzipLog);
             archiveLog(cn, mn + tag, buildLogA);
             archiveLog(cn, mn + tag, runLogA);
@@ -205,12 +206,12 @@ public class CodeQuarkusTest {
     public void supportedRestEasyClassicExtensions(TestInfo testInfo) throws Exception {
         testRuntime(testInfo, CodeQuarkusExtensions.getRestEasyClassicExtensions(), MvnCmds.MVNW_DEV);
     }
-    
+
     @Test
     public void notSupportedExtensionsSubsetA(TestInfo testInfo) throws Exception {
         testRuntime(testInfo, notSupportedEx.get(0).subList(0, Math.min(10, notSupportedEx.get(0).size())), MvnCmds.MVNW_DEV);
     }
-    
+
     @Test
     public void notSupportedExtensionsSubsetB(TestInfo testInfo) throws Exception {
         List<CodeQuarkusExtensions> notSupportedExtensionsSubsetB = notSupportedEx.get(0).subList(Math.min(10, notSupportedEx.get(0).size()), Math.min(20, notSupportedEx.get(0).size()));
@@ -227,34 +228,29 @@ public class CodeQuarkusTest {
 
     @Test
     public void java17BasedProject(TestInfo testInfo) throws Exception {
-        StringBuilder whatIDidReport = new StringBuilder();
-        String cn = testInfo.getTestClass().get().getCanonicalName();
-        String mn = testInfo.getTestMethod().get().getName();
-        File appDir = new File(GEN_BASE_DIR + File.separator + "code-with-quarkus");
-        String zipFile = GEN_BASE_DIR + File.separator + "code-with-quarkus.zip";
-
-        try {
-            appendln(whatIDidReport, "# " + cn + ", " + mn);
-            appendln(whatIDidReport, (new Date()).toString());
-            LOGGER.info("Downloading...");
-            appendln(whatIDidReport, "Download URL: " + download(List.of(CodeQuarkusExtensions.QUARKUS_RESTEASY_REACTIVE), zipFile, 17));
-            LOGGER.info("Unzipping...");
-            unzip(zipFile, GEN_BASE_DIR);
-
-            String pom = Files.readString(Paths.get(GEN_BASE_DIR + File.separator + "code-with-quarkus" + File.separator + "pom.xml"));
-            assertTrue(pom.contains("<maven.compiler.release>17"), "Downloaded app doesn't have Java 17 as a default version in pom.xml");
-
-        } finally {
-            writeReport(cn, mn, whatIDidReport.toString());
-            cleanDirOrFile(appDir.getAbsolutePath());
-        }
+        checkJavaVersion(testInfo, 17);
     }
 
-    /*
-     * Similar to java21BasedProject test, but not forcing concrete java version
-     */
+    @Test
+    public void java21BasedProject(TestInfo testInfo) throws Exception {
+        checkJavaVersion(testInfo, 21);
+    }
+
+    @Test
+    public void java25BasedProject(TestInfo testInfo) throws Exception {
+        checkJavaVersion(testInfo, 25);
+    }
+
     @Test
     public void defaultJavaBasedProject(TestInfo testInfo) throws Exception {
+        checkJavaVersion(testInfo, 25, true);
+    }
+
+    private static void checkJavaVersion(TestInfo testInfo, int version) throws IOException, InterruptedException {
+        checkJavaVersion(testInfo, version, false);
+    }
+
+    private static void checkJavaVersion(TestInfo testInfo, int version, boolean useDefault) throws IOException, InterruptedException {
         StringBuilder whatIDidReport = new StringBuilder();
         String cn = testInfo.getTestClass().get().getCanonicalName();
         String mn = testInfo.getTestMethod().get().getName();
@@ -265,12 +261,17 @@ public class CodeQuarkusTest {
             appendln(whatIDidReport, "# " + cn + ", " + mn);
             appendln(whatIDidReport, (new Date()).toString());
             LOGGER.info("Downloading...");
-            appendln(whatIDidReport, "Download URL: " + download(List.of(CodeQuarkusExtensions.QUARKUS_RESTEASY_REACTIVE), zipFile));
+            if (useDefault) {
+                appendln(whatIDidReport, "Download URL: " + download(List.of(CodeQuarkusExtensions.QUARKUS_RESTEASY_REACTIVE), zipFile));
+            } else {
+                appendln(whatIDidReport, "Download URL: " + download(List.of(CodeQuarkusExtensions.QUARKUS_RESTEASY_REACTIVE), zipFile, version));
+            }
             LOGGER.info("Unzipping...");
             unzip(zipFile, GEN_BASE_DIR);
 
             String pom = Files.readString(Paths.get(GEN_BASE_DIR + File.separator + "code-with-quarkus" + File.separator + "pom.xml"));
-            assertTrue(pom.contains("<maven.compiler.release>21"), "Downloaded app doesn't have Java 21 as a default in pom.xml");
+            assertTrue(pom.contains("<maven.compiler.release>" + version), "Downloaded app doesn't have Java " + version +
+                    " as a default version in pom.xml");
 
         } finally {
             writeReport(cn, mn, whatIDidReport.toString());

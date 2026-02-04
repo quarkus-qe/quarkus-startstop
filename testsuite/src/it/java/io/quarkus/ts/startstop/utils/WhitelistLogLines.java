@@ -40,6 +40,10 @@ public enum WhitelistLogLines {
             Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::allocateMemory has been called by io\\.netty\\.util\\.internal\\.PlatformDependent0\\$2.*"),
             Pattern.compile(".*WARNING: Please consider reporting this to the maintainers of class io\\.netty\\.util\\.internal\\.PlatformDependent0\\$2.*"),
             Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::allocateMemory will be removed in a future release.*"),
+            // TODO remove this when https://github.com/quarkusio/quarkus/issues/51990#issuecomment-3846976974 is fixed
+            Pattern.compile(".*The Maven extensions for the Quarkus Maven plugin are not enabled for this build.*"),
+            // TODO remove this when https://github.com/quarkusio/quarkus/issues/41016#issuecomment-3847062608 is fixed
+            Pattern.compile(".*Option 'DynamicProxyConfigurationResources' is deprecated and might be removed in a future release.*"),
     }),
     FULL_MICROPROFILE(new Pattern[]{
             // Some artifacts names...
@@ -74,6 +78,13 @@ public enum WhitelistLogLines {
             Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::allocateMemory has been called by io\\.netty\\.util\\.internal\\.PlatformDependent0\\$2.*"),
             Pattern.compile(".*WARNING: Please consider reporting this to the maintainers of class io\\.netty\\.util\\.internal\\.PlatformDependent0\\$2.*"),
             Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::allocateMemory will be removed in a future release.*"),
+            // TODO remove this when https://github.com/quarkusio/quarkus/issues/47504 is fixed
+            // issue reported in https://github.com/quarkusio/quarkus/issues/52014
+            Pattern.compile(".*This Gauge has been already registered .*netty.eventexecutor.workers.*"),
+            // TODO remove this when https://github.com/quarkusio/quarkus/issues/51990#issuecomment-3846976974 is fixed
+            Pattern.compile(".*The Maven extensions for the Quarkus Maven plugin are not enabled for this build.*"),
+            // TODO remove this when https://github.com/quarkusio/quarkus/issues/41016#issuecomment-3847062608 is fixed
+            Pattern.compile(".*Option 'DynamicProxyConfigurationResources' is deprecated and might be removed in a future release.*"),
     }),
     GENERATED_SKELETON(new Pattern[]{
             // Harmless warning
@@ -162,6 +173,13 @@ public enum WhitelistLogLines {
             Pattern.compile(".*WARNING: Restricted methods will be blocked in a future release unless native access is enabled.*"),
             // Remove when https://github.com/quarkusio/quarkus/issues/51556 is fixed
             Pattern.compile(".*Unrecognized configuration key \"quarkus.messaging.incoming.words-in.auto.offset.reset\" was provided.*"),
+            // TODO remove this when https://github.com/quarkusio/quarkus/issues/47504 is fixed
+            // issue reported in https://github.com/quarkusio/quarkus/issues/52014
+            Pattern.compile(".*This Gauge has been already registered .*netty.eventexecutor.workers.*"),
+            // TODO remove this when https://github.com/quarkusio/quarkus/issues/51990#issuecomment-3846976974 is fixed
+            Pattern.compile(".*The Maven extensions for the Quarkus Maven plugin are not enabled for this build.*"),
+            // TODO remove this when https://github.com/quarkusio/quarkus/issues/41016#issuecomment-3847062608 is fixed
+            Pattern.compile(".*Option 'DynamicProxyConfigurationResources' is deprecated and might be removed in a future release.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
