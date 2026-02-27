@@ -180,6 +180,14 @@ public enum WhitelistLogLines {
             Pattern.compile(".*The Maven extensions for the Quarkus Maven plugin are not enabled for this build.*"),
             // TODO remove this when https://github.com/quarkusio/quarkus/issues/41016#issuecomment-3847062608 is fixed
             Pattern.compile(".*Option 'DynamicProxyConfigurationResources' is deprecated and might be removed in a future release.*"),
+            // Needed because of early init of infinispan-client done in https://github.com/quarkusio/quarkus/pull/52142
+            Pattern.compile(".*ISPN004001: Could not find 'hotrod-client.properties' file in classpath, using defaults.*"),
+            Pattern.compile(".*Unrecognized configuration key \"quarkus.infinispan-client.hosts\" was provided.*"),
+            Pattern.compile(".*Unrecognized configuration key \"quarkus.infinispan-client.username\" was provided.*"),
+            // TODO remove this when https://github.com/quarkiverse/quarkus-mcp-server/issues/641 is fixed
+            Pattern.compile(".*Cross-Origin Resource Sharing \\(CORS\\) filter must be enabled for Streamable HTTP MCP server endpoints.*"),
+            // GH Actions Windows runners and Netty DNS config warning
+            Pattern.compile(".*DefaultDnsServerAddressStreamProvider.*Google Public DNS as a fallback.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
