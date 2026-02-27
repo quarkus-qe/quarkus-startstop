@@ -15,8 +15,9 @@ public enum MvnCmds {
             new String[]{"mvn", "clean", "dependency:tree", "compile", "quarkus:build", "-Dquarkus.package.output-name=quarkus"},
             new String[]{Commands.JAVA_BIN, "-jar", "target/quarkus-app/quarkus-run.jar"}
     }),
+    // TODO move back to quarkus:dependency-tree once https://github.com/quarkusio/quarkus/issues/52840 is fixed
     DEV(new String[][]{
-            new String[]{"mvn", "clean", "quarkus:dependency-tree", "quarkus:dev", "-Dmaven.repo.local=" + getLocalMavenRepoDir(), "-Dquarkus.analytics.disabled=true"}
+            new String[]{"mvn", "clean", "dependency:tree", "quarkus:dev", "-Dmaven.repo.local=" + getLocalMavenRepoDir(), "-Dquarkus.analytics.disabled=true"}
     }),
     NATIVE(new String[][]{
             Stream.concat(Stream.of("mvn", "clean", "compile", "package", "-Pnative"),

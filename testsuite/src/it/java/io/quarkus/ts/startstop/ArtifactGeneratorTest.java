@@ -276,7 +276,7 @@ public class ArtifactGeneratorTest {
             "langchain4j-ollama",
             "langchain4j-parsers-base",
             "langchain4j-mcp",
-            "mcp-server-sse",
+            "mcp-server-http",
             "mcp-server-stdio",
     };
 

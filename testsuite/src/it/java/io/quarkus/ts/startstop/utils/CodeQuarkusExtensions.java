@@ -78,7 +78,9 @@ public enum CodeQuarkusExtensions {
     QUARKUS_HIBERNATE_REACTIVE_REST_DATA_PANACHE("quarkus-hibernate-reactive-rest-data-panache", "REST resources for Hibernate Reactive with Panache", "ignored", false),
     QUARKUS_HIBERNATE_SEARCH_ORM_ELASTICSEARCH("quarkus-hibernate-search-orm-elasticsearch", "Hibernate Search + Elasticsearch", "oHk", true),
     QUARKUS_HIBERNATE_SEARCH_ORM_COORDINATION_OUTBOX_POLLING("quarkus-hibernate-search-orm-coordination-outbox-polling", "Hibernate Search Coordination with Outbox Polling", "HoS", false),
-    QUARKUS_INFINISPAN_CLIENT("quarkus-infinispan-client", "Infinispan Client", "sOv", true),
+    //  infinispan-client needs additional configuration when dev services are disabled, details in https://github.com/quarkusio/quarkus/pull/52142
+    //  infinispan-client is covered in ArtifactGeneratorTest and ArtifactGeneratorBOMTest tests which are using adjusted application.properties
+    // QUARKUS_INFINISPAN_CLIENT("quarkus-infinispan-client", "Infinispan Client", "sOv", true),
     // quarkus-liquibase expects available datasource, we are running without dev services to avoid Docker dependency
 //    QUARKUS_LIQUIBASE("quarkus-liquibase", "Liquibase", "Xkd", false),
     QUARKUS_LIQUIBASE_MONGODB("quarkus-liquibase-mongodb", "Liquibase MongoDB", "QWC", false),
