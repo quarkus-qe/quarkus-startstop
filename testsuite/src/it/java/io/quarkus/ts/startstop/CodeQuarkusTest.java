@@ -102,6 +102,7 @@ public class CodeQuarkusTest {
                 LOGGER.info("Removing repositories and pluginRepositories from pom.xml ...");
                 removeRepositoriesAndPluginRepositories(appDir + File.separator + "pom.xml");
             }
+            checkPackaging(appDir.getAbsolutePath(), "quarkus");
             adjustPrettyPrintForJsonLogging(appDir.getAbsolutePath());
             confIndexPageForSkeleton(appDir.getAbsolutePath());
             disableDevServices(appDir.getAbsolutePath());
@@ -277,6 +278,11 @@ public class CodeQuarkusTest {
             writeReport(cn, mn, whatIDidReport.toString());
             cleanDirOrFile(appDir.getAbsolutePath());
         }
+    }
+
+    private void checkPackaging(String appDir, String packaging) throws IOException {
+        String pom = Files.readString(Paths.get(appDir + File.separator + "pom.xml"));
+        assertTrue(pom.contains("<packaging>" + packaging + "</packaging>"), "App should have packaging " + packaging);
     }
 
     @ParameterizedTest
