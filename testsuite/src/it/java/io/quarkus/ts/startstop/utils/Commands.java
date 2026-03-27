@@ -323,7 +323,8 @@ public class Commands {
      */
     public static String download(Collection<CodeQuarkusExtensions> extensions, String destinationZipFile) throws IOException {
         String downloadURL = getCodeQuarkusURL() + "/api/download?" +
-                extensions.stream().map(x -> "e=" + x.id).collect(Collectors.joining("&"));
+                extensions.stream().map(x -> "e=" + x.id).collect(Collectors.joining("&")) +
+                "&S=3.20";
         return download(downloadURL, destinationZipFile);
     }
 
