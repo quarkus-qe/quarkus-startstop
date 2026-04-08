@@ -188,6 +188,9 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Cross-Origin Resource Sharing \\(CORS\\) filter must be enabled for Streamable HTTP MCP server endpoints.*"),
             // GH Actions Windows runners and Netty DNS config warning
             Pattern.compile(".*DefaultDnsServerAddressStreamProvider.*Google Public DNS as a fallback.*"),
+            // CSD jenkins include env property JAVA_TOOL_OPTIONS: -Dmaven.ext.class.path=... which gets picket by protobuf
+            // but the property itself is on different line, so cannot be checked for
+            Pattern.compile(".*com.google.protobuf-protoc.*completed but logged errors.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
