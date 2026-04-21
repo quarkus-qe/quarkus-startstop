@@ -79,8 +79,9 @@ public enum WhitelistLogLines {
             Pattern.compile(".*WARNING: Please consider reporting this to the maintainers of class io\\.netty\\.util\\.internal\\.PlatformDependent0\\$2.*"),
             Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::allocateMemory will be removed in a future release.*"),
             // TODO remove this when https://github.com/quarkusio/quarkus/issues/47504 is fixed
-            // issue reported in https://github.com/quarkusio/quarkus/issues/52014
+            // issue reported in https://github.com/quarkusio/quarkus/issues/47504
             Pattern.compile(".*This Gauge has been already registered .*netty.eventexecutor.workers.*"),
+            Pattern.compile(".*This Gauge has been already registered .*http.client.active.connections.*"),
             // TODO remove this when https://github.com/quarkusio/quarkus/issues/51990#issuecomment-3846976974 is fixed
             Pattern.compile(".*The Maven extensions for the Quarkus Maven plugin are not enabled for this build.*"),
             // TODO remove this when https://github.com/quarkusio/quarkus/issues/41016#issuecomment-3847062608 is fixed
@@ -174,8 +175,9 @@ public enum WhitelistLogLines {
             // Remove when https://github.com/quarkusio/quarkus/issues/51556 is fixed
             Pattern.compile(".*Unrecognized configuration key \"quarkus.messaging.incoming.words-in.auto.offset.reset\" was provided.*"),
             // TODO remove this when https://github.com/quarkusio/quarkus/issues/47504 is fixed
-            // issue reported in https://github.com/quarkusio/quarkus/issues/52014
+            // issue reported in https://github.com/quarkusio/quarkus/issues/47504
             Pattern.compile(".*This Gauge has been already registered .*netty.eventexecutor.workers.*"),
+            Pattern.compile(".*This Gauge has been already registered .*http.client.active.connections.*"),
             // TODO remove this when https://github.com/quarkusio/quarkus/issues/51990#issuecomment-3846976974 is fixed
             Pattern.compile(".*The Maven extensions for the Quarkus Maven plugin are not enabled for this build.*"),
             // TODO remove this when https://github.com/quarkusio/quarkus/issues/41016#issuecomment-3847062608 is fixed
