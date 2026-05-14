@@ -40,6 +40,10 @@ public enum WhitelistLogLines {
             Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::allocateMemory has been called by io\\.netty\\.util\\.internal\\.PlatformDependent0\\$2.*"),
             Pattern.compile(".*WARNING: Please consider reporting this to the maintainers of class io\\.netty\\.util\\.internal\\.PlatformDependent0\\$2.*"),
             Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::allocateMemory will be removed in a future release.*"),
+            // guice (maven 3.9.11)
+            Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::staticFieldBase has been called by com\\.google\\.inject\\.internal\\.aop\\.HiddenClassDefiner.*"),
+            Pattern.compile(".*WARNING: Please consider reporting this to the maintainers of class com\\.google\\.inject\\.internal\\.aop\\.HiddenClassDefiner.*"),
+            Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::staticFieldBase will be removed in a future release.*"),
             // TODO remove this when https://github.com/quarkusio/quarkus/issues/51990#issuecomment-3846976974 is fixed
             Pattern.compile(".*The Maven extensions for the Quarkus Maven plugin are not enabled for this build.*"),
             // TODO remove this when https://github.com/quarkusio/quarkus/issues/41016#issuecomment-3847062608 is fixed
@@ -78,6 +82,10 @@ public enum WhitelistLogLines {
             Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::allocateMemory has been called by io\\.netty\\.util\\.internal\\.PlatformDependent0\\$2.*"),
             Pattern.compile(".*WARNING: Please consider reporting this to the maintainers of class io\\.netty\\.util\\.internal\\.PlatformDependent0\\$2.*"),
             Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::allocateMemory will be removed in a future release.*"),
+            // guice (maven 3.9.11)
+            Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::staticFieldBase has been called by com\\.google\\.inject\\.internal\\.aop\\.HiddenClassDefiner.*"),
+            Pattern.compile(".*WARNING: Please consider reporting this to the maintainers of class com\\.google\\.inject\\.internal\\.aop\\.HiddenClassDefiner.*"),
+            Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::staticFieldBase will be removed in a future release.*"),
             // TODO remove this when https://github.com/quarkusio/quarkus/issues/47504 is fixed
             // issue reported in https://github.com/quarkusio/quarkus/issues/52014
             Pattern.compile(".*This Gauge has been already registered .*netty.eventexecutor.workers.*"),
@@ -171,6 +179,10 @@ public enum WhitelistLogLines {
             Pattern.compile(".*WARNING: java\\.lang\\.System::load has been called by com\\.sun\\.jna\\.Native in an unnamed module.*"),
             Pattern.compile(".*WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module.*"),
             Pattern.compile(".*WARNING: Restricted methods will be blocked in a future release unless native access is enabled.*"),
+            // guice (maven 3.9.11)
+            Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::staticFieldBase has been called by com\\.google\\.inject\\.internal\\.aop\\.HiddenClassDefiner.*"),
+            Pattern.compile(".*WARNING: Please consider reporting this to the maintainers of class com\\.google\\.inject\\.internal\\.aop\\.HiddenClassDefiner.*"),
+            Pattern.compile(".*WARNING: sun\\.misc\\.Unsafe::staticFieldBase will be removed in a future release.*"),
             // Remove when https://github.com/quarkusio/quarkus/issues/51556 is fixed
             Pattern.compile(".*Unrecognized configuration key \"quarkus.messaging.incoming.words-in.auto.offset.reset\" was provided.*"),
             // TODO remove this when https://github.com/quarkusio/quarkus/issues/47504 is fixed
