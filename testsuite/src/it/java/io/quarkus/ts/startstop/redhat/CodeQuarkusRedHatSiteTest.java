@@ -41,7 +41,7 @@ public class CodeQuarkusRedHatSiteTest {
     public static final String elementRedHatLogoByXpath = "//img[@class=\"logo\"][@alt=\"Red Hat Logo\"]";
     public static final String elementStreamPickerByXpath = "//div[@class=\"stream-picker dropdown\"]";
     public static final String elementStreamItemsByXpath = "//div[@class=\"dropdown-item\"]";
-    public static final String elementSupportedFlagByXpath = "//div[@class=\"extension-tag support-full-support dropdown-toggle\"]";
+    public static final String elementSupportedFlagByXpath = "//div[@class=\"extension-tag support-full-support extension-tag-full-name dropdown-toggle\"]";
     public static final String elementQuarkusPlatformVersionByXpath = "//div[contains(@class, 'quarkus-stream')]";
     public static final String elementExtensionByXpath = "//div[@class=\"extension-row\" and @aria-label=\"%s\"]";
     public static final String elementSupportFilterXpath = "//div[@class='filter-combo-button dropdown-toggle' and @aria-label=\"Toggle support combobox\"]";
