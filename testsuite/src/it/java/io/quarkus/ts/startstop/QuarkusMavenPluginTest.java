@@ -69,6 +69,11 @@ public class QuarkusMavenPluginTest {
 
             List<String> baseBuildCmd = new ArrayList<>();
             baseBuildCmd.addAll(Arrays.asList("mvn", "clean", "quarkus:" + goalName));
+            if (goalName.equals("update")) {
+                // quarkus:update goal requires confirmation that you want to apply the updates (you must interactively type Y).
+                // This option should force it to apply the updates without confirmation.
+                baseBuildCmd.add("-Drewrite");
+            }
             baseBuildCmd.add("-Dquarkus.version=" + getQuarkusVersion());
             baseBuildCmd.add("-Dquarkus.platform.group-id=" + getQuarkusGroupId());
             List<String> cmd = getBuildCommand(baseBuildCmd.toArray(new String[0]));
