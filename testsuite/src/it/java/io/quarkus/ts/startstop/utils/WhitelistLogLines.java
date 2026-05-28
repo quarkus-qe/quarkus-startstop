@@ -89,6 +89,7 @@ public enum WhitelistLogLines {
             // TODO remove this when https://github.com/quarkusio/quarkus/issues/47504 is fixed
             // issue reported in https://github.com/quarkusio/quarkus/issues/52014
             Pattern.compile(".*This Gauge has been already registered .*netty.eventexecutor.workers.*"),
+            Pattern.compile(".*This Gauge has been already registered .*http.client.active.connections.*"),
             // TODO remove this when https://github.com/quarkusio/quarkus/issues/51990#issuecomment-3846976974 is fixed
             Pattern.compile(".*The Maven extensions for the Quarkus Maven plugin are not enabled for this build.*"),
             // TODO remove this when https://github.com/quarkusio/quarkus/issues/41016#issuecomment-3847062608 is fixed
@@ -188,6 +189,7 @@ public enum WhitelistLogLines {
             // TODO remove this when https://github.com/quarkusio/quarkus/issues/47504 is fixed
             // issue reported in https://github.com/quarkusio/quarkus/issues/52014
             Pattern.compile(".*This Gauge has been already registered .*netty.eventexecutor.workers.*"),
+            Pattern.compile(".*This Gauge has been already registered .*http.client.active.connections.*"),
             // TODO remove this when https://github.com/quarkusio/quarkus/issues/51990#issuecomment-3846976974 is fixed
             Pattern.compile(".*The Maven extensions for the Quarkus Maven plugin are not enabled for this build.*"),
             // TODO remove this when https://github.com/quarkusio/quarkus/issues/41016#issuecomment-3847062608 is fixed
