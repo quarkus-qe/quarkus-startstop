@@ -171,9 +171,9 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        java: [ 21 ]
+        java: [ 25 ]
         graalvm-version: [ "mandrel-latest" ]
-        graalvm-java-version: [ "21" ]
+        graalvm-java-version: [ "25" ]
     steps:
       - uses: actions/checkout@v5
       - name: Install JDK {{ matrix.java }}
