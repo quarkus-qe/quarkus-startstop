@@ -126,6 +126,9 @@ public class CodeQuarkusRedHatSiteTest {
         streamPicker.click();
         Locator streamItems = page.locator(elementStreamItemsByXpath);
         assertTrue(streamItems.count() > 0, "No stream is defined");
+        assertTrue(streamItems.count() > 1, "Two (or more) streams are expected to be defined defined, streamItems count: " + streamItems.count() + "\n" +
+                "Production instances have at least 2 streams, because product offerings have 2 active streams\n" +
+                "Testing instances need to have at least 2 streams, because CLI update scenarios from previous LTS need to be tested.");
     }
 
     @Test
