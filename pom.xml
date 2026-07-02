@@ -22,7 +22,7 @@
         <commons.io.version>2.22.0</commons.io.version>
         <commons.lang.version>3.20.0</commons.lang.version>
         <jboss-logging.version>3.6.3.Final</jboss-logging.version>
-        <log4j.version>2.26.0</log4j.version>
+        <log4j.version>2.26.1</log4j.version>
         <playwright.version>1.61.0</playwright.version>
         <vertx-grpcio-server.version>5.1.3</vertx-grpcio-server.version>
         <formatter-maven-plugin.version>2.29.0</formatter-maven-plugin.version>
