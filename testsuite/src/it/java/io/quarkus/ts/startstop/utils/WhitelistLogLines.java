@@ -48,6 +48,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*The Maven extensions for the Quarkus Maven plugin are not enabled for this build.*"),
             // TODO remove this when https://github.com/quarkusio/quarkus/issues/41016#issuecomment-3847062608 is fixed
             Pattern.compile(".*Option 'DynamicProxyConfigurationResources' is deprecated and might be removed in a future release.*"),
+            // RHEL 8 uses docker cgroups v1 by default, those are considered deprecated in native build
+            Pattern.compile(".*Support for cgroup v1 is deprecated and planned to be removed.*"),
     }),
     FULL_MICROPROFILE(new Pattern[]{
             // Some artifacts names...
