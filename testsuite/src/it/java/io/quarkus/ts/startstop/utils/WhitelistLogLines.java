@@ -23,6 +23,7 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Warning: The option '-H:ReflectionConfigurationResources=META-INF/native-image/io\\.netty/netty-transport/reflection-config\\.json' is experimental and must be enabled via.*"),
             Pattern.compile(".*Unrecognized configuration key \"quarkus.version\" was provided.*"),
             // RHEL 8 uses docker cgroups v1 by default, those are considered deprecated in native build
+            Pattern.compile(".*Command docker \\(pid .*\\) completed.*but logged.*err.*"),
             Pattern.compile(".*Support for cgroup v1 is deprecated and planned to be removed.*"),
     }),
     FULL_MICROPROFILE(new Pattern[]{
