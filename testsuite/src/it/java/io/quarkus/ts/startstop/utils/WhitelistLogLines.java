@@ -197,6 +197,9 @@ public enum WhitelistLogLines {
             // CSD jenkins include env property JAVA_TOOL_OPTIONS: -Dmaven.ext.class.path=... which gets picket by protobuf
             // but the property itself is on different line, so cannot be checked for
             Pattern.compile(".*com.google.protobuf-protoc.*completed but logged errors.*"),
+            // TODO remove this when https://github.com/quarkusio/quarkus/issues/55835 is fixed
+            Pattern.compile(".*A restricted method in java.lang.foreign.Linker has been called.*"),
+            Pattern.compile(".*java.lang.foreign.Linker::downcallHandle has been called by org.aesh.terminal.tty.impl.LibC in an unnamed module.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
