@@ -90,6 +90,8 @@ public enum WhitelistLogLines {
             Pattern.compile(".*The Maven extensions for the Quarkus Maven plugin are not enabled for this build.*"),
             // TODO remove this when https://github.com/quarkusio/quarkus/issues/41016#issuecomment-3847062608 is fixed
             Pattern.compile(".*Option 'DynamicProxyConfigurationResources' is deprecated and might be removed in a future release.*"),
+            // TODO remove this when https://github.com/quarkusio/quarkus/issues/55855 is fixed
+            Pattern.compile(".*OpenTelemetry API usage issue detected.*"),
     }),
     GENERATED_SKELETON(new Pattern[]{
             // Harmless warning
@@ -200,6 +202,10 @@ public enum WhitelistLogLines {
             // TODO remove this when https://github.com/quarkusio/quarkus/issues/55835 is fixed
             Pattern.compile(".*A restricted method in java.lang.foreign.Linker has been called.*"),
             Pattern.compile(".*java.lang.foreign.Linker::downcallHandle has been called by org.aesh.terminal.tty.impl.LibC in an unnamed module.*"),
+            // TODO remove this when https://github.com/quarkusio/quarkus/issues/55855 is fixed
+            Pattern.compile(".*OpenTelemetry API usage issue detected.*"),
+            // stacktrace line is falsely marked as an error log entry because the .onError() method gets picked by warnErrorDetectionPattern
+            Pattern.compile(".*onError.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.
