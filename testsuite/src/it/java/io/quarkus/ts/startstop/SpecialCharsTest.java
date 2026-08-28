@@ -172,6 +172,7 @@ public class SpecialCharsTest {
 
     @Test
     @Tag("native")
+    @DisabledOnOs(value = {OS.WINDOWS}, disabledReason = "Native on Windows is not supported")
     public void spacesNative(TestInfo testInfo) throws IOException, InterruptedException {
         testRuntime(testInfo, Apps.JAKARTA_REST_MINIMAL, MvnCmds.NATIVE, "s p a c e s n a t i v e");
     }
