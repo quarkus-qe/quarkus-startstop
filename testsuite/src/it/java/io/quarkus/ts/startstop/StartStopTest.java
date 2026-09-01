@@ -7,6 +7,7 @@ import io.quarkus.ts.startstop.utils.LogBuilder;
 import io.quarkus.ts.startstop.utils.Logs;
 import io.quarkus.ts.startstop.utils.MvnCmds;
 import io.quarkus.ts.startstop.utils.OpenTelemetryCollector;
+import io.quarkus.ts.startstop.utils.Timeout;
 import io.quarkus.ts.startstop.utils.UnitTestResource;
 import io.quarkus.ts.startstop.utils.WebpageTester;
 import org.apache.commons.io.FileUtils;
@@ -103,7 +104,7 @@ public class StartStopTest {
             final List<String> buildCommand = getBuildCommand(baseBuildCmd.toArray(new String[0]));
             LOGGER.info("Running " + baseBuildCmd + " in the " + appDir.getAbsolutePath());
 
-            buildService.submit(new Commands.ProcessRunner(appDir, buildLogA, buildCommand, 20));
+            buildService.submit(new Commands.ProcessRunner(appDir, buildLogA, buildCommand, Timeout.ofMinutes(20)));
             appendln(whatIDidReport, "# " + canonicalName + ", " + methodName);
             appendln(whatIDidReport, (new Date()).toString());
             appendln(whatIDidReport, appDir.getAbsolutePath());
@@ -157,7 +158,8 @@ public class StartStopTest {
                 pA = runCommand(runCommand, appDir, runLogA);
 
                 // Test web pages
-                long timeToFirstOKRequest = WebpageTester.testWeb(app.urlContent.urlContent[0][0], 10, app.urlContent.urlContent[0][1], true);
+                long timeToFirstOKRequest = WebpageTester.testWeb(app.urlContent.urlContent[0][0], Timeout.ofSeconds(10),
+                        app.urlContent.urlContent[0][1], true);
 
                 final Process currentProcess = pA;
                 final int runId = i;
@@ -165,7 +167,7 @@ public class StartStopTest {
 
                 LOGGER.info("Testing web page content...");
                 for (String[] urlContent : app.urlContent.urlContent) {
-                    WebpageTester.testWeb(urlContent[0], 5, urlContent[1], false);
+                    WebpageTester.testWeb(urlContent[0], Timeout.ofSeconds(5), urlContent[1], false);
                 }
 
                 LOGGER.info("Terminate and scan logs...");
@@ -178,7 +180,7 @@ public class StartStopTest {
 
                 LOGGER.info("Gonna wait for ports closed...");
                 // Release ports
-                assertTrue(waitForTcpClosed("localhost", parsePort(app.urlContent.urlContent[0][0]), 60),
+                assertTrue(waitForTcpClosed("localhost", parsePort(app.urlContent.urlContent[0][0]), Timeout.ofMinutes(1)),
                         "Main port is still open");
                 if (!skipLogCheck) {
                     checkLog(canonicalName, methodName, app, mvnCmds, runLogA);

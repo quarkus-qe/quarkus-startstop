@@ -314,6 +314,16 @@ The need for async-profiler is assumed just for StartStopTest at this stage, see
 
 Ensure the system is prepared for async-profiler executions preventing unexpected warnings, details are mentioned in the above linked `TROUBLESHOOTING.md document.
 
+## Timeout scaling
+
+This test suite supports simple timeout scaling. On multiple places, the `Timeout` class is used to represent timeout
+values. This class multiplies the given value with the value of the `ts.timeout.multiplier` system property and uses
+the result as the actual timeout.
+
+To run tests with 4x longer timeouts, pass `-Dts.timeout.multiplier=4`.
+
+You can also pass a fraction if you want shorter timeouts: `-Dts.timeout.multiplier=0.5`.
+
 ## Windows notes
 
 ### Note on Native image

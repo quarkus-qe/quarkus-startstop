@@ -3,6 +3,7 @@ package io.quarkus.ts.startstop;
 import io.quarkus.ts.startstop.utils.Apps;
 import io.quarkus.ts.startstop.utils.MvnCmds;
 import io.quarkus.ts.startstop.utils.Commands;
+import io.quarkus.ts.startstop.utils.Timeout;
 import org.jboss.logging.Logger;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -68,7 +69,7 @@ public class NativeDebugTest {
             List<String> cmd = getBuildCommand(baseBuildCmd.toArray(new String[0]));
 
             LOGGER.info("Building (" + cmd + ")");
-            buildService.submit(new Commands.ProcessRunner(appDir, buildLogA, cmd, 20));
+            buildService.submit(new Commands.ProcessRunner(appDir, buildLogA, cmd, Timeout.ofMinutes(20)));
             buildService.shutdown();
             buildService.awaitTermination(30, TimeUnit.MINUTES);
 

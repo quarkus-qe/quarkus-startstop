@@ -4,6 +4,7 @@ import io.quarkus.ts.startstop.utils.Apps;
 import io.quarkus.ts.startstop.utils.CodeQuarkusExtensions;
 import io.quarkus.ts.startstop.utils.Commands;
 import io.quarkus.ts.startstop.utils.MvnCmds;
+import io.quarkus.ts.startstop.utils.Timeout;
 import io.quarkus.ts.startstop.utils.URLContent;
 import io.quarkus.ts.startstop.utils.WebpageTester;
 
@@ -123,7 +124,7 @@ public class CodeQuarkusTest {
                 appendlnSection(whatIDidReport, String.join(" ", cmd));
 
                 LOGGER.info("Building (" + cmd + ")");
-                buildService.submit(new Commands.ProcessRunner(appDir, buildLogA, cmd, 20));
+                buildService.submit(new Commands.ProcessRunner(appDir, buildLogA, cmd, Timeout.ofMinutes(20)));
 
                 buildService.shutdown();
                 buildService.awaitTermination(30, TimeUnit.MINUTES);
@@ -147,14 +148,14 @@ public class CodeQuarkusTest {
             pA = runCommand(cmd, appDir, runLogA);
 
             // It takes time to download the Internet
-            long timeoutS = 10 * 60;
-            LOGGER.info("Timeout: " + timeoutS + "s. Waiting for the web content...");
-            WebpageTester.testWeb(skeletonApp.urlContent[0][0], timeoutS, skeletonApp.urlContent[0][1], false);
+            Timeout timeout = Timeout.ofMinutes(10);
+            LOGGER.info("Timeout: " + timeout + ". Waiting for the web content...");
+            WebpageTester.testWeb(skeletonApp.urlContent[0][0], timeout, skeletonApp.urlContent[0][1], false);
             LOGGER.info("Terminating and scanning logs...");
             pA.getInputStream().available();
             processStopper(pA, false);
             LOGGER.info("Gonna wait for ports closed...");
-            assertTrue(waitForTcpClosed("localhost", parsePort(skeletonApp.urlContent[0][0]), 60),
+            assertTrue(waitForTcpClosed("localhost", parsePort(skeletonApp.urlContent[0][0]), Timeout.ofMinutes(1)),
                     "Main port is still open.");
             checkLog(cn, mn, Apps.GENERATED_SKELETON, mvnCmds, runLogA);
             checkListeningHost(cn, mn, mvnCmds, runLogA);
