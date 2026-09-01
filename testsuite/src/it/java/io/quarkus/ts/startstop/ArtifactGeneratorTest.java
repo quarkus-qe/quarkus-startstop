@@ -50,6 +50,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import io.quarkus.ts.startstop.utils.Timeout;
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
 import org.junit.jupiter.api.Assertions;
@@ -313,7 +314,7 @@ public class ArtifactGeneratorTest {
             // Build
             buildLogA = new File(logsDir + File.separator + (flags.contains(TestFlags.WARM_UP) ? "warmup-artifact-build.log" : "artifact-build.log"));
             ExecutorService buildService = Executors.newFixedThreadPool(1);
-            buildService.submit(new Commands.ProcessRunner(appBaseDir, buildLogA, generatorCmd, 20));
+            buildService.submit(new Commands.ProcessRunner(appBaseDir, buildLogA, generatorCmd, Timeout.ofMinutes(20)));
             appendln(whatIDidReport, "# " + cn + ", " + mn + ", warmup run: " + flags.contains(TestFlags.WARM_UP));
             appendln(whatIDidReport, (new Date()).toString());
             appendln(whatIDidReport, appBaseDir.getAbsolutePath());
@@ -344,8 +345,8 @@ public class ArtifactGeneratorTest {
             pA = runCommand(runCmd, appDir, runLogA);
             // Test web pages
             // The reason for a seemingly large timeout of 20 minutes is that dev mode will be downloading the Internet on the first fresh run.
-            long timeoutS = (flags.contains(TestFlags.WARM_UP) ? 20 * 60 : 120);
-            long timeToFirstOKRequest = WebpageTester.testWeb(skeletonApp.urlContent[0][0], timeoutS,
+            Timeout timeout = flags.contains(TestFlags.WARM_UP) ? Timeout.ofMinutes(20) : Timeout.ofMinutes(2);
+            long timeToFirstOKRequest = WebpageTester.testWeb(skeletonApp.urlContent[0][0], timeout,
                     skeletonApp.urlContent[0][1], !flags.contains(TestFlags.WARM_UP));
 
             if (flags.contains(TestFlags.WARM_UP)) {
@@ -354,7 +355,7 @@ public class ArtifactGeneratorTest {
                 processStopper(pA, false);
                 LOGGER.info("Gonna wait for ports closed after warmup...");
                 // Release ports
-                assertTrue(waitForTcpClosed("localhost", parsePort(skeletonApp.urlContent[0][0]), 60),
+                assertTrue(waitForTcpClosed("localhost", parsePort(skeletonApp.urlContent[0][0]), Timeout.ofMinutes(1)),
                         "Main port is still open after warmup");
                 checkLog(cn, mn, Apps.GENERATED_SKELETON, MvnCmds.GENERATOR, runLogA);
                 return;
@@ -371,8 +372,10 @@ public class ArtifactGeneratorTest {
 
             // test modified class and measure time
             long timeToReloadedOKRequest = WebpageTester.testWeb(
-                    flags.contains(TestFlags.RESTEASY_REACTIVE)?skeletonApp.urlContent[3][0]:skeletonApp.urlContent[1][0], 60,
-                    flags.contains(TestFlags.RESTEASY_REACTIVE)?skeletonApp.urlContent[3][1]:skeletonApp.urlContent[1][1], true);
+                    flags.contains(TestFlags.RESTEASY_REACTIVE)?skeletonApp.urlContent[3][0]:skeletonApp.urlContent[1][0],
+                    Timeout.ofMinutes(1),
+                    flags.contains(TestFlags.RESTEASY_REACTIVE)?skeletonApp.urlContent[3][1]:skeletonApp.urlContent[1][1],
+                    true);
 
             // add new class
             Path addedFile = Paths
@@ -382,7 +385,7 @@ public class ArtifactGeneratorTest {
             copyFileForSkeleton("AddedController.java", addedFile);
 
             // test added class
-            WebpageTester.testWeb(skeletonApp.urlContent[2][0], 60, skeletonApp.urlContent[2][1], false);
+            WebpageTester.testWeb(skeletonApp.urlContent[2][0], Timeout.ofMinutes(1), skeletonApp.urlContent[2][1], false);
 
             LOGGER.info("Terminate and scan logs...");
             pA.getInputStream().available();
@@ -394,7 +397,7 @@ public class ArtifactGeneratorTest {
 
             LOGGER.info("Gonna wait for ports closed...");
             // Release ports
-            assertTrue(waitForTcpClosed("localhost", parsePort(skeletonApp.urlContent[0][0]), 60),
+            assertTrue(waitForTcpClosed("localhost", parsePort(skeletonApp.urlContent[0][0]), Timeout.ofMinutes(1)),
                     "Main port is still open");
             checkLog(cn, mn, Apps.GENERATED_SKELETON, MvnCmds.GENERATOR, runLogA);
 
