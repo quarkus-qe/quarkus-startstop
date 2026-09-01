@@ -401,12 +401,11 @@ public class Commands {
         transformer.transform(new DOMSource(doc), new StreamResult(pomFile));
     }
 
-    public static boolean waitForTcpClosed(String host, int port, long loopTimeoutS) throws InterruptedException, UnknownHostException {
+    public static boolean waitForTcpClosed(String host, int port, Timeout timeout) throws InterruptedException, UnknownHostException {
         InetAddress address = InetAddress.getByName(host);
-        long now = System.currentTimeMillis();
-        long startTime = now;
         InetSocketAddress socketAddr = new InetSocketAddress(address, port);
-        while (now - startTime < 1000 * loopTimeoutS) {
+        TimeoutMeasure measure = timeout.measure();
+        while (measure.hasTimeLeft()) {
             try (Socket socket = new Socket()) {
                 // If it let's you write something there, it is still ready.
                 socket.connect(socketAddr, 1000);
@@ -420,7 +419,6 @@ public class Commands {
                 return true;
             }
             Thread.sleep(1000);
-            now = System.currentTimeMillis();
         }
         return false;
     }
@@ -716,13 +714,13 @@ public class Commands {
         final File directory;
         final File log;
         final List<String> command;
-        final long timeoutMinutes;
+        final Timeout timeout;
 
-        public ProcessRunner(File directory, File log, List<String> command, long timeoutMinutes) {
+        public ProcessRunner(File directory, File log, List<String> command, Timeout timeout) {
             this.directory = directory;
             this.log = log;
             this.command = command;
-            this.timeoutMinutes = timeoutMinutes;
+            this.timeout = timeout;
         }
 
         @Override
@@ -741,7 +739,7 @@ public class Commands {
                 e.printStackTrace();
             }
             try {
-                Objects.requireNonNull(p).waitFor(timeoutMinutes, TimeUnit.MINUTES);
+                Objects.requireNonNull(p).waitFor(timeout.toSeconds(), TimeUnit.SECONDS);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

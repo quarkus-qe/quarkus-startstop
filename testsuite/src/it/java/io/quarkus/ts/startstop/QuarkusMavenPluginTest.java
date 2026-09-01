@@ -2,6 +2,7 @@ package io.quarkus.ts.startstop;
 
 import io.quarkus.ts.startstop.utils.Apps;
 import io.quarkus.ts.startstop.utils.Commands;
+import io.quarkus.ts.startstop.utils.Timeout;
 import org.apache.commons.io.FileUtils;
 import org.jboss.logging.Logger;
 import org.junit.jupiter.api.Tag;
@@ -75,7 +76,7 @@ public class QuarkusMavenPluginTest {
 
             LOGGER.info("Running " + String.join(" ",cmd) +" in " + appDestDir);
 
-            buildService.submit(new Commands.ProcessRunner(appDestDir, logFile, cmd, 5));
+            buildService.submit(new Commands.ProcessRunner(appDestDir, logFile, cmd, Timeout.ofMinutes(5)));
             appendln(whatIDidReport, "# " + cn + ", " + mn);
             appendln(whatIDidReport, (new Date()).toString());
             appendln(whatIDidReport, appDestDir.getAbsolutePath());

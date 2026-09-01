@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 import io.quarkus.ts.startstop.utils.Apps;
 import io.quarkus.ts.startstop.utils.Commands;
 import io.quarkus.ts.startstop.utils.MvnCmds;
+import io.quarkus.ts.startstop.utils.Timeout;
 import io.quarkus.ts.startstop.utils.WebpageTester;
 import org.apache.commons.io.FileUtils;
 import org.jboss.logging.Logger;
@@ -106,7 +107,7 @@ public class SpecialCharsTest {
                 appendlnSection(whatIDidReport, String.join(" ", cmd));
 
                 LOGGER.info("Building (" + cmd + ")");
-                buildService.submit(new Commands.ProcessRunner(appDir, buildLogA, cmd, 20));
+                buildService.submit(new Commands.ProcessRunner(appDir, buildLogA, cmd, Timeout.ofMinutes(20)));
 
                 buildService.shutdown();
                 buildService.awaitTermination(30, TimeUnit.MINUTES);
@@ -134,7 +135,7 @@ public class SpecialCharsTest {
 
             // Test web page
             LOGGER.info("Testing web page content...");
-            int timeout = mvnCmds != MvnCmds.DEV ? 30 : 120;
+            Timeout timeout = mvnCmds != MvnCmds.DEV ? Timeout.ofSeconds(30) : Timeout.ofMinutes(3);
             for (String[] urlContent : app.urlContent.urlContent) {
                 WebpageTester.testWeb(urlContent[0], timeout, urlContent[1], false);
             }
