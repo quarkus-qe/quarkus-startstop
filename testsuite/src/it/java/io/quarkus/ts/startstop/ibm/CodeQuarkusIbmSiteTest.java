@@ -8,6 +8,7 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.options.ElementState;
 import io.quarkus.ts.startstop.utils.Commands;
+import io.quarkus.ts.startstop.utils.Timeout;
 import org.jboss.logging.Logger;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assumptions;
@@ -72,7 +73,7 @@ public class CodeQuarkusIbmSiteTest {
 
     @Test
     public void validatePresenceOfIcon(TestInfo testInfo) {
-        Page page = loadPage(webPageUrl, 60);
+        Page page = loadPage(webPageUrl, Timeout.ofMinutes(1));
         LOGGER.info("Trying to find element: " + elementIconByXpath);
         Locator icon = page.locator(elementIconByXpath);
         assertEquals(1, icon.count(), "Element: " + elementIconByXpath + " is missing!");
@@ -80,7 +81,7 @@ public class CodeQuarkusIbmSiteTest {
 
     @Test
     public void validatePresenceOfTitle(TestInfo testInfo) {
-        Page page = loadPage(webPageUrl, 60);
+        Page page = loadPage(webPageUrl, Timeout.ofMinutes(1));
         LOGGER.info("Verify page title is: " + elementTitleByText);
         assertEquals(elementTitleByText, page.title(),
                 "Title doesn't match. Found on the web: " + page.title() + ". Expected: " + elementTitleByText);
@@ -88,7 +89,7 @@ public class CodeQuarkusIbmSiteTest {
 
     @Test
     public void validatePresenceOfBrandName(TestInfo testInfo) {
-        Page page = loadPage(webPageUrl, 60);
+        Page page = loadPage(webPageUrl, Timeout.ofMinutes(1));
         LOGGER.info("Trying to find element: " + elementBrandNameByXpath);
         Locator brandName = page.locator(elementBrandNameByXpath);
         brandName.elementHandle().waitForElementState(ElementState.VISIBLE);
@@ -97,7 +98,7 @@ public class CodeQuarkusIbmSiteTest {
 
     @Test
     public void validatePresenceOfSupportedFlags(TestInfo testInfo) {
-        Page page = loadPage(webPageUrl + "/?e=grpc", 60);
+        Page page = loadPage(webPageUrl + "/?e=grpc", Timeout.ofMinutes(1));
         LOGGER.info("Trying to find element: " + elementSupportedFlagByXpath);
         Locator supportedExtensions = page.locator(elementSupportedFlagByXpath);
         assertTrue(supportedExtensions.count() >= 1, "Element: " + elementSupportedFlagByXpath + " is missing!");
@@ -105,7 +106,7 @@ public class CodeQuarkusIbmSiteTest {
 
     @Test
     public void validatePresenceOfJavaVersionSelect(TestInfo testInfo) {
-        Page page = loadPage(webPageUrl, 60);
+        Page page = loadPage(webPageUrl, Timeout.ofMinutes(1));
         LOGGER.info("Trying to find element: " + elementJavaVersionSelectByXpath);
         Locator javaVersionSelect = page.locator(elementJavaVersionSelectByXpath);
         assertTrue(javaVersionSelect.count() == 1, "Element: " + elementJavaVersionSelectByXpath + " is missing!");
@@ -117,7 +118,7 @@ public class CodeQuarkusIbmSiteTest {
 
     @Test
     public void validatePresenceOfStreamVersionSelect(TestInfo testInfo) {
-        Page page = loadPage(webPageUrl, 60);
+        Page page = loadPage(webPageUrl, Timeout.ofMinutes(1));
         LOGGER.info("Trying to find element: " + elementStreamPickerByXpath);
         Locator streamPicker = page.locator(elementStreamPickerByXpath);
         assertTrue(streamPicker.isVisible(), "Element: " + streamPicker + " is missing!");
@@ -137,7 +138,7 @@ public class CodeQuarkusIbmSiteTest {
         // TODO change this to IBM when it have standalone platform name
         Assumptions.assumeTrue(quarkusPlatformVersion.contains("redhat"));
 
-        Page page = loadPage(webPageUrl, 60);
+        Page page = loadPage(webPageUrl, Timeout.ofMinutes(1));
         LOGGER.info("Trying to find element: " + elementQuarkusPlatformVersionByXpath);
         String quarkusPlatformVersionFromWeb = page.locator(elementQuarkusPlatformVersionByXpath).elementHandle().getAttribute("title");
 
@@ -148,7 +149,7 @@ public class CodeQuarkusIbmSiteTest {
 
     @Test
     public void validateQuarkusSearchForAllSupportedExtensions(TestInfo testInfo) {
-        Page page = loadPageWithExtensions(webPageUrl + "?extension-search=support:*", 60);
+        Page page = loadPageWithExtensions(webPageUrl + "?extension-search=support:*", Timeout.ofMinutes(1));
         showAllExtension(page);
         // Check if the supported extension are visible
         LOGGER.info("Trying to find element: " + elementExtensionByXpath.formatted(QUARKUS_REST_EXTENSION));
@@ -166,7 +167,7 @@ public class CodeQuarkusIbmSiteTest {
 
     @Test
     public void validateQuarkusSearchForAllNotSupportedExtensions(TestInfo testInfo) {
-        Page page = loadPageWithExtensions(webPageUrl + "?extension-search=!support", 60);
+        Page page = loadPageWithExtensions(webPageUrl + "?extension-search=!support", Timeout.ofMinutes(1));
         showAllExtension(page);
         // Check if the supported extension are not visible
         LOGGER.info("Trying to find element: " + elementExtensionByXpath.formatted(QUARKUS_REST_EXTENSION));
@@ -189,7 +190,7 @@ public class CodeQuarkusIbmSiteTest {
         // TODO add `dev-preview` when the code.quarkus is updated
         String[] supportScopes = {"full-support", "tech-preview", "dev-support", "supported-in-jvm", "deprecated"};
 
-        Page page = loadPage(webPageUrl, 60);
+        Page page = loadPage(webPageUrl, Timeout.ofMinutes(1));
         // The support menu is not visible without clicking at it
         closeIntroductionModalWindow(page);
         page.locator(elementSupportFilterXpath).click();
@@ -218,18 +219,18 @@ public class CodeQuarkusIbmSiteTest {
         page.locator(elementExpandExtensionXpath).click();
     }
 
-    public Page loadPage(String url, int timeoutSeconds) {
-        return loadPageSettingWaitSelector(url, timeoutSeconds, pageLoadedSelector);
+    public Page loadPage(String url, Timeout timeout) {
+        return loadPageSettingWaitSelector(url, timeout, pageLoadedSelector);
     }
 
-    public Page loadPageWithExtensions(String url, int timeoutSeconds) {
-        return loadPageSettingWaitSelector(url, timeoutSeconds, pageWithExtensionLoadedSelector);
+    public Page loadPageWithExtensions(String url, Timeout timeout) {
+        return loadPageSettingWaitSelector(url, timeout, pageWithExtensionLoadedSelector);
     }
 
-    public Page loadPageSettingWaitSelector(String url, int timeoutSeconds, String selector) {
+    public Page loadPageSettingWaitSelector(String url, Timeout timeout, String selector) {
         LOGGER.info("Loading web page " + url);
         Page page = browserContext.newPage(); // this will create new tab inside browser
-        page.setDefaultTimeout(timeoutSeconds * 1000);
+        page.setDefaultTimeout(timeout.toMillis());
         page.navigate(url);
         page.waitForSelector(selector);
         return page;
