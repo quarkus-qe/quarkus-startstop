@@ -20,26 +20,23 @@ public class WebpageTester {
      * Patiently try to wait for a web page and examine it
      *
      * @param url             address
-     * @param timeoutS        in seconds
+     * @param timeout         timeout
      * @param stringToLookFor string must be present on the page
+     * @param measureTime     whether to try to measure time as precisely as possible
+     * @return the time it took for the {@code url} to contain the given {@code stringToLookFor}
      */
-    public static long testWeb(String url, long timeoutS, String stringToLookFor, boolean measureTime) throws InterruptedException, IOException {
+    public static long testWeb(String url, Timeout timeout, String stringToLookFor, boolean measureTime) throws InterruptedException, IOException {
         if (StringUtils.isBlank(url)) {
             throw new IllegalArgumentException("url must not be empty");
-        }
-        if (timeoutS < 0) {
-            throw new IllegalArgumentException("timeoutS must be positive");
         }
         if (StringUtils.isBlank(stringToLookFor)) {
             throw new IllegalArgumentException("stringToLookFor must contain a non-empty string");
         }
         String webPage = "";
 
-        long now = System.currentTimeMillis();
-        final long startTime = now;
         boolean found = false;
-        long foundTimestamp = -1L;
-        while (now - startTime < 1000 * timeoutS) {
+        TimeoutMeasure measure = timeout.measure();
+        while (measure.hasTimeLeft()) {
             URLConnection c = URI.create(url).toURL().openConnection();
             c.setRequestProperty("Accept", "*/*");
             c.setConnectTimeout(500);
@@ -52,9 +49,6 @@ public class WebpageTester {
             }
             if (webPage.contains(stringToLookFor)) {
                 found = true;
-                if (measureTime) {
-                    foundTimestamp = System.currentTimeMillis();
-                }
                 break;
             }
             if (!measureTime) {
@@ -62,16 +56,15 @@ public class WebpageTester {
             } else {
                 LockSupport.parkNanos(100000);
             }
-            now = System.currentTimeMillis();
         }
 
-        String failureMessage = "Timeout " + timeoutS + "s was reached. " +
+        String failureMessage = "Timeout " + timeout + " was reached. " +
                 (StringUtils.isNotBlank(webPage) ? webPage + " must contain string: " : "Empty webpage does not contain string: ") +
                 "`" + stringToLookFor + "'";
         if (!found) {
             LOGGER.info(failureMessage);
         }
         assertTrue(found, failureMessage);
-        return foundTimestamp - startTime;
+        return measure.elapsedMillis();
     }
 }

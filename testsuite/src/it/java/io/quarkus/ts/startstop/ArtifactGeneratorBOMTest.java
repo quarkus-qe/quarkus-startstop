@@ -4,6 +4,7 @@ import io.quarkus.ts.startstop.utils.Apps;
 import io.quarkus.ts.startstop.utils.Commands;
 import io.quarkus.ts.startstop.utils.MvnCmds;
 import io.quarkus.ts.startstop.utils.TestFlags;
+import io.quarkus.ts.startstop.utils.Timeout;
 import io.quarkus.ts.startstop.utils.URLContent;
 import io.quarkus.ts.startstop.utils.WebpageTester;
 import org.apache.commons.lang3.StringUtils;
@@ -94,7 +95,7 @@ public class ArtifactGeneratorBOMTest {
             LOGGER.info(mn + ": Generator command " + String.join(" ", generatorCmd));
             generateLog = new File(logsDir + File.separator + "bom-artifact-generator.log");
             ExecutorService buildService = Executors.newFixedThreadPool(1);
-            buildService.submit(new Commands.ProcessRunner(appBaseDir, generateLog, generatorCmd, 20));
+            buildService.submit(new Commands.ProcessRunner(appBaseDir, generateLog, generatorCmd, Timeout.ofMinutes(20)));
             appendln(whatIDidReport, "# " + cn + ", " + mn);
             appendln(whatIDidReport, (new Date()).toString());
             appendln(whatIDidReport, appBaseDir.getAbsolutePath());
@@ -119,7 +120,7 @@ public class ArtifactGeneratorBOMTest {
             LOGGER.info(mn + ": Build command " + String.join(" ", buildCmd));
             buildLogA = new File(logsDir + File.separator + "bom-artifact-build.log");
             buildService = Executors.newFixedThreadPool(1);
-            buildService.submit(new Commands.ProcessRunner(appDir, buildLogA, buildCmd, 20));
+            buildService.submit(new Commands.ProcessRunner(appDir, buildLogA, buildCmd, Timeout.ofMinutes(20)));
             appendln(whatIDidReport, appDir.getAbsolutePath());
             appendlnSection(whatIDidReport, String.join(" ", buildCmd));
             buildService.shutdown();
@@ -137,7 +138,7 @@ public class ArtifactGeneratorBOMTest {
             pA = runCommand(runCmd, appDir, runLogA);
 
             // Test web pages
-            WebpageTester.testWeb(skeletonApp.urlContent[0][0], 20,
+            WebpageTester.testWeb(skeletonApp.urlContent[0][0], Timeout.ofSeconds(20),
                     skeletonApp.urlContent[0][1], false);
 
             LOGGER.info("Terminating test and scanning logs...");
@@ -146,7 +147,7 @@ public class ArtifactGeneratorBOMTest {
             processStopper(pA, false);
             LOGGER.info("Gonna wait for ports closed after run...");
             // Release ports
-            assertTrue(waitForTcpClosed("localhost", parsePort(skeletonApp.urlContent[0][0]), 60),
+            assertTrue(waitForTcpClosed("localhost", parsePort(skeletonApp.urlContent[0][0]), Timeout.ofMinutes(1)),
                     "Main port is still open after run");
 
             checkLog(cn, mn, Apps.GENERATED_SKELETON, MvnCmds.JVM, runLogA);
