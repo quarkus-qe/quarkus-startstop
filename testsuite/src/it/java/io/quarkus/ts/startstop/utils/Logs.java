@@ -1,5 +1,6 @@
 package io.quarkus.ts.startstop.utils;
 
+import io.quarkus.ts.startstop.ArtifactGeneratorTest;
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
 
@@ -78,11 +79,36 @@ public class Logs {
             // Randomly fails when vertx-cache temporary directory exists. Related to https://github.com/quarkusio/quarkus/issues/7678
             // And https://github.com/quarkusio/quarkus/pull/15541/files#diff-a38e0d86cf6a637c19b6e0a0e23959f644886bdcc0f0e5615ce7cfa0e6bc9909R244
             if (Commands.isThisWindows && isDevModeError(offendingLines)) {
-            	Stream.of(WhitelistLogLines.WINDOWS_DEV_MODE_ERRORS.errs).forEach(lineToIgnore -> offendingLines.removeIf(line -> lineToIgnore.matcher(line).matches()));
+                Stream.of(WhitelistLogLines.WINDOWS_DEV_MODE_ERRORS.errs).forEach(lineToIgnore -> offendingLines.removeIf(line -> lineToIgnore.matcher(line).matches()));
             }
 
             assertTrue(offendingLines.isEmpty(),
                     cmd.name() + " log should not contain error or warning lines that are not whitelisted. " +
+                            "See testsuite" + File.separator + "target" + File.separator + "archived-logs" +
+                            File.separator + testClass + File.separator + testMethod + File.separator + log.getName() +
+                            " and check these offending lines: \n" + String.join("\n", offendingLines));
+        }
+    }
+
+    public static void checkProductizedDependencies(String testClass, String testMethod, File log, ArtifactGeneratorTest.SMOKE_CHECK_TYPE checkType, List<String> scannedDependencies) throws IOException {
+        try (Scanner sc = new Scanner(log, UTF_8)) {
+            Set<String> offendingLines = new HashSet<>();
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+                for (String dep : scannedDependencies) {
+                    if (checkType == ArtifactGeneratorTest.SMOKE_CHECK_TYPE.COMMUNITY) {
+                        if (line.contains(dep) && line.contains(jarSuffix)) {
+                            offendingLines.add(line);
+                        }
+                    } else {
+                        if (line.contains(dep) && !line.contains(jarSuffix)) {
+                            offendingLines.add(line);
+                        }
+                    }
+                }
+            }
+            assertTrue(offendingLines.isEmpty(),
+                    "Dependency tree should not contain non-productized dependencies for " + scannedDependencies + "." +
                             "See testsuite" + File.separator + "target" + File.separator + "archived-logs" +
                             File.separator + testClass + File.separator + testMethod + File.separator + log.getName() +
                             " and check these offending lines: \n" + String.join("\n", offendingLines));
