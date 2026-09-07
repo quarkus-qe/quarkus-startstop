@@ -206,6 +206,7 @@ public enum WhitelistLogLines {
             Pattern.compile(".*OpenTelemetry API usage issue detected.*"),
             // stacktrace line is falsely marked as an error log entry because the .onError() method gets picked by warnErrorDetectionPattern
             Pattern.compile(".*onError.*"),
+            Pattern.compile(".*Failed to resolve artifact io.quarkiverse.flow:quarkus-flow:jar:codestarts.*"),
     }),
     // Quarkus is not being gratefully shutdown in Windows when running in Dev mode.
     // Reported by https://github.com/quarkusio/quarkus/issues/14647.

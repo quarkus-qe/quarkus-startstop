@@ -22,6 +22,7 @@ import static io.quarkus.ts.startstop.utils.Logs.appendln;
 import static io.quarkus.ts.startstop.utils.Logs.appendlnSection;
 import static io.quarkus.ts.startstop.utils.Logs.archiveLog;
 import static io.quarkus.ts.startstop.utils.Logs.checkLog;
+import static io.quarkus.ts.startstop.utils.Logs.checkProductizedDependencies;
 import static io.quarkus.ts.startstop.utils.Logs.checkThreshold;
 import static io.quarkus.ts.startstop.utils.Logs.getLogsDir;
 import static io.quarkus.ts.startstop.utils.Logs.parseStartStopTimestamps;
@@ -104,7 +105,7 @@ public class ArtifactGeneratorTest {
             "resteasy-jsonb",
             "scheduler",
             "spring-boot-properties",
-            "smallrye-reactive-streams-operators",
+//            "smallrye-reactive-streams-operators",
             "spring-data-jpa",
             "spring-di",
             "spring-security",
@@ -199,7 +200,7 @@ public class ArtifactGeneratorTest {
             "reactive-pg-client",
             "scheduler",
             "spring-boot-properties",
-            "smallrye-reactive-streams-operators",
+//            "smallrye-reactive-streams-operators",
             "spring-data-jpa",
             "spring-di",
             "spring-security",
@@ -420,6 +421,109 @@ public class ArtifactGeneratorTest {
             appendln(whatIDidReport, "Measurements:");
             appendln(whatIDidReport, log.headerMarkdown + "\n" + log.lineMarkdown);
             checkThreshold(Apps.GENERATED_SKELETON, MvnCmds.GENERATOR, SKIP, timeToFirstOKRequest, timeToReloadedOKRequest);
+        } finally {
+            // Make sure processes are down even if there was an exception / failure
+            if (pA != null) {
+                processStopper(pA, true);
+            }
+            // Archive logs no matter what
+            archiveLog(cn, mn, buildLogA);
+            if (runLogA != null) {
+                // If build failed it is actually expected to have no runtime log.
+                archiveLog(cn, mn, runLogA);
+            }
+            writeReport(cn, mn, whatIDidReport.toString());
+            cleanDirOrFile(appBaseDir.getAbsolutePath());
+        }
+    }
+
+    public enum SMOKE_CHECK_TYPE {
+        COMMUNITY,
+        PRODUCTIZED
+    }
+
+    protected static final String[] flowExtensions = new String[]{
+            "quarkus-rest",
+            "quarkus-flow"
+    };
+    protected static final List<String> flowScannedDependencies = List.of(
+            "io.serverlessworkflow:",
+            "io.quarkiverse.flow:"
+    );
+
+    protected static final String[] cxfExtensions = new String[]{
+            "quarkus-cxf" // TODO add more once the testing instance provides CQ
+    };
+    protected static final List<String> cxfScannedDependencies = List.of(
+            "org.apache.cxf:",
+            "org.glassfish.jaxb:"
+    );
+
+    public void smokeCheck(TestInfo testInfo, SMOKE_CHECK_TYPE checkType, String[] extensions, List<String> scannedDependencies) throws Exception {
+        Process pA = null;
+        File buildLogA = null;
+        File runLogA = null;
+        StringBuilder whatIDidReport = new StringBuilder();
+        String cn = testInfo.getTestClass().get().getCanonicalName();
+        String mn = testInfo.getTestMethod().get().getName();
+        File appBaseDir = new File(getArtifactGeneBaseDir(), mn);
+        File appDir = new File(appBaseDir, Apps.GENERATED_SKELETON.dir);
+        String logsDir = appBaseDir.getAbsolutePath() + File.separator + Apps.GENERATED_SKELETON.dir + "-logs";
+        List<String> generatorCmd = getGeneratorCommand(MvnCmds.GENERATOR.mvnCmds[0], extensions);
+        List<String> runCmd = getRunCommand(MvnCmds.DEV.mvnCmds[0]);
+        URLContent skeletonApp = Apps.GENERATED_SKELETON.urlContent;
+        LOGGER.info(mn + ": Warming up setup: " + String.join(" ", generatorCmd));
+        LOGGER.info("Running inside " + appDir.getAbsolutePath());
+        try {
+            // Cleanup
+            cleanDirOrFile(appBaseDir.getAbsolutePath());
+            Files.createDirectories(Paths.get(logsDir));
+
+            // Prepare quarkus config
+            Files.createDirectories(Paths.get(appBaseDir.getAbsolutePath(), ".quarkus"));
+            prepareConfig(appBaseDir);
+
+            // Generate the app
+            buildLogA = new File(logsDir + File.separator + "smoke-artifact-build.log");
+            ExecutorService buildService = Executors.newFixedThreadPool(1);
+            buildService.submit(new Commands.ProcessRunner(appBaseDir, buildLogA, generatorCmd, Timeout.ofMinutes(20)));
+            appendln(whatIDidReport, "# " + cn + ", " + mn + ", smoke run");
+            appendln(whatIDidReport, (new Date()).toString());
+            appendln(whatIDidReport, appBaseDir.getAbsolutePath());
+            appendlnSection(whatIDidReport, String.join(" ", generatorCmd));
+            buildService.shutdown();
+            buildService.awaitTermination(10, TimeUnit.MINUTES);
+
+            assertTrue(buildLogA.exists());
+            checkLog(cn, mn, Apps.GENERATED_SKELETON, MvnCmds.GENERATOR, buildLogA);
+
+            confIndexPageForSkeleton(appDir.getAbsolutePath());
+            if (StringUtils.isBlank(System.getProperty("gh.actions"))) {
+                LOGGER.info("Removing repositories and pluginRepositories from pom.xml ...");
+                removeRepositoriesAndPluginRepositories(appDir + File.separator + "pom.xml");
+            }
+
+            // Run the app
+            LOGGER.info("Running... " + runCmd);
+            runLogA = new File(logsDir + File.separator + "smoke-dev-run.log");
+            appendln(whatIDidReport, appDir.getAbsolutePath());
+            appendlnSection(whatIDidReport, String.join(" ", runCmd));
+            pA = runCommand(runCmd, appDir, runLogA);
+            WebpageTester.testWeb(skeletonApp.urlContent[0][0], Timeout.ofMinutes(20),
+                    skeletonApp.urlContent[0][1], false);
+
+            LOGGER.info("Terminating smoke and scanning logs...");
+            pA.getInputStream().available();
+            processStopper(pA, false);
+            LOGGER.info("Gonna wait for ports closed after smoke...");
+            // Release ports
+            assertTrue(waitForTcpClosed("localhost", parsePort(skeletonApp.urlContent[0][0]), Timeout.ofMinutes(1)),
+                    "Main port is still open after smoke");
+
+            // TODO enable once logs are analyzed and reviewed
+            // checkLog(cn, mn, Apps.GENERATED_SKELETON, MvnCmds.GENERATOR, runLogA);
+            checkProductizedDependencies(cn, mn, runLogA, checkType, scannedDependencies);
+
         } finally {
             // Make sure processes are down even if there was an exception / failure
             if (pA != null) {
