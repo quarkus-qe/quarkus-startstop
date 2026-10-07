@@ -30,7 +30,15 @@ public enum WhitelistProductBomJars {
             "org.apache.xmlbeans.xmlbeans",
             "com.github.virtuald.curvesapi",
             "org.apache.poi.poi-ooxml-full",
-            "org.apache.poi.poi-scratchpad"
+            "org.apache.poi.poi-scratchpad",
+            // https://redhat.atlassian.net/browse/QUARKUS-9196
+            "org.osgi.service.component.annotations",
+            "osgi.annotation",
+            "org.osgi.namespace.extender",
+            "org.osgi.util.function",
+            "org.osgi.util.promise",
+            "com.typesafe:config",
+            "mcp-server-api"                            // https://redhat.atlassian.net/browse/QUARKUS-9475
     });
 
     public final String[] jarNames;
