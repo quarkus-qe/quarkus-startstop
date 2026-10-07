@@ -66,6 +66,10 @@ public enum WhitelistLogLines {
             Pattern.compile(".*Error reading service account token from.*"),
             // We have disabled the Quarkus Registry Client (-DquarkusRegistryClient=false)
             Pattern.compile(".*The extension catalog will be narrowed to.*"),
+            // registry.quarkus.io SNAPSHOT metadata integrity validation warnings https://github.com/quarkusio/quarkus/issues/57222
+            Pattern.compile(".*Could not validate integrity of download from https://registry.quarkus.io/maven/.*"),
+            // Whitelist registry conflict warning appearing in CI environment testing RHBQ versions
+            Pattern.compile(".*The following registries were configured as exclusive providers of the.*"),
             // comes with https://github.com/quarkusio/quarkus/pull/20182
             Pattern.compile(".*Hibernate ORM is disabled because no JPA entities were found.*"),
             Pattern.compile(".*Hibernate Reactive is disabled because no JPA entities were found.*"),
