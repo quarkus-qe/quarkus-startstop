@@ -37,7 +37,7 @@ public enum WhitelistProductBomJars {
             "org.osgi.namespace.extender",
             "org.osgi.util.function",
             "org.osgi.util.promise",
-            "com.typesafe:config",
+            "com.typesafe.config",
             "mcp-server-api"                            // https://redhat.atlassian.net/browse/QUARKUS-9475
     });
 
