@@ -16,6 +16,9 @@ public enum MvnCmds {
             new String[]{Commands.JAVA_BIN, "-jar", "target/quarkus-app/quarkus-run.jar"}
     }),
     DEV(new String[][]{
+            new String[]{"mvn", "clean", "quarkus:dev", "-Dmaven.repo.local=" + getLocalMavenRepoDir(), "-Dquarkus.analytics.disabled=true"}
+    }),
+    DEV_DIAGNOSTIC(new String[][]{
             new String[]{"mvn", "clean", "quarkus:dependency-tree", "quarkus:dev", "-Dmaven.repo.local=" + getLocalMavenRepoDir(), "-Dquarkus.analytics.disabled=true"}
     }),
     NATIVE(new String[][]{

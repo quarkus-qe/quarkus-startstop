@@ -296,7 +296,8 @@ public class ArtifactGeneratorTest {
         File appDir = new File(appBaseDir, Apps.GENERATED_SKELETON.dir);
         String logsDir = appBaseDir.getAbsolutePath() + File.separator + Apps.GENERATED_SKELETON.dir + "-logs";
         List<String> generatorCmd = getGeneratorCommand(MvnCmds.GENERATOR.mvnCmds[0], extensions);
-        List<String> runCmd = getRunCommand(MvnCmds.DEV.mvnCmds[0]);
+        MvnCmds devCmd = flags.contains(TestFlags.WARM_UP) ? MvnCmds.DEV_DIAGNOSTIC : MvnCmds.DEV;
+        List<String> runCmd = getRunCommand(devCmd.mvnCmds[0]);
         URLContent skeletonApp = Apps.GENERATED_SKELETON.urlContent;
         if (flags.contains(TestFlags.WARM_UP)) {
             LOGGER.info(mn + ": Warming up setup: " + String.join(" ", generatorCmd));
