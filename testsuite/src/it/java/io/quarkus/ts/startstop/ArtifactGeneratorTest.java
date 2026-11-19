@@ -121,6 +121,7 @@ public class ArtifactGeneratorTest {
             "quarkus-openshift-client",
             "quarkus-smallrye-graphql-client",
             "qpid-jms",
+            "cyclonedx",
     };
 
     public static final String[] supportedExtensionsSubsetSetB = new String[]{
@@ -215,6 +216,7 @@ public class ArtifactGeneratorTest {
             "micrometer-registry-prometheus",
             "quarkus-openshift-client",
             "quarkus-smallrye-graphql",
+            "cyclonedx",
     };
 
     public static final String[] supportedReactiveExtensionsSubsetSetB = new String[]{
